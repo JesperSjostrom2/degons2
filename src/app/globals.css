@@ -115,9 +115,38 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    cursor: none !important;
   }
+  
+  html {
+    scroll-padding-top: 100px;
+  }
+  
   body {
     @apply bg-background text-foreground;
+    cursor: none !important;
+    overflow-x: hidden;
+  }
+  
+  /* Optimize for Lenis smooth scrolling */
+  html.lenis {
+    height: auto;
+  }
+  
+  .lenis.lenis-smooth {
+    scroll-behavior: auto;
+  }
+  
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+  
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+  
+  .lenis.lenis-scrolling iframe {
+    pointer-events: none;
   }
 }
 
@@ -195,5 +224,15 @@
   
   .font-accent {
     font-family: var(--font-nyghtsherif), serif;
+  }
+  
+  .animate-gradient {
+    animation: gradient 8s linear infinite;
+  }
+  
+  @keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
   }
 }

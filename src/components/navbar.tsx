@@ -80,7 +80,7 @@ export default function Navbar() {
             <motion.button
               key={item.name}
               onClick={() => scrollToSection(item.href, item.id)}
-              className={`relative font-normal transition-colors duration-300 whitespace-nowrap ${
+              className={`relative font-normal transition-colors duration-300 whitespace-nowrap cursor-pointer ${
                 activeSection === item.id 
                   ? 'text-white' 
                   : 'text-white/70 hover:text-white/90'
@@ -129,7 +129,7 @@ export default function Navbar() {
           <Button
             variant="ghost"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="hover:bg-white/10"
+            className="hover:bg-white/10 cursor-pointer"
             style={{ padding: '0.25rem' }}
           >
             <motion.div
@@ -163,7 +163,7 @@ export default function Navbar() {
               <motion.button
                 key={item.name}
                 onClick={() => scrollToSection(item.href, item.id)}
-                className={`w-full text-left rounded-lg transition-all duration-300 font-normal ${
+                className={`w-full text-left rounded-lg transition-all duration-300 font-normal cursor-pointer ${
                   activeSection === item.id 
                     ? 'text-white' 
                     : 'text-white/70 hover:text-white hover:bg-white/10'

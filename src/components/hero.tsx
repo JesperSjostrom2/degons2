@@ -6,6 +6,7 @@ import { Copy, Check, Github, Linkedin, Mail } from 'lucide-react'
 import FloatingStars from '@/components/floating-stars'
 import LightRays from '@/blocks/Backgrounds/LightRays/LightRays'
 import GlareHover from '@/blocks/Animations/GlareHover/GlareHover'
+import GradientText from '@/components/GradientText'
 
 export default function Hero() {
   const [isCopied, setIsCopied] = useState(false)
@@ -192,7 +193,7 @@ export default function Hero() {
               ) : (
                 <Copy className="w-5 h-5" />
               )}
-              <span>{isCopied ? 'Copied!' : 'Email'}</span>
+              <span>{isCopied ? 'Copied!' : 'contact@jespersjostrom.se'}</span>
             </button>
           </motion.div>
 

@@ -1,0 +1,122 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+import { motion, useSpring, useMotionValue } from 'framer-motion'
+
+export default function CustomCursor() {
+  const [isVisible, setIsVisible] = useState(false)
+  const [isHovered, setIsHovered] = useState(false)
+  const [isClicking, setIsClicking] = useState(false)
+
+  const cursorX = useMotionValue(0)
+  const cursorY = useMotionValue(0)
+  
+  // Much more responsive spring physics - minimal inertia
+  const springConfig = { damping: 30, stiffness: 1000, mass: 0.1 }
+  const cursorXSpring = useSpring(cursorX, springConfig)
+  const cursorYSpring = useSpring(cursorY, springConfig)
+
+  useEffect(() => {
+    const updateCursor = (e: MouseEvent) => {
+      cursorX.set(e.clientX)
+      cursorY.set(e.clientY)
+      setIsVisible(true)
+    }
+
+    const handleMouseEnter = () => setIsVisible(true)
+    const handleMouseLeave = () => setIsVisible(false)
+
+    const handleMouseDown = () => setIsClicking(true)
+    const handleMouseUp = () => setIsClicking(false)
+
+    // Check for hoverable elements
+    const handleMouseOver = (e: MouseEvent) => {
+      const target = e.target as HTMLElement
+      if (
+        target.tagName === 'BUTTON' ||
+        target.tagName === 'A' ||
+        target.classList.contains('cursor-pointer') ||
+        target.style.cursor === 'pointer' ||
+        target.closest('button') ||
+        target.closest('a') ||
+        target.closest('[role="button"]')
+      ) {
+        setIsHovered(true)
+      } else {
+        setIsHovered(false)
+      }
+    }
+
+    document.addEventListener('mousemove', updateCursor)
+    document.addEventListener('mouseenter', handleMouseEnter)
+    document.addEventListener('mouseleave', handleMouseLeave)
+    document.addEventListener('mousedown', handleMouseDown)
+    document.addEventListener('mouseup', handleMouseUp)
+    document.addEventListener('mouseover', handleMouseOver)
+
+    return () => {
+      document.removeEventListener('mousemove', updateCursor)
+      document.removeEventListener('mouseenter', handleMouseEnter)
+      document.removeEventListener('mouseleave', handleMouseLeave)
+      document.removeEventListener('mousedown', handleMouseDown)
+      document.removeEventListener('mouseup', handleMouseUp)
+      document.removeEventListener('mouseover', handleMouseOver)
+    }
+  }, [cursorX, cursorY])
+
+  return (
+    <div className="fixed inset-0 pointer-events-none z-[9999]">
+      {/* Traditional Arrow Cursor */}
+      <motion.div
+        className="fixed"
+        style={{
+          left: cursorXSpring,
+          top: cursorYSpring,
+        }}
+        animate={{
+          scale: isClicking ? 0.9 : isHovered ? 1.1 : 1,
+          opacity: isVisible ? 1 : 0,
+        }}
+        transition={{
+          scale: { duration: 0.2, ease: "easeOut" },
+          opacity: { duration: 0.2 }
+        }}
+      >
+        {isHovered ? (
+          /* Hand cursor SVG for interactive elements */
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            width="20" 
+            height="20" 
+            viewBox="0 0 24 24"
+            className="drop-shadow-lg"
+          >
+            <path 
+              fill="#FFF" 
+              stroke="#000" 
+              strokeWidth="1.25" 
+              strokeLinejoin="round" 
+              d="M10 11V8.99c0-.88.59-1.64 1.44-1.86h.05A1.99 1.99 0 0 1 14 9.05V12v-2c0-.88.6-1.65 1.46-1.87h.05A1.98 1.98 0 0 1 18 10.06V13v-1.94a2 2 0 0 1 1.51-1.94h0A2 2 0 0 1 22 11.06V14c0 .6-.08 1.27-.21 1.97a7.96 7.96 0 0 1-7.55 6.48 54.98 54.98 0 0 1-4.48 0 7.96 7.96 0 0 1-7.55-6.48C2.08 15.27 2 14.59 2 14v-1.49c0-1.11.9-2.01 2.01-2.01h0a2 2 0 0 1 2.01 2.03l-.01.97v-10c0-1.1.9-2 2-2h0a2 2 0 0 1 2 2V11Z"
+            />
+          </svg>
+        ) : (
+          /* Default arrow cursor SVG */
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            width="25" 
+            height="25" 
+            viewBox="0 0 24 24"
+            className="drop-shadow-lg"
+          >
+            <path 
+              fill="#FFF" 
+              stroke="#000" 
+              strokeWidth="1.25" 
+              d="M5.5 3.21V20.8c0 .45.54.67.85.35l4.86-4.86a.5.5 0 0 1 .35-.15h6.87a.5.5 0 0 0 .35-.85L6.35 2.85a.5.5 0 0 0-.85.35Z"
+            />
+          </svg>
+        )}
+      </motion.div>
+    </div>
+  )
+}
