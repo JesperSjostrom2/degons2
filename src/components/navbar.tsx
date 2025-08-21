@@ -5,6 +5,15 @@ import { motion, useScroll, useMotionValueEvent } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Menu, X } from 'lucide-react'
 
+const navItems = [
+  { name: 'Home', href: '#home', id: 'home' },
+  { name: 'About', href: '#about', id: 'about' },
+  { name: 'Experience', href: '#experience', id: 'experience' },
+  { name: 'Work', href: '#work', id: 'work' },
+  { name: 'Skills', href: '#skills', id: 'skills' },
+  { name: 'Contact', href: '#contact', id: 'contact' },
+]
+
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -15,13 +24,37 @@ export default function Navbar() {
     setIsScrolled(latest > 50)
   })
 
-  const navItems = [
-    { name: 'Home', href: '#home', id: 'home' },
-    { name: 'Work', href: '#work', id: 'work' },
-    { name: 'Stack', href: '#tech', id: 'tech' },
-    { name: 'Education', href: '#education', id: 'education' },
-    { name: 'Contact', href: '#contact', id: 'contact' },
-  ]
+  // Track active section based on scroll position
+  useEffect(() => {
+    const observerOptions = {
+      root: null,
+      rootMargin: '-20% 0px -70% 0px', // Trigger when section is 20% from top
+      threshold: 0
+    }
+
+    const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const sectionId = entry.target.id
+          setActiveSection(sectionId)
+        }
+      })
+    }
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions)
+
+    // Observe all sections
+    navItems.forEach((item) => {
+      const element = document.querySelector(item.href)
+      if (element) {
+        observer.observe(element)
+      }
+    })
+
+    return () => {
+      observer.disconnect()
+    }
+  }, [])
 
   const scrollToSection = (href: string, id: string) => {
     const element = document.querySelector(href)
@@ -32,7 +65,7 @@ export default function Navbar() {
 
   return (
     <motion.nav
-      className={`fixed left-1/2 transform -translate-x-1/2 z-50 transition-all duration-300 max-w-[27.5rem] ${
+      className={`fixed left-1/2 transform -translate-x-1/2 z-50 transition-all duration-300 w-auto max-w-[95vw] ${
         isScrolled ? 'glass-nav shadow-xl' : 'glass-nav'
       }`}
       style={{ top: '2rem' }}
@@ -42,12 +75,12 @@ export default function Navbar() {
     >
       <div style={{ padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center relative" style={{ gap: '0.75rem' }}>
+        <div className="hidden lg:flex items-center relative flex-wrap justify-center" style={{ gap: '0.75rem' }}>
           {navItems.map((item, index) => (
             <motion.button
               key={item.name}
               onClick={() => scrollToSection(item.href, item.id)}
-              className={`relative font-normal transition-colors duration-300 ${
+              className={`relative font-normal transition-colors duration-300 whitespace-nowrap ${
                 activeSection === item.id 
                   ? 'text-white' 
                   : 'text-white/70 hover:text-white/90'
@@ -83,7 +116,7 @@ export default function Navbar() {
         </div>
 
         {/* Mobile Navigation */}
-        <div className="md:hidden flex items-center justify-between">
+        <div className="lg:hidden flex items-center justify-between">
           <motion.div
             className="font-normal text-white"
             style={{ fontSize: '1rem' }}
@@ -110,7 +143,7 @@ export default function Navbar() {
 
         {/* Mobile Menu */}
         <motion.div
-          className={`md:hidden absolute top-full left-0 right-0 glass-nav overflow-hidden ${
+          className={`lg:hidden absolute top-full left-0 right-0 glass-nav overflow-hidden ${
             isMobileMenuOpen ? 'block' : 'hidden'
           }`}
           style={{ 

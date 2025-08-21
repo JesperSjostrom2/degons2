@@ -12,6 +12,8 @@ interface Star {
   flickerSpeed: number
   glowIntensity: number
   animationDuration: number
+  moveX: number[]
+  moveY: number[]
 }
 
 const generateStars = (count: number = 30): Star[] => {
@@ -23,7 +25,9 @@ const generateStars = (count: number = 30): Star[] => {
     brightness: Math.random() * 0.7 + 0.3, // 0.3-1.0
     flickerSpeed: Math.random() * 4 + 3, // 3-7 seconds (much slower flicker)
     glowIntensity: Math.random() * 2 + 1, // 1-3px (much smaller glow)
-    animationDuration: Math.random() * 40 + 60, // 60-100 seconds (very slow drift)
+    animationDuration: Math.random() * 20 + 25, // 25-45 seconds (smooth movement)
+    moveX: [0, Math.random() * 40 - 20, Math.random() * 30 - 15, Math.random() * 35 - 17.5, 0],
+    moveY: [0, Math.random() * 50 - 25, Math.random() * 40 - 20, Math.random() * 45 - 22.5, 0],
   }))
 }
 
@@ -43,30 +47,43 @@ export default function FloatingStars() {
       {stars.map((star) => (
         <motion.div
           key={star.id}
-          className="absolute"
-          style={{
+          className="absolute will-change-transform"
+          style={{ transform: 'translate3d(0,0,0)' }}
+          initial={{ 
+            opacity: 0,
             left: `${star.x}%`,
             top: `${star.y}%`,
           }}
-          initial={{ opacity: 0 }}
           animate={{ 
             opacity: 1,
-            x: [0, Math.random() * 20 - 10, Math.random() * 15 - 7.5, 0],
-            y: [0, Math.random() * 20 - 10, Math.random() * 15 - 7.5, 0],
+            left: [
+              `${star.x}%`,
+              `${star.x + star.moveX[1] / 5}%`,
+              `${star.x + star.moveX[2] / 5}%`,
+              `${star.x + star.moveX[3] / 5}%`,
+              `${star.x}%`
+            ],
+            top: [
+              `${star.y}%`,
+              `${star.y + star.moveY[1] / 5}%`,
+              `${star.y + star.moveY[2] / 5}%`,
+              `${star.y + star.moveY[3] / 5}%`,
+              `${star.y}%`
+            ],
           }}
           transition={{ 
-            opacity: { duration: 2, delay: star.id * 0.2 },
-            x: { 
+            opacity: { duration: 2, delay: star.id * 0.1 },
+            left: { 
               duration: star.animationDuration, 
               repeat: Infinity, 
-              ease: "easeInOut",
-              times: [0, 0.33, 0.66, 1]
+              ease: "linear",
+              times: [0, 0.25, 0.5, 0.75, 1]
             },
-            y: { 
-              duration: star.animationDuration * 0.8, 
+            top: { 
+              duration: star.animationDuration * 1.2, 
               repeat: Infinity, 
-              ease: "easeInOut",
-              times: [0, 0.33, 0.66, 1]
+              ease: "linear", 
+              times: [0, 0.25, 0.5, 0.75, 1]
             }
           }}
         >

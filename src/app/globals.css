@@ -136,6 +136,19 @@
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   }
   
+  .glass-nav::before {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    pointer-events: none;
+    z-index: -1;
+  }
+  
   .noise {
     position: relative;
   }
