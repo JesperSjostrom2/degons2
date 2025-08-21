@@ -8,6 +8,7 @@ import { Menu, X } from 'lucide-react'
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [activeSection, setActiveSection] = useState('home')
   const { scrollY } = useScroll()
 
   useMotionValueEvent(scrollY, "change", (latest) => {
@@ -15,70 +16,77 @@ export default function Navbar() {
   })
 
   const navItems = [
-    { name: 'Home', href: '#home' },
-    { name: 'Work', href: '#work' },
-    { name: 'Tech Stack', href: '#tech' },
-    { name: 'Education', href: '#education' },
-    { name: 'Contact', href: '#contact' },
+    { name: 'Home', href: '#home', id: 'home' },
+    { name: 'Work', href: '#work', id: 'work' },
+    { name: 'Stack', href: '#tech', id: 'tech' },
+    { name: 'Education', href: '#education', id: 'education' },
+    { name: 'Contact', href: '#contact', id: 'contact' },
   ]
 
-  const scrollToSection = (href: string) => {
+  const scrollToSection = (href: string, id: string) => {
     const element = document.querySelector(href)
     element?.scrollIntoView({ behavior: 'smooth' })
+    setActiveSection(id)
     setIsMobileMenuOpen(false)
   }
 
   return (
     <motion.nav
-      className={`fixed top-4 left-1/2 transform -translate-x-1/2 z-50 transition-all duration-300 ${
+      className={`fixed left-1/2 transform -translate-x-1/2 z-50 transition-all duration-300 max-w-[27.5rem] ${
         isScrolled ? 'glass-nav shadow-xl' : 'glass-nav'
       }`}
+      style={{ top: '2rem' }}
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
     >
-      <div className="px-8 py-4 rounded-full">
+      <div style={{ padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center space-x-8">
+        <div className="hidden md:flex items-center relative" style={{ gap: '0.75rem' }}>
           {navItems.map((item, index) => (
             <motion.button
               key={item.name}
-              onClick={() => scrollToSection(item.href)}
-              className="relative text-foreground/80 hover:text-foreground transition-colors duration-300 hover-magnetic"
+              onClick={() => scrollToSection(item.href, item.id)}
+              className={`relative font-normal transition-colors duration-300 ${
+                activeSection === item.id 
+                  ? 'text-white' 
+                  : 'text-white/70 hover:text-white/90'
+              }`}
+              style={{ 
+                fontSize: '0.875rem',
+                padding: '0.25rem 0.625rem'
+              }}
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 + 0.2, duration: 0.6 }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              {item.name}
-              <motion.div
-                className="absolute -bottom-1 left-0 h-0.5 bg-accent rounded-full"
-                initial={{ width: 0 }}
-                whileHover={{ width: '100%' }}
-                transition={{ duration: 0.3 }}
-              />
+              {/* Active section glow */}
+              {activeSection === item.id && (
+                <motion.div
+                  className="absolute left-1/2 transform -translate-x-1/2 bg-white rounded-full shadow-lg"
+                  layoutId="activeGlow"
+                  style={{
+                    bottom: '-0.375rem',
+                    width: '2rem',
+                    height: '0.125rem',
+                    boxShadow: '0 0 0.5rem rgba(255, 255, 255, 0.8), 0 0 1rem rgba(255, 255, 255, 0.4)'
+                  }}
+                  transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                />
+              )}
+              
+              <span className="relative z-10">{item.name}</span>
             </motion.button>
           ))}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.5 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.8, duration: 0.6 }}
-          >
-            <Button 
-              variant="outline" 
-              className="border-accent text-accent hover:bg-accent hover:text-accent-foreground hover-magnetic"
-              onClick={() => scrollToSection('#contact')}
-            >
-              Let's Talk
-            </Button>
-          </motion.div>
         </div>
 
         {/* Mobile Navigation */}
         <div className="md:hidden flex items-center justify-between">
           <motion.div
-            className="text-xl font-bold text-gradient"
+            className="font-normal text-white"
+            style={{ fontSize: '1rem' }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
@@ -87,24 +95,28 @@ export default function Navbar() {
           </motion.div>
           <Button
             variant="ghost"
-            size="icon"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="hover-magnetic"
+            className="hover:bg-white/10"
+            style={{ padding: '0.25rem' }}
           >
             <motion.div
               animate={{ rotate: isMobileMenuOpen ? 90 : 0 }}
               transition={{ duration: 0.3 }}
             >
-              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              {isMobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
             </motion.div>
           </Button>
         </div>
 
         {/* Mobile Menu */}
         <motion.div
-          className={`md:hidden absolute top-full left-0 right-0 mt-3 glass-nav rounded-3xl overflow-hidden ${
+          className={`md:hidden absolute top-full left-0 right-0 glass-nav overflow-hidden ${
             isMobileMenuOpen ? 'block' : 'hidden'
           }`}
+          style={{ 
+            marginTop: '0.5rem',
+            borderRadius: '1rem'
+          }}
           initial={{ opacity: 0, y: -20, scale: 0.95 }}
           animate={{ 
             opacity: isMobileMenuOpen ? 1 : 0, 
@@ -113,12 +125,20 @@ export default function Navbar() {
           }}
           transition={{ duration: 0.3 }}
         >
-          <div className="p-4 space-y-2">
+          <div style={{ padding: '0.75rem', gap: '0.25rem' }} className="space-y-1">
             {navItems.map((item, index) => (
               <motion.button
                 key={item.name}
-                onClick={() => scrollToSection(item.href)}
-                className="w-full text-left px-4 py-3 text-foreground/80 hover:text-foreground hover:bg-accent/10 rounded-lg transition-all duration-300"
+                onClick={() => scrollToSection(item.href, item.id)}
+                className={`w-full text-left rounded-lg transition-all duration-300 font-normal ${
+                  activeSection === item.id 
+                    ? 'text-white' 
+                    : 'text-white/70 hover:text-white hover:bg-white/10'
+                }`}
+                style={{
+                  fontSize: '0.875rem',
+                  padding: '0.25rem 0.625rem'
+                }}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.1 }}
@@ -127,20 +147,6 @@ export default function Navbar() {
                 {item.name}
               </motion.button>
             ))}
-            <motion.div
-              className="pt-2"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
-            >
-              <Button 
-                variant="outline" 
-                className="w-full border-accent text-accent hover:bg-accent hover:text-accent-foreground"
-                onClick={() => scrollToSection('#contact')}
-              >
-                Let's Talk
-              </Button>
-            </motion.div>
           </div>
         </motion.div>
       </div>
