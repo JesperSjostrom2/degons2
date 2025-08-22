@@ -531,7 +531,7 @@ const BentoCardGrid: React.FC<{
   gridRef?: React.RefObject<HTMLDivElement | null>;
 }> = ({ children, gridRef }) => (
   <div
-    className="bento-section grid gap-4 p-6 w-full max-w-6xl mx-auto select-none relative"
+    className="bento-section grid gap-4 p-6 w-full max-w-7xl mx-auto select-none relative"
     style={{ fontSize: "clamp(1rem, 0.9rem + 0.5vw, 1.5rem)" }}
     ref={gridRef}
   >
@@ -602,7 +602,7 @@ const MagicBento: React.FC<BentoProps> = ({
               grid-template-columns: repeat(4, 1fr);
               grid-template-rows: repeat(4, 1fr);
               gap: 0.8rem;
-              min-height: 550px;
+              min-height: 800px;
             }
             
             /* Tablet layout - simplified bento */
@@ -637,8 +637,8 @@ const MagicBento: React.FC<BentoProps> = ({
               grid-template-columns: repeat(8, 1fr);
               grid-template-rows: repeat(3, 1fr);
               gap: 1rem;
-              min-height: 350px;
-              max-width: 1200px;
+              min-height: 700px;
+              max-width: 1400px;
               margin: 0 auto;
             }
             
@@ -744,7 +744,7 @@ const MagicBento: React.FC<BentoProps> = ({
             
             .card-responsive .card {
               width: 100%;
-              min-height: 180px;
+              min-height: 280px;
             }
           }
         `}
@@ -763,7 +763,7 @@ const MagicBento: React.FC<BentoProps> = ({
       <BentoCardGrid gridRef={gridRef}>
         <div className="card-responsive grid gap-2">
           {cardData.map((card, index) => {
-            const baseClassName = `card flex flex-col justify-between relative min-h-[180px] w-full max-w-full p-6 rounded-[20px] border border-solid font-light overflow-hidden transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-[0_8px_25px_rgba(0,0,0,0.15)] ${
+            const baseClassName = `card flex flex-col justify-between relative min-h-[280px] w-full max-w-full p-10 rounded-[20px] border border-solid font-light overflow-hidden transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-[0_8px_25px_rgba(0,0,0,0.15)] ${
               enableBorderGlow ? "card--border-glow" : ""
             }`;
 
