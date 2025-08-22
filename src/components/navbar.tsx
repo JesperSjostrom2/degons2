@@ -24,7 +24,6 @@ export default function Navbar() {
     setIsScrolled(latest > 50)
   })
 
-  // Track active section based on scroll position
   useEffect(() => {
     const observerOptions = {
       root: null,
@@ -43,7 +42,6 @@ export default function Navbar() {
 
     const observer = new IntersectionObserver(observerCallback, observerOptions)
 
-    // Observe all sections
     navItems.forEach((item) => {
       const element = document.querySelector(item.href)
       if (element) {
@@ -74,7 +72,6 @@ export default function Navbar() {
       transition={{ duration: 0.8, ease: "easeOut" }}
     >
       <div style={{ padding: '0.25rem 0.75rem', borderRadius: '9999px' }}>
-        {/* Desktop Navigation */}
         <div className="hidden lg:flex items-center relative flex-wrap justify-center" style={{ gap: '0.75rem' }}>
           {navItems.map((item, index) => (
             <motion.button
@@ -95,7 +92,6 @@ export default function Navbar() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              {/* Active section glow */}
               {activeSection === item.id && (
                 <motion.div
                   className="absolute left-1/2 transform -translate-x-1/2 bg-white rounded-full shadow-lg"
@@ -115,7 +111,6 @@ export default function Navbar() {
           ))}
         </div>
 
-        {/* Mobile Navigation */}
         <div className="lg:hidden flex items-center justify-between">
           <motion.div
             className="font-normal text-white"
@@ -141,7 +136,6 @@ export default function Navbar() {
           </Button>
         </div>
 
-        {/* Mobile Menu */}
         <motion.div
           className={`lg:hidden absolute top-full left-0 right-0 glass-nav overflow-hidden ${
             isMobileMenuOpen ? 'block' : 'hidden'

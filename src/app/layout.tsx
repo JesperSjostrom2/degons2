@@ -8,17 +8,6 @@ const outfit = Outfit({
   subsets: ["latin"],
 });
 
-// const nyghtsherif = localFont({
-//   src: [
-//     {
-//       path: "./fonts/nyghtsherif.woff2",
-//       weight: "400",
-//       style: "normal",
-//     },
-//   ],
-//   variable: "--font-nyghtsherif",
-//   fallback: ["serif"],
-// });
 
 export const metadata: Metadata = {
   title: "Frontend Developer Portfolio",

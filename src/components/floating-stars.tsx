@@ -21,11 +21,11 @@ const generateStars = (count: number = 30): Star[] => {
     id: i,
     x: Math.random() * 100,
     y: Math.random() * 100,
-    size: Math.random() * 0.8 + 0.3, // 0.3-1.1px (much smaller)
-    brightness: Math.random() * 0.7 + 0.3, // 0.3-1.0
-    flickerSpeed: Math.random() * 4 + 3, // 3-7 seconds (much slower flicker)
-    glowIntensity: Math.random() * 2 + 1, // 1-3px (much smaller glow)
-    animationDuration: Math.random() * 20 + 25, // 25-45 seconds (smooth movement)
+    size: Math.random() * 0.8 + 0.3,
+    brightness: Math.random() * 0.7 + 0.3,
+    flickerSpeed: Math.random() * 4 + 3,
+    glowIntensity: Math.random() * 2 + 1,
+    animationDuration: Math.random() * 20 + 25,
     moveX: [0, Math.random() * 40 - 20, Math.random() * 30 - 15, Math.random() * 35 - 17.5, 0],
     moveY: [0, Math.random() * 50 - 25, Math.random() * 40 - 20, Math.random() * 45 - 22.5, 0],
   }))
@@ -87,7 +87,6 @@ export default function FloatingStars() {
             }
           }}
         >
-          {/* Star with gentle flickering effect */}
           <motion.div
             className="relative"
             animate={{
@@ -101,7 +100,6 @@ export default function FloatingStars() {
               times: [0, 0.25, 0.5, 0.75, 1],
             }}
           >
-            {/* Outer glow */}
             <div
               className="absolute rounded-full bg-white/15 blur-sm"
               style={{
@@ -112,7 +110,6 @@ export default function FloatingStars() {
               }}
             />
             
-            {/* Star core */}
             <div
               className="absolute rounded-full bg-white"
               style={{
@@ -124,7 +121,6 @@ export default function FloatingStars() {
               }}
             />
             
-            {/* Subtle star rays */}
             <motion.div
               className="absolute"
               style={{

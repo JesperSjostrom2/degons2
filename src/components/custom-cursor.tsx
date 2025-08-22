@@ -11,7 +11,6 @@ export default function CustomCursor() {
   const cursorX = useMotionValue(0)
   const cursorY = useMotionValue(0)
   
-  // Much more responsive spring physics - minimal inertia
   const springConfig = { damping: 30, stiffness: 1000, mass: 0.1 }
   const cursorXSpring = useSpring(cursorX, springConfig)
   const cursorYSpring = useSpring(cursorY, springConfig)
@@ -29,7 +28,6 @@ export default function CustomCursor() {
     const handleMouseDown = () => setIsClicking(true)
     const handleMouseUp = () => setIsClicking(false)
 
-    // Check for hoverable elements
     const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement
       if (
@@ -66,7 +64,6 @@ export default function CustomCursor() {
 
   return (
     <div className="fixed inset-0 pointer-events-none z-[9999]">
-      {/* Traditional Arrow Cursor */}
       <motion.div
         className="fixed"
         style={{
@@ -83,7 +80,6 @@ export default function CustomCursor() {
         }}
       >
         {isHovered ? (
-          /* Hand cursor SVG for interactive elements */
           <svg 
             xmlns="http://www.w3.org/2000/svg" 
             width="20" 
@@ -100,7 +96,6 @@ export default function CustomCursor() {
             />
           </svg>
         ) : (
-          /* Default arrow cursor SVG */
           <svg 
             xmlns="http://www.w3.org/2000/svg" 
             width="25" 

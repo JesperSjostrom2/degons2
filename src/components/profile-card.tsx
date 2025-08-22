@@ -53,13 +53,11 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
         }}
         transition={{ duration: 0.3, ease: "easeOut" }}
       >
-        {/* Background Decorations */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute -top-4 -right-4 w-32 h-32 rounded-full bg-white/20 blur-xl"></div>
           <div className="absolute -bottom-8 -left-8 w-40 h-40 rounded-full bg-black/10 blur-2xl"></div>
         </div>
         
-        {/* Profile Image */}
         <div className="relative z-10 flex justify-center mb-6">
           <motion.div
             className="relative w-32 h-32 rounded-3xl overflow-hidden shadow-xl"
@@ -73,7 +71,6 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
               <span className="text-4xl font-bold text-white tracking-wide">JS</span>
             </div>
             
-            {/* Gradient overlay on hover */}
             <motion.div
               className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent"
               animate={{ opacity: isHovered ? 1 : 0 }}
@@ -82,7 +79,6 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
           </motion.div>
         </div>
         
-        {/* Profile Info */}
         <div className="relative z-10 text-center text-black">
           <motion.h3 
             className="text-2xl font-bold mb-2 tracking-wide"
@@ -100,7 +96,6 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
           </motion.p>
         </div>
         
-        {/* Hover Effect Shine */}
         <motion.div
           className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full"
           animate={{ 
@@ -110,7 +105,6 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
         />
       </motion.div>
       
-      {/* Bottom Info Card */}
       <motion.div
         className="mt-4 bg-card/95 backdrop-blur-sm border border-border/50 rounded-2xl p-6 shadow-xl"
         animate={{ 
@@ -124,7 +118,6 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
           <p className="text-muted-foreground text-sm">{bio}</p>
         </div>
         
-        {/* Stats */}
         <div className="grid grid-cols-2 gap-4 mb-6">
           <div className="text-center p-3 rounded-xl bg-background/50">
             <div className="flex items-center justify-center mb-1">
@@ -142,7 +135,6 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
           </div>
         </div>
         
-        {/* Social Links */}
         <div className="flex justify-center gap-4">
           {social.github && (
             <motion.a
