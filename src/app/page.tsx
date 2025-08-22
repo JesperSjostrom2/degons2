@@ -30,7 +30,7 @@ export default function Home() {
                     MORE ABOUT ME
                   </p>
                   <div className="mb-8">
-                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight" style={{textShadow: '0 0 20px rgba(255, 255, 255, 0.3), 0 0 40px rgba(255, 255, 255, 0.1)'}}>
+                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight" style={{textShadow: '0 0 10px rgba(255, 255, 255, 0.15), 0 0 20px rgba(255, 255, 255, 0.05)'}}>
                       I'm Jesper, a<br />
                       creative <span className="inline-block"><GradientText className="italic" style={{fontFamily: 'cursive'}}>developer</GradientText></span>
                     </h2>
