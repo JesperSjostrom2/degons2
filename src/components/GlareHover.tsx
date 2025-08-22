@@ -1,7 +1,3 @@
-/*
-	Installed from https://reactbits.dev/ts/tailwind/
-*/
-
 import React, { useRef } from "react";
 
 interface GlareHoverProps {

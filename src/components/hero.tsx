@@ -4,8 +4,8 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Copy, Check, Github, Linkedin, Mail } from 'lucide-react'
 import FloatingStars from '@/components/floating-stars'
-import LightRays from '@/blocks/Backgrounds/LightRays/LightRays'
-import GlareHover from '@/blocks/Animations/GlareHover/GlareHover'
+import LightRays from '@/components/LightRays'
+import GlareHover from '@/components/GlareHover'
 import GradientText from '@/components/GradientText'
 
 export default function Hero() {
@@ -21,7 +21,6 @@ export default function Hero() {
       await navigator.clipboard.writeText('contact@jespersjostrom.se')
       setIsCopied(true)
       
-      // Show notification
       const notification = document.createElement('div')
       notification.className = 'fixed bottom-24 right-4 px-4 py-3 rounded-lg shadow-lg z-50 transform translate-y-full transition-transform duration-300'
       notification.style.background = '#2a2a2a'
@@ -40,12 +39,10 @@ export default function Hero() {
       `
       document.body.appendChild(notification)
       
-      // Animate in
       setTimeout(() => {
         notification.style.transform = 'translateY(0)'
       }, 10)
       
-      // Remove notification after 3 seconds
       setTimeout(() => {
         notification.style.transform = 'translateY(100%)'
         setTimeout(() => {
@@ -53,7 +50,6 @@ export default function Hero() {
         }, 300)
       }, 3000)
       
-      // Reset icon after 2 seconds
       setTimeout(() => {
         setIsCopied(false)
       }, 2000)
@@ -64,7 +60,6 @@ export default function Hero() {
 
   return (
     <section id="home" className="min-h-screen relative overflow-hidden noise bg-background">
-      {/* Light Rays Background */}
       <div className="absolute inset-0 z-0">
         <LightRays
           raysOrigin="top-center"
@@ -83,13 +78,11 @@ export default function Hero() {
         />
       </div>
       
-      {/* Floating Stars */}
       <FloatingStars />
 
 
       <div className="container mx-auto px-6 flex items-center justify-center min-h-screen relative z-10 pt-20">
         <div className="text-center space-y-12">
-          {/* Greeting and Name */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -104,7 +97,6 @@ export default function Hero() {
                   <span className="text-accent">
                     Jesper
                   </span>
-                  {/* 3D shadow for Jesper */}
                   <span className="absolute top-0 left-0 opacity-0 group-hover/jesper:opacity-100 transition-opacity duration-300 -z-10 text-3xl md:text-5xl lg:text-6xl font-bold" style={{ transform: 'translate(6px, 4px)', color: '#8a7a5e' }}>
                     Jesper
                   </span>
@@ -113,7 +105,6 @@ export default function Hero() {
                   <span className="inline-block">
                     Sjöström
                   </span>
-                  {/* 3D shadow for Sjöström */}
                   <span className="absolute top-0 left-0 opacity-0 group-hover/sjostrom:opacity-100 transition-opacity duration-300 -z-10 text-3xl md:text-5xl lg:text-6xl font-bold inline-block" style={{ transform: 'translate(6px, 4px)', color: '#4a4a4a' }}>
                     Sjöström
                   </span>
@@ -122,7 +113,6 @@ export default function Hero() {
             </div>
           </motion.div>
 
-          {/* Description */}
           <motion.p
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -132,7 +122,6 @@ export default function Hero() {
             Passionate full-stack developer with 5+ years of experience creating modern web applications. 
           </motion.p>
 
-          {/* Let's Connect Button */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -154,7 +143,6 @@ export default function Hero() {
             </div>
           </motion.div>
 
-          {/* Social Links */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -197,7 +185,6 @@ export default function Hero() {
             </button>
           </motion.div>
 
-          {/* Scroll Indicator */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -219,7 +206,6 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Glowing separator line */}
       <motion.div 
         className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-4xl h-px"
         initial={{ opacity: 0, scaleX: 0 }}

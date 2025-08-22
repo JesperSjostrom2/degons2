@@ -6,7 +6,7 @@ import SocialLinks from '@/components/social-links'
 import GradientText from '@/components/GradientText'
 import CustomCursor from '@/components/custom-cursor'
 import SmoothScroll from '@/components/smooth-scroll'
-import MagicBento from '@/blocks/Components/MagicBento/MagicBento'
+import MagicBento from '@/components/MagicBento'
 
 export default function Home() {
   return (
@@ -32,7 +32,7 @@ export default function Home() {
                   <div className="mb-8">
                     <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight" style={{textShadow: '0 0 10px rgba(255, 255, 255, 0.15), 0 0 20px rgba(255, 255, 255, 0.05)'}}>
                       I'm Jesper, a<br />
-                      creative <span className="inline-block"><GradientText className="italic" style={{fontFamily: 'cursive'}}>developer</GradientText></span>
+                      creative <span className="inline-block"><GradientText className="italic" style={{fontFamily: 'cursive'}} colors={["#8b7355", "#dac5a7", "#8b7355"]}>developer</GradientText></span>
                     </h2>
                   </div>
                   <div className="space-y-6 text-lg text-muted-foreground leading-relaxed max-w-xl">
@@ -68,7 +68,7 @@ export default function Home() {
                     
                     {/* Main Profile Picture */}
                     <div className="relative w-72 h-72 rounded-3xl overflow-hidden shadow-2xl bg-gradient-to-br from-accent via-accent/95 to-accent/90 z-10 transition-transform duration-300 ease-out group-hover:-translate-x-2 group-hover:-translate-y-2">
-                      <div className="w-full h-full bg-gradient-to-br from-blue-500 via-purple-600 to-blue-700 flex items-center justify-center">
+                      <div className="w-full h-full flex items-center justify-center" style={{background: 'linear-gradient(to bottom right, #8b7355, #dac5a7)'}}>
                         <span className="text-8xl font-bold text-white">JS</span>
                       </div>
                     </div>
