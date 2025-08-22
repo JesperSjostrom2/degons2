@@ -6,6 +6,7 @@ import SocialLinks from '@/components/social-links'
 import GradientText from '@/components/GradientText'
 import CustomCursor from '@/components/custom-cursor'
 import SmoothScroll from '@/components/smooth-scroll'
+import MagicBento from '@/blocks/Components/MagicBento/MagicBento'
 
 export default function Home() {
   return (
@@ -94,6 +95,13 @@ export default function Home() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+      
+      {/* Magic Bento Grid Section */}
+      <section className="bg-background py-20">
+        <div className="flex justify-center">
+          <MagicBento />
         </div>
       </section>
       
