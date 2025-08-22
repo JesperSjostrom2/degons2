@@ -219,6 +219,18 @@ export default function Hero() {
         </div>
       </div>
 
+      {/* Glowing separator line */}
+      <motion.div 
+        className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-4xl h-px"
+        initial={{ opacity: 0, scaleX: 0 }}
+        animate={{ opacity: 1, scaleX: 1 }}
+        transition={{ duration: 1.5, delay: 2 }}
+        style={{
+          background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent)',
+          boxShadow: '0 0 20px rgba(255, 255, 255, 0.5), 0 0 40px rgba(255, 255, 255, 0.2)'
+        }}
+      />
+
     </section>
   )
 }

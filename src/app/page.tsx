@@ -31,7 +31,7 @@ export default function Home() {
                   <div className="mb-8">
                     <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight" style={{textShadow: '0 0 20px rgba(255, 255, 255, 0.3), 0 0 40px rgba(255, 255, 255, 0.1)'}}>
                       I'm Jesper, a<br />
-                      creative <span className="inline-block" style={{textShadow: 'none'}}><GradientText className="italic" style={{fontFamily: 'cursive'}}>developer</GradientText></span>
+                      creative <span className="inline-block"><GradientText className="italic" style={{fontFamily: 'cursive'}}>developer</GradientText></span>
                     </h2>
                   </div>
                   <div className="space-y-6 text-lg text-muted-foreground leading-relaxed max-w-xl">
@@ -81,7 +81,7 @@ export default function Home() {
                     </div>
                     <div className="bg-card/30 backdrop-blur-sm border border-accent/20 rounded-xl p-4 text-center relative" style={{boxShadow: '0 1px 0 0 rgba(255, 255, 255, 0.1)'}}>
                       <div className="text-2xl font-bold text-white">4+</div>
-                      <div className="text-xs text-muted-foreground font-medium">YEARS</div>
+                      <div className="text-xs text-muted-foreground font-medium">YEARS EXP</div>
                     </div>
                   </div>
                   

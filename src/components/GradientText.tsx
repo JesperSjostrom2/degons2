@@ -10,6 +10,7 @@ interface GradientTextProps {
   colors?: string[];
   animationSpeed?: number;
   showBorder?: boolean;
+  showGlow?: boolean;
 }
 
 export default function GradientText({
@@ -18,6 +19,7 @@ export default function GradientText({
   colors = ["#ffaa40", "#9c40ff", "#ffaa40"],
   animationSpeed = 8,
   showBorder = false,
+  showGlow = false,
 }: GradientTextProps) {
   const gradientStyle = {
     backgroundImage: `linear-gradient(to right, ${colors.join(", ")})`,
@@ -55,6 +57,9 @@ export default function GradientText({
           backgroundClip: "text",
           WebkitBackgroundClip: "text",
           backgroundSize: "300% 100%",
+          ...(showGlow && {
+            filter: 'drop-shadow(0 0 10px rgba(255, 170, 64, 0.3)) drop-shadow(0 0 20px rgba(156, 64, 255, 0.2))'
+          })
         }}
       >
         {children}
