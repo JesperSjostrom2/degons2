@@ -62,12 +62,6 @@ const cardData: BentoCardProps[] = [
   },
   {
     color: "#060010",
-    title: "🎮 Hobbies & Interests",
-    description: "Gaming, music, and exploring new technologies",
-    label: "Fun Facts",
-  },
-  {
-    color: "#060010",
     title: "🛠️ Currently Building",
     description: "SaaS application with authentication & dashboards",
     label: "Projects",
@@ -537,7 +531,7 @@ const BentoCardGrid: React.FC<{
   gridRef?: React.RefObject<HTMLDivElement | null>;
 }> = ({ children, gridRef }) => (
   <div
-    className="bento-section grid gap-4 p-6 max-w-7xl select-none relative"
+    className="bento-section grid gap-4 p-6 w-full max-w-6xl mx-auto select-none relative"
     style={{ fontSize: "clamp(1rem, 0.9rem + 0.5vw, 1.5rem)" }}
     ref={gridRef}
   >
@@ -603,59 +597,79 @@ const MagicBento: React.FC<BentoProps> = ({
             padding: 0.5rem;
           }
           
-          @media (min-width: 600px) {
+          @media (min-width: 600px) and (max-width: 1023px) {
             .card-responsive {
-              grid-template-columns: repeat(2, 1fr);
+              grid-template-columns: repeat(4, 1fr);
+              grid-template-rows: repeat(4, 1fr);
+              gap: 0.8rem;
+              min-height: 550px;
+            }
+            
+            /* Tablet layout - simplified bento */
+            .card-responsive .card:nth-child(1) {
+              grid-column: 1 / 5;
+              grid-row: 1 / 2;
+            }
+            
+            .card-responsive .card:nth-child(4) {
+              grid-column: 1 / 3;
+              grid-row: 2 / 4;
+            }
+            
+            .card-responsive .card:nth-child(3) {
+              grid-column: 3 / 5;
+              grid-row: 2 / 3;
+            }
+            
+            .card-responsive .card:nth-child(2) {
+              grid-column: 3 / 5;
+              grid-row: 3 / 4;
+            }
+            
+            .card-responsive .card:nth-child(5) {
+              grid-column: 1 / 5;
+              grid-row: 4 / 5;
             }
           }
           
           @media (min-width: 1024px) {
             .card-responsive {
-              grid-template-columns: repeat(3, 1fr);
-              grid-template-rows: auto auto auto;
+              grid-template-columns: repeat(8, 1fr);
+              grid-template-rows: repeat(3, 1fr);
               gap: 1rem;
+              min-height: 350px;
+              max-width: 1200px;
+              margin: 0 auto;
             }
             
-            /* Card 1: Collaboration - top left, wider (spans 2 columns) */
+            /* Card 1: Collaboration - wide top card (not full width) */
             .card-responsive .card:nth-child(1) {
-              grid-column: 1 / 3;
-              grid-row: 1;
-              min-height: 200px;
+              grid-column: 1 / 6;
+              grid-row: 1 / 2;
             }
             
-            /* Card 2: Tech Stack - top right, narrower (1 column) */
+            /* Card 2: Tech Stack - tall right column extending to top */
             .card-responsive .card:nth-child(2) {
-              grid-column: 3;
-              grid-row: 1;
-              min-height: 200px;
+              grid-column: 6 / 9;
+              grid-row: 1 / 3;
             }
             
-            /* Card 4: Time Zone - middle left, bigger */
+            /* Card 4: Remote Work - left area extending to bottom */
             .card-responsive .card:nth-child(4) {
-              grid-column: 1;
-              grid-row: 2;
-              min-height: 250px;
-            }
-            
-            /* Card 3: Let's Work Together - CENTER MIDDLE, smaller */
-            .card-responsive .card:nth-child(3) {
-              grid-column: 2;
-              grid-row: 2;
-              min-height: 180px;
-            }
-            
-            /* Card 5: Hobbies - middle right, bigger */
-            .card-responsive .card:nth-child(5) {
-              grid-column: 3;
-              grid-row: 2;
-              min-height: 250px;
-            }
-            
-            /* Card 6: Currently Building - bottom, full width */
-            .card-responsive .card:nth-child(6) {
               grid-column: 1 / 4;
-              grid-row: 3;
-              min-height: 160px;
+              grid-row: 2 / 4;
+            }
+            
+            /* Card 3: Contact - wider but shorter center card */
+            .card-responsive .card:nth-child(3) {
+              grid-column: 4 / 6;
+              grid-row: 2 / 3;
+            }
+            
+            /* Card 5: Currently Building - bottom right under Tech Stack */
+            .card-responsive .card:nth-child(5) {
+              grid-column: 4 / 9;
+              grid-row: 3 / 4;
             }
           }
           
@@ -749,7 +763,7 @@ const MagicBento: React.FC<BentoProps> = ({
       <BentoCardGrid gridRef={gridRef}>
         <div className="card-responsive grid gap-2">
           {cardData.map((card, index) => {
-            const baseClassName = `card flex flex-col justify-between relative aspect-[4/3] min-h-[300px] w-full max-w-full p-6 rounded-[20px] border border-solid font-light overflow-hidden transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-[0_8px_25px_rgba(0,0,0,0.15)] ${
+            const baseClassName = `card flex flex-col justify-between relative min-h-[180px] w-full max-w-full p-6 rounded-[20px] border border-solid font-light overflow-hidden transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-[0_8px_25px_rgba(0,0,0,0.15)] ${
               enableBorderGlow ? "card--border-glow" : ""
             }`;
 
