@@ -19,7 +19,7 @@ export default function Home() {
       <Hero />
       
       {/* About Section */}
-      <section id="about" className="min-h-screen flex items-center bg-background py-20">
+      <section id="about" className="min-h-screen flex items-center bg-background/80 py-20">
         <div className="container mx-auto px-6">
           <div className="flex justify-center items-center">
             <div className="grid lg:grid-cols-5 gap-12 lg:gap-20 items-center max-w-6xl w-full">
@@ -99,7 +99,7 @@ export default function Home() {
       </section>
       
       {/* Magic Bento Grid Section */}
-      <section className="bg-background py-20">
+      <section className="bg-background/80 py-20">
         <div className="flex justify-center">
           <MagicBento />
         </div>

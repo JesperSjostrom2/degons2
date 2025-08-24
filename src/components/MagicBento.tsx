@@ -17,10 +17,23 @@ import {
   SiBackbonedotjs, 
   SiFigma, 
   SiLess, 
-  SiSass 
+  SiSass,
+  SiFramer,
+  SiNextdotjs,
+  SiTailwindcss,
+  SiTypescript,
+  SiPython,
+  SiMongodb,
+  SiPostgresql,
+  SiRedis,
+  SiDocker,
+  SiGraphql
 } from "react-icons/si";
-import { Copy, Check, Mail, ShoppingCart, BarChart3, Rocket } from "lucide-react";
+import { Copy, Check, Mail, ShoppingCart, BarChart3, Rocket, User } from "lucide-react";
+import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
+import Magnet from "@/blocks/Animations/Magnet/Magnet";
+import ShinyText from "@/blocks/TextAnimations/ShinyText/ShinyText";
 
 const SimpleGlobe = dynamic(() => import('@/components/SimpleGlobe'), { 
   ssr: false,
@@ -37,6 +50,7 @@ export interface BentoCardProps {
   textAutoHide?: boolean;
   disableAnimations?: boolean;
   customContent?: React.ReactNode;
+  customBackground?: React.CSSProperties;
 }
 
 export interface BentoProps {
@@ -96,8 +110,8 @@ const cardData: BentoCardProps[] = [
     description: "TypeScript, Next.js, Tailwind, PostgreSQL & more",
     label: "Technologies",
     customContent: (
-      <div className="flex flex-col h-full">
-        <div className="mb-4">
+      <div className="flex flex-col h-full relative overflow-hidden">
+        <div className="mb-6 relative z-10">
           <h2 className="text-2xl font-bold text-white mb-2 leading-tight">
             Passionate about<br />
             <span className="text-accent">cutting-edge</span><br />
@@ -108,57 +122,125 @@ const cardData: BentoCardProps[] = [
           </p>
         </div>
         
-        <div className="flex-1 grid grid-cols-2 gap-x-4 gap-y-3 content-center">
-          <div className="flex flex-col gap-2">
-            <span className="px-3 py-1 bg-accent/20 border border-accent/40 text-white text-xs rounded-full font-medium flex items-center gap-1">
-              <SiJavascript className="w-3 h-3 text-yellow-400" />JavaScript
-            </span>
-            <span className="px-3 py-1 bg-accent/20 border border-accent/40 text-white text-xs rounded-full font-medium flex items-center gap-1">
-              <SiReact className="w-3 h-3 text-cyan-400" />React
-            </span>
-            <span className="px-3 py-1 bg-accent/20 border border-accent/40 text-white text-xs rounded-full font-medium flex items-center gap-1">
-              <SiGithub className="w-3 h-3 text-gray-300" />Github
-            </span>
-            <span className="px-3 py-1 bg-accent/20 border border-accent/40 text-white text-xs rounded-full font-medium flex items-center gap-1">
-              <SiBootstrap className="w-3 h-3 text-purple-500" />Bootstrap
-            </span>
-            <span className="px-3 py-1 bg-accent/20 border border-accent/40 text-white text-xs rounded-full font-medium flex items-center gap-1">
-              <SiCypress className="w-3 h-3 text-gray-400" />Cypress
-            </span>
-            <span className="px-3 py-1 bg-accent/20 border border-accent/40 text-white text-xs rounded-full font-medium flex items-center gap-1">
-              <SiBackbonedotjs className="w-3 h-3 text-blue-600" />Backbone
-            </span>
-            <span className="px-3 py-1 bg-accent/20 border border-accent/40 text-white text-xs rounded-full font-medium flex items-center gap-1">
-              <SiLess className="w-3 h-3 text-blue-700" />Less
-            </span>
-            <span className="px-3 py-1 bg-accent/20 border border-accent/40 text-white text-xs rounded-full font-medium flex items-center gap-1">
-              <SiSass className="w-3 h-3 text-pink-500" />Sass
-            </span>
+        <div className="flex-1 flex flex-col justify-center gap-8 overflow-hidden">
+          {/* First row - Right to Left */}
+          <div className="flex overflow-hidden">
+            <motion.div 
+              className="flex gap-4 whitespace-nowrap"
+              animate={{ 
+                x: [0, -2000] 
+              }}
+              transition={{
+                duration: 120,
+                ease: "linear",
+                repeat: Infinity,
+              }}
+              style={{ width: "max-content" }}
+            >
+              {Array(8).fill([
+                { icon: SiJavascript, name: "JavaScript", color: "text-yellow-400" },
+                { icon: SiReact, name: "React", color: "text-cyan-400" },
+                { icon: SiNextdotjs, name: "Next.js", color: "text-white" },
+                { icon: SiTypescript, name: "TypeScript", color: "text-blue-500" },
+                { icon: SiFramer, name: "Framer", color: "text-purple-500" },
+                { icon: SiTailwindcss, name: "Tailwind", color: "text-cyan-400" },
+                { icon: SiPython, name: "Python", color: "text-yellow-500" },
+                { icon: SiDocker, name: "Docker", color: "text-blue-400" },
+              ]).flat().map((skill, idx) => (
+                <span 
+                  key={idx}
+                  className="px-4 py-2 text-white text-sm font-medium flex items-center gap-2 whitespace-nowrap bg-card/40 backdrop-blur-sm border border-gray-400/30 rounded-lg"
+                  style={{
+                    boxShadow: '0 1px 0 0 rgba(255, 255, 255, 0.1)',
+                    backgroundColor: 'rgba(139, 115, 85, 0.15)'
+                  }}
+                >
+                  <skill.icon className={`w-4 h-4 ${skill.color}`} />
+                  {skill.name}
+                </span>
+              ))}
+            </motion.div>
           </div>
-          <div className="flex flex-col gap-2">
-            <span className="px-3 py-1 bg-accent/20 border border-accent/40 text-white text-xs rounded-full font-medium flex items-center gap-1">
-              <SiHtml5 className="w-3 h-3 text-orange-500" />HTML
-            </span>
-            <span className="px-3 py-1 bg-accent/20 border border-accent/40 text-white text-xs rounded-full font-medium flex items-center gap-1">
-              <SiCss3 className="w-3 h-3 text-blue-500" />CSS
-            </span>
-            <span className="px-3 py-1 bg-accent/20 border border-accent/40 text-white text-xs rounded-full font-medium flex items-center gap-1">
-              <SiNodedotjs className="w-3 h-3 text-green-500" />Node
-            </span>
-            <span className="px-3 py-1 bg-accent/20 border border-accent/40 text-white text-xs rounded-full font-medium flex items-center gap-1">
-              <SiGit className="w-3 h-3 text-red-500" />Git
-            </span>
-            <span className="px-3 py-1 bg-accent/20 border border-accent/40 text-white text-xs rounded-full font-medium flex items-center gap-1">
-              <SiHeroku className="w-3 h-3 text-purple-600" />Heroku
-            </span>
-            <span className="px-3 py-1 bg-accent/20 border border-accent/40 text-white text-xs rounded-full font-medium flex items-center gap-1">
-              <SiPostman className="w-3 h-3 text-orange-500" />Postman
-            </span>
-            <span className="px-3 py-1 bg-accent/20 border border-accent/40 text-white text-xs rounded-full font-medium flex items-center gap-1">
-              <SiFigma className="w-3 h-3 text-green-400" />Figma
-            </span>
+
+          {/* Second row - Left to Right */}
+          <div className="flex overflow-hidden">
+            <motion.div 
+              className="flex gap-4 whitespace-nowrap"
+              animate={{ 
+                x: [-2000, 0] 
+              }}
+              transition={{
+                duration: 100,
+                ease: "linear",
+                repeat: Infinity,
+              }}
+              style={{ width: "max-content" }}
+            >
+              {Array(8).fill([
+                { icon: SiHtml5, name: "HTML5", color: "text-orange-500" },
+                { icon: SiCss3, name: "CSS3", color: "text-blue-500" },
+                { icon: SiNodedotjs, name: "Node.js", color: "text-green-500" },
+                { icon: SiGit, name: "Git", color: "text-red-500" },
+                { icon: SiGithub, name: "GitHub", color: "text-gray-300" },
+                { icon: SiFigma, name: "Figma", color: "text-green-400" },
+                { icon: SiMongodb, name: "MongoDB", color: "text-green-600" },
+                { icon: SiGraphql, name: "GraphQL", color: "text-pink-400" },
+              ]).flat().map((skill, idx) => (
+                <span 
+                  key={idx}
+                  className="px-4 py-2 text-white text-sm font-medium flex items-center gap-2 whitespace-nowrap bg-card/40 backdrop-blur-sm border border-gray-400/30 rounded-lg"
+                  style={{
+                    boxShadow: '0 1px 0 0 rgba(255, 255, 255, 0.1)',
+                    backgroundColor: 'rgba(139, 115, 85, 0.15)'
+                  }}
+                >
+                  <skill.icon className={`w-4 h-4 ${skill.color}`} />
+                  {skill.name}
+                </span>
+              ))}
+            </motion.div>
+          </div>
+
+          {/* Third row - Right to Left */}
+          <div className="flex overflow-hidden">
+            <motion.div 
+              className="flex gap-4 whitespace-nowrap"
+              animate={{ 
+                x: [0, -2000] 
+              }}
+              transition={{
+                duration: 110,
+                ease: "linear",
+                repeat: Infinity,
+              }}
+              style={{ width: "max-content" }}
+            >
+              {Array(8).fill([
+                { icon: SiBootstrap, name: "Bootstrap", color: "text-purple-500" },
+                { icon: SiSass, name: "Sass", color: "text-pink-500" },
+                { icon: SiPostman, name: "Postman", color: "text-orange-500" },
+                { icon: SiCypress, name: "Cypress", color: "text-gray-400" },
+                { icon: SiHeroku, name: "Heroku", color: "text-purple-600" },
+                { icon: SiPostgresql, name: "PostgreSQL", color: "text-blue-600" },
+                { icon: SiRedis, name: "Redis", color: "text-red-600" },
+              ]).flat().map((skill, idx) => (
+                <span 
+                  key={idx}
+                  className="px-4 py-2 text-white text-sm font-medium flex items-center gap-2 whitespace-nowrap bg-card/40 backdrop-blur-sm border border-gray-400/30 rounded-lg"
+                  style={{
+                    boxShadow: '0 1px 0 0 rgba(255, 255, 255, 0.1)',
+                    backgroundColor: 'rgba(139, 115, 85, 0.15)'
+                  }}
+                >
+                  <skill.icon className={`w-4 h-4 ${skill.color}`} />
+                  {skill.name}
+                </span>
+              ))}
+            </motion.div>
           </div>
         </div>
+
+
       </div>
     ),
   },
@@ -167,38 +249,93 @@ const cardData: BentoCardProps[] = [
     title: "📩 Let's Work Together",
     description: "Ready for your next project collaboration",
     label: "Contact",
+    customBackground: {
+      background: `
+        linear-gradient(135deg, #000000 0%, #1a1a1a 25%, #2d2d2d 50%, #1a1a1a 75%, #000000 100%),
+        radial-gradient(circle at 20% 30%, rgba(40, 40, 40, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(60, 60, 60, 0.2) 0%, transparent 50%),
+        linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.02) 50%, transparent 70%)
+      `,
+      backgroundBlendMode: 'multiply, overlay, normal, normal, overlay'
+    },
     customContent: (
-      <div className="flex flex-col justify-between h-full">
-        <div>
-          <h2 className="text-2xl font-bold text-white mb-2 leading-tight">
-            Let's work together<br />
-            on your <span className="text-accent">next project</span>
-          </h2>
-          <p className="text-white/70 text-sm">
-            Ready to bring your ideas to life
-          </p>
-        </div>
-        
-        <div className="-mx-2">
-          <div className="flex items-center gap-2 mb-2 px-2">
-            <Mail className="w-4 h-4 text-accent" />
-            <span className="text-white/70 text-sm font-medium">Get in touch</span>
+      <div className="flex flex-col justify-center items-center h-full relative">        
+        <div className="relative z-10 text-center">
+          {/* Temporary Logo */}
+          <div className="mb-8 flex justify-center">
+            <div className="w-16 h-16 bg-gradient-to-r from-accent to-accent/80 rounded-full flex items-center justify-center shadow-lg">
+              <User className="w-8 h-8 text-white" />
+            </div>
           </div>
-          <button 
-            className="w-full text-white font-mono text-sm bg-accent/10 hover:bg-accent/20 px-3 py-2 rounded-lg transition-colors duration-200 cursor-pointer text-center group whitespace-nowrap"
-            onClick={(e) => {
-              navigator.clipboard.writeText('hello@jespersjostrom.se');
-              const button = e.currentTarget;
-              const originalText = button.textContent;
-              button.textContent = 'Copied!';
-              setTimeout(() => {
-                button.textContent = originalText;
-              }, 2000);
-            }}
-            title="Click to copy: hello@jespersjostrom.se"
+          
+          {/* Shiny "Let's connect" text */}
+          <div className="mb-8">
+            <ShinyText 
+              text="Let's connect" 
+              className="text-2xl font-bold leading-tight"
+              speed={0.3}
+            />
+          </div>
+          
+          {/* Magnet Button */}
+          <Magnet
+            padding={30}
+            magnetStrength={2}
+            wrapperClassName="flex justify-center"
           >
-            hello@jespersjostrom.se
-          </button>
+            <button 
+              className="px-4 py-2 text-white text-sm font-medium rounded-lg transition-all duration-300 relative overflow-hidden flex items-center gap-2"
+              style={{
+                background: 'rgba(139, 115, 85, 0.2)',
+                backdropFilter: 'blur(12px)',
+                border: '1px solid rgba(139, 115, 85, 0.4)',
+                boxShadow: '0 4px 20px rgba(139, 115, 85, 0.3), 0 0 30px rgba(218, 197, 167, 0.2)'
+              }}
+              onClick={async () => {
+                try {
+                  await navigator.clipboard.writeText('contact@jespersjostrom.se');
+                  
+                  // Use hero notification system
+                  const notification = document.createElement('div');
+                  notification.className = 'fixed bottom-24 right-4 px-4 py-3 rounded-lg shadow-lg z-50 transform translate-y-full transition-transform duration-300';
+                  notification.style.background = '#2a2a2a';
+                  notification.style.border = '1px solid #4a4a4a';
+                  notification.style.color = '#ffffff';
+                  notification.innerHTML = `
+                    <div class="flex items-center gap-2">
+                      <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                      </svg>
+                      <div>
+                        <div class="font-medium">Copied to clipboard!</div>
+                        <div class="text-sm opacity-70">Email address copied successfully</div>
+                      </div>
+                    </div>
+                  `;
+                  document.body.appendChild(notification);
+                  
+                  setTimeout(() => {
+                    notification.style.transform = 'translateY(0)';
+                  }, 10);
+                  
+                  setTimeout(() => {
+                    notification.style.transform = 'translateY(100%)';
+                    setTimeout(() => {
+                      document.body.removeChild(notification);
+                    }, 300);
+                  }, 3000);
+                } catch (err) {
+                  console.error('Failed to copy: ', err);
+                }
+              }}
+              title="Click to copy: contact@jespersjostrom.se"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              </svg>
+              <span className="relative z-10">contact@jespersjostrom.se</span>
+            </button>
+          </Magnet>
         </div>
       </div>
     ),
@@ -925,6 +1062,30 @@ const MagicBento: React.FC<BentoProps> = ({
           .card--border-glow:hover {
             box-shadow: 0 4px 20px rgba(61, 47, 40, 0.4), 0 0 30px rgba(${glowColor}, 0.2);
           }
+
+          .card::before {
+            content: '';
+            position: absolute;
+            inset: 2px;
+            border-radius: 18px;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            pointer-events: none;
+            z-index: 1;
+          }
+
+
+          @keyframes confettiFall {
+            0% {
+              transform: translateY(0px) rotate(0deg) scale(1);
+              opacity: 1;
+            }
+            100% {
+              transform: translateY(400px) rotate(720deg) scale(0);
+              opacity: 0;
+            }
+          }
+
           
           .particle::before {
             content: '';
@@ -989,9 +1150,19 @@ const MagicBento: React.FC<BentoProps> = ({
       <BentoCardGrid gridRef={gridRef}>
         <div className="card-responsive grid gap-2">
           {cardData.map((card, index) => {
-            const baseClassName = `card bg-card/30 backdrop-blur-sm border border-accent/20 flex flex-col justify-between relative min-h-[280px] w-full max-w-full p-8 rounded-[20px] font-light overflow-hidden transition-all duration-300 ease-in-out ${
+            const baseClassName = `card bg-transparent backdrop-blur-sm border border-accent/20 flex flex-col justify-between relative ${index === 2 ? 'min-h-[240px]' : 'min-h-[280px]'} w-full max-w-full p-8 rounded-[20px] font-light overflow-hidden transition-all duration-300 ease-in-out ${
               enableBorderGlow ? "card--border-glow" : ""
             }`;
+
+            const defaultGradient = {
+              background: `
+                linear-gradient(135deg, #000000 0%, #1a1a1a 25%, #2d2d2d 50%, #1a1a1a 75%, #000000 100%),
+                radial-gradient(circle at 20% 30%, rgba(40, 40, 40, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(60, 60, 60, 0.2) 0%, transparent 50%),
+                linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.02) 50%, transparent 70%)
+              `,
+              backgroundBlendMode: 'multiply, overlay, normal, overlay'
+            };
 
             const cardStyle = {
               backdropFilter: "blur(12px)",
@@ -1000,6 +1171,7 @@ const MagicBento: React.FC<BentoProps> = ({
               "--glow-y": "50%",
               "--glow-intensity": "0",
               "--glow-radius": "200px",
+              ...(card.customBackground || defaultGradient)
             } as React.CSSProperties;
 
             if (enableStars) {
