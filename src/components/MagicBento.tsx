@@ -35,7 +35,7 @@ import dynamic from "next/dynamic";
 import Magnet from "@/blocks/Animations/Magnet/Magnet";
 import ShinyText from "@/blocks/TextAnimations/ShinyText/ShinyText";
 
-const SimpleGlobe = dynamic(() => import('@/components/SimpleGlobe'), { 
+const HexedGlobe = dynamic(() => import('@/components/HexedGlobe'), { 
   ssr: false,
   loading: () => <div className="w-75 h-75 rounded-full bg-accent/10 animate-pulse flex items-center justify-center">
     <div className="w-36 h-36 rounded-full border-2 border-accent/20 border-t-accent animate-spin"></div>
@@ -72,364 +72,6 @@ const DEFAULT_SPOTLIGHT_RADIUS = 300;
 const DEFAULT_GLOW_COLOR = "218, 197, 167";
 const MOBILE_BREAKPOINT = 768;
 
-const cardData: BentoCardProps[] = [
-  {
-    color: "#8b7a6b",
-    title: "🤝 Collaboration",
-    description: "I prioritize client collaboration, fostering open communication",
-    label: "Teamwork",
-    customContent: (
-      <div className="flex flex-col justify-between h-full">
-        <div>
-          <h2 className="text-2xl font-bold text-white mb-2 leading-tight">
-            Clear communication<br />
-            and <span className="text-accent">seamless</span><br />
-            collaboration
-          </h2>
-          <p className="text-white/70 text-sm">
-            Working closely with teams and clients for optimal results
-          </p>
-        </div>
-        
-        <div className="flex items-center gap-2 text-white/60">
-          <div className="flex items-center gap-1 text-xs">
-            <span className="w-2 h-2 bg-accent rounded-full"></span>
-            <span>Daily standups</span>
-          </div>
-          <div className="flex items-center gap-1 text-xs">
-            <span className="w-2 h-2 bg-accent rounded-full"></span>
-            <span>Transparent feedback</span>
-          </div>
-        </div>
-      </div>
-    ),
-  },
-  {
-    color: "#8b7a6b",
-    title: "⚡ Tech Stack",
-    description: "TypeScript, Next.js, Tailwind, PostgreSQL & more",
-    label: "Technologies",
-    customContent: (
-      <div className="flex flex-col h-full relative overflow-hidden">
-        <div className="mb-6 relative z-10">
-          <h2 className="text-2xl font-bold text-white mb-2 leading-tight">
-            Passionate about<br />
-            <span className="text-accent">cutting-edge</span><br />
-            technologies
-          </h2>
-          <p className="text-white/70 text-sm">
-            Building modern web experiences with industry-leading tools
-          </p>
-        </div>
-        
-        <div className="flex-1 flex flex-col justify-center gap-8 overflow-hidden">
-          {/* First row - Right to Left */}
-          <div className="flex overflow-hidden">
-            <motion.div 
-              className="flex gap-4 whitespace-nowrap"
-              animate={{ 
-                x: [0, -2000] 
-              }}
-              transition={{
-                duration: 120,
-                ease: "linear",
-                repeat: Infinity,
-              }}
-              style={{ width: "max-content" }}
-            >
-              {Array(8).fill([
-                { icon: SiJavascript, name: "JavaScript", color: "text-yellow-400" },
-                { icon: SiReact, name: "React", color: "text-cyan-400" },
-                { icon: SiNextdotjs, name: "Next.js", color: "text-white" },
-                { icon: SiTypescript, name: "TypeScript", color: "text-blue-500" },
-                { icon: SiFramer, name: "Framer", color: "text-purple-500" },
-                { icon: SiTailwindcss, name: "Tailwind", color: "text-cyan-400" },
-                { icon: SiPython, name: "Python", color: "text-yellow-500" },
-                { icon: SiDocker, name: "Docker", color: "text-blue-400" },
-              ]).flat().map((skill, idx) => (
-                <span 
-                  key={idx}
-                  className="px-4 py-2 text-white text-sm font-medium flex items-center gap-2 whitespace-nowrap bg-card/40 backdrop-blur-sm border border-gray-400/30 rounded-lg"
-                  style={{
-                    boxShadow: '0 1px 0 0 rgba(255, 255, 255, 0.1)',
-                    backgroundColor: 'rgba(139, 115, 85, 0.15)'
-                  }}
-                >
-                  <skill.icon className={`w-4 h-4 ${skill.color}`} />
-                  {skill.name}
-                </span>
-              ))}
-            </motion.div>
-          </div>
-
-          {/* Second row - Left to Right */}
-          <div className="flex overflow-hidden">
-            <motion.div 
-              className="flex gap-4 whitespace-nowrap"
-              animate={{ 
-                x: [-2000, 0] 
-              }}
-              transition={{
-                duration: 100,
-                ease: "linear",
-                repeat: Infinity,
-              }}
-              style={{ width: "max-content" }}
-            >
-              {Array(8).fill([
-                { icon: SiHtml5, name: "HTML5", color: "text-orange-500" },
-                { icon: SiCss3, name: "CSS3", color: "text-blue-500" },
-                { icon: SiNodedotjs, name: "Node.js", color: "text-green-500" },
-                { icon: SiGit, name: "Git", color: "text-red-500" },
-                { icon: SiGithub, name: "GitHub", color: "text-gray-300" },
-                { icon: SiFigma, name: "Figma", color: "text-green-400" },
-                { icon: SiMongodb, name: "MongoDB", color: "text-green-600" },
-                { icon: SiGraphql, name: "GraphQL", color: "text-pink-400" },
-              ]).flat().map((skill, idx) => (
-                <span 
-                  key={idx}
-                  className="px-4 py-2 text-white text-sm font-medium flex items-center gap-2 whitespace-nowrap bg-card/40 backdrop-blur-sm border border-gray-400/30 rounded-lg"
-                  style={{
-                    boxShadow: '0 1px 0 0 rgba(255, 255, 255, 0.1)',
-                    backgroundColor: 'rgba(139, 115, 85, 0.15)'
-                  }}
-                >
-                  <skill.icon className={`w-4 h-4 ${skill.color}`} />
-                  {skill.name}
-                </span>
-              ))}
-            </motion.div>
-          </div>
-
-          {/* Third row - Right to Left */}
-          <div className="flex overflow-hidden">
-            <motion.div 
-              className="flex gap-4 whitespace-nowrap"
-              animate={{ 
-                x: [0, -2000] 
-              }}
-              transition={{
-                duration: 110,
-                ease: "linear",
-                repeat: Infinity,
-              }}
-              style={{ width: "max-content" }}
-            >
-              {Array(8).fill([
-                { icon: SiBootstrap, name: "Bootstrap", color: "text-purple-500" },
-                { icon: SiSass, name: "Sass", color: "text-pink-500" },
-                { icon: SiPostman, name: "Postman", color: "text-orange-500" },
-                { icon: SiCypress, name: "Cypress", color: "text-gray-400" },
-                { icon: SiHeroku, name: "Heroku", color: "text-purple-600" },
-                { icon: SiPostgresql, name: "PostgreSQL", color: "text-blue-600" },
-                { icon: SiRedis, name: "Redis", color: "text-red-600" },
-              ]).flat().map((skill, idx) => (
-                <span 
-                  key={idx}
-                  className="px-4 py-2 text-white text-sm font-medium flex items-center gap-2 whitespace-nowrap bg-card/40 backdrop-blur-sm border border-gray-400/30 rounded-lg"
-                  style={{
-                    boxShadow: '0 1px 0 0 rgba(255, 255, 255, 0.1)',
-                    backgroundColor: 'rgba(139, 115, 85, 0.15)'
-                  }}
-                >
-                  <skill.icon className={`w-4 h-4 ${skill.color}`} />
-                  {skill.name}
-                </span>
-              ))}
-            </motion.div>
-          </div>
-        </div>
-
-
-      </div>
-    ),
-  },
-  {
-    color: "#8b7a6b",
-    title: "📩 Let's Work Together",
-    description: "Ready for your next project collaboration",
-    label: "Contact",
-    customBackground: {
-      background: `
-        linear-gradient(135deg, #000000 0%, #1a1a1a 25%, #2d2d2d 50%, #1a1a1a 75%, #000000 100%),
-        radial-gradient(circle at 20% 30%, rgba(40, 40, 40, 0.3) 0%, transparent 50%),
-        radial-gradient(circle at 80% 70%, rgba(60, 60, 60, 0.2) 0%, transparent 50%),
-        linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.02) 50%, transparent 70%)
-      `,
-      backgroundBlendMode: 'multiply, overlay, normal, normal, overlay'
-    },
-    customContent: (
-      <div className="flex flex-col justify-center items-center h-full relative">        
-        <div className="relative z-10 text-center">
-          {/* Temporary Logo */}
-          <div className="mb-8 flex justify-center">
-            <div className="w-16 h-16 bg-gradient-to-r from-accent to-accent/80 rounded-full flex items-center justify-center shadow-lg">
-              <User className="w-8 h-8 text-white" />
-            </div>
-          </div>
-          
-          {/* Shiny "Let's connect" text */}
-          <div className="mb-8">
-            <ShinyText 
-              text="Let's connect" 
-              className="text-2xl font-bold leading-tight"
-              speed={0.3}
-            />
-          </div>
-          
-          {/* Magnet Button */}
-          <Magnet
-            padding={30}
-            magnetStrength={2}
-            wrapperClassName="flex justify-center"
-          >
-            <button 
-              className="px-4 py-2 text-white text-sm font-medium rounded-lg transition-all duration-300 relative overflow-hidden flex items-center gap-2"
-              style={{
-                background: 'rgba(139, 115, 85, 0.2)',
-                backdropFilter: 'blur(12px)',
-                border: '1px solid rgba(139, 115, 85, 0.4)',
-                boxShadow: '0 4px 20px rgba(139, 115, 85, 0.3), 0 0 30px rgba(218, 197, 167, 0.2)'
-              }}
-              onClick={async () => {
-                try {
-                  await navigator.clipboard.writeText('contact@jespersjostrom.se');
-                  
-                  // Use hero notification system
-                  const notification = document.createElement('div');
-                  notification.className = 'fixed bottom-24 right-4 px-4 py-3 rounded-lg shadow-lg z-50 transform translate-y-full transition-transform duration-300';
-                  notification.style.background = '#2a2a2a';
-                  notification.style.border = '1px solid #4a4a4a';
-                  notification.style.color = '#ffffff';
-                  notification.innerHTML = `
-                    <div class="flex items-center gap-2">
-                      <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                      </svg>
-                      <div>
-                        <div class="font-medium">Copied to clipboard!</div>
-                        <div class="text-sm opacity-70">Email address copied successfully</div>
-                      </div>
-                    </div>
-                  `;
-                  document.body.appendChild(notification);
-                  
-                  setTimeout(() => {
-                    notification.style.transform = 'translateY(0)';
-                  }, 10);
-                  
-                  setTimeout(() => {
-                    notification.style.transform = 'translateY(100%)';
-                    setTimeout(() => {
-                      document.body.removeChild(notification);
-                    }, 300);
-                  }, 3000);
-                } catch (err) {
-                  console.error('Failed to copy: ', err);
-                }
-              }}
-              title="Click to copy: contact@jespersjostrom.se"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-              </svg>
-              <span className="relative z-10">contact@jespersjostrom.se</span>
-            </button>
-          </Magnet>
-        </div>
-      </div>
-    ),
-  },
-  {
-    color: "#8b7a6b",
-    title: "🌍 Time Zone Flexibility",
-    description: "Available across UK, India, and USA timezones",
-    label: "Remote Work",
-    customContent: (
-      <div className="flex flex-col justify-between h-full relative overflow-hidden">
-        <div className="relative z-10">
-          <h2 className="text-2xl font-bold text-white mb-2 leading-tight">
-            Remote-first mindset,<br />
-            <span className="text-accent">timezone</span> flexible
-          </h2>
-          <p className="text-white/70 text-sm">
-            Adapting to your schedule, wherever you are
-          </p>
-        </div>
-        
-        <div className="flex-1 flex items-center justify-center relative overflow-hidden">
-          <div className="flex items-center justify-center">
-            <SimpleGlobe width={350} height={350} />
-          </div>
-        </div>
-        
-        <div className="space-y-2 relative z-10">
-          <div className="flex items-center justify-between text-xs text-white/60">
-            <span>Stockholm</span>
-            <span className="px-2 py-1 bg-accent/10 rounded text-accent font-mono">GMT+1</span>
-          </div>
-          <div className="flex items-center justify-between text-xs text-white/60">
-            <span>London</span>
-            <span className="px-2 py-1 bg-accent/10 rounded text-accent font-mono">GMT+0</span>
-          </div>
-          <div className="flex items-center justify-between text-xs text-white/60">
-            <span>New York</span>
-            <span className="px-2 py-1 bg-accent/10 rounded text-accent font-mono">GMT-5</span>
-          </div>
-        </div>
-      </div>
-    ),
-  },
-  {
-    color: "#8b7a6b",
-    title: "🛠️ Currently Building",
-    description: "SaaS application with authentication & dashboards",
-    label: "Projects",
-    customContent: (
-      <div className="flex flex-col justify-between h-full">
-        <div>
-          <h2 className="text-2xl font-bold text-white mb-2 leading-tight">
-            Building innovative<br />
-            <span className="text-accent">web experiences</span>
-          </h2>
-          <p className="text-white/70 text-sm">
-            From e-commerce platforms to data visualization tools
-          </p>
-        </div>
-        
-        <div className="space-y-3">
-          <div className="flex items-center gap-3 text-white/80">
-            <div className="w-8 h-8 bg-accent/20 rounded-lg flex items-center justify-center">
-              <ShoppingCart className="w-4 h-4 text-accent" />
-            </div>
-            <div>
-              <div className="text-sm font-medium">E-commerce Solutions</div>
-              <div className="text-xs text-white/60">Full-stack shopping platforms</div>
-            </div>
-          </div>
-          <div className="flex items-center gap-3 text-white/80">
-            <div className="w-8 h-8 bg-accent/20 rounded-lg flex items-center justify-center">
-              <BarChart3 className="w-4 h-4 text-accent" />
-            </div>
-            <div>
-              <div className="text-sm font-medium">Data Dashboards</div>
-              <div className="text-xs text-white/60">Interactive analytics tools</div>
-            </div>
-          </div>
-          <div className="flex items-center gap-3 text-white/80">
-            <div className="w-8 h-8 bg-accent/20 rounded-lg flex items-center justify-center">
-              <Rocket className="w-4 h-4 text-accent" />
-            </div>
-            <div>
-              <div className="text-sm font-medium">SaaS Applications</div>
-              <div className="text-xs text-white/60">Scalable business solutions</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    ),
-  },
-];
 
 const createParticleElement = (
   x: number,
@@ -934,6 +576,391 @@ const MagicBento: React.FC<BentoProps> = ({
   const gridRef = useRef<HTMLDivElement>(null);
   const isMobile = useMobileDetection();
   const shouldDisableAnimations = disableAnimations || isMobile;
+  const [selectedCountry, setSelectedCountry] = useState<string>('Finland');
+
+  const getRemoteWorkCard = () => ({
+    color: "#8b7a6b",
+    title: "🌍 Nordic & European Markets",
+    description: "Available across Finland, Sweden, and UK timezones",
+    label: "Remote Work",
+    customContent: (
+      <div className="flex flex-col h-full relative overflow-hidden">
+        <div className="relative z-10 p-6">
+          <h2 className="text-2xl font-bold text-white mb-2 leading-tight">
+            Nordic & European<br />
+            <span className="text-accent">collaboration</span>
+          </h2>
+          <p className="text-white/70 text-sm mb-4">
+            Working across Finnish, Swedish, and British markets
+          </p>
+          
+          {/* Country Selection Buttons - Moved to top */}
+          <div className="flex gap-2 mb-4">
+            {['Finland', 'Sweden', 'UK'].map((country) => (
+              <button
+                key={country}
+                onClick={() => setSelectedCountry(country)}
+                className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-all duration-300 flex-1 ${
+                  selectedCountry === country
+                    ? 'bg-accent/20 text-accent border border-accent/40'
+                    : 'bg-white/5 text-white/70 border border-white/10 hover:bg-white/10 hover:text-white'
+                }`}
+              >
+                {country}
+              </button>
+            ))}
+          </div>
+          
+          <div className="space-y-2 mb-4">
+            <div className={`flex items-center justify-between text-xs transition-opacity duration-300 ${
+              selectedCountry === 'Finland' ? 'text-accent' : 'text-white/60'
+            }`}>
+              <span>Helsinki</span>
+              <span className="px-2 py-1 bg-accent/10 rounded text-accent font-mono">GMT+2</span>
+            </div>
+            <div className={`flex items-center justify-between text-xs transition-opacity duration-300 ${
+              selectedCountry === 'Sweden' ? 'text-accent' : 'text-white/60'
+            }`}>
+              <span>Stockholm</span>
+              <span className="px-2 py-1 bg-accent/10 rounded text-accent font-mono">GMT+1</span>
+            </div>
+            <div className={`flex items-center justify-between text-xs transition-opacity duration-300 ${
+              selectedCountry === 'UK' ? 'text-accent' : 'text-white/60'
+            }`}>
+              <span>London</span>
+              <span className="px-2 py-1 bg-accent/10 rounded text-accent font-mono">GMT+0</span>
+            </div>
+          </div>
+        </div>
+        
+        <div className="flex-1 relative">
+          <HexedGlobe 
+            selectedCountry={selectedCountry}
+            onCountrySelect={setSelectedCountry}
+          />
+        </div>
+      </div>
+    ),
+  });
+
+  // Create cardData array with the remote work card that has access to state
+  const cardData = [
+    {
+      color: "#8b7a6b",
+      title: "🤝 Collaboration",
+      description: "I prioritize client collaboration, fostering open communication",
+      label: "Teamwork",
+      customContent: (
+        <div className="flex flex-col justify-between h-full">
+          <div>
+            <h2 className="text-2xl font-bold text-white mb-2 leading-tight">
+              Clear communication<br />
+              and <span className="text-accent">seamless</span><br />
+              collaboration
+            </h2>
+            <p className="text-white/70 text-sm">
+              Working closely with teams and clients for optimal results
+            </p>
+          </div>
+          
+          <div className="flex items-center gap-2 text-white/60">
+            <div className="flex items-center gap-1 text-xs">
+              <span className="w-2 h-2 bg-accent rounded-full"></span>
+              <span>Daily standups</span>
+            </div>
+            <div className="flex items-center gap-1 text-xs">
+              <span className="w-2 h-2 bg-accent rounded-full"></span>
+              <span>Transparent feedback</span>
+            </div>
+          </div>
+        </div>
+      ),
+    },
+    {
+      color: "#8b7a6b",
+      title: "⚡ Tech Stack",
+      description: "TypeScript, Next.js, Tailwind, PostgreSQL & more",
+      label: "Technologies",
+      customContent: (
+        <div className="flex flex-col h-full relative overflow-hidden">
+          <div className="mb-6 relative z-10">
+            <h2 className="text-2xl font-bold text-white mb-2 leading-tight">
+              Passionate about<br />
+              <span className="text-accent">cutting-edge</span><br />
+              technologies
+            </h2>
+            <p className="text-white/70 text-sm">
+              Building modern web experiences with industry-leading tools
+            </p>
+          </div>
+          
+          <div className="flex-1 flex flex-col justify-center gap-8 overflow-hidden">
+            {/* First row - Right to Left */}
+            <div className="flex overflow-hidden">
+              <motion.div 
+                className="flex gap-4 whitespace-nowrap"
+                animate={{ 
+                  x: [0, -2000] 
+                }}
+                transition={{
+                  duration: 120,
+                  ease: "linear",
+                  repeat: Infinity,
+                }}
+                style={{ width: "max-content" }}
+              >
+                {Array(8).fill([
+                  { icon: SiJavascript, name: "JavaScript", color: "text-yellow-400" },
+                  { icon: SiReact, name: "React", color: "text-cyan-400" },
+                  { icon: SiNextdotjs, name: "Next.js", color: "text-white" },
+                  { icon: SiTypescript, name: "TypeScript", color: "text-blue-500" },
+                  { icon: SiFramer, name: "Framer", color: "text-purple-500" },
+                  { icon: SiTailwindcss, name: "Tailwind", color: "text-cyan-400" },
+                  { icon: SiPython, name: "Python", color: "text-yellow-500" },
+                  { icon: SiDocker, name: "Docker", color: "text-blue-400" },
+                ]).flat().map((skill, idx) => (
+                  <span 
+                    key={idx}
+                    className="px-4 py-2 text-white text-sm font-medium flex items-center gap-2 whitespace-nowrap bg-card/40 backdrop-blur-sm border border-gray-400/30 rounded-lg"
+                    style={{
+                      boxShadow: '0 1px 0 0 rgba(255, 255, 255, 0.1)',
+                      backgroundColor: 'rgba(139, 115, 85, 0.15)'
+                    }}
+                  >
+                    <skill.icon className={`w-4 h-4 ${skill.color}`} />
+                    {skill.name}
+                  </span>
+                ))}
+              </motion.div>
+            </div>
+
+            {/* Second row - Left to Right */}
+            <div className="flex overflow-hidden">
+              <motion.div 
+                className="flex gap-4 whitespace-nowrap"
+                animate={{ 
+                  x: [-2000, 0] 
+                }}
+                transition={{
+                  duration: 100,
+                  ease: "linear",
+                  repeat: Infinity,
+                }}
+                style={{ width: "max-content" }}
+              >
+                {Array(8).fill([
+                  { icon: SiHtml5, name: "HTML5", color: "text-orange-500" },
+                  { icon: SiCss3, name: "CSS3", color: "text-blue-500" },
+                  { icon: SiNodedotjs, name: "Node.js", color: "text-green-500" },
+                  { icon: SiGit, name: "Git", color: "text-red-500" },
+                  { icon: SiGithub, name: "GitHub", color: "text-gray-300" },
+                  { icon: SiFigma, name: "Figma", color: "text-green-400" },
+                  { icon: SiMongodb, name: "MongoDB", color: "text-green-600" },
+                  { icon: SiGraphql, name: "GraphQL", color: "text-pink-400" },
+                ]).flat().map((skill, idx) => (
+                  <span 
+                    key={idx}
+                    className="px-4 py-2 text-white text-sm font-medium flex items-center gap-2 whitespace-nowrap bg-card/40 backdrop-blur-sm border border-gray-400/30 rounded-lg"
+                    style={{
+                      boxShadow: '0 1px 0 0 rgba(255, 255, 255, 0.1)',
+                      backgroundColor: 'rgba(139, 115, 85, 0.15)'
+                    }}
+                  >
+                    <skill.icon className={`w-4 h-4 ${skill.color}`} />
+                    {skill.name}
+                  </span>
+                ))}
+              </motion.div>
+            </div>
+
+            {/* Third row - Right to Left */}
+            <div className="flex overflow-hidden">
+              <motion.div 
+                className="flex gap-4 whitespace-nowrap"
+                animate={{ 
+                  x: [0, -2000] 
+                }}
+                transition={{
+                  duration: 110,
+                  ease: "linear",
+                  repeat: Infinity,
+                }}
+                style={{ width: "max-content" }}
+              >
+                {Array(8).fill([
+                  { icon: SiBootstrap, name: "Bootstrap", color: "text-purple-500" },
+                  { icon: SiSass, name: "Sass", color: "text-pink-500" },
+                  { icon: SiPostman, name: "Postman", color: "text-orange-500" },
+                  { icon: SiCypress, name: "Cypress", color: "text-gray-400" },
+                  { icon: SiHeroku, name: "Heroku", color: "text-purple-600" },
+                  { icon: SiPostgresql, name: "PostgreSQL", color: "text-blue-600" },
+                  { icon: SiRedis, name: "Redis", color: "text-red-600" },
+                ]).flat().map((skill, idx) => (
+                  <span 
+                    key={idx}
+                    className="px-4 py-2 text-white text-sm font-medium flex items-center gap-2 whitespace-nowrap bg-card/40 backdrop-blur-sm border border-gray-400/30 rounded-lg"
+                    style={{
+                      boxShadow: '0 1px 0 0 rgba(255, 255, 255, 0.1)',
+                      backgroundColor: 'rgba(139, 115, 85, 0.15)'
+                    }}
+                  >
+                    <skill.icon className={`w-4 h-4 ${skill.color}`} />
+                    {skill.name}
+                  </span>
+                ))}
+              </motion.div>
+            </div>
+          </div>
+        </div>
+      ),
+    },
+    {
+      color: "#8b7a6b",
+      title: "📩 Let's Work Together",
+      description: "Ready for your next project collaboration",
+      label: "Contact",
+      customBackground: {
+        background: `
+          linear-gradient(135deg, #000000 0%, #1a1a1a 25%, #2d2d2d 50%, #1a1a1a 75%, #000000 100%),
+          radial-gradient(circle at 20% 30%, rgba(40, 40, 40, 0.3) 0%, transparent 50%),
+          radial-gradient(circle at 80% 70%, rgba(60, 60, 60, 0.2) 0%, transparent 50%),
+          linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.02) 50%, transparent 70%)
+        `,
+        backgroundBlendMode: 'multiply, overlay, normal, normal, overlay'
+      },
+      customContent: (
+        <div className="flex flex-col justify-center items-center h-full relative">        
+          <div className="relative z-10 text-center">
+            {/* Temporary Logo */}
+            <div className="mb-8 flex justify-center">
+              <div className="w-16 h-16 bg-gradient-to-r from-accent to-accent/80 rounded-full flex items-center justify-center shadow-lg">
+                <User className="w-8 h-8 text-white" />
+              </div>
+            </div>
+            
+            {/* Shiny "Let's connect" text */}
+            <div className="mb-8">
+              <ShinyText 
+                text="Let's connect" 
+                className="text-2xl font-bold leading-tight"
+                speed={0.3}
+              />
+            </div>
+            
+            {/* Magnet Button */}
+            <Magnet
+              padding={30}
+              magnetStrength={2}
+              wrapperClassName="flex justify-center"
+            >
+              <button 
+                className="px-4 py-2 text-white text-sm font-medium rounded-lg transition-all duration-300 relative overflow-hidden flex items-center gap-2"
+                style={{
+                  background: 'rgba(139, 115, 85, 0.2)',
+                  backdropFilter: 'blur(12px)',
+                  border: '1px solid rgba(139, 115, 85, 0.4)',
+                  boxShadow: '0 4px 20px rgba(139, 115, 85, 0.3), 0 0 30px rgba(218, 197, 167, 0.2)'
+                }}
+                onClick={async () => {
+                  try {
+                    await navigator.clipboard.writeText('contact@jespersjostrom.se');
+                    
+                    // Use hero notification system
+                    const notification = document.createElement('div');
+                    notification.className = 'fixed bottom-24 right-4 px-4 py-3 rounded-lg shadow-lg z-50 transform translate-y-full transition-transform duration-300';
+                    notification.style.background = '#2a2a2a';
+                    notification.style.border = '1px solid #4a4a4a';
+                    notification.style.color = '#ffffff';
+                    notification.innerHTML = `
+                      <div class="flex items-center gap-2">
+                        <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <div>
+                          <div class="font-medium">Copied to clipboard!</div>
+                          <div class="text-sm opacity-70">Email address copied successfully</div>
+                        </div>
+                      </div>
+                    `;
+                    document.body.appendChild(notification);
+                    
+                    setTimeout(() => {
+                      notification.style.transform = 'translateY(0)';
+                    }, 10);
+                    
+                    setTimeout(() => {
+                      notification.style.transform = 'translateY(100%)';
+                      setTimeout(() => {
+                        document.body.removeChild(notification);
+                      }, 300);
+                    }, 3000);
+                  } catch (err) {
+                    console.error('Failed to copy: ', err);
+                  }
+                }}
+                title="Click to copy: contact@jespersjostrom.se"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                </svg>
+                <span className="relative z-10">contact@jespersjostrom.se</span>
+              </button>
+            </Magnet>
+          </div>
+        </div>
+      ),
+    },
+    getRemoteWorkCard(),
+    {
+      color: "#8b7a6b",
+      title: "🛠️ Currently Building",
+      description: "SaaS application with authentication & dashboards",
+      label: "Projects",
+      customContent: (
+        <div className="flex flex-col justify-between h-full">
+          <div>
+            <h2 className="text-2xl font-bold text-white mb-2 leading-tight">
+              Building innovative<br />
+              <span className="text-accent">web experiences</span>
+            </h2>
+            <p className="text-white/70 text-sm">
+              From e-commerce platforms to data visualization tools
+            </p>
+          </div>
+          
+          <div className="space-y-3">
+            <div className="flex items-center gap-3 text-white/80">
+              <div className="w-8 h-8 bg-accent/20 rounded-lg flex items-center justify-center">
+                <ShoppingCart className="w-4 h-4 text-accent" />
+              </div>
+              <div>
+                <div className="text-sm font-medium">E-commerce Solutions</div>
+                <div className="text-xs text-white/60">Full-stack shopping platforms</div>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 text-white/80">
+              <div className="w-8 h-8 bg-accent/20 rounded-lg flex items-center justify-center">
+                <BarChart3 className="w-4 h-4 text-accent" />
+              </div>
+              <div>
+                <div className="text-sm font-medium">Data Dashboards</div>
+                <div className="text-xs text-white/60">Interactive analytics tools</div>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 text-white/80">
+              <div className="w-8 h-8 bg-accent/20 rounded-lg flex items-center justify-center">
+                <Rocket className="w-4 h-4 text-accent" />
+              </div>
+              <div>
+                <div className="text-sm font-medium">SaaS Applications</div>
+                <div className="text-xs text-white/60">Scalable business solutions</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ),
+    },
+  ];
 
   return (
     <>
@@ -1150,7 +1177,7 @@ const MagicBento: React.FC<BentoProps> = ({
       <BentoCardGrid gridRef={gridRef}>
         <div className="card-responsive grid gap-2">
           {cardData.map((card, index) => {
-            const baseClassName = `card bg-transparent backdrop-blur-sm border border-accent/20 flex flex-col justify-between relative ${index === 2 ? 'min-h-[240px]' : 'min-h-[280px]'} w-full max-w-full p-8 rounded-[20px] font-light overflow-hidden transition-all duration-300 ease-in-out ${
+            const baseClassName = `card bg-transparent backdrop-blur-sm border border-accent/20 flex flex-col justify-between relative ${index === 2 ? 'min-h-[240px]' : 'min-h-[280px]'} w-full max-w-full ${index === 3 ? 'p-0' : 'p-8'} rounded-[20px] font-light overflow-hidden transition-all duration-300 ease-in-out ${
               enableBorderGlow ? "card--border-glow" : ""
             }`;
 
