@@ -7,6 +7,7 @@ import GradientText from '@/components/GradientText'
 import CustomCursor from '@/components/custom-cursor'
 import SmoothScroll from '@/components/smooth-scroll'
 import MagicBento from '@/components/MagicBento'
+import ExperienceSection from '@/components/ExperienceSection'
 
 export default function Home() {
   return (
@@ -30,22 +31,25 @@ export default function Home() {
                     MORE ABOUT ME
                   </p>
                   <div className="mb-8">
-                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight" style={{textShadow: '0 0 10px rgba(255, 255, 255, 0.15), 0 0 20px rgba(255, 255, 255, 0.05)'}}>
-                      I'm Jesper, a<br />
-                      creative <span className="inline-block"><GradientText className="italic" style={{fontFamily: 'cursive'}} colors={["#8b7355", "#dac5a7", "#8b7355"]}>developer</GradientText></span>
+                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight group cursor-default" style={{textShadow: '0 0 10px rgba(255, 255, 255, 0.15), 0 0 20px rgba(255, 255, 255, 0.05)'}}>
+                      I&apos;m Jesper, a<br />
+                      creative <span className="inline-block relative">
+                        <GradientText className="italic" style={{fontFamily: 'cursive'}} colors={["#8b7355", "#dac5a7", "#8b7355"]}>developer</GradientText>
+                        <span className="absolute -right-16 top-1/2 -translate-y-1/2 text-2xl md:text-3xl lg:text-4xl opacity-0 group-hover:opacity-100 transition-all duration-300 animate-waving">👋</span>
+                      </span>
                     </h2>
                   </div>
                   <div className="space-y-6 text-lg text-muted-foreground leading-relaxed max-w-xl">
                     <p>
-                      I'm Jesper Sjöström, a proactive full-stack developer passionate 
+                      I&apos;m Jesper Sjöström, a proactive full-stack developer passionate 
                       about creating dynamic web experiences. From frontend to 
                       backend, I thrive on solving complex problems with clean, 
                       efficient code. My expertise spans React, Next.js, and Node.js, 
-                      and I'm always eager to learn more.
+                      and I&apos;m always eager to learn more.
                     </p>
                     <p>
-                      When I'm not immersed in work, I'm exploring new ideas and 
-                      staying curious. Life's about balance, and I love embracing 
+                      When I&apos;m not immersed in work, I&apos;m exploring new ideas and 
+                      staying curious. Life&apos;s about balance, and I love embracing 
                       every part of it.
                     </p>
                     <p className="font-medium text-white">
@@ -76,18 +80,18 @@ export default function Home() {
                   
                   {/* Information Grid */}
                   <div className="grid grid-cols-2 gap-4 mb-4">
-                    <div className="bg-card/30 backdrop-blur-sm border border-accent/20 rounded-xl p-4 text-center relative" style={{boxShadow: '0 1px 0 0 rgba(255, 255, 255, 0.1)'}}>
+                    <div className="bg-card/30 backdrop-blur-sm border border-accent/20 rounded-xl p-4 text-center relative cursor-pointer transition-all duration-300 hover:translate-x-[-4px] hover:translate-y-[-4px] hover:rounded-md hover:shadow-[4px_4px_0px_rgba(218,197,167,0.8)] active:translate-x-[0px] active:translate-y-[0px] active:rounded-xl active:shadow-none" style={{boxShadow: '0 1px 0 0 rgba(255, 255, 255, 0.1)'}}>
                       <div className="text-2xl font-bold text-white">25</div>
                       <div className="text-xs text-muted-foreground font-medium">AGE</div>
                     </div>
-                    <div className="bg-card/30 backdrop-blur-sm border border-accent/20 rounded-xl p-4 text-center relative" style={{boxShadow: '0 1px 0 0 rgba(255, 255, 255, 0.1)'}}>
+                    <div className="bg-card/30 backdrop-blur-sm border border-accent/20 rounded-xl p-4 text-center relative cursor-pointer transition-all duration-300 hover:translate-x-[-4px] hover:translate-y-[-4px] hover:rounded-md hover:shadow-[4px_4px_0px_rgba(218,197,167,0.8)] active:translate-x-[0px] active:translate-y-[0px] active:rounded-xl active:shadow-none" style={{boxShadow: '0 1px 0 0 rgba(255, 255, 255, 0.1)'}}>
                       <div className="text-2xl font-bold text-white">4+</div>
                       <div className="text-xs text-muted-foreground font-medium">YEARS EXP</div>
                     </div>
                   </div>
                   
                   {/* Location */}
-                  <div className="bg-card/30 backdrop-blur-sm border border-accent/20 rounded-xl p-5 text-center relative" style={{boxShadow: '0 1px 0 0 rgba(255, 255, 255, 0.1)'}}>
+                  <div className="bg-card/30 backdrop-blur-sm border border-accent/20 rounded-xl p-5 text-center relative cursor-pointer transition-all duration-300 hover:translate-x-[-4px] hover:translate-y-[-4px] hover:rounded-md hover:shadow-[4px_4px_0px_rgba(218,197,167,0.8)] active:translate-x-[0px] active:translate-y-[0px] active:rounded-xl active:shadow-none" style={{boxShadow: '0 1px 0 0 rgba(255, 255, 255, 0.1)'}}>
                     <div className="text-xl font-bold text-white">Stockholm & Helsinki</div>
                     <div className="text-xs text-muted-foreground font-medium mt-1">LOCATION</div>
                   </div>
@@ -106,14 +110,7 @@ export default function Home() {
       </section>
       
       {/* Experience Section */}
-      <section id="experience" className="min-h-screen flex items-center justify-center bg-background/50 py-20">
-        <div className="container mx-auto px-6 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">Experience</h2>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
-            Professional journey and career highlights showcasing growth and expertise in frontend development.
-          </p>
-        </div>
-      </section>
+      <ExperienceSection />
       
       {/* Work Section */}
       <section id="work" className="min-h-screen flex items-center justify-center bg-background py-20">
