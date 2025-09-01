@@ -14,9 +14,7 @@ import {
   SiHeroku, 
   SiCypress, 
   SiPostman, 
-  SiBackbonedotjs, 
   SiFigma, 
-  SiLess, 
   SiSass,
   SiFramer,
   SiNextdotjs,
@@ -29,7 +27,7 @@ import {
   SiDocker,
   SiGraphql
 } from "react-icons/si";
-import { Copy, Check, Mail, ShoppingCart, BarChart3, Rocket, User } from "lucide-react";
+import { ShoppingCart, BarChart3, Rocket, User } from "lucide-react";
 import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
 import Magnet from "@/blocks/Animations/Magnet/Magnet";
@@ -585,7 +583,8 @@ const MagicBento: React.FC<BentoProps> = ({
     label: "Remote Work",
     customContent: (
       <div className="flex flex-col h-full relative overflow-hidden">
-        <div className="relative z-10 p-6">
+        {/* Content background */}
+        <div className="relative z-0 p-6 h-full flex flex-col">
           <h2 className="text-2xl font-bold text-white mb-2 leading-tight">
             Nordic & European<br />
             <span className="text-accent">collaboration</span>
@@ -594,7 +593,7 @@ const MagicBento: React.FC<BentoProps> = ({
             Working across Finnish, Swedish, and British markets
           </p>
           
-          {/* Country Selection Buttons - Moved to top */}
+          {/* Country Selection Buttons */}
           <div className="flex gap-2 mb-4">
             {['Finland', 'Sweden', 'UK'].map((country) => (
               <button
@@ -633,11 +632,63 @@ const MagicBento: React.FC<BentoProps> = ({
           </div>
         </div>
         
-        <div className="flex-1 relative">
+        {/* Globe overlay */}
+        <div className="absolute inset-0 z-10 pointer-events-none">
           <HexedGlobe 
             selectedCountry={selectedCountry}
             onCountrySelect={setSelectedCountry}
           />
+        </div>
+        
+        {/* Text overlay */}
+        <div className="absolute inset-0 z-20 p-6 pointer-events-none">
+          <div className="h-full flex flex-col pointer-events-auto">
+            <h2 className="text-2xl font-bold text-white mb-2 leading-tight">
+              Nordic & European<br />
+              <span className="text-accent">collaboration</span>
+            </h2>
+            <p className="text-white/70 text-sm mb-4">
+              Working across Finnish, Swedish, and British markets
+            </p>
+            
+            {/* Country Selection Buttons */}
+            <div className="flex gap-2 mb-4">
+              {['Finland', 'Sweden', 'UK'].map((country) => (
+                <button
+                  key={country}
+                  onClick={() => setSelectedCountry(country)}
+                  className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-all duration-300 flex-1 ${
+                    selectedCountry === country
+                      ? 'bg-accent/20 text-accent border border-accent/40'
+                      : 'bg-white/5 text-white/70 border border-white/10 hover:bg-white/10 hover:text-white'
+                  }`}
+                >
+                  {country}
+                </button>
+              ))}
+            </div>
+            
+            <div className="space-y-2 mb-4">
+              <div className={`flex items-center justify-between text-xs transition-opacity duration-300 ${
+                selectedCountry === 'Finland' ? 'text-accent' : 'text-white/60'
+              }`}>
+                <span>Helsinki</span>
+                <span className="px-2 py-1 bg-accent/10 rounded text-accent font-mono">GMT+2</span>
+              </div>
+              <div className={`flex items-center justify-between text-xs transition-opacity duration-300 ${
+                selectedCountry === 'Sweden' ? 'text-accent' : 'text-white/60'
+              }`}>
+                <span>Stockholm</span>
+                <span className="px-2 py-1 bg-accent/10 rounded text-accent font-mono">GMT+1</span>
+              </div>
+              <div className={`flex items-center justify-between text-xs transition-opacity duration-300 ${
+                selectedCountry === 'UK' ? 'text-accent' : 'text-white/60'
+              }`}>
+                <span>London</span>
+                <span className="px-2 py-1 bg-accent/10 rounded text-accent font-mono">GMT+0</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     ),
