@@ -1,15 +1,31 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Copy, Check, Github, Linkedin, Mail } from 'lucide-react'
+import { Copy, Check, Github, Linkedin } from 'lucide-react'
 import FloatingStars from '@/components/floating-stars'
 import LightRays from '@/components/LightRays'
 import GlareHover from '@/components/GlareHover'
-import GradientText from '@/components/GradientText'
 
 export default function Hero() {
   const [isCopied, setIsCopied] = useState(false)
+  const [currentTime, setCurrentTime] = useState('')
+
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date()
+      const timeInFinland = new Date(now.toLocaleString("en-US", {timeZone: "Europe/Helsinki"}))
+      const hours = timeInFinland.getHours().toString().padStart(2, '0')
+      const minutes = timeInFinland.getMinutes().toString().padStart(2, '0')
+      const seconds = timeInFinland.getSeconds().toString().padStart(2, '0')
+      setCurrentTime(`${hours}:${minutes}:${seconds}`)
+    }
+
+    updateTime()
+    const interval = setInterval(updateTime, 1000)
+    
+    return () => clearInterval(interval)
+  }, [])
 
   const scrollToWork = () => {
     const element = document.querySelector('#work')
@@ -60,26 +76,49 @@ export default function Hero() {
 
   return (
     <section id="home" className="min-h-screen relative overflow-hidden noise bg-background">
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 w-full h-full z-0" style={{ minHeight: '100vh' }}>
         <LightRays
           raysOrigin="top-center"
           raysColor="#dac5a7"
-          raysSpeed={0.5}
-          lightSpread={1}
-          rayLength={2}
+          raysSpeed={1}
+          lightSpread={0.8}
+          rayLength={3}
           pulsating={false}
-          fadeDistance={2}
-          saturation={0.5}
+          fadeDistance={1.5}
+          saturation={1}
           followMouse={false}
           mouseInfluence={0}
           noiseAmount={0}
           distortion={0}
-          className="opacity-40"
+          className="opacity-80 w-full h-full"
         />
       </div>
       
       <FloatingStars />
 
+      {/* Available for work and time indicator */}
+      <motion.div
+        className="fixed top-8 left-8 z-50 flex flex-col gap-3"
+        initial={{ opacity: 0, x: -30 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.8, delay: 0.3 }}
+      >
+        {/* Available for work and Local time combined */}
+        <div className="bg-black/20 backdrop-blur-md border border-white/10 rounded-full px-4 py-2">
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse shadow-lg shadow-green-400/50"></div>
+              <span className="text-sm font-medium text-white/90">Available for work</span>
+            </div>
+            <div className="w-px h-4 bg-white/20"></div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium text-white/90">Local time</span>
+              <span className="text-sm font-mono font-medium text-white/90">{currentTime}</span>
+              <span className="text-xs text-white/60">EEST</span>
+            </div>
+          </div>
+        </div>
+      </motion.div>
 
       <div className="container mx-auto px-6 flex items-center justify-center min-h-screen relative z-10 pt-20">
         <div className="text-center space-y-12">
@@ -89,7 +128,7 @@ export default function Hero() {
             transition={{ duration: 0.8, delay: 0.2 }}
           >
             <div className="text-lg md:text-xl text-muted-foreground mb-4 font-medium">
-              Hi I'm
+              Hi I&apos;m
             </div>
             <div className="relative inline-block">
               <div className="text-3xl md:text-5xl lg:text-6xl font-bold text-white leading-none space-y-1 relative z-10">
@@ -138,7 +177,7 @@ export default function Hero() {
                 className="px-8 py-2 text-lg font-medium text-black hover:!bg-transparent hover:text-accent hover:!border-accent transition-all duration-300 cursor-pointer relative"
                 style={{ boxShadow: '0 4px 15px rgba(255, 255, 255, 0.2)' }}
               >
-                Let's Connect
+                Let&apos;s Connect
               </GlareHover>
             </div>
           </motion.div>
