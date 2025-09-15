@@ -8,8 +8,8 @@ import { Menu, X } from 'lucide-react'
 const navItems = [
   { name: 'Home', href: '#home', id: 'home' },
   { name: 'About', href: '#about', id: 'about' },
-  { name: 'Experience', href: '#experience', id: 'experience' },
   { name: 'Work', href: '#work', id: 'work' },
+  { name: 'Experience', href: '#experience', id: 'experience' },
   { name: 'Skills', href: '#skills', id: 'skills' },
   { name: 'Contact', href: '#contact', id: 'contact' },
 ]

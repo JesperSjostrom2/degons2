@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 
 interface Country {
   type: string;
-  geometry: any;
+  geometry: GeoJSON.Geometry;
   properties: {
     ADMIN: string;
     ISO_A2: string;
@@ -27,12 +27,12 @@ const COUNTRY_COORDINATES = {
 };
 
 const HexedGlobe = ({ 
-  width = 280, 
-  height = 280, 
+  width = 400, 
+  height = 400, 
   onCountrySelect,
   selectedCountry 
 }: HexedGlobeProps) => {
-  const globeRef = useRef<any>(null);
+  const globeRef = useRef<HTMLDivElement>(null);
   const rootRef = useRef<any>(null);
   const globeInstanceRef = useRef<any>(null);
   const [countries, setCountries] = useState<Country[]>([]);
@@ -95,12 +95,12 @@ const HexedGlobe = ({
           rootRef.current = createRoot(globeRef.current);
         }
         
-        const globeElement = React.createElement(Globe, {
+        const globeElement = React.createElement(Globe as any, {
           ref: (globe: any) => {
             globeInstanceRef.current = globe;
           },
-          width,
-          height,
+          width: width,
+          height: height,
           backgroundColor: 'rgba(0,0,0,0)',
           
           // Globe appearance - light blue theme
@@ -112,7 +112,7 @@ const HexedGlobe = ({
           
           // Hexagonal polygons - even lighter blue
           hexPolygonsData: countries,
-          hexPolygonGeoJsonGeometry: (d: Country) => d.geometry,
+          hexPolygonGeoJsonGeometry: (d: any) => d.geometry,
           hexPolygonColor: () => '#B6E5FF', // Even lighter blue for countries
           hexPolygonResolution: 3,
           hexPolygonMargin: 0.15,
@@ -143,8 +143,8 @@ const HexedGlobe = ({
           },
           
           // Handle polygon clicks
-          onHexPolygonClick: (polygon: Country) => {
-            const countryName = polygon.properties?.ADMIN;
+          onHexPolygonClick: (polygon: any) => {
+            const countryName = polygon?.properties?.ADMIN;
             if (countryName && onCountrySelect) {
               // Map country names to our country codes
               const countryMap: { [key: string]: string } = {
@@ -178,7 +178,7 @@ const HexedGlobe = ({
               rootRef.current.unmount();
               rootRef.current = null;
             }
-          } catch (e) {
+          } catch {
             // Ignore unmount errors
           }
         }, 0);
@@ -201,23 +201,19 @@ const HexedGlobe = ({
     <div 
       style={{ 
         width: '100%', 
-        height: '100%', // Fill the container completely
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        overflow: 'hidden' // Hide overflow to contain the globe properly
+        height: '100%',
+        position: 'relative'
       }} 
       className="cursor-pointer"
     >
       <div
         ref={globeRef} 
         style={{ 
-          width, 
-          height, 
+          width: '100%', 
+          height: '100%',
           position: 'absolute',
-          bottom: '-30%', // Adjust position for smaller globe
-          left: '50%',
-          transform: 'translateX(-50%)', // Center horizontally
+          top: '50%',
+          left: '0'
         }} 
         className="transition-transform duration-300"
       />

@@ -7,6 +7,7 @@ import GradientText from '@/components/GradientText'
 import CustomCursor from '@/components/custom-cursor'
 import SmoothScroll from '@/components/smooth-scroll'
 import MagicBento from '@/components/MagicBento'
+import ProgressScrollbar from '@/components/ProgressScrollbar'
 import ExperienceSection from '@/components/ExperienceSection'
 
 export default function Home() {
@@ -14,6 +15,7 @@ export default function Home() {
     <main className="relative min-h-screen">
       <SmoothScroll />
       <CustomCursor />
+      <ProgressScrollbar />
       <Navbar />
       <EmailContact />
       <CVButton />
@@ -109,15 +111,15 @@ export default function Home() {
         </div>
       </section>
       
-      {/* Experience Section */}
+      {/* Work Section */}
       <ExperienceSection />
       
-      {/* Work Section */}
-      <section id="work" className="min-h-screen flex items-center justify-center bg-background py-20">
+      {/* Experience Section */}
+      <section id="experience" className="min-h-screen flex items-center justify-center bg-background py-20">
         <div className="container mx-auto px-6 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">Featured Work</h2>
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">Experience</h2>
           <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
-            A collection of projects that demonstrate technical skills and creative problem-solving abilities.
+            Professional journey and career highlights showcasing growth and expertise in frontend development.
           </p>
         </div>
       </section>

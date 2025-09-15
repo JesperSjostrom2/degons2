@@ -1,6 +1,5 @@
-import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { ArrowLeft, Download, Mail, Phone, MapPin, Globe } from 'lucide-react'
+import { ArrowLeft, Download, Mail, MapPin, Globe } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 export default function CVPage() {
@@ -113,7 +112,7 @@ export default function CVPage() {
               <h3 className="text-xl font-semibold">Computer Science Degree</h3>
               <p className="text-accent mb-2">University Name • 2018 - 2021</p>
               <p className="text-muted-foreground">
-                Bachelor's degree in Computer Science with focus on web development and software engineering.
+                Bachelor&apos;s degree in Computer Science with focus on web development and software engineering.
               </p>
             </div>
           </section>
