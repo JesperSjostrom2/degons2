@@ -18,38 +18,22 @@ interface Project {
 const projectsData: Project[] = [
   {
     id: 1,
-    title: "E-commerce Platform",
-    description: "A comprehensive full-stack e-commerce solution featuring modern UI/UX design, secure payment processing with Stripe integration, and a robust admin dashboard. Built with scalability and performance in mind to handle high traffic volumes.",
+    title: "Café & Bistro Kerma",
+    description: "At Café & Bistro Kerma, I was an all-around worker responsible for a wide range of tasks including inventory management, serving food, cooking, and working at the bar. I designed and developed the website, creating a user-friendly platform with an online menu and reservation system.",
     bulletPoints: [
-      "Integrated Stripe payments with secure webhook handling",
-      "Real-time inventory management and order tracking",
-      "Advanced product filtering with search functionality",
-      "Mobile-responsive design with PWA capabilities"
+      "Designed and developed the complete website with online menu and reservation system",
+      "Created the logotype, designing an easy and simple logo to recognize",
+      "Maintained close customer contact to ensure satisfaction with branding and web presence",
+      "Incorporated customer feedback to refine brand identity and online presence"
     ],
-    skills: ["React", "Next.js", "TypeScript", "PostgreSQL", "Stripe", "Tailwind CSS", "Prisma"],
+    skills: ["Web Design", "Logo Design", "Brand Identity", "UI/UX", "HTML/CSS", "JavaScript"],
     backgroundColor: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
     year: "2024",
-    duration: "3 months",
+    duration: "6 months",
     image: "/assets/projects/kerma.png"
   },
   {
     id: 2,
-    title: "SaaS Analytics Dashboard",
-    description: "Enterprise-level analytics platform providing comprehensive data visualization, custom reporting capabilities, and real-time collaboration features. Designed to handle complex datasets with interactive charts and team-based workflows.",
-    bulletPoints: [
-      "Interactive data visualization with D3.js and Chart.js",
-      "Real-time data streaming using WebSocket connections",
-      "Custom report builder with drag-and-drop interface",
-      "Role-based access control and team collaboration"
-    ],
-    skills: ["TypeScript", "React", "D3.js", "Node.js", "Socket.io", "MongoDB", "Redis"],
-    backgroundColor: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
-    year: "2024",
-    duration: "4 months",
-    image: "/assets/projects/analytics-dashboard.jpg"
-  },
-  {
-    id: 3,
     title: "Portfolio Website",
     description: "Modern, interactive portfolio website showcasing creative web development skills. Features smooth animations, dark mode support, and optimized performance with custom components and innovative layout designs.",
     bulletPoints: [
@@ -63,6 +47,22 @@ const projectsData: Project[] = [
     year: "2023",
     duration: "2 months",
     image: "/assets/projects/ogportfolio.png"
+  },
+  {
+    id: 3,
+    title: "Creative Portfolio Website",
+    description: "Currently developing an innovative and creative portfolio website that pushes the boundaries of modern web design. This work-in-progress project focuses on unique user experiences, cutting-edge animations, and creative visual storytelling to showcase development skills.",
+    bulletPoints: [
+      "Experimental UI/UX design with innovative interactions",
+      "Advanced animations and visual effects using modern technologies",
+      "Custom components and creative layout designs",
+      "Focus on performance optimization and accessibility"
+    ],
+    skills: ["Next.js", "TypeScript", "Framer Motion", "GSAP", "Three.js", "Tailwind CSS"],
+    backgroundColor: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+    year: "2025",
+    duration: "In Progress",
+    image: "/assets/projects/current-portfolio.jpg"
   }
 ]
 
@@ -92,7 +92,12 @@ const skillLogos: { [key: string]: string } = {
   'Python': 'python/python-original',
   'Vue.js': 'vuejs/vuejs-original',
   'Angular': 'angularjs/angularjs-original',
-  'Svelte': 'svelte/svelte-original'
+  'Svelte': 'svelte/svelte-original',
+  'Web Design': 'figma/figma-original',
+  'Logo Design': 'illustrator/illustrator-plain',
+  'Brand Identity': 'photoshop/photoshop-plain',
+  'UI/UX': 'figma/figma-original',
+  'HTML/CSS': 'html5/html5-original'
 }
 
 const ProjectInfo: React.FC<ProjectInfoProps> = ({ project }) => {
@@ -191,10 +196,10 @@ const ExperienceSection: React.FC = () => {
   const activeProject = projectsData.find(p => p.id === activeProjectId) || projectsData[0]
 
   return (
-    <section id="work" ref={sectionRef} className="bg-background/50 py-20">
+    <section id="projects" ref={sectionRef} className="bg-background/50 py-20">
       <div className="container mx-auto px-6 mb-12">
         <div className="text-center max-w-3xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">Featured Work</h2>
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">Featured Projects</h2>
           <p className="text-lg md:text-xl text-muted-foreground">
             A collection of projects that demonstrate technical skills and creative problem-solving abilities.
           </p>
@@ -244,7 +249,7 @@ const ExperienceSection: React.FC = () => {
                     {/* Bottom section with project image (70% height, touching bottom) */}
                     <div className="absolute bottom-0 left-0 right-0 h-[70%] px-8 pb-0 pt-4 overflow-hidden">
                       <div 
-                        className="w-full h-[110%] rounded-t-lg overflow-hidden cursor-pointer relative transition-all duration-300 ease-in-out hover:scale-105 hover:rotate-2"
+                        className="w-full h-[110%] rounded-t-lg overflow-hidden cursor-pointer relative transition-all duration-300 ease-in-out hover:scale-105 hover:rotate-2 group"
                         style={{
                           transformOrigin: 'center 40%',
                           boxShadow: `
@@ -258,10 +263,6 @@ const ExperienceSection: React.FC = () => {
                           src={project.image}
                           alt={project.title}
                           className="w-full h-full object-cover"
-                          style={{
-                            filter: 'brightness(1) saturate(1) contrast(1)',
-                            transition: 'filter 0.3s ease-in-out'
-                          }}
                           onError={(e) => {
                             // Fallback if image doesn't exist
                             const target = e.target as HTMLImageElement;
@@ -274,6 +275,13 @@ const ExperienceSection: React.FC = () => {
                                 </div>
                               `;
                             }
+                          }}
+                        />
+                        {/* Dark overlay */}
+                        <div 
+                          className="absolute inset-0 transition-opacity duration-300 group-hover:opacity-0"
+                          style={{
+                            background: 'rgba(0, 0, 0, 0.4)'
                           }}
                         />
                       </div>
