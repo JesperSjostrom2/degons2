@@ -27,8 +27,8 @@ export default function Hero() {
     return () => clearInterval(interval)
   }, [])
 
-  const scrollToWork = () => {
-    const element = document.querySelector('#work')
+  const scrollToProjects = () => {
+    const element = document.querySelector('#projects')
     element?.scrollIntoView({ behavior: 'smooth' })
   }
 
@@ -167,7 +167,7 @@ export default function Hero() {
             transition={{ duration: 0.8, delay: 0.6 }}
             className="flex justify-center"
           >
-            <div onClick={() => scrollToWork()}>
+            <div onClick={() => scrollToProjects()}>
               <GlareHover 
                 width="auto"
                 height="auto"
