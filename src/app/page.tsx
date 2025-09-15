@@ -111,7 +111,7 @@ export default function Home() {
         </div>
       </section>
       
-      {/* Work Section */}
+      {/* Projects Section */}
       <ExperienceSection />
       
       {/* Experience Section */}
