@@ -9,25 +9,7 @@ import GlareHover from '@/components/GlareHover'
 
 export default function Hero() {
   const [isCopied, setIsCopied] = useState(false)
-  const [currentTime, setCurrentTime] = useState('')
-
-  useEffect(() => {
-    const updateTime = () => {
-      const now = new Date()
-      const timeInFinland = new Date(now.toLocaleString("en-US", {timeZone: "Europe/Helsinki"}))
-      const hours = timeInFinland.getHours().toString().padStart(2, '0')
-      const minutes = timeInFinland.getMinutes().toString().padStart(2, '0')
-      const seconds = timeInFinland.getSeconds().toString().padStart(2, '0')
-      setCurrentTime(`${hours}:${minutes}:${seconds}`)
-    }
-
-    updateTime()
-    const interval = setInterval(updateTime, 1000)
-    
-    return () => clearInterval(interval)
-  }, [])
-
-  const scrollToProjects = () => {
+    const scrollToProjects = () => {
     const element = document.querySelector('#projects')
     element?.scrollIntoView({ behavior: 'smooth' })
   }
@@ -96,31 +78,7 @@ export default function Hero() {
       
       <FloatingStars />
 
-      {/* Available for work and time indicator */}
-      <motion.div
-        className="fixed top-8 left-8 z-50 hidden md:flex flex-col gap-3"
-        initial={{ opacity: 0, x: -30 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.8, delay: 0.3 }}
-      >
-        {/* Available for work and Local time combined */}
-        <div className="glass-nav relative px-4 py-2">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-3">
-              <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse shadow-lg shadow-green-400/50"></div>
-              <span className="text-sm font-medium text-white/90">Available for work</span>
-            </div>
-            <div className="w-px h-4 bg-white/20"></div>
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-white/90">Local time</span>
-              <span className="text-sm font-mono font-medium text-white/90">{currentTime}</span>
-              <span className="text-xs text-white/60">EEST</span>
-            </div>
-          </div>
-        </div>
-      </motion.div>
-
-      <div className="container mx-auto px-6 flex items-center justify-center min-h-screen relative z-10 pt-20">
+            <div className="container mx-auto px-6 flex items-center justify-center min-h-screen relative z-10 pt-20">
         <div className="text-center space-y-12">
           <motion.div
             initial={{ opacity: 0, y: 30 }}

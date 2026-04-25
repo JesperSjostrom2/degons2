@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { MenuCloseIcon } from '@/components/ui/animated-state-icons'
+import ProfileCard from '@/components/ui/profile-card'
 import Link from 'next/link'
 import { FileText } from 'lucide-react'
 
@@ -70,8 +71,19 @@ export default function Navbar() {
   }, [isMobileMenuOpen])
 
   return (
-    <motion.nav
-      className={`fixed z-50 transition-colors duration-300 w-full top-0 left-0 right-0 ${
+    <>
+      <div className="hidden lg:block fixed top-6 left-6 z-50">
+        <ProfileCard
+          imageSrc="https://ik.imagekit.io/kqmrslzuq/21st.dev%20Components/ProfileCard/logo.png"
+          name="Jesper Sjöström"
+          role="Full Stack Developer"
+          socials={{
+            github: "https://github.com/jespersjostrom"
+          }}
+        />
+      </div>
+      <motion.nav
+        className={`fixed z-50 transition-colors duration-300 w-full top-0 left-0 right-0 ${
         isMobileMenuOpen ? 'bg-transparent border-transparent' : 'bg-[#808080]/15 backdrop-blur-xl border-b border-white/10'
       } lg:bg-transparent lg:backdrop-blur-none lg:border-none lg:w-auto lg:max-w-[95vw] lg:right-auto lg:left-1/2 lg:-translate-x-1/2 lg:top-8`}
       initial={{ y: -100, opacity: 0 }}
@@ -119,14 +131,20 @@ export default function Navbar() {
       </div>
 
       {/* Mobile Header */}
-      <div className="lg:hidden flex items-center justify-between px-6 py-4 relative z-50">
+      <div className="lg:hidden flex items-center justify-between px-6 py-3 relative z-50">
         <motion.div
-          className="font-medium text-white tracking-wide text-xl"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2 }}
         >
-          Jesper Sjöström
+          <ProfileCard
+            imageSrc="https://ik.imagekit.io/kqmrslzuq/21st.dev%20Components/ProfileCard/logo.png"
+            name="Jesper Sjöström"
+            role="Full Stack Developer"
+            socials={{
+              github: "https://github.com/jespersjostrom"
+            }}
+          />
         </motion.div>
         <Button
           variant="ghost"
@@ -223,5 +241,6 @@ export default function Navbar() {
         </div>
       </div>
     </motion.nav>
+    </>
   )
 }

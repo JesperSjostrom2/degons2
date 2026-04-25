@@ -12,6 +12,7 @@ import ExperienceSection from '@/components/ExperienceSection'
 import TimelineExperience from '@/components/TimelineExperience'
 import TechStackSection from '@/components/TechStackSection'
 import ContactSection from '@/components/ContactSection'
+import Footer from '@/components/footer'
 
 export default function Home() {
   return (
@@ -125,6 +126,9 @@ export default function Home() {
       
       {/* Contact Section */}
       <ContactSection />
+      
+      {/* Footer */}
+      <Footer />
       
     </main>
   )
