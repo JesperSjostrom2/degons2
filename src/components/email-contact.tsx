@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 export default function EmailContact() {
   return (
     <motion.div
-      className="fixed bottom-0 right-0 flex flex-col items-center z-40"
+      className="fixed bottom-0 right-0 z-40 hidden md:flex flex-col items-center"
       style={{ 
         right: '3rem',
         bottom: '0'
