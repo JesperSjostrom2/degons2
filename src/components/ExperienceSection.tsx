@@ -216,100 +216,36 @@ const ExperienceSection: React.FC = () => {
                 className="mb-24"
                 data-project-id={project.id}
               >
-                <div className="relative">
-                  {/* Laptop Screen - Static Frame */}
-                  <div 
-                    className="w-4/5 h-96 rounded-2xl relative overflow-hidden mx-auto"
-                    style={{ 
-                      background: project.backgroundColor,
-                      boxShadow: `
-                        0 0 0 3px #1f2937,
-                        0 0 0 6px #374151,
-                        0 0 0 8px #4b5563,
-                        0 25px 50px rgba(0, 0, 0, 0.4),
-                        inset 0 2px 4px rgba(255, 255, 255, 0.3),
-                        inset 0 -2px 4px rgba(0, 0, 0, 0.2),
-                        inset 2px 2px 8px rgba(255, 255, 255, 0.15),
-                        inset -2px -2px 8px rgba(0, 0, 0, 0.15)
-                      `
-                    }}
-                  >
-                    {/* Top section with project title (30% height) */}
-                    <div className="absolute top-0 left-0 right-0 h-[30%] flex items-center justify-center z-20 p-6">
-                      <div className="text-center">
-                        <h3 className="text-2xl font-bold text-white mb-2 drop-shadow-lg">
-                          {project.title}
-                        </h3>
-                        <p className="text-lg text-white/80 drop-shadow-md">
-                          {project.year}
-                        </p>
-                      </div>
-                    </div>
-                    
-                    {/* Bottom section with project image (70% height, touching bottom) */}
-                    <div className="absolute bottom-0 left-0 right-0 h-[70%] px-8 pb-0 pt-4 overflow-hidden">
-                      <div 
-                        className="w-full h-[110%] rounded-t-lg overflow-hidden cursor-pointer relative transition-all duration-300 ease-in-out hover:scale-105 hover:rotate-2 group"
-                        style={{
-                          transformOrigin: 'center 40%',
-                          boxShadow: `
-                            0 0 15px rgba(218, 197, 167, 0.4),
-                            0 0 30px rgba(218, 197, 167, 0.2),
-                            0 5px 15px rgba(0, 0, 0, 0.3)
-                          `
+                <div className="relative mx-auto w-4/5">
+                  <div className="relative h-96 rounded-[24px] border border-white/10 bg-gradient-to-br from-zinc-700 via-zinc-900 to-black p-[10px] pb-3">
+                    <div className="absolute left-1/2 top-1.5 h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-black ring-1 ring-white/15" />
+                    <div className="relative h-full overflow-hidden rounded-[16px] border border-black bg-black cursor-pointer transition-transform duration-300 ease-in-out hover:scale-[1.015]">
+                      <img 
+                        src={project.image}
+                        alt={project.title}
+                        className="h-full w-full object-cover object-top"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.style.display = 'none';
+                          const parent = target.parentElement;
+                          if (parent) {
+                            parent.innerHTML = `
+                              <div class="w-full h-full bg-gradient-to-r from-gray-800 to-gray-700 flex items-center justify-center">
+                                <span class="text-white/60 text-sm">Project Image</span>
+                              </div>
+                            `;
+                          }
                         }}
-                      >
-                        <img 
-                          src={project.image}
-                          alt={project.title}
-                          className="w-full h-full object-cover"
-                          onError={(e) => {
-                            // Fallback if image doesn't exist
-                            const target = e.target as HTMLImageElement;
-                            target.style.display = 'none';
-                            const parent = target.parentElement;
-                            if (parent) {
-                              parent.innerHTML = `
-                                <div class="w-full h-full bg-gradient-to-r from-gray-800 to-gray-700 flex items-center justify-center rounded-t-lg">
-                                  <span class="text-white/60 text-sm">Project Image</span>
-                                </div>
-                              `;
-                            }
-                          }}
-                        />
-                        {/* Dark overlay */}
-                        <div 
-                          className="absolute inset-0 transition-opacity duration-300 group-hover:opacity-0"
-                          style={{
-                            background: 'rgba(0, 0, 0, 0.4)'
-                          }}
-                        />
-                      </div>
+                      />
+                      <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
                     </div>
-                    
                   </div>
 
-                  {/* Laptop Base */}
-                  <div 
-                    className="w-5/6 h-6 mx-auto mt-2 rounded-b-2xl"
-                    style={{
-                      background: 'linear-gradient(145deg, #374151, #1f2937)',
-                      boxShadow: `
-                        0 0 0 2px #4b5563,
-                        0 8px 16px rgba(0, 0, 0, 0.3),
-                        inset 0 1px 2px rgba(255, 255, 255, 0.2),
-                        inset 0 -1px 2px rgba(0, 0, 0, 0.3)
-                      `
-                    }}
-                  />
-
-                  {/* Laptop Notch/Camera */}
-                  <div 
-                    className="absolute top-3 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-gray-800 rounded-full"
-                    style={{
-                      boxShadow: 'inset 0 1px 2px rgba(0, 0, 0, 0.5)'
-                    }}
-                  />
+                  <div className="mx-auto h-2 w-[86%] rounded-b-sm bg-gradient-to-b from-zinc-700 to-zinc-900" />
+                  <div className="relative mx-auto h-8 w-[106%] -translate-x-[3%] rounded-b-[26px] border-t border-white/15 bg-gradient-to-b from-zinc-500 via-zinc-700 to-zinc-900">
+                    <div className="absolute left-1/2 top-0 h-2.5 w-28 -translate-x-1/2 rounded-b-xl bg-black/30" />
+                    <div className="absolute bottom-1.5 left-1/2 h-2 w-40 -translate-x-1/2 rounded-xl border border-white/10 bg-black/15" />
+                  </div>
                 </div>
               </div>
             ))}

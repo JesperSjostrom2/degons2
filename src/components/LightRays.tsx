@@ -27,6 +27,28 @@ interface LightRaysProps {
   className?: string;
 }
 
+interface UniformValue<T> {
+  value: T;
+}
+
+interface LightRaysUniforms {
+  iTime: UniformValue<number>;
+  iResolution: UniformValue<[number, number]>;
+  rayPos: UniformValue<[number, number]>;
+  rayDir: UniformValue<[number, number]>;
+  raysColor: UniformValue<[number, number, number]>;
+  raysSpeed: UniformValue<number>;
+  lightSpread: UniformValue<number>;
+  rayLength: UniformValue<number>;
+  pulsating: UniformValue<number>;
+  fadeDistance: UniformValue<number>;
+  saturation: UniformValue<number>;
+  mousePos: UniformValue<[number, number]>;
+  mouseInfluence: UniformValue<number>;
+  noiseAmount: UniformValue<number>;
+  distortion: UniformValue<number>;
+}
+
 const DEFAULT_COLOR = "#ffffff";
 
 const hexToRgb = (hex: string): [number, number, number] => {
@@ -82,12 +104,12 @@ const LightRays: React.FC<LightRaysProps> = ({
   className = "",
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const uniformsRef = useRef<any>(null);
+  const uniformsRef = useRef<LightRaysUniforms | null>(null);
   const rendererRef = useRef<Renderer | null>(null);
   const mouseRef = useRef({ x: 0.5, y: 0.5 });
   const smoothMouseRef = useRef({ x: 0.5, y: 0.5 });
   const animationIdRef = useRef<number | null>(null);
-  const meshRef = useRef<any>(null);
+  const meshRef = useRef<Mesh<Triangle, Program> | null>(null);
   const cleanupFunctionRef = useRef<(() => void) | null>(null);
   const [isVisible, setIsVisible] = useState(false);
   const observerRef = useRef<IntersectionObserver | null>(null);
@@ -245,7 +267,7 @@ void main() {
   gl_FragColor  = color;
 }`;
 
-      const uniforms = {
+      const uniforms: LightRaysUniforms = {
         iTime: { value: 0 },
         iResolution: { value: [1, 1] },
 

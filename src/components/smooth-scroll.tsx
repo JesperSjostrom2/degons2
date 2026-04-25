@@ -9,7 +9,6 @@ export default function SmoothScroll() {
       duration: 0.6,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
-      smoothTouch: false,
       touchMultiplier: 2,
       infinite: false,
       orientation: 'vertical',

@@ -2,36 +2,14 @@
 
 import React, { useRef, useEffect, useState, useCallback } from "react";
 import { gsap } from "gsap";
-import { 
-  SiJavascript, 
-  SiHtml5, 
-  SiCss3, 
-  SiReact, 
-  SiNodedotjs, 
-  SiGithub, 
-  SiGit, 
-  SiBootstrap, 
-  SiHeroku, 
-  SiCypress, 
-  SiPostman, 
-  SiFigma, 
-  SiSass,
-  SiFramer,
-  SiNextdotjs,
-  SiTailwindcss,
-  SiTypescript,
-  SiPython,
-  SiMongodb,
-  SiPostgresql,
-  SiRedis,
-  SiDocker,
-  SiGraphql
-} from "react-icons/si";
+import { Player } from "@remotion/player";
 import { ShoppingCart, BarChart3, Rocket, User } from "lucide-react";
 import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
 import Magnet from "@/blocks/Animations/Magnet/Magnet";
 import ShinyText from "@/blocks/TextAnimations/ShinyText/ShinyText";
+import BorderGlow from "@/components/BorderGlow";
+import { InfiniteBentoPan } from "@/components/ui/infinite-bento-pan";
 
 const HexedGlobe = dynamic(() => import('@/components/HexedGlobe'), { 
   ssr: false,
@@ -69,6 +47,9 @@ const DEFAULT_PARTICLE_COUNT = 12;
 const DEFAULT_SPOTLIGHT_RADIUS = 300;
 const DEFAULT_GLOW_COLOR = "218, 197, 167";
 const MOBILE_BREAKPOINT = 768;
+const BORDER_GLOW_COLORS = ["#8b7355", "#dac5a7", "#f5efe4"];
+const BORDER_GLOW_HSL = "38 37 76";
+const BORDER_GLOW_BACKGROUND = "#050505";
 
 
 const createParticleElement = (
@@ -574,7 +555,7 @@ const MagicBento: React.FC<BentoProps> = ({
   const gridRef = useRef<HTMLDivElement>(null);
   const isMobile = useMobileDetection();
   const shouldDisableAnimations = disableAnimations || isMobile;
-  const [selectedCountry, setSelectedCountry] = useState<string>('Finland');
+  const [selectedCountry, setSelectedCountry] = useState<string | undefined>();
 
   const getRemoteWorkCard = () => ({
     color: "#8b7a6b",
@@ -582,9 +563,8 @@ const MagicBento: React.FC<BentoProps> = ({
     description: "Available across Finland, Sweden, and UK timezones",
     label: "Remote Work",
     customContent: (
-      <div className="flex flex-col h-full relative overflow-hidden">
-        {/* Content background */}
-        <div className="relative z-0 p-6 h-full flex flex-col">
+      <div className="relative flex h-full flex-col overflow-hidden">
+        <div className="relative z-20 flex flex-col p-6 pb-3">
           <h2 className="text-2xl font-bold text-white mb-2 leading-tight">
             Nordic & European<br />
             <span className="text-accent">collaboration</span>
@@ -592,13 +572,12 @@ const MagicBento: React.FC<BentoProps> = ({
           <p className="text-white/70 text-sm mb-4">
             Working across Finnish, Swedish, and British markets
           </p>
-          
-          {/* Country Selection Buttons */}
+
           <div className="flex gap-2 mb-4">
             {['Finland', 'Sweden', 'UK'].map((country) => (
               <button
                 key={country}
-                onClick={() => setSelectedCountry(country)}
+                onClick={() => setSelectedCountry((currentCountry) => currentCountry === country ? undefined : country)}
                 className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-all duration-300 flex-1 ${
                   selectedCountry === country
                     ? 'bg-accent/20 text-accent border border-accent/40'
@@ -609,8 +588,8 @@ const MagicBento: React.FC<BentoProps> = ({
               </button>
             ))}
           </div>
-          
-          <div className="space-y-2 mb-4">
+
+          <div className="space-y-2">
             <div className={`flex items-center justify-between text-xs transition-opacity duration-300 ${
               selectedCountry === 'Finland' ? 'text-accent' : 'text-white/60'
             }`}>
@@ -631,63 +610,13 @@ const MagicBento: React.FC<BentoProps> = ({
             </div>
           </div>
         </div>
-        
-        {/* Globe overlay */}
-        <div className="absolute inset-0 z-10 pointer-events-none">
-          <HexedGlobe 
-            selectedCountry={selectedCountry}
-            onCountrySelect={setSelectedCountry}
-          />
-        </div>
-        
-        {/* Text overlay */}
-        <div className="absolute inset-0 z-20 p-6 pointer-events-none">
-          <div className="h-full flex flex-col pointer-events-auto">
-            <h2 className="text-2xl font-bold text-white mb-2 leading-tight">
-              Nordic & European<br />
-              <span className="text-accent">collaboration</span>
-            </h2>
-            <p className="text-white/70 text-sm mb-4">
-              Working across Finnish, Swedish, and British markets
-            </p>
-            
-            {/* Country Selection Buttons */}
-            <div className="flex gap-2 mb-4">
-              {['Finland', 'Sweden', 'UK'].map((country) => (
-                <button
-                  key={country}
-                  onClick={() => setSelectedCountry(country)}
-                  className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-all duration-300 flex-1 ${
-                    selectedCountry === country
-                      ? 'bg-accent/20 text-accent border border-accent/40'
-                      : 'bg-white/5 text-white/70 border border-white/10 hover:bg-white/10 hover:text-white'
-                  }`}
-                >
-                  {country}
-                </button>
-              ))}
-            </div>
-            
-            <div className="space-y-2 mb-4">
-              <div className={`flex items-center justify-between text-xs transition-opacity duration-300 ${
-                selectedCountry === 'Finland' ? 'text-accent' : 'text-white/60'
-              }`}>
-                <span>Helsinki</span>
-                <span className="px-2 py-1 bg-accent/10 rounded text-accent font-mono">GMT+2</span>
-              </div>
-              <div className={`flex items-center justify-between text-xs transition-opacity duration-300 ${
-                selectedCountry === 'Sweden' ? 'text-accent' : 'text-white/60'
-              }`}>
-                <span>Stockholm</span>
-                <span className="px-2 py-1 bg-accent/10 rounded text-accent font-mono">GMT+1</span>
-              </div>
-              <div className={`flex items-center justify-between text-xs transition-opacity duration-300 ${
-                selectedCountry === 'UK' ? 'text-accent' : 'text-white/60'
-              }`}>
-                <span>London</span>
-                <span className="px-2 py-1 bg-accent/10 rounded text-accent font-mono">GMT+0</span>
-              </div>
-            </div>
+
+        <div className="relative z-10 mt-auto min-h-[220px] h-[52%] overflow-visible">
+          <div className="absolute inset-x-0 bottom-[-42%] h-[128%]">
+            <HexedGlobe 
+              selectedCountry={selectedCountry}
+              onCountrySelect={setSelectedCountry}
+            />
           </div>
         </div>
       </div>
@@ -729,138 +658,52 @@ const MagicBento: React.FC<BentoProps> = ({
     },
     {
       color: "#8b7a6b",
-      title: "⚡ Tech Stack",
-      description: "TypeScript, Next.js, Tailwind, PostgreSQL & more",
+      title: "⚡ Product Systems",
+      description: "Interfaces, dashboards, automation, and deployment flows",
       label: "Technologies",
       customContent: (
-        <div className="flex flex-col h-full relative overflow-hidden">
-          <div className="mb-6 relative z-10">
-            <h2 className="text-2xl font-bold text-white mb-2 leading-tight">
-              Passionate about<br />
-              <span className="text-accent">cutting-edge</span><br />
-              technologies
-            </h2>
-            <p className="text-white/70 text-sm">
-              Building modern web experiences with industry-leading tools
-            </p>
+        <div className="relative -m-8 h-[calc(100%+4rem)] overflow-hidden bg-transparent">
+          <div className="relative z-10 h-[56%] p-8 pb-5">
+            <div className="flex h-full flex-col justify-between">
+              <div>
+                <h2 className="text-2xl font-bold leading-tight text-white">
+                  Interfaces that<br />
+                  feel <span className="text-accent">alive</span><br />
+                  under the hood
+                </h2>
+              </div>
+              <p className="max-w-xs text-sm leading-6 text-white/72">
+                I build dashboards, workflows, and deployment-ready frontend systems with motion,
+                data clarity, and performance in mind.
+              </p>
+            </div>
           </div>
-          
-          <div className="flex-1 flex flex-col justify-center gap-8 overflow-hidden">
-            {/* First row - Right to Left */}
-            <div className="flex overflow-hidden">
-              <motion.div 
-                className="flex gap-4 whitespace-nowrap"
-                animate={{ 
-                  x: [0, -2000] 
-                }}
-                transition={{
-                  duration: 120,
-                  ease: "linear",
-                  repeat: Infinity,
-                }}
-                style={{ width: "max-content" }}
-              >
-                {Array(8).fill([
-                  { icon: SiJavascript, name: "JavaScript", color: "text-yellow-400" },
-                  { icon: SiReact, name: "React", color: "text-cyan-400" },
-                  { icon: SiNextdotjs, name: "Next.js", color: "text-white" },
-                  { icon: SiTypescript, name: "TypeScript", color: "text-blue-500" },
-                  { icon: SiFramer, name: "Framer", color: "text-purple-500" },
-                  { icon: SiTailwindcss, name: "Tailwind", color: "text-cyan-400" },
-                  { icon: SiPython, name: "Python", color: "text-yellow-500" },
-                  { icon: SiDocker, name: "Docker", color: "text-blue-400" },
-                ]).flat().map((skill, idx) => (
-                  <span 
-                    key={idx}
-                    className="px-4 py-2 text-white text-sm font-medium flex items-center gap-2 whitespace-nowrap bg-card/40 backdrop-blur-sm border border-gray-400/30 rounded-lg"
-                    style={{
-                      boxShadow: '0 1px 0 0 rgba(255, 255, 255, 0.1)',
-                      backgroundColor: 'rgba(139, 115, 85, 0.15)'
-                    }}
-                  >
-                    <skill.icon className={`w-4 h-4 ${skill.color}`} />
-                    {skill.name}
-                  </span>
-                ))}
-              </motion.div>
-            </div>
 
-            {/* Second row - Left to Right */}
-            <div className="flex overflow-hidden">
-              <motion.div 
-                className="flex gap-4 whitespace-nowrap"
-                animate={{ 
-                  x: [-2000, 0] 
-                }}
-                transition={{
-                  duration: 100,
-                  ease: "linear",
-                  repeat: Infinity,
-                }}
-                style={{ width: "max-content" }}
-              >
-                {Array(8).fill([
-                  { icon: SiHtml5, name: "HTML5", color: "text-orange-500" },
-                  { icon: SiCss3, name: "CSS3", color: "text-blue-500" },
-                  { icon: SiNodedotjs, name: "Node.js", color: "text-green-500" },
-                  { icon: SiGit, name: "Git", color: "text-red-500" },
-                  { icon: SiGithub, name: "GitHub", color: "text-gray-300" },
-                  { icon: SiFigma, name: "Figma", color: "text-green-400" },
-                  { icon: SiMongodb, name: "MongoDB", color: "text-green-600" },
-                  { icon: SiGraphql, name: "GraphQL", color: "text-pink-400" },
-                ]).flat().map((skill, idx) => (
-                  <span 
-                    key={idx}
-                    className="px-4 py-2 text-white text-sm font-medium flex items-center gap-2 whitespace-nowrap bg-card/40 backdrop-blur-sm border border-gray-400/30 rounded-lg"
-                    style={{
-                      boxShadow: '0 1px 0 0 rgba(255, 255, 255, 0.1)',
-                      backgroundColor: 'rgba(139, 115, 85, 0.15)'
-                    }}
-                  >
-                    <skill.icon className={`w-4 h-4 ${skill.color}`} />
-                    {skill.name}
-                  </span>
-                ))}
-              </motion.div>
-            </div>
-
-            {/* Third row - Right to Left */}
-            <div className="flex overflow-hidden">
-              <motion.div 
-                className="flex gap-4 whitespace-nowrap"
-                animate={{ 
-                  x: [0, -2000] 
-                }}
-                transition={{
-                  duration: 110,
-                  ease: "linear",
-                  repeat: Infinity,
-                }}
-                style={{ width: "max-content" }}
-              >
-                {Array(8).fill([
-                  { icon: SiBootstrap, name: "Bootstrap", color: "text-purple-500" },
-                  { icon: SiSass, name: "Sass", color: "text-pink-500" },
-                  { icon: SiPostman, name: "Postman", color: "text-orange-500" },
-                  { icon: SiCypress, name: "Cypress", color: "text-gray-400" },
-                  { icon: SiHeroku, name: "Heroku", color: "text-purple-600" },
-                  { icon: SiPostgresql, name: "PostgreSQL", color: "text-blue-600" },
-                  { icon: SiRedis, name: "Redis", color: "text-red-600" },
-                ]).flat().map((skill, idx) => (
-                  <span 
-                    key={idx}
-                    className="px-4 py-2 text-white text-sm font-medium flex items-center gap-2 whitespace-nowrap bg-card/40 backdrop-blur-sm border border-gray-400/30 rounded-lg"
-                    style={{
-                      boxShadow: '0 1px 0 0 rgba(255, 255, 255, 0.1)',
-                      backgroundColor: 'rgba(139, 115, 85, 0.15)'
-                    }}
-                  >
-                    <skill.icon className={`w-4 h-4 ${skill.color}`} />
-                    {skill.name}
-                  </span>
-                ))}
-              </motion.div>
-            </div>
+          <div className="absolute inset-x-0 bottom-0 h-[44%] overflow-hidden">
+            <Player
+              component={InfiniteBentoPan}
+              inputProps={{ speed: 0.82, panSpeed: 0.92, accentColor: '#dac5a7' }}
+              durationInFrames={360}
+              fps={30}
+              compositionWidth={1280}
+              compositionHeight={720}
+              autoPlay
+              loop
+              controls={false}
+              clickToPlay={false}
+              style={{
+                position: 'absolute',
+                left: '-1.5rem',
+                right: '-1.5rem',
+                top: 0,
+                bottom: '-2rem',
+                width: 'calc(100% + 3rem)',
+                height: 'calc(100% + 2rem)',
+                background: 'transparent',
+              }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/55" />
+            <div className="absolute inset-x-0 top-0 z-30 h-px bg-gradient-to-r from-transparent via-accent/70 to-transparent" />
           </div>
         </div>
       ),
@@ -894,7 +737,7 @@ const MagicBento: React.FC<BentoProps> = ({
               <ShinyText 
                 text="Let's connect" 
                 className="text-2xl font-bold leading-tight"
-                speed={0.3}
+                speed={2.4}
               />
             </div>
             
@@ -1017,20 +860,6 @@ const MagicBento: React.FC<BentoProps> = ({
     <>
       <style>
         {`
-          .bento-section {
-            --glow-x: 50%;
-            --glow-y: 50%;
-            --glow-intensity: 0;
-            --glow-radius: 200px;
-            --glow-color: ${glowColor};
-            --border-color: #dac5a7;
-            --background-dark: #8b7a6b;
-            --white: hsl(0, 0%, 100%);
-            --purple-primary: rgba(218, 197, 167, 1);
-            --purple-glow: rgba(218, 197, 167, 0.2);
-            --purple-border: rgba(218, 197, 167, 0.8);
-          }
-          
           .card-responsive {
             grid-template-columns: 1fr;
             width: 90%;
@@ -1114,33 +943,6 @@ const MagicBento: React.FC<BentoProps> = ({
             }
           }
           
-          .card--border-glow::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            padding: 6px;
-            background: radial-gradient(var(--glow-radius) circle at var(--glow-x) var(--glow-y),
-                rgba(${glowColor}, calc(var(--glow-intensity) * 0.8)) 0%,
-                rgba(${glowColor}, calc(var(--glow-intensity) * 0.4)) 30%,
-                transparent 60%);
-            border-radius: inherit;
-            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            mask-composite: subtract;
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-            z-index: 1;
-          }
-          
-          .card--border-glow:hover::after {
-            opacity: 1;
-          }
-          
-          .card--border-glow:hover {
-            box-shadow: 0 4px 20px rgba(61, 47, 40, 0.4), 0 0 30px rgba(${glowColor}, 0.2);
-          }
-
           .card::before {
             content: '';
             position: absolute;
@@ -1215,7 +1017,7 @@ const MagicBento: React.FC<BentoProps> = ({
         `}
       </style>
 
-      {enableSpotlight && (
+      {enableSpotlight && !enableBorderGlow && (
         <GlobalSpotlight
           gridRef={gridRef}
           disableAnimations={shouldDisableAnimations}
@@ -1228,9 +1030,8 @@ const MagicBento: React.FC<BentoProps> = ({
       <BentoCardGrid gridRef={gridRef}>
         <div className="card-responsive grid gap-2">
           {cardData.map((card, index) => {
-            const baseClassName = `card bg-transparent backdrop-blur-sm border border-accent/20 flex flex-col justify-between relative ${index === 2 ? 'min-h-[240px]' : 'min-h-[280px]'} w-full max-w-full ${index === 3 ? 'p-0' : 'p-8'} rounded-[20px] font-light overflow-hidden transition-all duration-300 ease-in-out ${
-              enableBorderGlow ? "card--border-glow" : ""
-            }`;
+            const baseClassName = `card relative ${index === 2 ? 'min-h-[240px]' : 'min-h-[280px]'} w-full max-w-full rounded-[20px]`;
+            const cardInnerClassName = `relative flex h-full flex-col justify-between overflow-hidden rounded-[20px] font-light transition-all duration-300 ease-in-out ${index === 3 ? 'p-0' : 'p-8'}`;
 
             const defaultGradient = {
               background: `
@@ -1244,54 +1045,45 @@ const MagicBento: React.FC<BentoProps> = ({
 
             const cardStyle = {
               backdropFilter: "blur(12px)",
-              boxShadow: "0 1px 0 0 rgba(255, 255, 255, 0.1)",
-              "--glow-x": "50%",
-              "--glow-y": "50%",
-              "--glow-intensity": "0",
-              "--glow-radius": "200px",
               ...(card.customBackground || defaultGradient)
             } as React.CSSProperties;
 
-            if (enableStars) {
-              return (
-                <ParticleCard
-                  key={index}
-                  className={baseClassName}
-                  style={cardStyle}
-                  disableAnimations={shouldDisableAnimations}
-                  particleCount={particleCount}
-                  glowColor={glowColor}
-                  enableTilt={enableTilt}
-                  clickEffect={clickEffect}
-                  enableMagnetism={enableMagnetism}
-                >
-                  {card.customContent || (
-                    <>
-                      <div className="card__header flex justify-between gap-3 relative text-white">
-                        <span className="card__label text-base">{card.label}</span>
-                      </div>
-                      <div className="card__content flex flex-col relative text-white">
-                        <h3
-                          className={`card__title font-normal text-base m-0 mb-1 ${textAutoHide ? "text-clamp-1" : ""}`}
-                        >
-                          {card.title}
-                        </h3>
-                        <p
-                          className={`card__description text-xs leading-5 opacity-90 ${textAutoHide ? "text-clamp-2" : ""}`}
-                        >
-                          {card.description}
-                        </p>
-                      </div>
-                    </>
-                  )}
-                </ParticleCard>
-              );
-            }
+            const content = card.customContent || (
+              <>
+                <div className="card__header flex justify-between gap-3 relative text-white">
+                  <span className="card__label text-base">{card.label}</span>
+                </div>
+                <div className="card__content flex flex-col relative text-white">
+                  <h3
+                    className={`card__title font-normal text-base m-0 mb-1 ${textAutoHide ? "text-clamp-1" : ""}`}
+                  >
+                    {card.title}
+                  </h3>
+                  <p
+                    className={`card__description text-xs leading-5 opacity-90 ${textAutoHide ? "text-clamp-2" : ""}`}
+                  >
+                    {card.description}
+                  </p>
+                </div>
+              </>
+            );
 
-            return (
+            const cardBody = enableStars ? (
+              <ParticleCard
+                className={cardInnerClassName}
+                style={cardStyle}
+                disableAnimations={shouldDisableAnimations}
+                particleCount={particleCount}
+                glowColor={glowColor}
+                enableTilt={enableTilt}
+                clickEffect={clickEffect}
+                enableMagnetism={enableMagnetism}
+              >
+                {content}
+              </ParticleCard>
+            ) : (
               <div
-                key={index}
-                className={baseClassName}
+                className={`${cardInnerClassName} bg-transparent`}
                 style={cardStyle}
                 ref={(el) => {
                   if (!el) return;
@@ -1403,26 +1195,49 @@ const MagicBento: React.FC<BentoProps> = ({
                   el.addEventListener("click", handleClick);
                 }}
               >
-                {card.customContent || (
-                  <>
-                    <div className="card__header flex justify-between gap-3 relative text-white">
-                      <span className="card__label text-base">{card.label}</span>
-                    </div>
-                    <div className="card__content flex flex-col relative text-white">
-                      <h3
-                        className={`card__title font-normal text-base m-0 mb-1 ${textAutoHide ? "text-clamp-1" : ""}`}
-                      >
-                        {card.title}
-                      </h3>
-                      <p
-                        className={`card__description text-xs leading-5 opacity-90 ${textAutoHide ? "text-clamp-2" : ""}`}
-                      >
-                        {card.description}
-                      </p>
-                    </div>
-                  </>
-                )}
+                {content}
               </div>
+            );
+
+            if (enableBorderGlow) {
+              return (
+                <BorderGlow
+                  key={index}
+                  className={baseClassName}
+                  edgeSensitivity={26}
+                  glowColor={BORDER_GLOW_HSL}
+                  backgroundColor={BORDER_GLOW_BACKGROUND}
+                  borderRadius={20}
+                  glowRadius={34}
+                  glowIntensity={1.35}
+                  coneSpread={24}
+                  colors={BORDER_GLOW_COLORS}
+                  fillOpacity={0.4}
+                >
+                  {cardBody}
+                </BorderGlow>
+              );
+            }
+
+            return (
+              <React.Fragment key={index}>
+                {enableStars ? (
+                  <ParticleCard
+                    className={`${baseClassName} ${cardInnerClassName} bg-transparent`}
+                    style={cardStyle}
+                    disableAnimations={shouldDisableAnimations}
+                    particleCount={particleCount}
+                    glowColor={glowColor}
+                    enableTilt={enableTilt}
+                    clickEffect={clickEffect}
+                    enableMagnetism={enableMagnetism}
+                  >
+                    {content}
+                  </ParticleCard>
+                ) : (
+                  cardBody
+                )}
+              </React.Fragment>
             );
           })}
         </div>

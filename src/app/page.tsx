@@ -9,6 +9,9 @@ import SmoothScroll from '@/components/smooth-scroll'
 import MagicBento from '@/components/MagicBento'
 import ProgressScrollbar from '@/components/ProgressScrollbar'
 import ExperienceSection from '@/components/ExperienceSection'
+import TimelineExperience from '@/components/TimelineExperience'
+import TechStackSection from '@/components/TechStackSection'
+import ContactSection from '@/components/ContactSection'
 
 export default function Home() {
   return (
@@ -73,7 +76,7 @@ export default function Home() {
                     <div className="absolute top-6 left-18 w-72 h-72 border-2 border-accent/60 rounded-3xl z-0 animate-pulse transition-transform duration-300 ease-out group-hover:translate-x-2 group-hover:translate-y-2"></div>
                     
                     {/* Main Profile Picture */}
-                    <div className="relative w-72 h-72 rounded-3xl overflow-hidden shadow-2xl bg-gradient-to-br from-accent via-accent/95 to-accent/90 z-10 transition-transform duration-300 ease-out group-hover:-translate-x-2 group-hover:-translate-y-2">
+                    <div className="relative w-72 h-72 rounded-3xl overflow-hidden bg-gradient-to-br from-accent via-accent/95 to-accent/90 z-10 transition-transform duration-300 ease-out group-hover:-translate-x-2 group-hover:-translate-y-2">
                       <div className="w-full h-full flex items-center justify-center" style={{background: 'linear-gradient(to bottom right, #8b7355, #dac5a7)'}}>
                         <span className="text-8xl font-bold text-white">JS</span>
                       </div>
@@ -83,7 +86,7 @@ export default function Home() {
                   {/* Information Grid */}
                   <div className="grid grid-cols-2 gap-4 mb-4">
                     <div className="bg-card/30 backdrop-blur-sm border border-accent/20 rounded-xl p-4 text-center relative cursor-pointer transition-all duration-300 hover:translate-x-[-4px] hover:translate-y-[-4px] hover:rounded-md hover:shadow-[4px_4px_0px_rgba(218,197,167,0.8)] active:translate-x-[0px] active:translate-y-[0px] active:rounded-xl active:shadow-none" style={{boxShadow: '0 1px 0 0 rgba(255, 255, 255, 0.1)'}}>
-                      <div className="text-2xl font-bold text-white">25</div>
+                      <div className="text-2xl font-bold text-white">26</div>
                       <div className="text-xs text-muted-foreground font-medium">AGE</div>
                     </div>
                     <div className="bg-card/30 backdrop-blur-sm border border-accent/20 rounded-xl p-4 text-center relative cursor-pointer transition-all duration-300 hover:translate-x-[-4px] hover:translate-y-[-4px] hover:rounded-md hover:shadow-[4px_4px_0px_rgba(218,197,167,0.8)] active:translate-x-[0px] active:translate-y-[0px] active:rounded-xl active:shadow-none" style={{boxShadow: '0 1px 0 0 rgba(255, 255, 255, 0.1)'}}>
@@ -94,7 +97,7 @@ export default function Home() {
                   
                   {/* Location */}
                   <div className="bg-card/30 backdrop-blur-sm border border-accent/20 rounded-xl p-5 text-center relative cursor-pointer transition-all duration-300 hover:translate-x-[-4px] hover:translate-y-[-4px] hover:rounded-md hover:shadow-[4px_4px_0px_rgba(218,197,167,0.8)] active:translate-x-[0px] active:translate-y-[0px] active:rounded-xl active:shadow-none" style={{boxShadow: '0 1px 0 0 rgba(255, 255, 255, 0.1)'}}>
-                    <div className="text-xl font-bold text-white">Stockholm & Helsinki</div>
+                    <div className="text-xl font-bold text-white">Helsinki</div>
                     <div className="text-xs text-muted-foreground font-medium mt-1">LOCATION</div>
                   </div>
                 </div>
@@ -115,34 +118,13 @@ export default function Home() {
       <ExperienceSection />
       
       {/* Experience Section */}
-      <section id="experience" className="min-h-screen flex items-center justify-center bg-background py-20">
-        <div className="container mx-auto px-6 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">Experience</h2>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
-            Professional journey and career highlights showcasing growth and expertise in frontend development.
-          </p>
-        </div>
-      </section>
+      <TimelineExperience />
       
       {/* Skills Section */}
-      <section id="skills" className="min-h-screen flex items-center justify-center bg-background/50 py-20">
-        <div className="container mx-auto px-6 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">Skills</h2>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
-            Technical expertise and proficiency across various technologies, frameworks, and development practices.
-          </p>
-        </div>
-      </section>
+      <TechStackSection />
       
       {/* Contact Section */}
-      <section id="contact" className="min-h-screen flex items-center justify-center bg-background py-20">
-        <div className="container mx-auto px-6 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">Contact</h2>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
-            Get in touch to discuss opportunities, collaborations, or just to say hello.
-          </p>
-        </div>
-      </section>
+      <ContactSection />
       
     </main>
   )

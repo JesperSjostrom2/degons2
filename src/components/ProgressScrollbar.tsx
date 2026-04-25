@@ -1,11 +1,10 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { motion, useSpring } from 'framer-motion'
+import { motion } from 'framer-motion'
 
 const ProgressScrollbar: React.FC = () => {
   const [scrollProgress, setScrollProgress] = useState(0)
-  const smoothProgress = useSpring(0, { stiffness: 100, damping: 30 })
 
   useEffect(() => {
     const updateScrollProgress = () => {

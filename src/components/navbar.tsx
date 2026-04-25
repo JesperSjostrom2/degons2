@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { motion, useScroll, useMotionValueEvent } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Menu, X } from 'lucide-react'
 
@@ -15,14 +15,8 @@ const navItems = [
 ]
 
 export default function Navbar() {
-  const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('home')
-  const { scrollY } = useScroll()
-
-  useMotionValueEvent(scrollY, "change", (latest) => {
-    setIsScrolled(latest > 50)
-  })
 
   useEffect(() => {
     const observerOptions = {
@@ -63,9 +57,7 @@ export default function Navbar() {
 
   return (
     <motion.nav
-      className={`fixed left-1/2 transform -translate-x-1/2 z-50 transition-all duration-300 w-auto max-w-[95vw] ${
-        isScrolled ? 'glass-nav shadow-xl' : 'glass-nav'
-      }`}
+      className="fixed left-1/2 transform -translate-x-1/2 z-50 transition-all duration-300 w-auto max-w-[95vw] glass-nav"
       style={{ top: '2rem' }}
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
