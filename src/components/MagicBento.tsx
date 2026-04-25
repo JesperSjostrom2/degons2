@@ -10,6 +10,7 @@ import Magnet from "@/blocks/Animations/Magnet/Magnet";
 import ShinyText from "@/blocks/TextAnimations/ShinyText/ShinyText";
 import BorderGlow from "@/components/BorderGlow";
 import { InfiniteBentoPan } from "@/components/ui/infinite-bento-pan";
+import { Globe } from "@/components/ui/cobe-globe";
 
 const HexedGlobe = dynamic(() => import('@/components/HexedGlobe'), { 
   ssr: false,
@@ -555,67 +556,54 @@ const MagicBento: React.FC<BentoProps> = ({
   const gridRef = useRef<HTMLDivElement>(null);
   const isMobile = useMobileDetection();
   const shouldDisableAnimations = disableAnimations || isMobile;
+  const [isMounted, setIsMounted] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState<string | undefined>();
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const getRemoteWorkCard = () => ({
     color: "#8b7a6b",
-    title: "🌍 Nordic & European Markets",
-    description: "Available across Finland, Sweden, and UK timezones",
+    title: "🌍 Global Availability",
+    description: "Flexible with timezones. Based in Finland, available globally.",
     label: "Remote Work",
     customContent: (
       <div className="relative flex h-full flex-col overflow-hidden">
         <div className="relative z-20 flex flex-col p-6 pb-3">
           <h2 className="text-2xl font-bold text-white mb-2 leading-tight">
-            Nordic & European<br />
-            <span className="text-accent">collaboration</span>
+            Flexible with<br />
+            <span className="text-accent">timezones</span>
           </h2>
           <p className="text-white/70 text-sm mb-4">
-            Working across Finnish, Swedish, and British markets
+            Based in Finland, available globally
           </p>
 
-          <div className="flex gap-2 mb-4">
-            {['Finland', 'Sweden', 'UK'].map((country) => (
-              <button
-                key={country}
-                onClick={() => setSelectedCountry((currentCountry) => currentCountry === country ? undefined : country)}
-                className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-all duration-300 flex-1 ${
-                  selectedCountry === country
-                    ? 'bg-accent/20 text-accent border border-accent/40'
-                    : 'bg-white/5 text-white/70 border border-white/10 hover:bg-white/10 hover:text-white'
-                }`}
-              >
-                {country}
-              </button>
-            ))}
-          </div>
-
-          <div className="space-y-2">
-            <div className={`flex items-center justify-between text-xs transition-opacity duration-300 ${
-              selectedCountry === 'Finland' ? 'text-accent' : 'text-white/60'
-            }`}>
-              <span>Helsinki</span>
-              <span className="px-2 py-1 bg-accent/10 rounded text-accent font-mono">GMT+2</span>
-            </div>
-            <div className={`flex items-center justify-between text-xs transition-opacity duration-300 ${
-              selectedCountry === 'Sweden' ? 'text-accent' : 'text-white/60'
-            }`}>
-              <span>Stockholm</span>
-              <span className="px-2 py-1 bg-accent/10 rounded text-accent font-mono">GMT+1</span>
-            </div>
-            <div className={`flex items-center justify-between text-xs transition-opacity duration-300 ${
-              selectedCountry === 'UK' ? 'text-accent' : 'text-white/60'
-            }`}>
-              <span>London</span>
-              <span className="px-2 py-1 bg-accent/10 rounded text-accent font-mono">GMT+0</span>
-            </div>
-          </div>
         </div>
 
         <div className="relative z-10 mt-auto min-h-[220px] h-[52%] overflow-visible">
-          <div className="absolute inset-x-0 bottom-[-42%] h-[128%]">
-            <HexedGlobe 
-              selectedCountry={selectedCountry}
-              onCountrySelect={setSelectedCountry}
+          <div className="absolute inset-x-0 bottom-[-65%] h-[180%] flex justify-center items-center pointer-events-auto">
+            <Globe 
+              className="w-full max-w-[600px] relative z-10 scale-[1.15]"
+              dark={1}
+              baseColor={[0.1, 0.1, 0.1]}
+              glowColor={[1, 1, 1]}
+              markerColor={[0.2, 0.5, 1.0]}
+              arcColor={[0.2, 0.5, 1.0]}
+              theta={0.1}
+              markers={[
+                { id: "helsinki", location: [60.1699, 24.9384] as [number, number], label: "Helsinki" },
+                { id: "tokyo", location: [35.6762, 139.6503] as [number, number], label: "Tokyo" },
+                { id: "sydney", location: [-33.8688, 151.2093] as [number, number], label: "Sydney" },
+                { id: "newyork", location: [40.7128, -74.006] as [number, number], label: "New York" },
+                { id: "capetown", location: [-33.9249, 18.4241] as [number, number], label: "Cape Town" },
+              ]}
+              arcs={[
+                { id: "ny-hel", from: [40.7128, -74.006] as [number, number], to: [60.1699, 24.9384] as [number, number] },
+                { id: "hel-ct", from: [60.1699, 24.9384] as [number, number], to: [-33.9249, 18.4241] as [number, number] },
+                { id: "ct-tokyo", from: [-33.9249, 18.4241] as [number, number], to: [35.6762, 139.6503] as [number, number] },
+                { id: "tokyo-syd", from: [35.6762, 139.6503] as [number, number], to: [-33.8688, 151.2093] as [number, number] },
+              ]}
             />
           </div>
         </div>
@@ -680,28 +668,30 @@ const MagicBento: React.FC<BentoProps> = ({
           </div>
 
           <div className="absolute inset-x-0 bottom-0 h-[44%] overflow-hidden">
-            <Player
-              component={InfiniteBentoPan}
-              inputProps={{ speed: 0.82, panSpeed: 0.92, accentColor: '#dac5a7' }}
-              durationInFrames={360}
-              fps={30}
-              compositionWidth={1280}
-              compositionHeight={720}
-              autoPlay
-              loop
-              controls={false}
-              clickToPlay={false}
-              style={{
-                position: 'absolute',
-                left: '-1.5rem',
-                right: '-1.5rem',
-                top: 0,
-                bottom: '-2rem',
-                width: 'calc(100% + 3rem)',
-                height: 'calc(100% + 2rem)',
-                background: 'transparent',
-              }}
-            />
+            {isMounted && (
+              <Player
+                component={InfiniteBentoPan}
+                inputProps={{ speed: 0.82, panSpeed: 0.92, accentColor: '#dac5a7' }}
+                durationInFrames={360}
+                fps={30}
+                compositionWidth={1280}
+                compositionHeight={720}
+                autoPlay
+                loop
+                controls={false}
+                clickToPlay={false}
+                style={{
+                  position: 'absolute',
+                  left: '-1.5rem',
+                  right: '-1.5rem',
+                  top: 0,
+                  bottom: '-2rem',
+                  width: 'calc(100% + 3rem)',
+                  height: 'calc(100% + 2rem)',
+                  background: 'transparent',
+                }}
+              />
+            )}
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/55" />
             <div className="absolute inset-x-0 top-0 z-30 h-px bg-gradient-to-r from-transparent via-accent/70 to-transparent" />
           </div>

@@ -18,6 +18,22 @@ interface Project {
 const projectsData: Project[] = [
   {
     id: 1,
+    title: "ANDCREATIVE",
+    description: "A modern, premium website built for a creative agency. 'VISUALS WITH MEANING - We turn your vision into timeless visuals—photo and film.' The platform focuses on high-end visual storytelling and showcases their photography and videography portfolio.",
+    bulletPoints: [
+      "Designed and developed a sleek, dark-themed UI that puts visual content first",
+      "Implemented smooth, cinematic interactions and scroll animations",
+      "Optimized media loading for high-resolution photo and video assets",
+      "Created a responsive layout that maintains the premium feel across all devices"
+    ],
+    skills: ["Next.js", "Tailwind CSS", "Framer Motion", "UI/UX", "Web Design"],
+    backgroundColor: "linear-gradient(135deg, #111111 0%, #000000 100%)",
+    year: "2024",
+    duration: "3 months",
+    image: "/assets/projects/andcreative.png"
+  },
+  {
+    id: 2,
     title: "Café & Bistro Kerma",
     description: "At Café & Bistro Kerma, I was an all-around worker responsible for a wide range of tasks including inventory management, serving food, cooking, and working at the bar. I designed and developed the website, creating a user-friendly platform with an online menu and reservation system.",
     bulletPoints: [
@@ -33,7 +49,7 @@ const projectsData: Project[] = [
     image: "/assets/projects/kerma.png"
   },
   {
-    id: 2,
+    id: 3,
     title: "Portfolio Website",
     description: "Modern, interactive portfolio website showcasing creative web development skills. Features smooth animations, dark mode support, and optimized performance with custom components and innovative layout designs.",
     bulletPoints: [
@@ -49,7 +65,7 @@ const projectsData: Project[] = [
     image: "/assets/projects/ogportfolio.png"
   },
   {
-    id: 3,
+    id: 4,
     title: "Creative Portfolio Website",
     description: "Currently developing an innovative and creative portfolio website that pushes the boundaries of modern web design. This work-in-progress project focuses on unique user experiences, cutting-edge animations, and creative visual storytelling to showcase development skills.",
     bulletPoints: [
