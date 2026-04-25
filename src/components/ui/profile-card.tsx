@@ -66,15 +66,12 @@ export default function ProfileCard({
       <motion.div
         className={cn(
           "relative z-0 flex items-center overflow-hidden p-1",
-          // Base bg + text for both themes
-          "bg-white/10 text-zinc-50 backdrop-blur-md border border-white/10",
-          "dark:bg-zinc-900/80 dark:text-zinc-50"
+          "glass-nav text-white"
         )}
         style={{ cursor: "default" }}
-        layout
         initial={{ borderRadius: 40, width: 48, height: 48 }}
         animate={{
-          width: isHovered ? "auto" : 48,
+          width: isHovered ? 228 : 48,
           borderRadius: 40,
         }}
         transition={fluidTransition}
@@ -88,7 +85,7 @@ export default function ProfileCard({
         {/* Gradient background reacts to theme */}
         <div
           className={cn(
-            "absolute inset-0 transition-opacity duration-500 z-0",
+            "absolute inset-0 transition-opacity duration-500 z-0 rounded-[40px]",
             "bg-gradient-to-br from-white/10 via-white/5 to-transparent",
             isHovered ? "opacity-100" : "opacity-0"
           )}
@@ -143,7 +140,7 @@ export default function ProfileCard({
                 initial="hidden"
                 animate="visible"
                 exit="exit"
-                className="flex flex-col justify-center pl-2 pr-6 min-w-[160px]"
+                className="flex flex-col justify-center pl-2 pr-3 w-[180px]"
               >
                 {/* Header Row: Name & Social */}
                 <div className="flex items-center justify-between gap-4 mb-0.5">
@@ -175,7 +172,6 @@ export default function ProfileCard({
                   <span className="text-[10px] font-medium text-white/60 uppercase tracking-wider">
                     {role}
                   </span>
-                  <span className="h-0.5 w-0.5 rounded-full bg-white/40" />
                 </motion.div>
               </motion.div>
             )}
