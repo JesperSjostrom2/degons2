@@ -209,13 +209,13 @@ export default function Navbar() {
                 }}
               >
                 <Link href="/cv" onClick={() => setIsMobileMenuOpen(false)}>
-                  <motion.button
+                  <motion.div
                     className="px-6 py-4 bg-accent/10 hover:bg-accent/20 text-accent rounded-xl flex items-center justify-center gap-3 transition-all duration-300 font-medium text-xl w-full sm:w-auto cursor-pointer"
                     whileTap={{ scale: 0.98 }}
                   >
                     <FileText className="w-6 h-6" />
                     Resume
-                  </motion.button>
+                  </motion.div>
                 </Link>
               </motion.div>
             </div>

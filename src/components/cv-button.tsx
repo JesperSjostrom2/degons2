@@ -13,7 +13,7 @@ export default function CVButton() {
       transition={{ duration: 0.6, delay: 0.8 }}
     >
       <Link href="/cv">
-        <motion.button
+        <motion.div
           className="px-4 py-2 bg-accent/90 hover:bg-accent text-accent-foreground rounded-full flex items-center justify-center gap-2 shadow-lg backdrop-blur-sm border border-white/10 transition-all duration-300 cursor-pointer font-medium text-sm"
           whileHover={{ 
             scale: 1.05,
@@ -23,7 +23,7 @@ export default function CVButton() {
         >
           <FileText className="w-4 h-4" />
           Resume
-        </motion.button>
+        </motion.div>
       </Link>
     </motion.div>
   )
