@@ -76,9 +76,9 @@ export default function Navbar() {
         <ProfileCard
           imageSrc="https://ik.imagekit.io/kqmrslzuq/21st.dev%20Components/ProfileCard/logo.png"
           name="Jesper Sjöström"
-          role="Full Stack Developer"
+          role="Front End Developer"
           socials={{
-            github: "https://github.com/jespersjostrom"
+            github: "https://github.com/jespersjostrom2"
           }}
         />
       </div>
@@ -140,9 +140,9 @@ export default function Navbar() {
           <ProfileCard
             imageSrc="https://ik.imagekit.io/kqmrslzuq/21st.dev%20Components/ProfileCard/logo.png"
             name="Jesper Sjöström"
-            role="Full Stack Developer"
+            role="Front End Developer"
             socials={{
-              github: "https://github.com/jespersjostrom"
+              github: "https://github.com/jespersjostrom2"
             }}
           />
         </motion.div>

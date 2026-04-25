@@ -65,7 +65,7 @@ export default function ProfileCard({
     <div className={cn("flex items-center justify-center", className)}>
       <motion.div
         className={cn(
-          "relative z-0 flex items-center overflow-hidden",
+          "relative z-0 flex items-center overflow-hidden p-1",
           // Base bg + text for both themes
           "bg-white/10 text-zinc-50 backdrop-blur-md border border-white/10",
           "dark:bg-zinc-900/80 dark:text-zinc-50"
@@ -97,7 +97,7 @@ export default function ProfileCard({
         {/* --- Avatar Wrapper --- */}
         <motion.div
           layout="position" // Keeps avatar anchored smoothly during expansion
-          className="relative z-30 h-10 w-10 shrink-0 m-1"
+          className="relative z-30 h-10 w-10 shrink-0"
         >
           {/* Living Ambient Glow: Rotates slowly to feel alive */}
           <motion.div
