@@ -28,7 +28,7 @@ const projectsData: Project[] = [
     ],
     skills: ["Next.js", "Tailwind CSS", "Framer Motion", "UI/UX", "Web Design"],
     backgroundColor: "linear-gradient(135deg, #111111 0%, #000000 100%)",
-    year: "2024",
+    year: "2026",
     duration: "3 months",
     image: "/assets/projects/andcreative.png"
   },
@@ -63,22 +63,6 @@ const projectsData: Project[] = [
     year: "2023",
     duration: "2 months",
     image: "/assets/projects/ogportfolio.png"
-  },
-  {
-    id: 4,
-    title: "Creative Portfolio Website",
-    description: "Currently developing an innovative and creative portfolio website that pushes the boundaries of modern web design. This work-in-progress project focuses on unique user experiences, cutting-edge animations, and creative visual storytelling to showcase development skills.",
-    bulletPoints: [
-      "Experimental UI/UX design with innovative interactions",
-      "Advanced animations and visual effects using modern technologies",
-      "Custom components and creative layout designs",
-      "Focus on performance optimization and accessibility"
-    ],
-    skills: ["Next.js", "TypeScript", "Framer Motion", "GSAP", "Three.js", "Tailwind CSS"],
-    backgroundColor: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-    year: "2025",
-    duration: "In Progress",
-    image: "/assets/projects/current-portfolio.jpg"
   }
 ]
 
