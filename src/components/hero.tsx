@@ -98,7 +98,7 @@ export default function Hero() {
 
       {/* Available for work and time indicator */}
       <motion.div
-        className="fixed top-8 left-8 z-50 flex flex-col gap-3"
+        className="fixed top-8 left-8 z-50 hidden md:flex flex-col gap-3"
         initial={{ opacity: 0, x: -30 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.8, delay: 0.3 }}

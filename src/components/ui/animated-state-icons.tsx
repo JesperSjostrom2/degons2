@@ -52,8 +52,9 @@ export function SuccessIcon({ size = 40, color = "currentColor", className, dura
 }
 
 /* ─── 2. MENU → CLOSE ─── hamburger morphs to X */
-export function MenuCloseIcon({ size = 40, color = "currentColor", className, duration = 2000 }: StateIconProps) {
-  const open = useAutoToggle(duration);
+export function MenuCloseIcon({ size = 40, color = "currentColor", className, duration = 2000, isAnimating }: StateIconProps) {
+  const auto = useAutoToggle(duration);
+  const open = isAnimating !== undefined ? isAnimating : auto;
   return (
     <svg viewBox="0 0 40 40" fill="none" className={cn("", className)} style={{ width: size, height: size }}>
       <motion.line x1="10" x2="30" stroke={color} strokeWidth={2.5} strokeLinecap="round"

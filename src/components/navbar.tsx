@@ -3,7 +3,9 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
-import { Menu, X } from 'lucide-react'
+import { MenuCloseIcon } from '@/components/ui/animated-state-icons'
+import Link from 'next/link'
+import { FileText } from 'lucide-react'
 
 const navItems = [
   { name: 'Home', href: '#home', id: 'home' },
@@ -57,8 +59,7 @@ export default function Navbar() {
 
   return (
     <motion.nav
-      className="fixed left-1/2 transform -translate-x-1/2 z-50 transition-all duration-300 w-auto max-w-[95vw] glass-nav"
-      style={{ top: '2rem' }}
+      className="fixed z-50 transition-all duration-300 w-auto max-w-[95vw] glass-nav right-6 top-6 lg:right-auto lg:left-1/2 lg:-translate-x-1/2 lg:top-8"
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
@@ -103,33 +104,18 @@ export default function Navbar() {
           ))}
         </div>
 
-        <div className="lg:hidden flex items-center justify-between">
-          <motion.div
-            className="font-normal text-white"
-            style={{ fontSize: '1rem' }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
-          >
-            Portfolio
-          </motion.div>
+        <div className="lg:hidden flex items-center justify-center">
           <Button
             variant="ghost"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="hover:bg-white/10 cursor-pointer"
-            style={{ padding: '0.25rem' }}
+            className="hover:bg-white/10 cursor-pointer p-2"
           >
-            <motion.div
-              animate={{ rotate: isMobileMenuOpen ? 90 : 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              {isMobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
-            </motion.div>
+            <MenuCloseIcon size={28} isAnimating={isMobileMenuOpen} className="text-white" />
           </Button>
         </div>
 
         <motion.div
-          className={`lg:hidden absolute top-full left-0 right-0 glass-nav overflow-hidden ${
+          className={`lg:hidden absolute top-full right-0 glass-nav overflow-hidden w-48 ${
             isMobileMenuOpen ? 'block' : 'hidden'
           }`}
           style={{ 
@@ -166,6 +152,17 @@ export default function Navbar() {
                 {item.name}
               </motion.button>
             ))}
+            <div className="pt-2 mt-2 border-t border-white/10">
+              <Link href="/cv" onClick={() => setIsMobileMenuOpen(false)}>
+                <motion.button
+                  className="w-full px-4 py-2 bg-accent/90 hover:bg-accent text-accent-foreground rounded-lg flex items-center justify-center gap-2 transition-all duration-300 font-medium text-sm"
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <FileText className="w-4 h-4" />
+                  Resume
+                </motion.button>
+              </Link>
+            </div>
           </div>
         </motion.div>
       </div>
