@@ -289,7 +289,7 @@ export default function BorderGlow({
       onPointerMove={isInteractive ? handlePointerMove : undefined}
       onPointerEnter={isInteractive ? () => setIsHovered(true) : undefined}
       onPointerLeave={isInteractive ? () => setIsHovered(false) : undefined}
-      className={cn('relative grid isolate border border-white/15', className)}
+      className={cn('relative grid isolate overflow-hidden border border-white/15 md:overflow-visible', className)}
       style={{
         background: backgroundColor,
         borderRadius: `${borderRadius}px`,

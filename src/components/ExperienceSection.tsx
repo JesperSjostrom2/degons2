@@ -242,7 +242,7 @@ const ExperienceSection: React.FC = () => {
                   </div>
 
                   <div className="mx-auto h-2 w-[86%] rounded-b-sm bg-gradient-to-b from-zinc-700 to-zinc-900" />
-                  <div className="relative mx-auto h-8 w-[106%] -translate-x-[3%] rounded-b-[26px] border-t border-white/15 bg-gradient-to-b from-zinc-500 via-zinc-700 to-zinc-900">
+                  <div className="relative mx-auto h-8 w-full rounded-b-[26px] border-t border-white/15 bg-gradient-to-b from-zinc-500 via-zinc-700 to-zinc-900 lg:w-[106%] lg:-translate-x-[3%]">
                     <div className="absolute left-1/2 top-0 h-2.5 w-28 -translate-x-1/2 rounded-b-xl bg-black/30" />
                     <div className="absolute bottom-1.5 left-1/2 h-2 w-40 -translate-x-1/2 rounded-xl border border-white/10 bg-black/15" />
                   </div>

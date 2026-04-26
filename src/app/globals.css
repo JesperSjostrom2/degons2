@@ -124,12 +124,10 @@
   
   html {
     scroll-padding-top: 100px;
-    overflow-x: hidden;
   }
   
   body {
     @apply bg-background text-foreground;
-    overflow-x: hidden;
   }
   
   /* Optimize for Lenis smooth scrolling */
