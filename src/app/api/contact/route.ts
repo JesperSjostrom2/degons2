@@ -3,6 +3,7 @@ import { Resend } from 'resend'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 const contactEmail = process.env.CONTACT_TO_EMAIL || 'jespersjostrom2@gmail.com'
+const fromEmail = process.env.RESEND_FROM_EMAIL || 'Portfolio Contact <onboarding@resend.dev>'
 
 interface ContactRequestBody {
   name?: string
@@ -45,7 +46,7 @@ export async function POST(request: Request) {
     console.log('[Contact API] Sending email via Resend')
 
     const result = await resend.emails.send({
-      from: 'Portfolio Contact <onboarding@resend.dev>',
+      from: fromEmail,
       to: contactEmail,
       replyTo: email,
       subject: `Project inquiry from ${name}`,

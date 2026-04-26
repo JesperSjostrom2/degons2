@@ -16,6 +16,12 @@ interface Star {
   moveY: number[]
 }
 
+interface FloatingStarsProps {
+  className?: string
+  count?: number
+  mobileCount?: number
+}
+
 const generateStars = (count: number = 30): Star[] => {
   return Array.from({ length: count }, (_, i) => ({
     id: i,
@@ -31,7 +37,11 @@ const generateStars = (count: number = 30): Star[] => {
   }))
 }
 
-export default function FloatingStars() {
+export default function FloatingStars({
+  className = 'absolute inset-0 overflow-hidden pointer-events-none',
+  count = 30,
+  mobileCount = 12,
+}: FloatingStarsProps) {
   const [stars, setStars] = useState<Star[]>([])
   const [isMounted, setIsMounted] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
@@ -41,13 +51,13 @@ export default function FloatingStars() {
 
     setIsMobile(isMobileViewport)
     setIsMounted(true)
-    setStars(generateStars(isMobileViewport ? 12 : 30))
-  }, [])
+    setStars(generateStars(isMobileViewport ? mobileCount : count))
+  }, [count, mobileCount])
 
   if (!isMounted) return null
 
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+    <div className={className}>
       {stars.map((star) => (
         <motion.div
           key={star.id}

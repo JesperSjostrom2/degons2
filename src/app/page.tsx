@@ -6,13 +6,14 @@ import CVButton from '@/components/cv-button'
 import SocialLinks from '@/components/social-links'
 import GradientText from '@/components/GradientText'
 import CustomCursor from '@/components/custom-cursor'
+import FloatingStars from '@/components/floating-stars'
 import SmoothScroll from '@/components/smooth-scroll'
 import MagicBento from '@/components/MagicBento'
 import ExperienceSection from '@/components/ExperienceSection'
-import TimelineExperience from '@/components/TimelineExperience'
 import TechStackSection from '@/components/TechStackSection'
 import ContactSection from '@/components/ContactSection'
 import Footer from '@/components/footer'
+import ProgressScrollbar from '@/components/ProgressScrollbar'
 
 const aboutInfoCardClass = 'relative z-10 rounded-xl border border-accent/20 bg-card/30 p-4 text-center backdrop-blur-sm transition-all duration-300 group-hover:-translate-x-1 group-hover:-translate-y-1 group-hover:rounded-[4px] group-hover:shadow-[4px_4px_0px_rgba(218,197,167,0.8)] group-active:translate-x-0 group-active:translate-y-0 group-active:rounded-xl group-active:shadow-none'
 const aboutInfoDepthClass = 'pointer-events-none absolute inset-0 z-0 rounded-xl border border-accent/45 bg-accent/10 opacity-0 shadow-[0_0_24px_rgba(218,197,167,0.12),inset_0_1px_0_rgba(255,255,255,0.16)] transition-all duration-300 group-hover:translate-x-1.5 group-hover:translate-y-1.5 group-hover:opacity-100 group-hover:rounded-[4px]'
@@ -20,18 +21,23 @@ const aboutInfoCardStyle = { boxShadow: '0 1px 0 0 rgba(255, 255, 255, 0.1)' }
 
 export default function Home() {
   return (
-    <main className="relative min-h-screen">
+    <main className="isolate relative min-h-screen bg-[#080808]">
       <SmoothScroll />
       <CustomCursor />
-      <HeroAboutGenie />
-      <Navbar />
-      <EmailContact />
-      <CVButton />
-      <Hero />
+      <ProgressScrollbar />
+      <div className="fixed inset-0 z-0 bg-[linear-gradient(180deg,#1a1a1a_0%,#101010_28%,#080808_100%)]" />
+      <FloatingStars className="pointer-events-none fixed inset-0 z-0 overflow-hidden opacity-80" count={44} mobileCount={18} />
+      <div className="relative z-10">
+        <HeroAboutGenie />
+        <Navbar />
+        <EmailContact />
+        <CVButton />
+        <Hero />
       
       {/* About Section */}
-      <section id="about" className="min-h-screen flex items-center bg-background/80 py-20">
-        <div className="container mx-auto px-6">
+      <section id="about" className="relative flex min-h-screen items-center overflow-hidden py-20">
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(20,20,20,0.92)_0%,rgba(16,16,16,0.94)_45%,rgba(8,8,8,0.96)_100%),radial-gradient(circle_at_18%_34%,rgba(218,197,167,0.035),transparent_32%),radial-gradient(circle_at_82%_62%,rgba(218,197,167,0.025),transparent_30%)]" />
+        <div className="container relative z-10 mx-auto px-6">
           <div className="flex justify-center items-center">
             <div className="grid lg:grid-cols-5 gap-12 lg:gap-20 items-center max-w-6xl w-full">
               {/* Left Content */}
@@ -123,17 +129,18 @@ export default function Home() {
       </section>
       
       {/* Magic Bento Grid Section */}
-      <section className="bg-background/80 py-20">
-        <div className="flex justify-center">
+      <section className="relative -mt-8 overflow-hidden bg-background/80 pb-24 pt-16">
+        <div className="absolute left-1/2 top-0 h-px w-full max-w-5xl -translate-x-1/2 bg-gradient-to-r from-transparent via-accent/70 to-transparent" />
+        <div className="absolute left-1/2 top-0 h-24 w-full max-w-4xl -translate-x-1/2 -translate-y-1/2 bg-[radial-gradient(ellipse_at_center,rgba(218,197,167,0.18),transparent_68%)] blur-xl" />
+        <div className="absolute left-1/2 top-1/2 h-[520px] w-[520px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/10 blur-3xl md:h-[720px] md:w-[720px]" />
+        <div className="absolute left-1/2 top-1/2 h-[260px] w-[260px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/15 blur-2xl md:h-[380px] md:w-[380px]" />
+        <div className="relative z-10 flex justify-center">
           <MagicBento />
         </div>
       </section>
       
       {/* Projects Section */}
       <ExperienceSection />
-      
-      {/* Experience Section */}
-      <TimelineExperience />
       
       {/* Skills Section */}
       <TechStackSection />
@@ -143,7 +150,8 @@ export default function Home() {
       
       {/* Footer */}
       <Footer />
-      
+      </div>
+       
     </main>
   )
 }

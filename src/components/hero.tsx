@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { motion, useMotionValue, useSpring } from 'framer-motion'
 
-import FloatingStars from '@/components/floating-stars'
 import GlareHover from '@/components/GlareHover'
 import LightRays from '@/components/LightRays'
 
@@ -74,7 +73,7 @@ export default function Hero() {
   }
 
   return (
-    <section id="home" className="relative min-h-screen overflow-hidden bg-background noise">
+    <section id="home" className="relative min-h-screen overflow-hidden noise">
       <div className="absolute inset-0 z-0 h-full w-full" style={{ minHeight: '100vh' }}>
         {showLightRays ? (
           <LightRays
@@ -96,8 +95,6 @@ export default function Hero() {
           <div className="h-full w-full bg-[radial-gradient(circle_at_50%_0%,rgba(218,197,167,0.18),transparent_45%)]" />
         )}
       </div>
-
-      <FloatingStars />
 
       <div className="container relative z-10 mx-auto flex min-h-screen items-center px-6 pb-16 pt-28">
         <div className="relative mx-auto grid w-full max-w-7xl items-center gap-10 lg:grid-cols-[0.8fr_1.4fr_0.8fr]">
