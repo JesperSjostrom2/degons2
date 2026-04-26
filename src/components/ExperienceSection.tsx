@@ -1,261 +1,230 @@
-'use client'
+"use client"
 
-import { useState, useRef, useEffect } from 'react'
-// Animations removed for instant content updates
+import Image from 'next/image'
+import { ArrowRight, CheckCircle2, Sparkles } from 'lucide-react'
+
+import BorderGlow from '@/components/BorderGlow'
+import GlareHover from '@/components/GlareHover'
+
+const BORDER_GLOW_COLORS = ['#8b7355', '#dac5a7', '#f5efe4']
+const BORDER_GLOW_HSL = '38 37 76'
+const BORDER_GLOW_BACKGROUND = '#050505'
 
 interface Project {
   id: number
   title: string
+  displayTitle: string
+  category: string
+  summary: string
   description: string
   bulletPoints: string[]
   skills: string[]
-  backgroundColor: string
   year: string
-  duration: string
   image: string
 }
 
 const projectsData: Project[] = [
   {
     id: 1,
-    title: "ANDCREATIVE",
-    description: "A modern, premium website built for a creative agency. 'VISUALS WITH MEANING - We turn your vision into timeless visuals—photo and film.' The platform focuses on high-end visual storytelling and showcases their photography and videography portfolio.",
+    title: 'ANDCREATIVE',
+    displayTitle: 'ANDCREATIVE',
+    category: 'Web Design',
+    summary: 'A creative agency website focused on high-end visuals and storytelling.',
+    description:
+      "A modern, premium website built for a creative agency. 'VISUALS WITH MEANING' turns ideas into timeless visuals through photo and film.",
     bulletPoints: [
-      "Designed and developed a sleek, dark-themed UI that puts visual content first",
-      "Implemented smooth, cinematic interactions and scroll animations",
-      "Optimized media loading for high-resolution photo and video assets",
-      "Created a responsive layout that maintains the premium feel across all devices"
+      'Sleek, dark-themed UI with a visual-first approach',
+      'Smooth interactions and scroll animations',
+      'Optimized media loading for high-resolution assets',
+      'Responsive layout across all devices',
     ],
-    skills: ["Next.js", "Tailwind CSS", "Framer Motion", "UI/UX", "Web Design"],
-    backgroundColor: "linear-gradient(135deg, #111111 0%, #000000 100%)",
-    year: "2026",
-    duration: "3 months",
-    image: "/assets/projects/andcreative.png"
+    skills: ['Next.js', 'Tailwind CSS', 'Framer Motion', 'UI/UX', 'Web Design'],
+    year: '2026',
+    image: '/assets/projects/andcreative.png',
   },
   {
     id: 2,
-    title: "Café & Bistro Kerma",
-    description: "At Café & Bistro Kerma, I was an all-around worker responsible for a wide range of tasks including inventory management, serving food, cooking, and working at the bar. I designed and developed the website, creating a user-friendly platform with an online menu and reservation system.",
+    title: 'Café & Bistro Kerma',
+    displayTitle: 'TAHKON KERMA',
+    category: 'Brand & Web',
+    summary: 'A restaurant website that reflects warmth, comfort, and a memorable guest experience.',
+    description:
+      'A website for Tahkon Kerma Café & Bistro designed to offer a cozy digital experience while showcasing menu, events, and ambience.',
     bulletPoints: [
-      "Designed and developed the complete website with online menu and reservation system",
-      "Created the logotype, designing an easy and simple logo to recognize",
-      "Maintained close customer contact to ensure satisfaction with branding and web presence",
-      "Incorporated customer feedback to refine brand identity and online presence"
+      'Warm and inviting interface',
+      'Integrated menu and reservation flow',
+      'Brand identity and logo direction',
+      'Smooth scrolling and subtle animations',
     ],
-    skills: ["Web Design", "Logo Design", "Brand Identity", "UI/UX", "HTML/CSS", "JavaScript"],
-    backgroundColor: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-    year: "2024",
-    duration: "6 months",
-    image: "/assets/projects/kerma.png"
+    skills: ['Web Design', 'Logo Design', 'Brand Identity', 'UI/UX', 'HTML/CSS', 'JavaScript'],
+    year: '2024',
+    image: '/assets/projects/kerma.png',
   },
   {
     id: 3,
-    title: "Portfolio Website",
-    description: "Modern, interactive portfolio website showcasing creative web development skills. Features smooth animations, dark mode support, and optimized performance with custom components and innovative layout designs.",
+    title: 'Portfolio Website',
+    displayTitle: 'PORTFOLIO SYSTEM',
+    category: 'Development',
+    summary: 'An interactive portfolio built around motion, performance, and polished presentation.',
+    description:
+      'A modern portfolio experience showcasing projects, experience, and technical strengths through a responsive interactive interface.',
     bulletPoints: [
-      "Smooth scroll animations with Framer Motion",
-      "Custom interactive components and visual effects",
-      "SEO optimized with perfect Lighthouse performance scores",
-      "Fully responsive design across all device types"
+      'Custom interactive components and visual effects',
+      'Responsive layouts across device sizes',
+      'Motion-led sections with polished transitions',
+      'Performance-minded structure and SEO foundations',
     ],
-    skills: ["Next.js", "Tailwind CSS", "Framer Motion", "TypeScript", "GSAP", "Three.js"],
-    backgroundColor: "linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)",
-    year: "2023",
-    duration: "2 months",
-    image: "/assets/projects/ogportfolio.png"
-  }
+    skills: ['Next.js', 'Tailwind CSS', 'Framer Motion', 'TypeScript', 'GSAP', 'Three.js'],
+    year: '2023',
+    image: '/assets/projects/ogportfolio.png',
+  },
 ]
 
-
-interface ProjectInfoProps {
-  project: Project
-}
-
-// Skill to devicon mapping
-const skillLogos: { [key: string]: string } = {
-  'React': 'react/react-original',
-  'Next.js': 'nextjs/nextjs-original',
-  'TypeScript': 'typescript/typescript-original',
-  'PostgreSQL': 'postgresql/postgresql-original',
-  'Stripe': 'javascript/javascript-original', // Fallback for Stripe
-  'Tailwind CSS': 'tailwindcss/tailwindcss-plain',
-  'Prisma': 'postgresql/postgresql-original', // Fallback for Prisma
-  'D3.js': 'd3js/d3js-original',
-  'Node.js': 'nodejs/nodejs-original',
-  'Socket.io': 'socketio/socketio-original',
-  'MongoDB': 'mongodb/mongodb-original',
-  'Redis': 'redis/redis-original',
-  'Framer Motion': 'react/react-original', // Fallback for Framer Motion
-  'GSAP': 'javascript/javascript-original', // Fallback for GSAP
-  'Three.js': 'threejs/threejs-original',
-  'JavaScript': 'javascript/javascript-original',
-  'Python': 'python/python-original',
-  'Vue.js': 'vuejs/vuejs-original',
-  'Angular': 'angularjs/angularjs-original',
-  'Svelte': 'svelte/svelte-original',
-  'Web Design': 'figma/figma-original',
-  'Logo Design': 'illustrator/illustrator-plain',
-  'Brand Identity': 'photoshop/photoshop-plain',
-  'UI/UX': 'figma/figma-original',
-  'HTML/CSS': 'html5/html5-original'
-}
-
-const ProjectInfo: React.FC<ProjectInfoProps> = ({ project }) => {
+const ProjectCard = ({ project, index }: { project: Project; index: number }) => {
   return (
-    <div
-      key={project.id}
-      className="space-y-4"
+    <BorderGlow
+      className="rounded-[28px]"
+      edgeSensitivity={26}
+      glowColor={BORDER_GLOW_HSL}
+      backgroundColor={BORDER_GLOW_BACKGROUND}
+      borderRadius={28}
+      glowRadius={34}
+      glowIntensity={1.35}
+      coneSpread={24}
+      colors={BORDER_GLOW_COLORS}
+      fillOpacity={0.4}
     >
-        {/* Project Header */}
-        <div>
-          <div className="flex items-center gap-6 mb-2">
-            <div className="w-6 h-1 bg-accent rounded-full -ml-10"></div>
-            <h3 className="text-2xl font-bold text-white">
-              {project.title}
-            </h3>
-            <span className="text-sm px-3 py-1 rounded-full border border-accent/40 bg-accent/20 text-accent">
-              {project.year}
-            </span>
-          </div>
+    <article className="group overflow-hidden rounded-[28px] bg-[#080808]/90 shadow-[0_24px_80px_rgba(0,0,0,0.28)] lg:grid lg:grid-cols-[1.45fr_1fr]">
+      <div className="relative min-h-[430px] overflow-hidden border-b border-white/10 lg:min-h-[520px] lg:border-b-0 lg:border-r">
+        <Image
+          src={project.image}
+          alt={project.title}
+          fill
+          sizes="(max-width: 1024px) 100vw, 58vw"
+          className="object-cover object-center opacity-70 transition-all duration-700 group-hover:scale-[1.035] group-hover:opacity-82"
+        />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.86),rgba(0,0,0,0.42)_48%,rgba(0,0,0,0.1)),linear-gradient(180deg,rgba(0,0,0,0.08),rgba(0,0,0,0.88))]" />
+
+        <div className="absolute left-6 top-6 flex h-12 w-12 items-center justify-center rounded-xl border border-white/20 bg-black/45 text-lg font-semibold text-white backdrop-blur-md">
+          {String(index + 1).padStart(2, '0')}
         </div>
 
-        {/* Description */}
-        <p className="text-muted-foreground leading-relaxed text-lg">
-          {project.description}
-        </p>
+        <div className="absolute bottom-8 left-6 right-6 md:bottom-10 md:left-10 md:right-10">
+          <div className="mb-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-accent">
+            <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+            {project.category}
+          </div>
+          <h3 className="max-w-xl text-3xl font-bold uppercase leading-tight tracking-tight text-white md:text-4xl">
+            {project.displayTitle}
+          </h3>
+          <p className="mt-4 max-w-md text-sm leading-6 text-white/78 md:text-base">
+            {project.summary}
+          </p>
 
-        {/* Key Features */}
-        <div>
-          <h4 className="font-semibold mb-3 text-base text-accent">
-            Key Features
-          </h4>
-          <ul className="space-y-2">
-            {project.bulletPoints.map((point, index) => (
-              <li 
-                key={index} 
-                className="flex items-start gap-3 text-white"
-              >
-                <div className="w-2 h-2 rounded-full mt-2 flex-shrink-0 bg-accent" />
-                <span className="leading-relaxed">{point}</span>
+          <div className="mt-8 flex flex-wrap items-center gap-4">
+            <a
+              href="#contact"
+              className="inline-flex items-center gap-5 rounded-full border border-white/25 bg-white/8 px-6 py-3 text-sm font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:border-accent/55 hover:bg-accent hover:text-background"
+            >
+              View Project
+              <ArrowRight className="h-4 w-4" />
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex flex-col justify-center p-6 md:p-8 lg:p-10">
+        <div className="mb-7 flex items-start justify-between gap-4">
+          <div>
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-accent">Overview</p>
+            <p className="text-sm leading-7 text-white/70">{project.description}</p>
+          </div>
+          <span className="shrink-0 rounded-full border border-accent/30 px-3 py-1 text-xs font-semibold text-accent">
+            {project.year}
+          </span>
+        </div>
+
+        <div className="border-t border-white/10 py-7">
+          <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-accent">Key Features</p>
+          <ul className="space-y-3">
+            {project.bulletPoints.map((point) => (
+              <li key={point} className="flex gap-3 text-sm leading-6 text-white/78">
+                <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 fill-accent/20 text-accent" />
+                <span>{point}</span>
               </li>
             ))}
           </ul>
         </div>
 
-        {/* Skills with Real Logos */}
-        <div>
+        <div className="border-t border-white/10 pt-7">
+          <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-accent">Technologies</p>
           <div className="flex flex-wrap gap-2">
-            {project.skills.map((skill, index) => (
-              <div
-                key={index}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20 transition-all duration-300 hover:bg-accent/20 hover:scale-105 group"
-              >
-                <img 
-                  src={`https://cdn.jsdelivr.net/gh/devicons/devicon/icons/${skillLogos[skill] || 'javascript/javascript-original'}.svg`}
-                  alt={skill}
-                  className="w-4 h-4 object-contain"
-                />
-                <span className="text-sm text-white/90 font-medium">{skill}</span>
-              </div>
+            {project.skills.map((skill) => (
+              <span key={skill} className="rounded-full border border-white/10 bg-white/[0.06] px-3 py-1.5 text-xs text-white/72">
+                {skill}
+              </span>
             ))}
           </div>
         </div>
-    </div>
+      </div>
+    </article>
+    </BorderGlow>
   )
 }
 
 const ExperienceSection: React.FC = () => {
-  const [activeProjectId, setActiveProjectId] = useState(projectsData[0].id)
-  const sectionRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const observerOptions = {
-      root: null,
-      rootMargin: '-40% 0px -40% 0px',
-      threshold: 0.3
-    }
-
-    const observerCallback = (entries: IntersectionObserverEntry[]) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const projectId = parseInt(entry.target.getAttribute('data-project-id') || '1')
-          setActiveProjectId(projectId)
-        }
-      })
-    }
-
-    const observer = new IntersectionObserver(observerCallback, observerOptions)
-
-    // Observe all project images
-    const projectImages = document.querySelectorAll('[data-project-id]')
-    projectImages.forEach((image) => observer.observe(image))
-
-    return () => observer.disconnect()
-  }, [])
-
-  const activeProject = projectsData.find(p => p.id === activeProjectId) || projectsData[0]
+  const scrollToContact = () => {
+    const element = document.querySelector('#contact')
+    element?.scrollIntoView({ behavior: 'smooth' })
+  }
 
   return (
-    <section id="projects" ref={sectionRef} className="bg-background/50 py-20">
-      <div className="container mx-auto px-6 mb-12">
-        <div className="text-center max-w-3xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">Featured Projects</h2>
-          <p className="text-lg md:text-xl text-muted-foreground">
+    <section id="projects" className="bg-background/50 py-24">
+      <div className="container mx-auto px-6">
+        <div className="mx-auto mb-14 max-w-3xl text-center">
+          <div className="mb-4 flex items-center justify-center gap-3 text-sm font-semibold uppercase tracking-[0.28em] text-accent/70">
+            <span className="h-px w-7 bg-accent/70" />
+            Work
+            <span className="h-px w-7 bg-accent/70" />
+          </div>
+          <h2 className="mb-5 text-4xl font-bold text-white md:text-5xl">Featured Projects</h2>
+          <p className="text-lg text-muted-foreground">
             A collection of projects that demonstrate technical skills and creative problem-solving abilities.
           </p>
         </div>
-      </div>
 
-      <div className="container mx-auto px-6">
-        <div className="flex flex-col gap-10 lg:flex-row lg:gap-12">
-          {/* Left Side - Project Images (60%) */}
-          <div className="w-full lg:w-3/5">
-            {projectsData.map((project) => (
-              <div 
-                key={project.id}
-                className="mb-16 lg:mb-24"
-                data-project-id={project.id}
-              >
-                <div className="relative mx-auto w-full max-w-2xl lg:w-4/5">
-                  <div className="relative h-64 rounded-[24px] border border-white/10 bg-gradient-to-br from-zinc-700 via-zinc-900 to-black p-[10px] pb-3 sm:h-80 lg:h-96">
-                    <div className="absolute left-1/2 top-1.5 h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-black ring-1 ring-white/15" />
-                    <div className="relative h-full overflow-hidden rounded-[16px] border border-black bg-black cursor-pointer transition-transform duration-300 ease-in-out hover:scale-[1.015]">
-                      <img 
-                        src={project.image}
-                        alt={project.title}
-                        className="h-full w-full object-cover object-top"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.style.display = 'none';
-                          const parent = target.parentElement;
-                          if (parent) {
-                            parent.innerHTML = `
-                              <div class="w-full h-full bg-gradient-to-r from-gray-800 to-gray-700 flex items-center justify-center">
-                                <span class="text-white/60 text-sm">Project Image</span>
-                              </div>
-                            `;
-                          }
-                        }}
-                      />
-                      <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-white/10 to-transparent pointer-events-none" />
-                    </div>
-                  </div>
+        <div className="mx-auto flex max-w-7xl flex-col gap-7">
+          {projectsData.map((project, index) => (
+            <ProjectCard key={project.id} project={project} index={index} />
+          ))}
+        </div>
 
-                  <div className="mx-auto h-2 w-[86%] rounded-b-sm bg-gradient-to-b from-zinc-700 to-zinc-900" />
-                  <div className="relative mx-auto h-8 w-full rounded-b-[26px] border-t border-white/15 bg-gradient-to-b from-zinc-500 via-zinc-700 to-zinc-900 lg:w-[106%] lg:-translate-x-[3%]">
-                    <div className="absolute left-1/2 top-0 h-2.5 w-28 -translate-x-1/2 rounded-b-xl bg-black/30" />
-                    <div className="absolute bottom-1.5 left-1/2 h-2 w-40 -translate-x-1/2 rounded-xl border border-white/10 bg-black/15" />
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Right Side - Sticky Project Info (40%) */}
-          <div className="w-full lg:w-2/5">
-            <div className="h-fit lg:sticky lg:top-64">
-              <ProjectInfo key={activeProjectId} project={activeProject} />
+        <div className="mx-auto mt-14 max-w-7xl pt-2 text-center">
+          <div className="mb-5 flex items-center gap-4">
+            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/10 to-white/10" />
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-accent/30 bg-accent/10 text-accent shadow-[0_0_28px_rgba(218,197,167,0.1)]">
+              <Sparkles className="h-5 w-5" />
             </div>
+            <div className="h-px flex-1 bg-gradient-to-l from-transparent via-white/10 to-white/10" />
+          </div>
+          <p className="text-sm font-medium text-white/78">Have a project in mind?</p>
+          <p className="mt-2 text-xs text-muted-foreground sm:text-sm">
+            I&apos;m always open to discussing new opportunities and exciting ideas.
+          </p>
+          <div className="mt-6 inline-flex cursor-pointer" onClick={scrollToContact}>
+            <GlareHover
+              width="auto"
+              height="auto"
+              background="#dac5a7"
+              borderRadius="20px"
+              borderColor="#dac5a7"
+              className="relative cursor-pointer px-8 py-2 text-lg font-medium text-black transition-all duration-300 hover:!bg-none hover:!bg-transparent hover:!border-accent hover:text-white"
+            >
+              <span className="flex cursor-pointer items-center gap-5">
+                Let&apos;s Work Together
+                <ArrowRight className="h-4 w-4" />
+              </span>
+            </GlareHover>
           </div>
         </div>
       </div>
