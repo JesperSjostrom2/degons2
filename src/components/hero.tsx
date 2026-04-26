@@ -1,64 +1,39 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { Copy, Check, Github, Linkedin } from 'lucide-react'
+
 import FloatingStars from '@/components/floating-stars'
-import LightRays from '@/components/LightRays'
 import GlareHover from '@/components/GlareHover'
+import LightRays from '@/components/LightRays'
+
+const focusAreas = ['Frontend Engineering', 'Creative Interfaces', 'Performance-minded UI', 'Product Polish']
 
 export default function Hero() {
-  const [isCopied, setIsCopied] = useState(false)
-    const scrollToProjects = () => {
-    const element = document.querySelector('#projects')
+  const [activeFocusArea, setActiveFocusArea] = useState(0)
+  const [isFocusAreaPaused, setIsFocusAreaPaused] = useState(false)
+
+  useEffect(() => {
+    if (isFocusAreaPaused) {
+      return
+    }
+
+    const timer = window.setInterval(() => {
+      setActiveFocusArea((currentArea) => (currentArea + 1) % focusAreas.length)
+    }, 1400)
+
+    return () => window.clearInterval(timer)
+  }, [isFocusAreaPaused])
+
+  const scrollToContact = () => {
+    const element = document.querySelector('#contact')
     element?.scrollIntoView({ behavior: 'smooth' })
   }
 
-  const copyToClipboard = async () => {
-    try {
-      await navigator.clipboard.writeText('contact@jespersjostrom.se')
-      setIsCopied(true)
-      
-      const notification = document.createElement('div')
-      notification.className = 'fixed bottom-24 right-4 px-4 py-3 rounded-lg shadow-lg z-50 transform translate-y-full transition-transform duration-300'
-      notification.style.background = '#2a2a2a'
-      notification.style.border = '1px solid #4a4a4a'
-      notification.style.color = '#ffffff'
-      notification.innerHTML = `
-        <div class="flex items-center gap-2">
-          <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-          </svg>
-          <div>
-            <div class="font-medium">Copied to clipboard!</div>
-            <div class="text-sm opacity-70">Email address copied successfully</div>
-          </div>
-        </div>
-      `
-      document.body.appendChild(notification)
-      
-      setTimeout(() => {
-        notification.style.transform = 'translateY(0)'
-      }, 10)
-      
-      setTimeout(() => {
-        notification.style.transform = 'translateY(100%)'
-        setTimeout(() => {
-          document.body.removeChild(notification)
-        }, 300)
-      }, 3000)
-      
-      setTimeout(() => {
-        setIsCopied(false)
-      }, 2000)
-    } catch (err) {
-      console.error('Failed to copy: ', err)
-    }
-  }
-
   return (
-    <section id="home" className="min-h-screen relative overflow-hidden noise bg-background">
-      <div className="absolute inset-0 w-full h-full z-0" style={{ minHeight: '100vh' }}>
+    <section id="home" className="relative min-h-screen overflow-hidden bg-background noise">
+      <div className="absolute inset-0 z-0 h-full w-full" style={{ minHeight: '100vh' }}>
         <LightRays
           raysOrigin="top-center"
           raysColor="#dac5a7"
@@ -72,148 +47,118 @@ export default function Hero() {
           mouseInfluence={0}
           noiseAmount={0}
           distortion={0}
-          className="opacity-80 w-full h-full"
+          className="h-full w-full opacity-80"
         />
       </div>
-      
+
       <FloatingStars />
 
-            <div className="container mx-auto px-6 flex items-center justify-center min-h-screen relative z-10 pt-20">
-        <div className="text-center space-y-12">
+      <div className="container relative z-10 mx-auto flex min-h-screen items-center px-6 pb-16 pt-28">
+        <div className="relative mx-auto grid w-full max-w-7xl items-center gap-10 lg:grid-cols-[0.8fr_1.4fr_0.8fr]">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, x: -24 }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
+            className="relative z-20 max-w-xs justify-self-start lg:pt-36"
           >
-            <div className="text-lg md:text-xl text-muted-foreground mb-4 font-medium">
-              Hi I&apos;m
-            </div>
-            <div className="relative inline-block">
-              <div className="text-3xl md:text-5xl lg:text-6xl font-bold text-white leading-none space-y-1 relative z-10">
-                <div className="relative group/jesper inline-block">
-                  <span className="text-accent">
-                    Jesper
-                  </span>
-                  <span className="absolute top-0 left-0 opacity-0 group-hover/jesper:opacity-100 transition-opacity duration-300 -z-10 text-3xl md:text-5xl lg:text-6xl font-bold" style={{ transform: 'translate(6px, 4px)', color: '#8a7a5e' }}>
-                    Jesper
-                  </span>
-                </div>
-                <div className="relative group/sjostrom">
-                  <span className="inline-block">
-                    Sjöström
-                  </span>
-                  <span className="absolute top-0 left-0 opacity-0 group-hover/sjostrom:opacity-100 transition-opacity duration-300 -z-10 text-3xl md:text-5xl lg:text-6xl font-bold inline-block" style={{ transform: 'translate(6px, 4px)', color: '#4a4a4a' }}>
-                    Sjöström
-                  </span>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-
-          <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto"
-          >
-            Passionate full-stack developer with 5+ years of experience creating modern web applications. 
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            className="flex justify-center"
-          >
-            <div onClick={() => scrollToProjects()}>
-              <GlareHover 
+            <p className="text-base font-semibold leading-7 text-white md:text-lg">
+              Hey there. I&apos;m a frontend-focused developer based in Helsinki, building sharp digital
+              experiences with clean code and a strong eye for interaction.
+            </p>
+            <div className="mt-8 inline-flex" onClick={scrollToContact}>
+              <GlareHover
                 width="auto"
                 height="auto"
                 background="#dac5a7"
                 borderRadius="20px"
                 borderColor="#dac5a7"
-                className="px-8 py-2 text-lg font-medium text-black hover:!bg-transparent hover:text-accent hover:!border-accent transition-all duration-300 cursor-pointer relative"
-                style={{ boxShadow: '0 4px 15px rgba(255, 255, 255, 0.2)' }}
+                className="px-8 py-2 text-lg font-medium text-black hover:!bg-none hover:!bg-transparent hover:text-white hover:!border-accent transition-all duration-300 cursor-pointer relative"
               >
                 Let&apos;s Connect
               </GlareHover>
             </div>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-            className="flex gap-6 justify-center items-center mt-16"
-          >
-            <a
-              href="https://github.com/jespersjostrom"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 text-muted-foreground hover:text-accent transition-colors duration-200"
+          <div className="relative min-h-[520px] overflow-visible md:min-h-[620px] lg:min-h-[680px]">
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, delay: 0.1 }}
+              className="absolute left-1/2 top-[6%] z-10 w-[120vw] max-w-none -translate-x-1/2 select-none overflow-visible bg-gradient-to-b from-[#f7ead8] via-[#dac5a7] to-[#8b7355] bg-clip-text pb-5 pt-8 text-center text-[3.45rem] font-black uppercase leading-[0.98] tracking-[-0.018em] text-transparent sm:text-[5.45rem] sm:tracking-[-0.025em] md:text-[7.15rem] lg:text-[8.45rem] xl:text-[9.6rem]"
             >
-              <Github className="w-5 h-5" />
-              <span>GitHub</span>
-            </a>
-            <a
-              href="https://linkedin.com/in/jespersjostrom"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 text-muted-foreground hover:text-accent transition-colors duration-200"
+              Jesper<br className="sm:hidden" /> Sjöström
+            </motion.h1>
+
+            <motion.div
+              initial={{ opacity: 0, y: 48, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.9, delay: 0.25, ease: 'easeOut' }}
+              className="absolute inset-x-0 bottom-0 z-20 mx-auto flex justify-center"
             >
-              <Linkedin className="w-5 h-5" />
-              <span>LinkedIn</span>
-            </a>
-            <button
-              onClick={isCopied ? undefined : copyToClipboard}
-              disabled={isCopied}
-              className={`flex items-center gap-2 transition-all duration-200 ${
-                isCopied 
-                  ? 'text-muted-foreground cursor-default' 
-                  : 'text-muted-foreground hover:text-accent cursor-pointer'
-              }`}
-            >
-              {isCopied ? (
-                <Check className="w-5 h-5 text-muted-foreground" />
-              ) : (
-                <Copy className="w-5 h-5" />
-              )}
-              <span>{isCopied ? 'Copied!' : 'contact@jespersjostrom.se'}</span>
-            </button>
-          </motion.div>
+              <div className="relative h-[420px] w-[420px] sm:h-[500px] sm:w-[500px] md:h-[570px] md:w-[570px] lg:h-[630px] lg:w-[630px]">
+                <div className="absolute inset-x-[18%] bottom-10 top-[18%] rounded-full bg-accent/10 blur-3xl" />
+                <div className="absolute left-1/2 top-[20%] h-72 w-72 -translate-x-1/2 rounded-full border border-accent/20 bg-[radial-gradient(circle,rgba(218,197,167,0.18)_0%,transparent_68%)] md:h-96 md:w-96" />
+                <Image
+                  src="/assets/memoji.png"
+                  alt="Memoji portrait of Jesper Sjöström"
+                  fill
+                  priority
+                  sizes="(max-width: 768px) 90vw, 620px"
+                  className="object-contain object-bottom drop-shadow-[0_40px_80px_rgba(0,0,0,0.45)]"
+                />
+              </div>
+            </motion.div>
+          </div>
 
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 1.5 }}
-            className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+            initial={{ opacity: 0, x: 24 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.35 }}
+            className="relative z-20 max-w-xs justify-self-end lg:pt-48"
           >
-            <motion.div
-              animate={{ y: [0, 10, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
-              className="w-6 h-10 border-2 border-accent rounded-full flex justify-center"
+            <div
+              onPointerEnter={() => setIsFocusAreaPaused(true)}
+              onPointerLeave={() => setIsFocusAreaPaused(false)}
+              onBlur={(event) => {
+                if (!event.currentTarget.contains(event.relatedTarget)) {
+                  setIsFocusAreaPaused(false)
+                }
+              }}
+              className="space-y-3 text-sm font-semibold md:text-base"
             >
-              <motion.div
-                animate={{ y: [0, 12, 0] }}
-                transition={{ duration: 2, repeat: Infinity }}
-                className="w-1 h-3 bg-accent rounded-full mt-2"
-              />
-            </motion.div>
+              {focusAreas.map((area, index) => (
+                <button
+                  key={area}
+                  type="button"
+                  onPointerEnter={() => {
+                    setIsFocusAreaPaused(true)
+                    setActiveFocusArea(index)
+                  }}
+                  onFocus={() => {
+                    setIsFocusAreaPaused(true)
+                    setActiveFocusArea(index)
+                  }}
+                  className={`block text-left transition-colors duration-300 ${
+                    activeFocusArea === index ? 'text-white' : 'text-white/45 hover:text-white/70'
+                  }`}
+                >
+                  {area}
+                </button>
+              ))}
+            </div>
           </motion.div>
         </div>
       </div>
 
-      <motion.div 
-        className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-4xl h-px"
+      <motion.div
+        className="absolute bottom-0 left-1/2 h-px w-full max-w-4xl -translate-x-1/2"
         initial={{ opacity: 0, scaleX: 0 }}
         animate={{ opacity: 1, scaleX: 1 }}
-        transition={{ duration: 1.5, delay: 2 }}
+        transition={{ duration: 1.5, delay: 1.2 }}
         style={{
           background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent)',
-          boxShadow: '0 0 20px rgba(255, 255, 255, 0.5), 0 0 40px rgba(255, 255, 255, 0.2)'
         }}
       />
-
     </section>
   )
 }

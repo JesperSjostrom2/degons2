@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, type Transition, type Variants } from "framer-motion";
 import { Github } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -13,12 +13,13 @@ interface SpecialCardProps {
     github: string;
   };
   className?: string;
+  expandedWidth?: number;
 }
 
 // --- Animation Physics & Variants ---
 
 // 1. The "Fluid" Spring: softer and more elastic feeling
-const fluidTransition = {
+const fluidTransition: Transition = {
   type: "spring",
   stiffness: 260,
   damping: 28,
@@ -26,7 +27,7 @@ const fluidTransition = {
 };
 
 // 2. Container for staggering text elements smoothly
-const contentContainerVariants = {
+const contentContainerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -42,7 +43,7 @@ const contentContainerVariants = {
 };
 
 // 3. The "Elegant Reveal": slides up while un-blurring
-const elegantItemVariants = {
+const elegantItemVariants: Variants = {
   hidden: { y: 12, opacity: 0, filter: "blur(6px)" },
   visible: {
     y: 0,
@@ -58,6 +59,7 @@ export default function ProfileCard({
   role,
   socials,
   className = "",
+  expandedWidth = 228,
 }: SpecialCardProps) {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -71,7 +73,7 @@ export default function ProfileCard({
         style={{ cursor: "default" }}
         initial={{ borderRadius: 40, width: 48, height: 48 }}
         animate={{
-          width: isHovered ? 228 : 48,
+          width: isHovered ? expandedWidth : 48,
           borderRadius: 40,
         }}
         transition={fluidTransition}
@@ -140,7 +142,8 @@ export default function ProfileCard({
                 initial="hidden"
                 animate="visible"
                 exit="exit"
-                className="flex flex-col justify-center pl-2 pr-3 w-[180px]"
+                className="flex flex-col justify-center pl-2 pr-3"
+                style={{ width: expandedWidth - 48 }}
               >
                 {/* Header Row: Name & Social */}
                 <div className="flex items-center justify-between gap-4 mb-0.5">

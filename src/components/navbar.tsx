@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Button } from '@/components/ui/button'
 import { MenuCloseIcon } from '@/components/ui/animated-state-icons'
 import ProfileCard from '@/components/ui/profile-card'
 import Link from 'next/link'
@@ -83,7 +82,7 @@ export default function Navbar() {
         />
       </div>
       <motion.nav
-        className={`fixed z-50 transition-colors duration-300 w-full top-0 left-0 right-0 ${
+        className={`fixed z-50 box-border max-w-[100dvw] overflow-x-clip transition-colors duration-300 w-full top-0 left-0 right-0 ${
         isMobileMenuOpen ? 'bg-transparent border-transparent' : 'bg-[#808080]/15 backdrop-blur-xl border-b border-white/10'
       } lg:bg-transparent lg:backdrop-blur-none lg:border-none lg:w-auto lg:max-w-[95vw] lg:right-auto lg:left-1/2 lg:-translate-x-1/2 lg:top-8`}
       initial={{ y: -100, opacity: 0 }}
@@ -131,32 +130,38 @@ export default function Navbar() {
       </div>
 
       {/* Mobile Header */}
-      <div className="lg:hidden flex items-center justify-between px-6 py-3 relative z-50">
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.2 }}
-        >
-          <ProfileCard
-            imageSrc="https://ik.imagekit.io/kqmrslzuq/21st.dev%20Components/ProfileCard/logo.png"
-            name="Jesper Sjöström"
-            role="Front End Developer"
-            socials={{
-              github: "https://github.com/jespersjostrom2"
-            }}
-          />
-        </motion.div>
-        <Button
-          variant="ghost"
+      <div className="lg:hidden relative z-50 h-[72px] w-full max-w-[100dvw] overflow-visible px-4 py-3">
+        <div className="absolute left-4 top-3 max-w-[calc(100dvw-5.5rem)] overflow-visible">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            <ProfileCard
+              imageSrc="https://ik.imagekit.io/kqmrslzuq/21st.dev%20Components/ProfileCard/logo.png"
+              name="Jesper Sjöström"
+              role="Front End Developer"
+              expandedWidth={190}
+              className="justify-start"
+              socials={{
+                github: "https://github.com/jespersjostrom2"
+              }}
+            />
+          </motion.div>
+        </div>
+
+        <button
+          type="button"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="hover:bg-white/10 cursor-pointer p-2 -mr-2"
+          className="glass-nav before:hidden absolute right-4 top-3 z-[70] flex h-11 w-11 translate-x-0 items-center justify-center p-0 text-white transition-colors duration-300 hover:bg-white/10"
+          aria-label="Toggle navigation menu"
         >
-          <MenuCloseIcon size={28} isAnimating={isMobileMenuOpen} className="text-white" />
-        </Button>
+          <MenuCloseIcon size={24} isAnimating={isMobileMenuOpen} className="text-white" />
+        </button>
       </div>
 
       {/* Mobile Fullscreen Kinetic Menu */}
-      <div className={`lg:hidden fixed inset-0 h-[100dvh] w-screen overflow-hidden ${isMobileMenuOpen ? 'pointer-events-auto' : 'pointer-events-none'}`}>
+      <div className={`lg:hidden fixed inset-0 h-[100dvh] w-auto max-w-[100dvw] overflow-hidden ${isMobileMenuOpen ? 'pointer-events-auto' : 'pointer-events-none'}`}>
         
         {/* Kinetic Backdrop Sweeps */}
         <motion.div
