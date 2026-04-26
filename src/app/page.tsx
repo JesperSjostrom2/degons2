@@ -1,5 +1,6 @@
 import Navbar from '@/components/navbar'
 import Hero from '@/components/hero'
+import HeroAboutGenie from '@/components/hero-about-genie'
 import EmailContact from '@/components/email-contact'
 import CVButton from '@/components/cv-button'
 import SocialLinks from '@/components/social-links'
@@ -22,6 +23,7 @@ export default function Home() {
     <main className="relative min-h-screen overflow-x-clip">
       <SmoothScroll />
       <CustomCursor />
+      <HeroAboutGenie />
       <Navbar />
       <EmailContact />
       <CVButton />
@@ -79,9 +81,10 @@ export default function Home() {
                     <div className="absolute left-5 top-5 z-0 h-72 w-72 rounded-3xl border-2 border-accent/60 transition-transform duration-300 ease-out group-hover:translate-x-2 group-hover:translate-y-2 animate-pulse"></div>
                     
                     {/* Main Profile Picture */}
-                    <div className="relative w-72 h-72 rounded-3xl overflow-hidden bg-gradient-to-br from-accent via-accent/95 to-accent/90 z-10 transition-transform duration-300 ease-out group-hover:-translate-x-2 group-hover:-translate-y-2">
+                    <div data-about-profile className="relative w-72 h-72 rounded-3xl overflow-hidden bg-gradient-to-br from-accent via-accent/95 to-accent/90 z-10 transition-transform duration-300 ease-out group-hover:-translate-x-2 group-hover:-translate-y-2">
                       <div className="w-full h-full flex items-center justify-center" style={{background: 'linear-gradient(to bottom right, #8b7355, #dac5a7)'}}>
-                        <span className="text-8xl font-bold text-white">JS</span>
+                        <span className="about-profile-initial text-8xl font-bold text-white transition-all duration-500">JS</span>
+                        <span className="about-profile-memoji absolute inset-0 bg-[url('/assets/memoji.png')] bg-contain bg-center bg-no-repeat opacity-0 transition-all duration-700" />
                       </div>
                     </div>
                   </div>

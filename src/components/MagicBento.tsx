@@ -589,7 +589,7 @@ const MagicBento: React.FC<BentoProps> = ({
               markerColor={[0.2, 0.5, 1.0]}
               arcColor={[0.2, 0.5, 1.0]}
               theta={0.1}
-              mapSamples={isMobile ? 8000 : 16000}
+              mapSamples={isMobile ? 5000 : 16000}
               speed={isMobile ? 0.0015 : 0.003}
               markers={[
                 { id: "helsinki", location: [60.1699, 24.9384] as [number, number], label: "Helsinki" },

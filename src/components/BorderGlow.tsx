@@ -149,6 +149,17 @@ export default function BorderGlow({
   const [cursorAngle, setCursorAngle] = useState(45)
   const [edgeProximity, setEdgeProximity] = useState(0)
   const [sweepActive, setSweepActive] = useState(false)
+  const [isInteractive, setIsInteractive] = useState(false)
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(pointer: fine) and (min-width: 768px)')
+    const updateInteractivity = () => setIsInteractive(mediaQuery.matches)
+
+    updateInteractivity()
+    mediaQuery.addEventListener('change', updateInteractivity)
+
+    return () => mediaQuery.removeEventListener('change', updateInteractivity)
+  }, [])
 
   const getCenterOfElement = useCallback((element: HTMLElement) => {
     const { width, height } = element.getBoundingClientRect()
@@ -218,7 +229,7 @@ export default function BorderGlow({
   )
 
   useEffect(() => {
-    if (!animated) {
+    if (!animated || !isInteractive) {
       return
     }
 
@@ -256,10 +267,10 @@ export default function BorderGlow({
       onUpdate: (value) => setEdgeProximity(value / 100),
       onEnd: () => setSweepActive(false),
     })
-  }, [animated])
+  }, [animated, isInteractive])
 
   const colorSensitivity = edgeSensitivity + 20
-  const isVisible = isHovered || sweepActive
+  const isVisible = isInteractive && (isHovered || sweepActive)
   const borderOpacity = isVisible
     ? Math.max(0, (edgeProximity * 100 - colorSensitivity) / (100 - colorSensitivity))
     : 0
@@ -275,9 +286,9 @@ export default function BorderGlow({
   return (
     <div
       ref={cardRef}
-      onPointerMove={handlePointerMove}
-      onPointerEnter={() => setIsHovered(true)}
-      onPointerLeave={() => setIsHovered(false)}
+      onPointerMove={isInteractive ? handlePointerMove : undefined}
+      onPointerEnter={isInteractive ? () => setIsHovered(true) : undefined}
+      onPointerLeave={isInteractive ? () => setIsHovered(false) : undefined}
       className={cn('relative grid isolate border border-white/15', className)}
       style={{
         background: backgroundColor,

@@ -34,12 +34,14 @@ const generateStars = (count: number = 30): Star[] => {
 export default function FloatingStars() {
   const [stars, setStars] = useState<Star[]>([])
   const [isMounted, setIsMounted] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
-    const isMobile = window.matchMedia('(max-width: 767px)').matches
+    const isMobileViewport = window.matchMedia('(max-width: 767px)').matches
 
+    setIsMobile(isMobileViewport)
     setIsMounted(true)
-    setStars(generateStars(isMobile ? 12 : 30))
+    setStars(generateStars(isMobileViewport ? 12 : 30))
   }, [])
 
   if (!isMounted) return null
@@ -50,18 +52,14 @@ export default function FloatingStars() {
         <motion.div
           key={star.id}
           className="absolute will-change-transform"
-          style={{ transform: 'translate3d(0,0,0)' }}
-          initial={{ 
-            opacity: 0,
-            left: `${star.x}%`,
-            top: `${star.y}%`,
-          }}
-          animate={{ 
+          style={{ left: `${star.x}%`, top: `${star.y}%`, transform: 'translate3d(0,0,0)' }}
+          initial={isMobile ? false : { opacity: 0 }}
+          animate={isMobile ? { opacity: star.brightness } : {
             opacity: 1,
             x: [0, star.moveX[1], star.moveX[2], star.moveX[3], 0],
             y: [0, star.moveY[1], star.moveY[2], star.moveY[3], 0],
           }}
-          transition={{ 
+          transition={isMobile ? undefined : { 
             opacity: { duration: 2, delay: star.id * 0.1 },
             x: { 
               duration: star.animationDuration, 
@@ -79,11 +77,11 @@ export default function FloatingStars() {
         >
           <motion.div
             className="relative"
-            animate={{
+            animate={isMobile ? undefined : {
               opacity: [star.brightness * 0.6, star.brightness, star.brightness * 0.8, star.brightness],
               scale: [0.9, 1.1, 0.95, 1.05, 0.9],
             }}
-            transition={{
+            transition={isMobile ? undefined : {
               duration: star.flickerSpeed,
               repeat: Infinity,
               ease: "easeInOut",
@@ -120,10 +118,10 @@ export default function FloatingStars() {
                 height: `${star.size * 0.2}px`,
                 background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent)',
               }}
-              animate={{
+              animate={isMobile ? undefined : {
                 opacity: [0.2, 0.5, 0.2],
               }}
-              transition={{
+              transition={isMobile ? undefined : {
                 duration: star.flickerSpeed * 1.2,
                 repeat: Infinity,
                 ease: "easeInOut",
@@ -138,10 +136,10 @@ export default function FloatingStars() {
                 height: `${star.size * 1.6}px`,
                 background: 'linear-gradient(180deg, transparent, rgba(255,255,255,0.6), transparent)',
               }}
-              animate={{
+              animate={isMobile ? undefined : {
                 opacity: [0.2, 0.5, 0.2],
               }}
-              transition={{
+              transition={isMobile ? undefined : {
                 duration: star.flickerSpeed * 1.2,
                 repeat: Infinity,
                 ease: "easeInOut",

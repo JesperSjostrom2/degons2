@@ -63,6 +63,7 @@ export function Globe({
   const phiOffsetRef = useRef(0)
   const thetaOffsetRef = useRef(0)
   const isPausedRef = useRef(false)
+  const isVisibleRef = useRef(false)
 
   const handlePointerDown = useCallback(
     (e: React.PointerEvent) => {
@@ -123,13 +124,15 @@ export function Globe({
     const canvas = canvasRef.current
     let globe: ReturnType<typeof createGlobe> | null = null
     let animationId: number
+    let observer: IntersectionObserver | null = null
     let phi = 0
 
     function init() {
       const width = canvas.offsetWidth
       if (width === 0 || globe) return
 
-      const dpr = Math.min(window.devicePixelRatio || 1, 2)
+      const isMobileViewport = window.matchMedia('(max-width: 767px)').matches
+      const dpr = isMobileViewport ? 1 : Math.min(window.devicePixelRatio || 1, 2)
       globe = createGlobe(canvas, {
         devicePixelRatio: dpr,
         width,
@@ -161,6 +164,11 @@ export function Globe({
       })
 
       function animate() {
+        if (!isVisibleRef.current) {
+          animationId = requestAnimationFrame(animate)
+          return
+        }
+
         if (!isPausedRef.current) {
           phi += speed
           if (
@@ -202,6 +210,14 @@ export function Globe({
         })
         animationId = requestAnimationFrame(animate)
       }
+      observer = new IntersectionObserver(
+        ([entry]) => {
+          isVisibleRef.current = entry.isIntersecting
+        },
+        { threshold: 0.05 },
+      )
+      observer.observe(canvas)
+
       animate()
       setTimeout(() => canvas && (canvas.style.opacity = "1"))
     }
@@ -220,6 +236,7 @@ export function Globe({
 
     return () => {
       if (animationId) cancelAnimationFrame(animationId)
+      observer?.disconnect()
       if (globe) globe.destroy()
     }
   }, [markers, arcs, markerColor, baseColor, arcColor, glowColor, dark, mapBrightness, markerSize, markerElevation, arcWidth, arcHeight, speed, theta, diffuse, mapSamples])

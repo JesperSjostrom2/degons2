@@ -5,7 +5,7 @@ import Lenis from 'lenis'
 
 export default function SmoothScroll() {
   useEffect(() => {
-    if (window.matchMedia('(pointer: coarse)').matches) {
+    if (window.matchMedia('(pointer: coarse), (max-width: 767px)').matches) {
       return
     }
 

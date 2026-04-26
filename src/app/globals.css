@@ -266,6 +266,28 @@
   .about-info-3d:hover::after {
     opacity: 1;
   }
+
+  html.about-genie-travelling [data-hero-face],
+  html.about-genie-at-about [data-hero-face] {
+    opacity: 0;
+    transition: opacity 500ms ease;
+  }
+
+  html.about-genie-travelling .about-profile-initial,
+  html.about-genie-at-about .about-profile-initial {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+
+  html.about-genie-travelling .about-profile-memoji {
+    opacity: 0;
+  }
+
+  html.about-genie-at-about .about-profile-memoji {
+    opacity: 1;
+    transform: scale(1);
+    transition-duration: 80ms;
+  }
   
   .font-accent {
     font-family: var(--font-nyghtsherif), serif;

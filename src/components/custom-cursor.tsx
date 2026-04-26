@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion, useSpring, useMotionValue } from 'framer-motion'
 
 export default function CustomCursor() {
-  const [isDisabled, setIsDisabled] = useState(false)
+  const [isDisabled, setIsDisabled] = useState(true)
   const [isVisible, setIsVisible] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
   const [isClicking, setIsClicking] = useState(false)
@@ -17,14 +17,39 @@ export default function CustomCursor() {
   const cursorYSpring = useSpring(cursorY, springConfig)
 
   useEffect(() => {
-    if (window.matchMedia('(pointer: coarse)').matches) {
+    const pointerQuery = window.matchMedia('(hover: hover) and (pointer: fine)')
+    const mobileViewportQuery = window.matchMedia('(max-width: 1024px)')
+
+    const updateCursorAvailability = () => {
+      const hasTouchInput = navigator.maxTouchPoints > 0
+      const shouldDisable = hasTouchInput || !pointerQuery.matches || mobileViewportQuery.matches
+
+      setIsDisabled(shouldDisable)
+
+      if (shouldDisable) {
+        document.documentElement.classList.remove('custom-cursor-active')
+      }
+    }
+
+    updateCursorAvailability()
+    pointerQuery.addEventListener('change', updateCursorAvailability)
+    mobileViewportQuery.addEventListener('change', updateCursorAvailability)
+    window.addEventListener('resize', updateCursorAvailability)
+
+    return () => {
+      pointerQuery.removeEventListener('change', updateCursorAvailability)
+      mobileViewportQuery.removeEventListener('change', updateCursorAvailability)
+      window.removeEventListener('resize', updateCursorAvailability)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (isDisabled) {
       document.documentElement.classList.remove('custom-cursor-active')
-      setIsDisabled(true)
       return
     }
 
     document.documentElement.classList.add('custom-cursor-active')
-    setIsDisabled(false)
 
     const updateCursor = (e: MouseEvent) => {
       cursorX.set(e.clientX)
@@ -71,7 +96,7 @@ export default function CustomCursor() {
       document.removeEventListener('mouseup', handleMouseUp)
       document.removeEventListener('mouseover', handleMouseOver)
     }
-  }, [cursorX, cursorY])
+  }, [cursorX, cursorY, isDisabled])
 
   if (isDisabled) {
     return null
