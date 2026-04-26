@@ -115,16 +115,20 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+  }
+
+  html.custom-cursor-active *,
+  html.custom-cursor-active body {
     cursor: none !important;
   }
   
   html {
     scroll-padding-top: 100px;
+    overflow-x: hidden;
   }
   
   body {
     @apply bg-background text-foreground;
-    cursor: none !important;
     overflow-x: hidden;
   }
   

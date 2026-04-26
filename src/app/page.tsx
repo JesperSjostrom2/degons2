@@ -7,7 +7,6 @@ import GradientText from '@/components/GradientText'
 import CustomCursor from '@/components/custom-cursor'
 import SmoothScroll from '@/components/smooth-scroll'
 import MagicBento from '@/components/MagicBento'
-import ProgressScrollbar from '@/components/ProgressScrollbar'
 import ExperienceSection from '@/components/ExperienceSection'
 import TimelineExperience from '@/components/TimelineExperience'
 import TechStackSection from '@/components/TechStackSection'
@@ -16,10 +15,9 @@ import Footer from '@/components/footer'
 
 export default function Home() {
   return (
-    <main className="relative min-h-screen">
+    <main className="relative min-h-screen overflow-x-clip">
       <SmoothScroll />
       <CustomCursor />
-      <ProgressScrollbar />
       <Navbar />
       <EmailContact />
       <CVButton />
@@ -32,7 +30,7 @@ export default function Home() {
             <div className="grid lg:grid-cols-5 gap-12 lg:gap-20 items-center max-w-6xl w-full">
               {/* Left Content */}
               <div className="lg:col-span-3 lg:col-start-1 space-y-8">
-                <div className="text-left ml-8">
+                <div className="text-left md:ml-8">
                   <p className="text-sm uppercase tracking-wider text-muted-foreground mb-4">
                     MORE ABOUT ME
                   </p>
@@ -41,7 +39,7 @@ export default function Home() {
                       I&apos;m Jesper, a<br />
                       creative <span className="inline-block relative">
                         <GradientText className="italic" style={{fontFamily: 'cursive'}} colors={["#8b7355", "#dac5a7", "#8b7355"]}>developer</GradientText>
-                        <span className="absolute -right-16 top-1/2 -translate-y-1/2 text-2xl md:text-3xl lg:text-4xl opacity-0 group-hover:opacity-100 transition-all duration-300 animate-waving">👋</span>
+                        <span className="absolute -right-16 top-1/2 hidden -translate-y-1/2 text-2xl opacity-0 transition-all duration-300 group-hover:opacity-100 md:block md:text-3xl lg:text-4xl animate-waving">👋</span>
                       </span>
                     </h2>
                   </div>

@@ -36,8 +36,10 @@ export default function FloatingStars() {
   const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
+    const isMobile = window.matchMedia('(max-width: 767px)').matches
+
     setIsMounted(true)
-    setStars(generateStars())
+    setStars(generateStars(isMobile ? 12 : 30))
   }, [])
 
   if (!isMounted) return null
@@ -56,30 +58,18 @@ export default function FloatingStars() {
           }}
           animate={{ 
             opacity: 1,
-            left: [
-              `${star.x}%`,
-              `${star.x + star.moveX[1] / 5}%`,
-              `${star.x + star.moveX[2] / 5}%`,
-              `${star.x + star.moveX[3] / 5}%`,
-              `${star.x}%`
-            ],
-            top: [
-              `${star.y}%`,
-              `${star.y + star.moveY[1] / 5}%`,
-              `${star.y + star.moveY[2] / 5}%`,
-              `${star.y + star.moveY[3] / 5}%`,
-              `${star.y}%`
-            ],
+            x: [0, star.moveX[1], star.moveX[2], star.moveX[3], 0],
+            y: [0, star.moveY[1], star.moveY[2], star.moveY[3], 0],
           }}
           transition={{ 
             opacity: { duration: 2, delay: star.id * 0.1 },
-            left: { 
+            x: { 
               duration: star.animationDuration, 
               repeat: Infinity, 
               ease: "linear",
               times: [0, 0.25, 0.5, 0.75, 1]
             },
-            top: { 
+            y: { 
               duration: star.animationDuration * 1.2, 
               repeat: Infinity, 
               ease: "linear", 

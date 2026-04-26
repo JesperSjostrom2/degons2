@@ -13,6 +13,17 @@ const focusAreas = ['Frontend Engineering', 'Creative Interfaces', 'Performance-
 export default function Hero() {
   const [activeFocusArea, setActiveFocusArea] = useState(0)
   const [isFocusAreaPaused, setIsFocusAreaPaused] = useState(false)
+  const [showLightRays, setShowLightRays] = useState(false)
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(min-width: 768px)')
+    const updateLightRays = () => setShowLightRays(mediaQuery.matches)
+
+    updateLightRays()
+    mediaQuery.addEventListener('change', updateLightRays)
+
+    return () => mediaQuery.removeEventListener('change', updateLightRays)
+  }, [])
 
   useEffect(() => {
     if (isFocusAreaPaused) {
@@ -34,21 +45,25 @@ export default function Hero() {
   return (
     <section id="home" className="relative min-h-screen overflow-hidden bg-background noise">
       <div className="absolute inset-0 z-0 h-full w-full" style={{ minHeight: '100vh' }}>
-        <LightRays
-          raysOrigin="top-center"
-          raysColor="#dac5a7"
-          raysSpeed={1}
-          lightSpread={0.8}
-          rayLength={3}
-          pulsating={false}
-          fadeDistance={1.5}
-          saturation={1}
-          followMouse={false}
-          mouseInfluence={0}
-          noiseAmount={0}
-          distortion={0}
-          className="h-full w-full opacity-80"
-        />
+        {showLightRays ? (
+          <LightRays
+            raysOrigin="top-center"
+            raysColor="#dac5a7"
+            raysSpeed={1}
+            lightSpread={0.8}
+            rayLength={3}
+            pulsating={false}
+            fadeDistance={1.5}
+            saturation={1}
+            followMouse={false}
+            mouseInfluence={0}
+            noiseAmount={0}
+            distortion={0}
+            className="h-full w-full opacity-80"
+          />
+        ) : (
+          <div className="h-full w-full bg-[radial-gradient(circle_at_50%_0%,rgba(218,197,167,0.18),transparent_45%)]" />
+        )}
       </div>
 
       <FloatingStars />

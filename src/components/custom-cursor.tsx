@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion, useSpring, useMotionValue } from 'framer-motion'
 
 export default function CustomCursor() {
+  const [isDisabled, setIsDisabled] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
   const [isClicking, setIsClicking] = useState(false)
@@ -16,6 +17,15 @@ export default function CustomCursor() {
   const cursorYSpring = useSpring(cursorY, springConfig)
 
   useEffect(() => {
+    if (window.matchMedia('(pointer: coarse)').matches) {
+      document.documentElement.classList.remove('custom-cursor-active')
+      setIsDisabled(true)
+      return
+    }
+
+    document.documentElement.classList.add('custom-cursor-active')
+    setIsDisabled(false)
+
     const updateCursor = (e: MouseEvent) => {
       cursorX.set(e.clientX)
       cursorY.set(e.clientY)
@@ -53,6 +63,7 @@ export default function CustomCursor() {
     document.addEventListener('mouseover', handleMouseOver)
 
     return () => {
+      document.documentElement.classList.remove('custom-cursor-active')
       document.removeEventListener('mousemove', updateCursor)
       document.removeEventListener('mouseenter', handleMouseEnter)
       document.removeEventListener('mouseleave', handleMouseLeave)
@@ -61,6 +72,10 @@ export default function CustomCursor() {
       document.removeEventListener('mouseover', handleMouseOver)
     }
   }, [cursorX, cursorY])
+
+  if (isDisabled) {
+    return null
+  }
 
   return (
     <div className="fixed inset-0 pointer-events-none z-[9999]">

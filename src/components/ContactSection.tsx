@@ -259,7 +259,7 @@ export default function ContactSection() {
                         <Icon className="h-9 w-9 shrink-0 transition-colors duration-300" />
                         <span>
                           <span className="block text-lg font-semibold">{social.name}</span>
-                          <span className={`mt-1 block text-sm transition-colors duration-300 ${isActive ? 'text-background/70' : 'text-white/45 group-hover:text-background/70'}`}>
+                          <span className={`mt-1 block break-all text-sm transition-colors duration-300 ${isActive ? 'text-background/70' : 'text-white/45 group-hover:text-background/70'}`}>
                             {social.handle}
                           </span>
                         </span>

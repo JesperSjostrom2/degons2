@@ -207,17 +207,17 @@ const ExperienceSection: React.FC = () => {
       </div>
 
       <div className="container mx-auto px-6">
-        <div className="flex gap-12">
+        <div className="flex flex-col gap-10 lg:flex-row lg:gap-12">
           {/* Left Side - Project Images (60%) */}
-          <div className="w-3/5">
+          <div className="w-full lg:w-3/5">
             {projectsData.map((project) => (
               <div 
                 key={project.id}
-                className="mb-24"
+                className="mb-16 lg:mb-24"
                 data-project-id={project.id}
               >
-                <div className="relative mx-auto w-4/5">
-                  <div className="relative h-96 rounded-[24px] border border-white/10 bg-gradient-to-br from-zinc-700 via-zinc-900 to-black p-[10px] pb-3">
+                <div className="relative mx-auto w-full max-w-2xl lg:w-4/5">
+                  <div className="relative h-64 rounded-[24px] border border-white/10 bg-gradient-to-br from-zinc-700 via-zinc-900 to-black p-[10px] pb-3 sm:h-80 lg:h-96">
                     <div className="absolute left-1/2 top-1.5 h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-black ring-1 ring-white/15" />
                     <div className="relative h-full overflow-hidden rounded-[16px] border border-black bg-black cursor-pointer transition-transform duration-300 ease-in-out hover:scale-[1.015]">
                       <img 
@@ -252,8 +252,8 @@ const ExperienceSection: React.FC = () => {
           </div>
 
           {/* Right Side - Sticky Project Info (40%) */}
-          <div className="w-2/5">
-            <div className="sticky top-64 h-fit">
+          <div className="w-full lg:w-2/5">
+            <div className="h-fit lg:sticky lg:top-64">
               <ProjectInfo key={activeProjectId} project={activeProject} />
             </div>
           </div>

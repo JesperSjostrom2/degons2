@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { MenuCloseIcon } from '@/components/ui/animated-state-icons'
 import ProfileCard from '@/components/ui/profile-card'
 import Link from 'next/link'
@@ -83,7 +83,7 @@ export default function Navbar() {
       </div>
       <motion.nav
         className={`fixed z-50 box-border max-w-[100dvw] overflow-x-clip transition-colors duration-300 w-full top-0 left-0 right-0 ${
-        isMobileMenuOpen ? 'bg-transparent border-transparent' : 'bg-[#808080]/15 backdrop-blur-xl border-b border-white/10'
+        isMobileMenuOpen ? 'bg-transparent border-transparent' : 'bg-[#808080]/15 backdrop-blur-xl border-transparent'
       } lg:bg-transparent lg:backdrop-blur-none lg:border-none lg:w-auto lg:max-w-[95vw] lg:right-auto lg:left-1/2 lg:-translate-x-1/2 lg:top-8`}
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
@@ -218,7 +218,7 @@ export default function Navbar() {
               </div>
             ))}
             
-            <div className="overflow-hidden pt-8 mt-8 border-t border-white/10">
+            <div className={`overflow-hidden pt-8 mt-8 border-t transition-colors duration-300 ${isMobileMenuOpen ? 'border-white/10' : 'border-transparent'}`}>
               <motion.div
                 initial={{ y: "100%", opacity: 0 }}
                 animate={{ 

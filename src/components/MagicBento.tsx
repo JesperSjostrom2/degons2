@@ -4,20 +4,11 @@ import React, { useRef, useEffect, useState, useCallback } from "react";
 import { gsap } from "gsap";
 import { Player } from "@remotion/player";
 import { ShoppingCart, BarChart3, Rocket, User } from "lucide-react";
-import { motion } from "framer-motion";
-import dynamic from "next/dynamic";
 import Magnet from "@/blocks/Animations/Magnet/Magnet";
 import ShinyText from "@/blocks/TextAnimations/ShinyText/ShinyText";
 import BorderGlow from "@/components/BorderGlow";
 import { InfiniteBentoPan } from "@/components/ui/infinite-bento-pan";
 import { Globe } from "@/components/ui/cobe-globe";
-
-const HexedGlobe = dynamic(() => import('@/components/HexedGlobe'), { 
-  ssr: false,
-  loading: () => <div className="w-75 h-75 rounded-full bg-accent/10 animate-pulse flex items-center justify-center">
-    <div className="w-36 h-36 rounded-full border-2 border-accent/20 border-t-accent animate-spin"></div>
-  </div>
-});
 
 export interface BentoCardProps {
   color?: string;
@@ -557,7 +548,6 @@ const MagicBento: React.FC<BentoProps> = ({
   const isMobile = useMobileDetection();
   const shouldDisableAnimations = disableAnimations || isMobile;
   const [isMounted, setIsMounted] = useState(false);
-  const [selectedCountry, setSelectedCountry] = useState<string | undefined>();
 
   useEffect(() => {
     setIsMounted(true);
@@ -591,6 +581,8 @@ const MagicBento: React.FC<BentoProps> = ({
               markerColor={[0.2, 0.5, 1.0]}
               arcColor={[0.2, 0.5, 1.0]}
               theta={0.1}
+              mapSamples={isMobile ? 8000 : 16000}
+              speed={isMobile ? 0.0015 : 0.003}
               markers={[
                 { id: "helsinki", location: [60.1699, 24.9384] as [number, number], label: "Helsinki" },
                 { id: "tokyo", location: [35.6762, 139.6503] as [number, number], label: "Tokyo" },
@@ -668,7 +660,7 @@ const MagicBento: React.FC<BentoProps> = ({
           </div>
 
           <div className="absolute inset-x-0 bottom-0 h-[44%] overflow-hidden">
-            {isMounted && (
+            {isMounted && !isMobile && (
               <Player
                 component={InfiniteBentoPan}
                 inputProps={{ speed: 0.82, panSpeed: 0.92, accentColor: '#dac5a7' }}
@@ -691,6 +683,9 @@ const MagicBento: React.FC<BentoProps> = ({
                   background: 'transparent',
                 }}
               />
+            )}
+            {isMobile && (
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_35%_30%,rgba(218,197,167,0.22),transparent_32%),linear-gradient(135deg,rgba(218,197,167,0.12),transparent_62%)]" />
             )}
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/55" />
             <div className="absolute inset-x-0 top-0 z-30 h-px bg-gradient-to-r from-transparent via-accent/70 to-transparent" />
