@@ -13,6 +13,10 @@ import TechStackSection from '@/components/TechStackSection'
 import ContactSection from '@/components/ContactSection'
 import Footer from '@/components/footer'
 
+const aboutInfoCardClass = 'relative z-10 rounded-xl border border-accent/20 bg-card/30 p-4 text-center backdrop-blur-sm transition-all duration-300 group-hover:-translate-x-1 group-hover:-translate-y-1 group-hover:rounded-[4px] group-hover:shadow-[4px_4px_0px_rgba(218,197,167,0.8)] group-active:translate-x-0 group-active:translate-y-0 group-active:rounded-xl group-active:shadow-none'
+const aboutInfoDepthClass = 'pointer-events-none absolute inset-0 z-0 rounded-xl border border-accent/45 bg-accent/10 opacity-0 shadow-[0_0_24px_rgba(218,197,167,0.12),inset_0_1px_0_rgba(255,255,255,0.16)] transition-all duration-300 group-hover:translate-x-1.5 group-hover:translate-y-1.5 group-hover:opacity-100 group-hover:rounded-[4px]'
+const aboutInfoCardStyle = { boxShadow: '0 1px 0 0 rgba(255, 255, 255, 0.1)' }
+
 export default function Home() {
   return (
     <main className="relative min-h-screen overflow-x-clip">
@@ -72,7 +76,7 @@ export default function Home() {
                   {/* Profile Picture with outline behind */}
                   <div className="relative mb-16 flex justify-start group">
                     {/* Animated outline box behind picture - sticking out right */}
-                    <div className="absolute top-6 left-18 w-72 h-72 border-2 border-accent/60 rounded-3xl z-0 animate-pulse transition-transform duration-300 ease-out group-hover:translate-x-2 group-hover:translate-y-2"></div>
+                    <div className="absolute left-5 top-5 z-0 h-72 w-72 rounded-3xl border-2 border-accent/60 transition-transform duration-300 ease-out group-hover:translate-x-2 group-hover:translate-y-2 animate-pulse"></div>
                     
                     {/* Main Profile Picture */}
                     <div className="relative w-72 h-72 rounded-3xl overflow-hidden bg-gradient-to-br from-accent via-accent/95 to-accent/90 z-10 transition-transform duration-300 ease-out group-hover:-translate-x-2 group-hover:-translate-y-2">
@@ -84,20 +88,29 @@ export default function Home() {
                   
                   {/* Information Grid */}
                   <div className="grid grid-cols-2 gap-4 mb-4">
-                    <div className="bg-card/30 backdrop-blur-sm border border-accent/20 rounded-xl p-4 text-center relative cursor-pointer transition-all duration-300 hover:translate-x-[-4px] hover:translate-y-[-4px] hover:rounded-md hover:shadow-[4px_4px_0px_rgba(218,197,167,0.8)] active:translate-x-[0px] active:translate-y-[0px] active:rounded-xl active:shadow-none" style={{boxShadow: '0 1px 0 0 rgba(255, 255, 255, 0.1)'}}>
-                      <div className="text-2xl font-bold text-white">26</div>
-                      <div className="text-xs text-muted-foreground font-medium">AGE</div>
+                    <div className="about-info-3d group relative cursor-pointer">
+                      <div className={aboutInfoDepthClass} />
+                      <div className={aboutInfoCardClass} style={aboutInfoCardStyle}>
+                        <div className="text-2xl font-bold text-white">26</div>
+                        <div className="text-xs text-muted-foreground font-medium">AGE</div>
+                      </div>
                     </div>
-                    <div className="bg-card/30 backdrop-blur-sm border border-accent/20 rounded-xl p-4 text-center relative cursor-pointer transition-all duration-300 hover:translate-x-[-4px] hover:translate-y-[-4px] hover:rounded-md hover:shadow-[4px_4px_0px_rgba(218,197,167,0.8)] active:translate-x-[0px] active:translate-y-[0px] active:rounded-xl active:shadow-none" style={{boxShadow: '0 1px 0 0 rgba(255, 255, 255, 0.1)'}}>
-                      <div className="text-2xl font-bold text-white">4+</div>
-                      <div className="text-xs text-muted-foreground font-medium">YEARS EXP</div>
+                    <div className="about-info-3d group relative cursor-pointer">
+                      <div className={aboutInfoDepthClass} />
+                      <div className={aboutInfoCardClass} style={aboutInfoCardStyle}>
+                        <div className="text-2xl font-bold text-white">4+</div>
+                        <div className="text-xs text-muted-foreground font-medium">YEARS EXP</div>
+                      </div>
                     </div>
                   </div>
                   
                   {/* Location */}
-                  <div className="bg-card/30 backdrop-blur-sm border border-accent/20 rounded-xl p-5 text-center relative cursor-pointer transition-all duration-300 hover:translate-x-[-4px] hover:translate-y-[-4px] hover:rounded-md hover:shadow-[4px_4px_0px_rgba(218,197,167,0.8)] active:translate-x-[0px] active:translate-y-[0px] active:rounded-xl active:shadow-none" style={{boxShadow: '0 1px 0 0 rgba(255, 255, 255, 0.1)'}}>
-                    <div className="text-xl font-bold text-white">Helsinki</div>
-                    <div className="text-xs text-muted-foreground font-medium mt-1">LOCATION</div>
+                  <div className="about-info-3d group relative cursor-pointer">
+                    <div className={aboutInfoDepthClass} />
+                    <div className={`${aboutInfoCardClass} p-5`} style={aboutInfoCardStyle}>
+                      <div className="text-xl font-bold text-white">Helsinki</div>
+                      <div className="text-xs text-muted-foreground font-medium mt-1">LOCATION</div>
+                    </div>
                   </div>
                 </div>
               </div>

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
-import { motion } from 'framer-motion'
+import { motion, useMotionValue, useScroll, useSpring, useTransform } from 'framer-motion'
 
 import FloatingStars from '@/components/floating-stars'
 import GlareHover from '@/components/GlareHover'
@@ -14,6 +14,12 @@ export default function Hero() {
   const [activeFocusArea, setActiveFocusArea] = useState(0)
   const [isFocusAreaPaused, setIsFocusAreaPaused] = useState(false)
   const [showLightRays, setShowLightRays] = useState(false)
+  const faceParallaxX = useMotionValue(0)
+  const faceParallaxY = useMotionValue(0)
+  const smoothFaceParallaxX = useSpring(faceParallaxX, { stiffness: 70, damping: 22, mass: 0.45 })
+  const smoothFaceParallaxY = useSpring(faceParallaxY, { stiffness: 70, damping: 22, mass: 0.45 })
+  const { scrollY } = useScroll()
+  const slowFaceScrollY = useTransform(scrollY, (value) => Math.min(value * 0.055, 42))
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(min-width: 768px)')
@@ -36,6 +42,33 @@ export default function Hero() {
 
     return () => window.clearInterval(timer)
   }, [isFocusAreaPaused])
+
+  useEffect(() => {
+    if (!window.matchMedia('(pointer: fine)').matches) {
+      return
+    }
+
+    const updateFaceParallax = (event: PointerEvent) => {
+      const normalizedX = event.clientX / window.innerWidth - 0.5
+      const normalizedY = event.clientY / window.innerHeight - 0.5
+
+      faceParallaxX.set(normalizedX * -30)
+      faceParallaxY.set(normalizedY * -20)
+    }
+
+    const resetFaceParallax = () => {
+      faceParallaxX.set(0)
+      faceParallaxY.set(0)
+    }
+
+    window.addEventListener('pointermove', updateFaceParallax, { passive: true })
+    window.addEventListener('pointerleave', resetFaceParallax)
+
+    return () => {
+      window.removeEventListener('pointermove', updateFaceParallax)
+      window.removeEventListener('pointerleave', resetFaceParallax)
+    }
+  }, [faceParallaxX, faceParallaxY])
 
   const scrollToContact = () => {
     const element = document.querySelector('#contact')
@@ -108,20 +141,25 @@ export default function Hero() {
               initial={{ opacity: 0, y: 48, scale: 0.96 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.9, delay: 0.25, ease: 'easeOut' }}
-              className="absolute inset-x-0 bottom-0 z-20 mx-auto flex justify-center"
+              className="absolute inset-x-0 -bottom-8 z-20 mx-auto flex justify-center sm:-bottom-10 md:-bottom-12"
             >
-              <div className="relative h-[420px] w-[420px] sm:h-[500px] sm:w-[500px] md:h-[570px] md:w-[570px] lg:h-[630px] lg:w-[630px]">
-                <div className="absolute inset-x-[18%] bottom-10 top-[18%] rounded-full bg-accent/10 blur-3xl" />
-                <div className="absolute left-1/2 top-[20%] h-72 w-72 -translate-x-1/2 rounded-full border border-accent/20 bg-[radial-gradient(circle,rgba(218,197,167,0.18)_0%,transparent_68%)] md:h-96 md:w-96" />
-                <Image
-                  src="/assets/memoji.png"
-                  alt="Memoji portrait of Jesper Sjöström"
-                  fill
-                  priority
-                  sizes="(max-width: 768px) 90vw, 620px"
-                  className="object-contain object-bottom drop-shadow-[0_40px_80px_rgba(0,0,0,0.45)]"
-                />
-              </div>
+              <motion.div style={{ y: slowFaceScrollY }} className="will-change-transform">
+                <motion.div
+                  style={{ x: smoothFaceParallaxX, y: smoothFaceParallaxY }}
+                  className="relative h-[420px] w-[420px] will-change-transform sm:h-[500px] sm:w-[500px] md:h-[570px] md:w-[570px] lg:h-[630px] lg:w-[630px]"
+                >
+                  <div className="absolute inset-x-[18%] bottom-10 top-[18%] rounded-full bg-accent/10 blur-3xl" />
+                  <div className="absolute left-1/2 top-[20%] h-72 w-72 -translate-x-1/2 rounded-full border border-accent/20 bg-[radial-gradient(circle,rgba(218,197,167,0.18)_0%,transparent_68%)] md:h-96 md:w-96" />
+                  <Image
+                    src="/assets/memoji.png"
+                    alt="Memoji portrait of Jesper Sjöström"
+                    fill
+                    priority
+                    sizes="(max-width: 768px) 90vw, 620px"
+                    className="object-contain object-bottom drop-shadow-[0_40px_80px_rgba(0,0,0,0.45)]"
+                  />
+                </motion.div>
+              </motion.div>
             </motion.div>
           </div>
 
