@@ -43,6 +43,14 @@ const BORDER_GLOW_COLORS = ["#8b7355", "#dac5a7", "#f5efe4"];
 const BORDER_GLOW_HSL = "38 37 76";
 const BORDER_GLOW_BACKGROUND = "#050505";
 
+const COLLABORATION_AVATARS = [
+  { seed: "Maya", className: "left-[6%] top-[31%]", delayClass: "group-hover/collab:delay-0" },
+  { seed: "Noah", className: "right-[6%] top-[43%]", delayClass: "group-hover/collab:delay-200" },
+  { seed: "Ava", className: "left-[13%] bottom-[13%]", delayClass: "group-hover/collab:delay-[400ms]" },
+  { seed: "Elias", className: "right-[24%] top-[21%]", delayClass: "group-hover/collab:delay-[600ms]" },
+  { seed: "Lina", className: "right-[13%] bottom-[9%]", delayClass: "group-hover/collab:delay-[800ms]" },
+];
+
 
 const createParticleElement = (
   x: number,
@@ -611,28 +619,28 @@ const MagicBento: React.FC<BentoProps> = ({
       description: "I prioritize client collaboration, fostering open communication",
       label: "Teamwork",
       customContent: (
-        <div className="flex flex-col justify-between h-full">
-          <div>
-            <h2 className="text-2xl font-bold text-white mb-2 leading-tight">
-              Clear communication<br />
-              and <span className="text-accent">seamless</span><br />
-              collaboration
+        <div className="group/collab relative -m-8 h-[calc(100%+4rem)] overflow-hidden p-6 sm:p-8">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_55%,rgba(218,197,167,0.16),transparent_34%)] opacity-80 transition-opacity duration-700 group-hover/collab:opacity-100" />
+
+          <div className="relative z-30 max-w-[15rem]">
+            <h2 className="mb-3 text-2xl font-bold leading-tight text-white">
+              Let&apos;s build<br />
+              <span className="text-accent">together.</span>
             </h2>
-            <p className="text-white/70 text-sm">
-              Working closely with teams and clients for optimal results
+            <p className="text-sm leading-6 text-white/70">
+              Clear communication, fast iterations, no surprises.
             </p>
           </div>
-          
-          <div className="flex items-center gap-2 text-white/60">
-            <div className="flex items-center gap-1 text-xs">
-              <span className="w-2 h-2 bg-accent rounded-full"></span>
-              <span>Daily standups</span>
-            </div>
-            <div className="flex items-center gap-1 text-xs">
-              <span className="w-2 h-2 bg-accent rounded-full"></span>
-              <span>Transparent feedback</span>
-            </div>
-          </div>
+
+          {COLLABORATION_AVATARS.map((avatar) => (
+            <div
+              key={avatar.seed}
+              className={`absolute z-20 h-12 w-12 scale-50 rounded-full border border-white/20 bg-accent bg-cover bg-center opacity-0 shadow-[0_12px_35px_rgba(0,0,0,0.35)] blur-sm transition-all duration-700 ease-out group-hover/collab:scale-100 group-hover/collab:opacity-100 group-hover/collab:blur-0 sm:h-14 sm:w-14 ${avatar.className} ${avatar.delayClass}`}
+              style={{ backgroundImage: `url(https://api.dicebear.com/9.x/adventurer/svg?seed=${avatar.seed})` }}
+            />
+          ))}
+
+          <div className="absolute left-1/2 top-[56%] z-30 h-28 w-28 -translate-x-1/2 -translate-y-1/2 rounded-full border border-accent/40 bg-black/40 bg-contain bg-center bg-no-repeat shadow-[0_20px_60px_rgba(0,0,0,0.45),0_0_40px_rgba(218,197,167,0.18)] transition-transform duration-700 ease-out group-hover/collab:scale-105 sm:h-32 sm:w-32" style={{ backgroundImage: "url('/assets/memoji.png')" }} />
         </div>
       ),
     },
