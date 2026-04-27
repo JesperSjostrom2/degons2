@@ -49,9 +49,7 @@ export default function Navbar() {
     }
   }, [])
 
-  const scrollToSection = (href: string, id: string) => {
-    const element = document.querySelector(href)
-    element?.scrollIntoView({ behavior: 'smooth' })
+  const handleNavClick = (id: string) => {
     setActiveSection(id)
     setIsMobileMenuOpen(false)
   }
@@ -91,9 +89,10 @@ export default function Navbar() {
       {/* Desktop Menu */}
       <div className="hidden lg:flex glass-nav items-center relative flex-wrap justify-center" style={{ padding: '0.25rem 0.75rem', gap: '0.75rem' }}>
         {navItems.map((item, index) => (
-          <motion.button
+          <motion.a
             key={item.name}
-            onClick={() => scrollToSection(item.href, item.id)}
+            href={item.href}
+            onClick={() => handleNavClick(item.id)}
             className={`relative font-normal transition-colors duration-300 whitespace-nowrap cursor-pointer ${
               activeSection === item.id 
                 ? 'text-white' 
@@ -124,7 +123,7 @@ export default function Navbar() {
             )}
             
             <span className="relative z-10">{item.name}</span>
-          </motion.button>
+          </motion.a>
         ))}
       </div>
 
@@ -200,7 +199,7 @@ export default function Navbar() {
                     delay: isMobileMenuOpen ? 0.35 + index * 0.05 : 0 
                   }}
                 >
-                  <Link href={item.href} onClick={() => setIsMobileMenuOpen(false)}>
+                  <Link href={item.href} onClick={() => handleNavClick(item.id)}>
                     <motion.div
                       className={`text-4xl sm:text-5xl font-serif tracking-tight cursor-pointer ${
                         activeSection === item.id 
