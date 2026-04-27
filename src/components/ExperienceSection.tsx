@@ -254,11 +254,7 @@ const ExperienceSection: React.FC = () => {
     <section id="projects" className="bg-background/50 py-24">
       <div className="container mx-auto px-6">
         <div className="mx-auto mb-14 max-w-3xl text-center">
-          <div className="mb-4 flex items-center justify-center gap-3 text-sm font-semibold uppercase tracking-[0.28em] text-accent/70">
-            <span className="h-px w-7 bg-accent/70" />
-            Work
-            <span className="h-px w-7 bg-accent/70" />
-          </div>
+          <p className="mb-4 text-sm uppercase tracking-[0.28em] text-accent/70">Selected Work</p>
           <h2 className="mb-5 text-4xl font-bold text-white md:text-5xl">Featured Projects</h2>
           <p className="text-lg text-muted-foreground">
             A collection of projects that demonstrate technical skills and creative problem-solving abilities.
