@@ -164,7 +164,7 @@ const ProjectCard = ({ project, index }: { project: Project; index: number }) =>
       colors={project.glowColors}
       fillOpacity={0.4}
     >
-    <article className="group overflow-hidden rounded-[28px] bg-[#080808]/90 shadow-[0_24px_80px_rgba(0,0,0,0.28)] lg:grid lg:grid-cols-[1.45fr_1fr]">
+    <article className="warm-card-surface group overflow-hidden rounded-[28px] lg:grid lg:grid-cols-[1.45fr_1fr]">
       <div ref={imageRef} className="relative min-h-[380px] overflow-hidden border-b border-white/10 sm:min-h-[410px] lg:min-h-[520px] lg:border-b-0 lg:border-r">
         <motion.div style={{ y: imageY }} className="absolute inset-x-0 -inset-y-[12%]">
           <Image
@@ -196,7 +196,7 @@ const ProjectCard = ({ project, index }: { project: Project; index: number }) =>
           <div className="mt-8 flex flex-wrap items-center gap-3 sm:gap-4">
             <a
               href="#contact"
-              className="group/view inline-flex items-center gap-5 rounded-full border border-white/25 bg-white/8 px-6 py-3 text-sm font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:border-white/45 hover:bg-white/14 hover:text-white"
+              className="btn-neutral-dark group/view inline-flex items-center gap-5 rounded-full px-6 py-3 text-sm font-semibold backdrop-blur-sm"
             >
               View Project
               <span className="relative h-4 w-4 overflow-hidden">
@@ -251,12 +251,12 @@ const ExperienceSection: React.FC = () => {
   }
 
   return (
-    <section id="projects" className="bg-background/50 py-24">
+    <section id="projects" className="site-section">
       <div className="container mx-auto px-6">
-        <div className="mx-auto mb-14 max-w-3xl text-center">
-          <p className="mb-4 text-sm uppercase tracking-[0.28em] text-accent/70">Selected Work</p>
-          <h2 className="mb-5 text-4xl font-bold text-white md:text-5xl">Featured Projects</h2>
-          <p className="text-lg text-muted-foreground">
+        <div className="section-header">
+          <p className="section-label">Selected Work</p>
+          <h2 className="section-title">Featured Projects</h2>
+          <p className="section-description">
             A collection of projects that demonstrate technical skills and creative problem-solving abilities.
           </p>
         </div>
@@ -270,7 +270,7 @@ const ExperienceSection: React.FC = () => {
         <div className="mx-auto mt-14 max-w-7xl pt-2 text-center">
           <div className="mb-5 flex items-center gap-4">
             <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/10 to-white/10" />
-            <div className="group/sparkles relative flex h-11 w-11 items-center justify-center rounded-xl border border-accent/30 bg-accent/10 text-accent shadow-[0_0_28px_rgba(218,197,167,0.1)] transition-all duration-300 hover:border-accent/55 hover:bg-accent/15 hover:shadow-[0_0_34px_rgba(218,197,167,0.16)]">
+            <div className="group/sparkles relative flex h-11 w-11 items-center justify-center rounded-xl border border-accent/30 bg-accent/10 text-accent transition-all duration-300 hover:border-accent/55 hover:bg-accent/15">
               <Sparkles className="h-5 w-5 transition-transform duration-300 ease-out group-hover/sparkles:scale-110" />
             </div>
             <div className="h-px flex-1 bg-gradient-to-l from-transparent via-white/10 to-white/10" />

@@ -3,9 +3,8 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
 import { gsap } from "gsap";
 import { Player } from "@remotion/player";
-import { ShoppingCart, BarChart3, Rocket, User } from "lucide-react";
+import { User, Copy, Check } from "lucide-react";
 import Magnet from "@/blocks/Animations/Magnet/Magnet";
-import ShinyText from "@/blocks/TextAnimations/ShinyText/ShinyText";
 import BorderGlow from "@/components/BorderGlow";
 import { InfiniteBentoPan } from "@/components/ui/infinite-bento-pan";
 import { Globe } from "@/components/ui/cobe-globe";
@@ -42,6 +41,14 @@ const MOBILE_BREAKPOINT = 768;
 const BORDER_GLOW_COLORS = ["#8b7355", "#dac5a7", "#f5efe4"];
 const BORDER_GLOW_HSL = "38 37 76";
 const BORDER_GLOW_BACKGROUND = "#050505";
+const BENTO_ACCENTS = {
+  brass: "#a88c62",
+  champagne: "#c2a77b",
+  gold: "#dac5a7",
+  bronze: "#8b7355",
+  olive: "#8fa58a",
+  blue: "#7fa7c8",
+};
 
 const COLLABORATION_AVATARS = [
   { seed: "Maya", className: "left-[6%] top-[31%]", delayClass: "group-hover/collab:delay-0", mobileDelay: "0ms" },
@@ -553,26 +560,36 @@ const MagicBento: React.FC<BentoProps> = ({
   enableMagnetism = false,
 }) => {
   const gridRef = useRef<HTMLDivElement>(null);
+  const copyFeedbackTimeoutRef = useRef<number | null>(null);
   const isMobile = useMobileDetection();
   const shouldDisableAnimations = disableAnimations || isMobile;
   const [isMounted, setIsMounted] = useState(false);
+  const [isContactCopied, setIsContactCopied] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
+  useEffect(() => {
+    return () => {
+      if (copyFeedbackTimeoutRef.current !== null) {
+        window.clearTimeout(copyFeedbackTimeoutRef.current);
+      }
+    };
+  }, []);
+
   const getRemoteWorkCard = () => ({
-    color: "#8b7a6b",
+    color: BENTO_ACCENTS.blue,
     title: "🌍 Global Availability",
     description: "Flexible with timezones. Based in Finland, available globally.",
     label: "Remote Work",
     customContent: (
       <div className="relative flex h-full flex-col overflow-hidden">
         <div className="relative z-20 flex flex-col p-6 pb-3">
-          <h2 className="text-2xl font-bold text-white mb-2 leading-tight">
-            Flexible with<br />
-            <span className="text-accent">timezones</span>
-          </h2>
+            <h2 className="mb-2 text-2xl font-bold leading-tight text-white">
+              Flexible with<br />
+              <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.blue }}>timezones</span>
+            </h2>
           <p className="text-white/70 text-sm mb-4">
             Based in Finland, available globally
           </p>
@@ -614,19 +631,22 @@ const MagicBento: React.FC<BentoProps> = ({
   // Create cardData array with the remote work card that has access to state
   const cardData = [
     {
-      color: "#8b7a6b",
+      color: BENTO_ACCENTS.brass,
       title: "🤝 Easy Collaboration",
       description: "Clear updates, quick changes, and room for feedback until it feels right",
       label: "Client Process",
       customContent: (
         <div className="group/collab relative -m-8 h-[calc(100%+4rem)] overflow-hidden p-6 sm:p-8">
-          <div className={`absolute inset-0 bg-[radial-gradient(circle_at_50%_55%,rgba(218,197,167,0.16),transparent_34%)] transition-opacity duration-700 ${isMobile ? 'opacity-100' : 'opacity-80 group-hover/collab:opacity-100'}`} />
+          <div className="collab-card-bg absolute inset-0" />
+          <div className="collab-card-ambient absolute inset-0" />
+          <div className={`absolute inset-0 bg-[radial-gradient(circle_at_50%_55%,rgba(168,140,98,0.16),transparent_34%)] transition-opacity duration-700 ${isMobile ? 'opacity-100' : 'opacity-70 group-hover/collab:opacity-100'}`} />
           <div className={`absolute inset-0 bg-black/5 backdrop-blur-sm transition-opacity duration-700 ${isMobile ? 'opacity-100' : 'opacity-0 group-hover/collab:opacity-100'}`} />
+          <div className="bento-mobile-frost absolute inset-0" />
 
           <div className="relative z-30 max-w-[15rem]">
             <h2 className="mb-3 text-2xl font-bold leading-tight text-white">
               Easy feedback,<br />
-              <span className="text-accent">better results.</span>
+              <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.champagne }}>better results.</span>
             </h2>
             <p className="text-sm leading-6 text-white/70">
               We can go back and forth with changes until you are satisfied.
@@ -649,7 +669,7 @@ const MagicBento: React.FC<BentoProps> = ({
       ),
     },
     {
-      color: "#8b7a6b",
+      color: BENTO_ACCENTS.gold,
       title: "⚡ Product Systems",
       description: "Interfaces, dashboards, automation, and deployment flows",
       label: "Technologies",
@@ -660,7 +680,7 @@ const MagicBento: React.FC<BentoProps> = ({
               <div>
                 <h2 className="text-2xl font-bold leading-tight text-white">
                   Interfaces that<br />
-                  feel <span className="text-accent">alive</span><br />
+                  feel <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.olive }}>alive</span><br />
                   under the hood
                 </h2>
               </div>
@@ -675,7 +695,7 @@ const MagicBento: React.FC<BentoProps> = ({
             {isMounted && !isMobile && (
               <Player
                 component={InfiniteBentoPan}
-                inputProps={{ speed: 0.82, panSpeed: 0.92, accentColor: '#dac5a7' }}
+                inputProps={{ speed: 0.82, panSpeed: 0.92, accentColor: BENTO_ACCENTS.gold }}
                 durationInFrames={360}
                 fps={30}
                 compositionWidth={1280}
@@ -706,7 +726,7 @@ const MagicBento: React.FC<BentoProps> = ({
       ),
     },
     {
-      color: "#8b7a6b",
+      color: BENTO_ACCENTS.gold,
       title: "📩 Let's Work Together",
       description: "Ready for your next project collaboration",
       label: "Contact",
@@ -720,41 +740,45 @@ const MagicBento: React.FC<BentoProps> = ({
         backgroundBlendMode: 'multiply, overlay, normal, normal, overlay'
       },
       customContent: (
-        <div className="flex flex-col justify-center items-center h-full relative">        
+        <div className="relative flex h-full flex-col items-center justify-center overflow-hidden">
+          <div className="contact-card-bg absolute inset-0" />
+          <div className="contact-card-grid absolute inset-0 opacity-45" />
+          <div className="contact-card-orbit contact-card-orbit-a" />
+          <div className="contact-card-orbit contact-card-orbit-b" />
+          <div className="contact-card-frost absolute inset-0" />
+
           <div className="relative z-10 text-center">
-            {/* Temporary Logo */}
             <div className="mb-8 flex justify-center">
-              <div className="w-16 h-16 bg-gradient-to-r from-accent to-accent/80 rounded-full flex items-center justify-center shadow-lg">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full" style={{ background: BENTO_ACCENTS.champagne }}>
                 <User className="w-8 h-8 text-white" />
               </div>
             </div>
             
-            {/* Shiny "Let's connect" text */}
             <div className="mb-8">
-              <ShinyText 
-                text="Let's connect" 
-                className="text-2xl font-bold leading-tight"
-                speed={2.4}
-              />
+              <h2 className="mx-auto max-w-[15rem] text-2xl font-bold leading-tight text-[#f5efe4]">
+                Let&apos;s work together on your next <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.champagne }}>project</span>
+              </h2>
             </div>
             
-            {/* Magnet Button */}
             <Magnet
               padding={30}
               magnetStrength={2}
               wrapperClassName="flex justify-center"
             >
               <button 
-                className="px-4 py-2 text-white text-sm font-medium rounded-lg transition-all duration-300 relative overflow-hidden flex items-center gap-2"
-                style={{
-                  background: 'rgba(139, 115, 85, 0.2)',
-                  backdropFilter: 'blur(12px)',
-                  border: '1px solid rgba(139, 115, 85, 0.4)',
-                  boxShadow: '0 4px 20px rgba(139, 115, 85, 0.3), 0 0 30px rgba(218, 197, 167, 0.2)'
-                }}
+                className="btn-neutral-dark relative flex items-center gap-2 overflow-hidden rounded-lg !bg-transparent px-4 py-2 text-sm font-medium text-white backdrop-blur-sm transition-all duration-300 hover:!bg-white/10"
                 onClick={async () => {
                   try {
                     await navigator.clipboard.writeText('contact@jespersjostrom.se');
+
+                    setIsContactCopied(true);
+                    if (copyFeedbackTimeoutRef.current !== null) {
+                      window.clearTimeout(copyFeedbackTimeoutRef.current);
+                    }
+                    copyFeedbackTimeoutRef.current = window.setTimeout(() => {
+                      setIsContactCopied(false);
+                      copyFeedbackTimeoutRef.current = null;
+                    }, 1600);
                     
                     // Use hero notification system
                     const notification = document.createElement('div');
@@ -791,9 +815,10 @@ const MagicBento: React.FC<BentoProps> = ({
                 }}
                 title="Click to copy: contact@jespersjostrom.se"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                </svg>
+                <span className="relative h-4 w-4">
+                  <Copy className={`absolute left-0 top-0 h-4 w-4 transition-all duration-200 ${isContactCopied ? 'scale-75 opacity-0' : 'scale-100 opacity-100'}`} />
+                  <Check className={`absolute left-0 top-0 h-4 w-4 text-emerald-300 transition-all duration-200 ${isContactCopied ? 'scale-100 opacity-100' : 'scale-75 opacity-0'}`} />
+                </span>
                 <span className="relative z-10">contact@jespersjostrom.se</span>
               </button>
             </Magnet>
@@ -803,50 +828,60 @@ const MagicBento: React.FC<BentoProps> = ({
     },
     getRemoteWorkCard(),
     {
-      color: "#8b7a6b",
-      title: "🛠️ Websites I Can Build",
-      description: "Business websites, online stores, dashboards, and SaaS products",
+      color: BENTO_ACCENTS.bronze,
+      title: "✨ Websites That Make a Difference",
+      description: "Websites that stand out and turn attention into results",
       label: "Services",
       customContent: (
-        <div className="relative -m-8 flex h-[calc(100%+4rem)] flex-col justify-between overflow-hidden p-8">
-          <div className="websites-pattern absolute inset-0 opacity-60" />
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_15%,rgba(218,197,167,0.12),transparent_32%),linear-gradient(180deg,transparent,rgba(0,0,0,0.42))]" />
-          <div className="relative z-10">
-            <h2 className="text-2xl font-bold text-white mb-2 leading-tight">
-              Websites built<br />
-              <span className="text-accent">around your goals</span>
+        <div className="group/selling relative -m-8 flex h-[calc(100%+4rem)] flex-col overflow-hidden p-8">
+          <div className="selling-site-bg absolute inset-0" />
+          <div className="selling-site-ambient absolute inset-0" />
+          <div className="selling-radial absolute bottom-[-16%] right-[-10%] z-0 h-[86%] w-[78%]" />
+          <div className="selling-mobile-frost absolute inset-0" />
+
+          <div className="relative z-20 max-w-[18rem]">
+            <h2 className="mb-3 text-2xl font-bold leading-tight text-white">
+              Websites that<br />
+              <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.champagne }}>stand out</span> and<br />
+              make a difference
             </h2>
-            <p className="text-white/70 text-sm">
-              From conversion-focused sites to full product platforms
+            <p className="text-sm leading-6 text-white/72">
+              Tailored experiences that look premium, perform fast, and help people trust your brand.
             </p>
           </div>
-          
-          <div className="relative z-10 space-y-3">
-            <div className="flex items-center gap-3 text-white/80">
-              <div className="w-8 h-8 bg-accent/20 rounded-lg flex items-center justify-center">
-                <ShoppingCart className="w-4 h-4 text-accent" />
+
+          <div className="pointer-events-none absolute bottom-0 right-[-8%] z-10 w-[82%] sm:right-[-6%] sm:w-[74%]">
+            <div className={`selling-browser ml-auto w-full max-w-[26rem] transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${isMobile ? 'translate-y-[30%]' : 'translate-y-[52%] group-hover/selling:translate-y-[28%]'}`}>
+              <div className="selling-browser-top">
+                <div className="selling-dots">
+                  <span />
+                  <span />
+                  <span />
+                </div>
+                <div className="selling-url" />
               </div>
-              <div>
-                <div className="text-sm font-medium">E-commerce Websites</div>
-                <div className="text-xs text-white/60">Full-stack shopping platforms</div>
-              </div>
-            </div>
-            <div className="flex items-center gap-3 text-white/80">
-              <div className="w-8 h-8 bg-accent/20 rounded-lg flex items-center justify-center">
-                <BarChart3 className="w-4 h-4 text-accent" />
-              </div>
-              <div>
-                <div className="text-sm font-medium">Business Dashboards</div>
-                <div className="text-xs text-white/60">Interactive analytics tools</div>
-              </div>
-            </div>
-            <div className="flex items-center gap-3 text-white/80">
-              <div className="w-8 h-8 bg-accent/20 rounded-lg flex items-center justify-center">
-                <Rocket className="w-4 h-4 text-accent" />
-              </div>
-              <div>
-                <div className="text-sm font-medium">SaaS Platforms</div>
-                <div className="text-xs text-white/60">Scalable business solutions</div>
+
+              <div className="selling-browser-body">
+                <div className="selling-hero-line selling-line-lg" />
+                <div className="selling-hero-line selling-line-md" />
+                <div className="selling-cta" />
+
+                <div className="selling-cards-row">
+                  <div className="selling-card">
+                    <span className="selling-stat-bar" />
+                    <span className="selling-stat-bar short" />
+                  </div>
+                  <div className="selling-card">
+                    <span className="selling-stat-bar" />
+                    <span className="selling-stat-bar short" />
+                  </div>
+                  <div className="selling-card">
+                    <span className="selling-stat-bar" />
+                    <span className="selling-stat-bar short" />
+                  </div>
+                </div>
+
+                <div className="selling-cursor" aria-hidden="true" />
               </div>
             </div>
           </div>
@@ -872,23 +907,325 @@ const MagicBento: React.FC<BentoProps> = ({
             }
           }
 
-          @keyframes websites-pattern-drift {
-            from {
-              background-position: 0 0, 0 0;
+          @keyframes selling-cursor-move {
+            0% {
+              transform: translate(14px, 18px) rotate(-10deg);
+              opacity: 0.75;
             }
-            to {
-              background-position: 48px 48px, -48px 48px;
+            35% {
+              transform: translate(148px, 44px) rotate(-10deg);
+              opacity: 1;
+            }
+            40% {
+              transform: translate(148px, 44px) rotate(-10deg) scale(0.94);
+              opacity: 1;
+            }
+            45% {
+              transform: translate(148px, 44px) rotate(-10deg);
+              opacity: 1;
+            }
+            74% {
+              transform: translate(92px, 114px) rotate(-10deg);
+              opacity: 0.92;
+            }
+            100% {
+              transform: translate(14px, 18px) rotate(-10deg);
+              opacity: 0.75;
             }
           }
 
-          .websites-pattern {
+          @keyframes selling-bars-pulse {
+            0%,
+            100% {
+              transform: scaleX(0.72);
+              opacity: 0.8;
+            }
+            50% {
+              transform: scaleX(1);
+              opacity: 1;
+            }
+          }
+
+          .selling-site-bg {
+            background:
+              radial-gradient(circle at 14% 16%, rgba(245, 239, 228, 0.055), transparent 42%),
+              radial-gradient(circle at 84% 78%, rgba(127, 167, 200, 0.2), transparent 38%),
+              linear-gradient(180deg, rgba(17, 17, 16, 0.72), rgba(8, 8, 8, 0.9));
+          }
+
+          .collab-card-bg {
+            background:
+              radial-gradient(circle at 18% 18%, rgba(218, 197, 167, 0.12), transparent 36%),
+              radial-gradient(circle at 84% 78%, rgba(127, 167, 200, 0.12), transparent 40%),
+              linear-gradient(180deg, rgba(17, 17, 16, 0.68), rgba(8, 8, 8, 0.9));
+          }
+
+          .collab-card-ambient {
+            background: linear-gradient(125deg, transparent 20%, rgba(245, 239, 228, 0.045) 48%, transparent 76%);
+            opacity: 0.8;
+          }
+
+          .selling-site-ambient {
+            background: linear-gradient(125deg, transparent 18%, rgba(245, 239, 228, 0.06) 46%, transparent 78%);
+          }
+
+          .selling-radial {
+            background:
+              repeating-radial-gradient(
+                ellipse at 56% 92%,
+                rgba(245, 239, 228, 0.22) 0 2px,
+                rgba(245, 239, 228, 0) 2px 48px
+              );
+            opacity: 0.68;
+            -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.98) 10%, rgba(0, 0, 0, 0.72) 62%, rgba(0, 0, 0, 0.12));
+            mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.98) 10%, rgba(0, 0, 0, 0.72) 62%, rgba(0, 0, 0, 0.12));
+          }
+
+          .selling-mobile-frost {
+            display: none;
+            z-index: 15;
+            pointer-events: none;
+          }
+
+          .bento-mobile-frost {
+            display: none;
+            z-index: 25;
+            pointer-events: none;
+          }
+
+          @media (max-width: 750px) {
+            .selling-mobile-frost,
+            .bento-mobile-frost {
+              display: block;
+              background: rgba(8, 8, 8, 0.12);
+              backdrop-filter: blur(3.5px);
+              -webkit-backdrop-filter: blur(3.5px);
+            }
+          }
+
+          .selling-browser {
+            border-radius: 16px;
+            border: 1px solid rgba(245, 239, 228, 0.2);
+            background: linear-gradient(180deg, rgba(20, 20, 19, 0.94), rgba(8, 8, 8, 0.94));
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(245, 239, 228, 0.12);
+            overflow: hidden;
+            min-height: 20.5rem;
+          }
+
+          .selling-browser-top {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.55rem 0.7rem;
+            border-bottom: 1px solid rgba(245, 239, 228, 0.12);
+            background: rgba(245, 239, 228, 0.04);
+          }
+
+          .selling-dots {
+            display: inline-flex;
+            gap: 0.3rem;
+          }
+
+          .selling-dots span {
+            width: 0.42rem;
+            height: 0.42rem;
+            border-radius: 9999px;
+            background: rgba(245, 239, 228, 0.45);
+          }
+
+          .selling-url {
+            height: 0.5rem;
+            width: min(65%, 11rem);
+            border-radius: 9999px;
+            background: rgba(245, 239, 228, 0.16);
+          }
+
+          .selling-browser-body {
+            position: relative;
+            padding: 1rem;
+            background:
+              radial-gradient(circle at 80% 18%, rgba(127, 167, 200, 0.12), transparent 34%),
+              linear-gradient(180deg, rgba(245, 239, 228, 0.02), transparent 40%);
+            min-height: 18.4rem;
+          }
+
+          .selling-hero-line {
+            height: 0.6rem;
+            border-radius: 9999px;
+            background: rgba(245, 239, 228, 0.75);
+            margin-bottom: 0.45rem;
+          }
+
+          .selling-line-lg {
+            width: 72%;
+          }
+
+          .selling-line-md {
+            width: 48%;
+            opacity: 0.8;
+          }
+
+          .selling-cta {
+            width: 38%;
+            height: 0.52rem;
+            border-radius: 9999px;
+            margin-bottom: 0.9rem;
+            background: linear-gradient(90deg, rgba(194, 167, 123, 0.95), rgba(218, 197, 167, 0.95));
+          }
+
+          .selling-cards-row {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.45rem;
+          }
+
+          .selling-card {
+            border: 1px solid rgba(245, 239, 228, 0.14);
+            border-radius: 10px;
+            background: rgba(245, 239, 228, 0.04);
+            padding: 0.45rem;
+            min-height: 3rem;
+          }
+
+          .selling-stat-bar {
+            display: block;
+            height: 0.34rem;
+            width: 100%;
+            border-radius: 9999px;
+            background: rgba(127, 167, 200, 0.7);
+            transform-origin: left;
+            animation: selling-bars-pulse 2.3s ease-in-out infinite;
+          }
+
+          .selling-stat-bar.short {
+            width: 64%;
+            margin-top: 0.35rem;
+            animation-delay: 0.25s;
+            background: rgba(245, 239, 228, 0.52);
+          }
+
+          .selling-card:nth-child(2) .selling-stat-bar {
+            animation-delay: 0.15s;
+          }
+
+          .selling-card:nth-child(3) .selling-stat-bar {
+            animation-delay: 0.3s;
+          }
+
+          .selling-cursor {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 0.95rem;
+            height: 1.3rem;
+            background: #f5efe4;
+            clip-path: polygon(0 0, 0 100%, 30% 74%, 45% 100%, 56% 95%, 42% 66%, 84% 66%);
+            filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.7)) drop-shadow(0 8px 10px rgba(0, 0, 0, 0.32));
+            animation: selling-cursor-move 6s ease-in-out infinite;
+          }
+
+          .selling-cursor::after {
+            content: '';
+            position: absolute;
+            left: 2px;
+            top: 2px;
+            width: 0.52rem;
+            height: 0.74rem;
+            background: rgba(14, 14, 14, 0.48);
+            clip-path: polygon(0 0, 0 100%, 30% 72%, 45% 100%, 56% 95%, 42% 64%, 84% 64%);
+          }
+
+          @keyframes contact-mesh-drift {
+            0% {
+              transform: translate3d(-4%, -3%, 0) scale(1);
+              opacity: 0.72;
+            }
+            50% {
+              transform: translate3d(3%, 2%, 0) scale(1.06);
+              opacity: 0.92;
+            }
+            100% {
+              transform: translate3d(-4%, -3%, 0) scale(1);
+              opacity: 0.72;
+            }
+          }
+
+          @keyframes contact-orbit-spin {
+            from {
+              transform: translate(-50%, -50%) rotate(0deg);
+            }
+            to {
+              transform: translate(-50%, -50%) rotate(360deg);
+            }
+          }
+
+          .contact-card-bg {
+            background:
+              radial-gradient(circle at 24% 20%, rgba(245, 239, 228, 0.14), transparent 42%),
+              radial-gradient(circle at 78% 72%, rgba(127, 167, 200, 0.18), transparent 46%),
+              linear-gradient(145deg, rgba(12, 12, 11, 0.6), rgba(6, 6, 6, 0.82));
+            filter: saturate(1.08);
+            animation: contact-mesh-drift 11s ease-in-out infinite;
+          }
+
+          .contact-card-frost {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.012));
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            z-index: 1;
+            pointer-events: none;
+          }
+
+          .contact-card-grid {
             background-image:
-              linear-gradient(rgba(218, 197, 167, 0.08) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(218, 197, 167, 0.08) 1px, transparent 1px);
-            background-size: 48px 48px;
-            -webkit-mask-image: radial-gradient(circle at 50% 45%, black, transparent 72%);
-            mask-image: radial-gradient(circle at 50% 45%, black, transparent 72%);
-            animation: websites-pattern-drift 14s linear infinite;
+              linear-gradient(rgba(245, 239, 228, 0.045) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(245, 239, 228, 0.045) 1px, transparent 1px);
+            background-size: 34px 34px;
+            -webkit-mask-image: radial-gradient(circle at 50% 50%, black, transparent 75%);
+            mask-image: radial-gradient(circle at 50% 50%, black, transparent 75%);
+          }
+
+          .contact-card-orbit {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            border-radius: 9999px;
+            border: 1px solid rgba(245, 239, 228, 0.15);
+            pointer-events: none;
+            animation: contact-orbit-spin linear infinite;
+            z-index: 0;
+          }
+
+          .contact-card-orbit::after {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: 50%;
+            width: 8px;
+            height: 8px;
+            border-radius: 9999px;
+            background: rgba(194, 167, 123, 0.9);
+            box-shadow: 0 0 0 6px rgba(194, 167, 123, 0.12);
+            transform: translateX(-50%);
+          }
+
+          .contact-card-orbit-a {
+            width: 220px;
+            height: 220px;
+            animation-duration: 18s;
+          }
+
+          .contact-card-orbit-b {
+            width: 300px;
+            height: 300px;
+            border-color: rgba(127, 167, 200, 0.24);
+            animation-duration: 26s;
+            animation-direction: reverse;
+          }
+
+          .contact-card-orbit-b::after {
+            background: rgba(127, 167, 200, 0.92);
+            box-shadow: 0 0 0 7px rgba(127, 167, 200, 0.14);
           }
 
           .collab-avatar-mobile {
@@ -913,11 +1250,11 @@ const MagicBento: React.FC<BentoProps> = ({
 
           .bento-card-surface {
             background:
-              linear-gradient(180deg, rgba(5, 5, 5, 0.46), rgba(5, 5, 5, 0.66)),
-              radial-gradient(circle at 20% 16%, rgba(218, 197, 167, 0.14), transparent 42%),
-              radial-gradient(circle at 82% 88%, rgba(255, 255, 255, 0.09), transparent 46%),
-              linear-gradient(145deg, rgba(218, 197, 167, 0.06), transparent 42%, rgba(255, 255, 255, 0.045)),
-              linear-gradient(135deg, #000000 0%, #1a1a1a 25%, #2d2d2d 50%, #1a1a1a 75%, #000000 100%),
+              linear-gradient(180deg, rgba(20, 20, 19, 0.66), rgba(8, 8, 8, 0.82)),
+              radial-gradient(circle at 20% 16%, color-mix(in srgb, var(--bento-accent, #dac5a7) 24%, transparent), transparent 42%),
+              radial-gradient(circle at 82% 88%, rgba(245, 239, 228, 0.08), transparent 46%),
+              linear-gradient(145deg, color-mix(in srgb, var(--bento-accent, #dac5a7) 10%, transparent), transparent 42%, rgba(255, 255, 255, 0.04)),
+              linear-gradient(135deg, #080808 0%, #141413 25%, #20201d 50%, #141413 75%, #080808 100%),
               radial-gradient(circle at 20% 30%, rgba(40, 40, 40, 0.3) 0%, transparent 50%),
               radial-gradient(circle at 80% 70%, rgba(60, 60, 60, 0.2) 0%, transparent 50%),
               linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.02) 50%, transparent 70%) !important;
@@ -1007,9 +1344,20 @@ const MagicBento: React.FC<BentoProps> = ({
             inset: 2px;
             border-radius: 18px;
             background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(245, 239, 228, 0.09);
             pointer-events: none;
             z-index: 1;
+          }
+
+          .card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            border-top: 2px solid color-mix(in srgb, var(--bento-accent, #dac5a7) 54%, transparent);
+            opacity: 0.85;
+            pointer-events: none;
+            z-index: 2;
           }
 
 
@@ -1094,7 +1442,7 @@ const MagicBento: React.FC<BentoProps> = ({
         <div className="card-responsive grid gap-2">
           {cardData.map((card, index) => {
             const baseClassName = `card relative ${index === 2 ? 'min-h-[240px]' : 'min-h-[280px]'} w-full max-w-full rounded-[20px]`;
-            const cardInnerClassName = `bento-card-surface relative flex h-full flex-col justify-between overflow-hidden rounded-[20px] font-light transition-all duration-300 ease-in-out ${index === 3 ? 'p-0' : 'p-8'}`;
+            const cardInnerClassName = `bento-card-surface relative flex h-full flex-col justify-between overflow-hidden rounded-[20px] font-light transition-all duration-300 ease-in-out ${index === 2 || index === 3 ? 'p-0' : 'p-8'}`;
 
             const defaultGradient = {
               background: `
@@ -1107,6 +1455,7 @@ const MagicBento: React.FC<BentoProps> = ({
             };
 
             const cardStyle = {
+              '--bento-accent': card.color,
               backdropFilter: "blur(12px)",
               ...(card.customBackground || defaultGradient)
             } as React.CSSProperties;

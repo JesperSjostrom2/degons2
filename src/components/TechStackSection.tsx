@@ -134,20 +134,20 @@ export default function TechStackSection() {
   } as CSSProperties
 
   return (
-    <section id="skills" className="bg-background/50 py-24">
+    <section id="skills" className="site-section">
       <div className="container mx-auto px-6">
-        <div className="mx-auto mb-8 max-w-3xl text-center">
-          <p className="mb-3 text-sm uppercase tracking-[0.28em] text-accent/70">My Personal Toolkit</p>
-          <h2 className="text-4xl font-bold text-white md:text-5xl">Tech Stack</h2>
+        <div className="section-header mb-10">
+          <p className="section-label">My Personal Toolkit</p>
+          <h2 className="section-title">Tech Stack</h2>
         </div>
 
         <div
           ref={gridRef}
           onPointerLeave={hideHoverFill}
-          className="relative mx-auto flex max-w-7xl flex-wrap overflow-hidden rounded-[22px] border border-white/10 bg-card/10 md:grid md:grid-cols-3 md:rounded-[28px] lg:grid-cols-6"
+          className="warm-card-surface relative mx-auto flex max-w-7xl flex-wrap overflow-hidden rounded-[22px] md:grid md:grid-cols-3 md:rounded-[28px] lg:grid-cols-6"
         >
           <div
-            className="pointer-events-none absolute left-0 top-0 z-0 bg-accent transition-[transform,width,height,border-radius,opacity] duration-300 ease-out"
+            className="pointer-events-none absolute left-0 top-0 z-0 bg-[#a88c62] transition-[transform,width,height,border-radius,opacity] duration-300 ease-out"
             style={hoverFillStyle}
           />
 

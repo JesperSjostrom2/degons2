@@ -196,12 +196,12 @@ export default function ContactSection() {
   }
 
   return (
-    <section id="contact" className="min-h-screen py-24">
+    <section id="contact" className="site-section min-h-screen">
       <div className="container mx-auto px-6">
-        <div className="mx-auto mb-12 max-w-3xl text-center">
-          <p className="mb-4 text-sm uppercase tracking-[0.28em] text-accent/70">Contact</p>
-          <h2 className="mb-5 text-4xl font-bold text-white md:text-5xl">Let&apos;s Build Something</h2>
-          <p className="text-lg text-muted-foreground">
+        <div className="section-header">
+          <p className="section-label">Contact</p>
+          <h2 className="section-title">Let&apos;s Build Something</h2>
+          <p className="section-description">
             Tell me what you want to create, improve, or launch. Send the details here or reach me through the links beside it.
           </p>
         </div>
@@ -219,11 +219,11 @@ export default function ContactSection() {
             colors={BORDER_GLOW_COLORS}
             fillOpacity={0.4}
           >
-            <div className="relative grid overflow-hidden rounded-[28px] bg-card/20 backdrop-blur-sm lg:grid-cols-[0.9fr_1.35fr]">
+            <div className="warm-card-surface relative grid overflow-hidden rounded-[28px] backdrop-blur-sm lg:grid-cols-[0.9fr_1.35fr]">
               <aside className="flex flex-col justify-between border-b border-white/10 p-6 md:p-8 lg:border-b-0 lg:border-r">
                 <div>
                   <p className="mb-3 text-sm uppercase tracking-[0.24em] text-accent/70">Find Me</p>
-                  <h3 className="text-2xl font-bold text-white md:text-3xl">More ways to connect</h3>
+                  <h3 className="text-2xl font-bold tracking-[-0.025em] text-[#f5efe4] md:text-3xl">More ways to connect</h3>
                   <p className="mt-4 text-sm leading-6 text-muted-foreground">
                     Prefer a quick intro, code deep-dive, or a direct email? These stay close to the form so the next step feels connected.
                   </p>
@@ -235,7 +235,7 @@ export default function ContactSection() {
                   className="relative mt-8 grid overflow-hidden rounded-[24px] border border-white/10 bg-black/30 sm:grid-cols-3 lg:grid-cols-1"
                 >
                   <div
-                    className="pointer-events-none absolute left-0 top-0 z-0 bg-accent transition-[transform,width,height,border-radius,opacity] duration-300 ease-out"
+                    className="pointer-events-none absolute left-0 top-0 z-0 bg-[#a88c62] transition-[transform,width,height,border-radius,opacity] duration-300 ease-out"
                     style={hoverFillStyle}
                   />
 
@@ -277,7 +277,7 @@ export default function ContactSection() {
                       value={name}
                       onChange={(event) => setName(event.target.value)}
                       required
-                      className="w-full rounded-2xl border border-white/10 bg-black/35 px-4 py-3 text-white outline-none transition-colors duration-300 placeholder:text-white/30 focus:border-accent/45"
+                      className="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none transition-colors duration-300 placeholder:text-white/30 focus:border-accent/45 focus:bg-black/40"
                       placeholder="Your name"
                     />
                   </label>
@@ -289,7 +289,7 @@ export default function ContactSection() {
                       value={email}
                       onChange={(event) => setEmail(event.target.value)}
                       required
-                      className="w-full rounded-2xl border border-white/10 bg-black/35 px-4 py-3 text-white outline-none transition-colors duration-300 placeholder:text-white/30 focus:border-accent/45"
+                      className="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none transition-colors duration-300 placeholder:text-white/30 focus:border-accent/45 focus:bg-black/40"
                       placeholder="you@example.com"
                     />
                   </label>
@@ -300,7 +300,7 @@ export default function ContactSection() {
                       <select
                         value={projectType}
                         onChange={(event) => setProjectType(event.target.value)}
-                        className="w-full appearance-none rounded-2xl border border-white/10 bg-black/35 py-3 pl-4 pr-12 text-white outline-none transition-colors duration-300 focus:border-accent/45"
+                        className="w-full appearance-none rounded-2xl border border-white/10 bg-black/30 py-3 pl-4 pr-12 text-white outline-none transition-colors duration-300 focus:border-accent/45 focus:bg-black/40"
                       >
                         {projectTypes.map((type) => (
                           <option key={type} value={type} className="bg-[#050505]">
@@ -317,7 +317,7 @@ export default function ContactSection() {
                     <input
                       value={budget}
                       onChange={(event) => setBudget(event.target.value)}
-                      className="w-full rounded-2xl border border-white/10 bg-black/35 px-4 py-3 text-white outline-none transition-colors duration-300 placeholder:text-white/30 focus:border-accent/45"
+                      className="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none transition-colors duration-300 placeholder:text-white/30 focus:border-accent/45 focus:bg-black/40"
                       placeholder="Optional"
                     />
                   </label>
@@ -330,7 +330,7 @@ export default function ContactSection() {
                     onChange={(event) => setMessage(event.target.value)}
                     required
                     rows={7}
-                    className="w-full resize-none rounded-2xl border border-white/10 bg-black/35 px-4 py-3 text-white outline-none transition-colors duration-300 placeholder:text-white/30 focus:border-accent/45"
+                    className="w-full resize-none rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none transition-colors duration-300 placeholder:text-white/30 focus:border-accent/45 focus:bg-black/40"
                     placeholder="A short description of the project, goals, and what you need help with."
                   />
                 </label>
@@ -346,7 +346,7 @@ export default function ContactSection() {
                   <button
                     type="submit"
                     disabled={status === 'sending' || status === 'sent'}
-                    className="inline-flex items-center justify-center gap-2 rounded-full border border-accent/35 bg-accent/15 px-6 py-3 text-sm font-semibold text-accent transition-colors duration-300 hover:bg-accent hover:text-background disabled:pointer-events-none disabled:opacity-70"
+                    className="btn-primary-warm inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold disabled:pointer-events-none disabled:opacity-70"
                   >
                     {status === 'sending' ? (
                       <>

@@ -92,7 +92,7 @@ export default function Hero() {
             className="h-full w-full opacity-80"
           />
         ) : (
-          <div className="h-full w-full bg-[radial-gradient(circle_at_50%_0%,rgba(218,197,167,0.18),transparent_45%)]" />
+          <div className="h-full w-full bg-[radial-gradient(circle_at_50%_0%,rgba(218,197,167,0.16),transparent_42%),radial-gradient(circle_at_80%_22%,rgba(168,140,98,0.08),transparent_32%)]" />
         )}
       </div>
 
@@ -104,7 +104,7 @@ export default function Hero() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="relative z-20 max-w-xs justify-self-start lg:pt-36"
           >
-            <p className="text-base font-semibold leading-7 text-white md:text-lg">
+            <p className="text-base font-medium leading-[1.65] text-[#f5efe4] md:text-lg">
               Hey there. I&apos;m a frontend-focused developer based in Helsinki, building sharp digital
               experiences with clean code and a strong eye for interaction.
             </p>
@@ -115,7 +115,7 @@ export default function Hero() {
                 background="#dac5a7"
                 borderRadius="20px"
                 borderColor="#dac5a7"
-                className="px-8 py-2 text-lg font-medium text-black hover:!bg-none hover:!bg-transparent hover:text-white hover:!border-accent transition-all duration-300 cursor-pointer relative"
+                className="relative cursor-pointer px-8 py-2 text-lg font-medium text-[#141413] transition-all duration-300 hover:!border-[#f5efe4] hover:!bg-[#f5efe4]"
               >
                 Let&apos;s Connect
               </GlareHover>
@@ -184,7 +184,7 @@ export default function Hero() {
                     setActiveFocusArea(index)
                   }}
                   className={`block text-left transition-colors duration-300 ${
-                    activeFocusArea === index ? 'text-white' : 'text-white/45 hover:text-white/70'
+                    activeFocusArea === index ? 'text-[#f5efe4]' : 'text-[#b0aea5]/60 hover:text-[#f5efe4]/80'
                   }`}
                 >
                   {area}

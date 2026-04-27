@@ -43,7 +43,7 @@ export const Footer = ({
 }: FooterProps) => {
   return (
     <section className={cn("relative w-full overflow-hidden", className)}>
-      <footer className="relative overflow-hidden border-t border-white/10 bg-[linear-gradient(180deg,rgba(20,20,20,0.92)_0%,rgba(16,16,16,0.94)_45%,rgba(8,8,8,0.96)_100%),radial-gradient(circle_at_18%_34%,rgba(218,197,167,0.035),transparent_32%),radial-gradient(circle_at_82%_62%,rgba(218,197,167,0.025),transparent_30%)]">
+      <footer className="warm-section-bg relative overflow-hidden border-t border-white/10">
         <div className="relative mx-auto flex min-h-[22rem] max-w-7xl flex-col justify-between px-6 py-10 md:min-h-[25rem]">
           <div className="flex flex-col items-center text-center">
             {statusSlot && <div className="mb-8">{statusSlot}</div>}
