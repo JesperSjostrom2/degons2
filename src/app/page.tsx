@@ -132,9 +132,15 @@ export default function Home() {
       <section className="relative -mt-8 overflow-hidden bg-background/80 pb-24 pt-16">
         <div className="absolute left-1/2 top-0 h-px w-full max-w-5xl -translate-x-1/2 bg-gradient-to-r from-transparent via-accent/70 to-transparent" />
         <div className="absolute left-1/2 top-0 h-24 w-full max-w-4xl -translate-x-1/2 -translate-y-1/2 bg-[radial-gradient(ellipse_at_center,rgba(218,197,167,0.18),transparent_68%)] blur-xl" />
-        <div className="absolute left-1/2 top-1/2 h-[520px] w-[520px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/10 blur-3xl md:h-[720px] md:w-[720px]" />
-        <div className="absolute left-1/2 top-1/2 h-[260px] w-[260px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/15 blur-2xl md:h-[380px] md:w-[380px]" />
-        <div className="relative z-10 flex justify-center">
+        <div className="relative z-10 mx-auto flex max-w-7xl flex-col items-center px-6">
+          <div className="mb-8 max-w-3xl text-center md:mb-10">
+            <p className="mb-3 text-sm font-medium uppercase tracking-[0.28em] text-accent/70">
+              Why choose me
+            </p>
+            <h2 className="text-3xl font-bold leading-tight text-white md:text-5xl">
+              A smoother way to bring your website to life
+            </h2>
+          </div>
           <MagicBento />
         </div>
       </section>

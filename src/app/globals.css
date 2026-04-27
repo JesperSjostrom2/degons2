@@ -325,4 +325,42 @@
     animation: waving 1s ease-in-out infinite;
     transform-origin: 70% 70%;
   }
+
+  .group\/view:hover .project-arrow-out {
+    animation: project-arrow-out 620ms cubic-bezier(0.76, 0, 0.24, 1) forwards;
+  }
+
+  .project-arrow-in {
+    opacity: 0;
+    transform: translateX(-1.4rem);
+  }
+
+  .group\/view:hover .project-arrow-in {
+    animation: project-arrow-in 620ms cubic-bezier(0.76, 0, 0.24, 1) forwards;
+  }
+
+  @keyframes project-arrow-out {
+    0% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    42%, 100% {
+      opacity: 0;
+      transform: translateX(1.4rem);
+    }
+  }
+
+  @keyframes project-arrow-in {
+    0%, 42% {
+      opacity: 0;
+      transform: translateX(-1.4rem);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
 }

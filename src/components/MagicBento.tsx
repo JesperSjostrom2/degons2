@@ -615,9 +615,9 @@ const MagicBento: React.FC<BentoProps> = ({
   const cardData = [
     {
       color: "#8b7a6b",
-      title: "🤝 Collaboration",
-      description: "I prioritize client collaboration, fostering open communication",
-      label: "Teamwork",
+      title: "🤝 Easy Collaboration",
+      description: "Clear updates, quick changes, and room for feedback until it feels right",
+      label: "Client Process",
       customContent: (
         <div className="group/collab relative -m-8 h-[calc(100%+4rem)] overflow-hidden p-6 sm:p-8">
           <div className={`absolute inset-0 bg-[radial-gradient(circle_at_50%_55%,rgba(218,197,167,0.16),transparent_34%)] transition-opacity duration-700 ${isMobile ? 'opacity-100' : 'opacity-80 group-hover/collab:opacity-100'}`} />
@@ -625,11 +625,11 @@ const MagicBento: React.FC<BentoProps> = ({
 
           <div className="relative z-30 max-w-[15rem]">
             <h2 className="mb-3 text-2xl font-bold leading-tight text-white">
-              Let&apos;s build<br />
-              <span className="text-accent">together.</span>
+              Easy feedback,<br />
+              <span className="text-accent">better results.</span>
             </h2>
             <p className="text-sm leading-6 text-white/70">
-              Clear communication, fast iterations, no surprises.
+              We can go back and forth with changes until you are satisfied.
             </p>
           </div>
 
@@ -804,28 +804,30 @@ const MagicBento: React.FC<BentoProps> = ({
     getRemoteWorkCard(),
     {
       color: "#8b7a6b",
-      title: "🛠️ Currently Building",
-      description: "SaaS application with authentication & dashboards",
-      label: "Projects",
+      title: "🛠️ Websites I Can Build",
+      description: "Business websites, online stores, dashboards, and SaaS products",
+      label: "Services",
       customContent: (
-        <div className="flex flex-col justify-between h-full">
-          <div>
+        <div className="relative -m-8 flex h-[calc(100%+4rem)] flex-col justify-between overflow-hidden p-8">
+          <div className="websites-pattern absolute inset-0 opacity-60" />
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_15%,rgba(218,197,167,0.12),transparent_32%),linear-gradient(180deg,transparent,rgba(0,0,0,0.42))]" />
+          <div className="relative z-10">
             <h2 className="text-2xl font-bold text-white mb-2 leading-tight">
-              Building innovative<br />
-              <span className="text-accent">web experiences</span>
+              Websites built<br />
+              <span className="text-accent">around your goals</span>
             </h2>
             <p className="text-white/70 text-sm">
-              From e-commerce platforms to data visualization tools
+              From conversion-focused sites to full product platforms
             </p>
           </div>
           
-          <div className="space-y-3">
+          <div className="relative z-10 space-y-3">
             <div className="flex items-center gap-3 text-white/80">
               <div className="w-8 h-8 bg-accent/20 rounded-lg flex items-center justify-center">
                 <ShoppingCart className="w-4 h-4 text-accent" />
               </div>
               <div>
-                <div className="text-sm font-medium">E-commerce Solutions</div>
+                <div className="text-sm font-medium">E-commerce Websites</div>
                 <div className="text-xs text-white/60">Full-stack shopping platforms</div>
               </div>
             </div>
@@ -834,7 +836,7 @@ const MagicBento: React.FC<BentoProps> = ({
                 <BarChart3 className="w-4 h-4 text-accent" />
               </div>
               <div>
-                <div className="text-sm font-medium">Data Dashboards</div>
+                <div className="text-sm font-medium">Business Dashboards</div>
                 <div className="text-xs text-white/60">Interactive analytics tools</div>
               </div>
             </div>
@@ -843,7 +845,7 @@ const MagicBento: React.FC<BentoProps> = ({
                 <Rocket className="w-4 h-4 text-accent" />
               </div>
               <div>
-                <div className="text-sm font-medium">SaaS Applications</div>
+                <div className="text-sm font-medium">SaaS Platforms</div>
                 <div className="text-xs text-white/60">Scalable business solutions</div>
               </div>
             </div>
@@ -870,6 +872,25 @@ const MagicBento: React.FC<BentoProps> = ({
             }
           }
 
+          @keyframes websites-pattern-drift {
+            from {
+              background-position: 0 0, 0 0;
+            }
+            to {
+              background-position: 48px 48px, -48px 48px;
+            }
+          }
+
+          .websites-pattern {
+            background-image:
+              linear-gradient(rgba(218, 197, 167, 0.08) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(218, 197, 167, 0.08) 1px, transparent 1px);
+            background-size: 48px 48px;
+            -webkit-mask-image: radial-gradient(circle at 50% 45%, black, transparent 72%);
+            mask-image: radial-gradient(circle at 50% 45%, black, transparent 72%);
+            animation: websites-pattern-drift 14s linear infinite;
+          }
+
           .collab-avatar-mobile {
             opacity: 0;
             transform: scale(0.5);
@@ -879,9 +900,29 @@ const MagicBento: React.FC<BentoProps> = ({
 
           .card-responsive {
             grid-template-columns: 1fr;
-            width: 90%;
+            width: 100%;
             margin: 0 auto;
             padding: 0.5rem;
+            position: relative;
+            isolation: isolate;
+          }
+
+          .card-responsive .card {
+            z-index: 1;
+          }
+
+          .bento-card-surface {
+            background:
+              linear-gradient(180deg, rgba(5, 5, 5, 0.46), rgba(5, 5, 5, 0.66)),
+              radial-gradient(circle at 20% 16%, rgba(218, 197, 167, 0.14), transparent 42%),
+              radial-gradient(circle at 82% 88%, rgba(255, 255, 255, 0.09), transparent 46%),
+              linear-gradient(145deg, rgba(218, 197, 167, 0.06), transparent 42%, rgba(255, 255, 255, 0.045)),
+              linear-gradient(135deg, #000000 0%, #1a1a1a 25%, #2d2d2d 50%, #1a1a1a 75%, #000000 100%),
+              radial-gradient(circle at 20% 30%, rgba(40, 40, 40, 0.3) 0%, transparent 50%),
+              radial-gradient(circle at 80% 70%, rgba(60, 60, 60, 0.2) 0%, transparent 50%),
+              linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.02) 50%, transparent 70%) !important;
+            background-attachment: scroll, scroll, scroll, scroll, fixed, fixed, fixed, fixed !important;
+            background-blend-mode: normal, screen, soft-light, soft-light, multiply, overlay, normal, overlay !important;
           }
           
           @media (min-width: 600px) and (max-width: 1023px) {
@@ -1019,13 +1060,18 @@ const MagicBento: React.FC<BentoProps> = ({
           }
           
           @media (max-width: 599px) {
+            .bento-section {
+              padding-left: 0.75rem;
+              padding-right: 0.75rem;
+            }
+
             .card-responsive {
               grid-template-columns: 1fr;
-              width: 90%;
+              width: 100%;
               margin: 0 auto;
-              padding: 0.5rem;
+              padding: 0;
             }
-            
+
             .card-responsive .card {
               width: 100%;
               min-height: 280px;
@@ -1048,7 +1094,7 @@ const MagicBento: React.FC<BentoProps> = ({
         <div className="card-responsive grid gap-2">
           {cardData.map((card, index) => {
             const baseClassName = `card relative ${index === 2 ? 'min-h-[240px]' : 'min-h-[280px]'} w-full max-w-full rounded-[20px]`;
-            const cardInnerClassName = `relative flex h-full flex-col justify-between overflow-hidden rounded-[20px] font-light transition-all duration-300 ease-in-out ${index === 3 ? 'p-0' : 'p-8'}`;
+            const cardInnerClassName = `bento-card-surface relative flex h-full flex-col justify-between overflow-hidden rounded-[20px] font-light transition-all duration-300 ease-in-out ${index === 3 ? 'p-0' : 'p-8'}`;
 
             const defaultGradient = {
               background: `

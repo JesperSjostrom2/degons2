@@ -196,7 +196,7 @@ export default function ContactSection() {
   }
 
   return (
-    <section id="contact" className="min-h-screen bg-background py-24">
+    <section id="contact" className="min-h-screen py-24">
       <div className="container mx-auto px-6">
         <div className="mx-auto mb-12 max-w-3xl text-center">
           <p className="mb-4 text-sm uppercase tracking-[0.28em] text-accent/70">Contact</p>

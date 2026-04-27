@@ -137,14 +137,14 @@ export default function TechStackSection() {
     <section id="skills" className="bg-background/50 py-24">
       <div className="container mx-auto px-6">
         <div className="mx-auto mb-8 max-w-3xl text-center">
-          <p className="mb-3 text-sm uppercase tracking-[0.28em] text-accent/70">Professional At</p>
+          <p className="mb-3 text-sm uppercase tracking-[0.28em] text-accent/70">My Personal Toolkit</p>
           <h2 className="text-4xl font-bold text-white md:text-5xl">Tech Stack</h2>
         </div>
 
         <div
           ref={gridRef}
           onPointerLeave={hideHoverFill}
-          className="relative mx-auto grid max-w-7xl grid-cols-1 overflow-hidden rounded-[28px] border border-white/10 bg-card/10 md:grid-cols-3 lg:grid-cols-6"
+          className="relative mx-auto flex max-w-7xl flex-wrap overflow-hidden rounded-[22px] border border-white/10 bg-card/10 md:grid md:grid-cols-3 md:rounded-[28px] lg:grid-cols-6"
         >
           <div
             className="pointer-events-none absolute left-0 top-0 z-0 bg-accent transition-[transform,width,height,border-radius,opacity] duration-300 ease-out"
@@ -164,28 +164,28 @@ export default function TechStackSection() {
                 onPointerEnter={(event) => moveHoverFill(event.currentTarget, tech.name)}
                 onFocus={(event) => moveHoverFill(event.currentTarget, tech.name)}
                 onBlur={hideHoverFill}
-                className={`group relative z-10 flex items-center justify-center border-white/10 transition-colors duration-300 ${
+                className={`group relative z-10 flex basis-1/2 items-center justify-center border-b border-r border-white/10 p-3 transition-colors duration-300 sm:basis-1/3 md:basis-auto ${
                   tech.featured
-                    ? 'min-h-[250px] border-b p-10 md:col-span-1 lg:col-span-2 lg:min-h-[330px]'
-                    : 'min-h-[170px] border-b p-8 md:border-r lg:col-span-1 lg:border-b-0'
+                    ? 'min-h-[98px] md:col-span-1 md:min-h-[250px] md:p-10 lg:col-span-2 lg:min-h-[330px]'
+                    : 'min-h-[86px] md:min-h-[170px] md:p-8 lg:col-span-1 lg:border-b-0'
                 } ${isActive ? 'text-background' : 'text-white/90 hover:text-background'}`}
                 aria-label={`Open ${tech.name} website`}
               >
-                <div className="flex flex-col items-center gap-4 text-center">
+                <div className="flex flex-col items-center gap-2 text-center md:gap-4">
                   {Icon ? (
                     <Icon
                       className={`transition-colors duration-300 ${
-                        tech.featured ? 'h-20 w-20 md:h-24 md:w-24' : 'h-12 w-12 md:h-14 md:w-14'
+                        tech.featured ? 'h-9 w-9 md:h-24 md:w-24' : 'h-7 w-7 md:h-14 md:w-14'
                       }`}
                     />
                   ) : (
-                    <span className="font-black italic tracking-[-0.12em] text-[2.55rem] leading-none transition-colors duration-300 md:text-[3rem]">
+                    <span className="text-[1.35rem] font-black italic leading-none tracking-[-0.12em] transition-colors duration-300 md:text-[3rem]">
                       {tech.wordmark}
                     </span>
                   )}
                   <span
                     className={`font-semibold transition-colors duration-300 ${
-                      tech.featured ? 'text-xl md:text-2xl' : 'text-sm md:text-base'
+                      tech.featured ? 'text-xs md:text-2xl' : 'text-[0.7rem] md:text-base'
                     }`}
                   >
                     {tech.name}
