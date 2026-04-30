@@ -117,14 +117,6 @@ export default function ContactSection() {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    console.log('[ContactSection] submit started', {
-      name,
-      email,
-      projectType,
-      budget,
-      messageLength: message.length,
-      status,
-    })
 
     setStatus('sending')
     setErrorMessage('')
@@ -141,18 +133,11 @@ export default function ContactSection() {
       const rawResponse = await response.text()
       const data = rawResponse ? JSON.parse(rawResponse) : {}
 
-      console.log('[ContactSection] API response received', {
-        ok: response.ok,
-        status: response.status,
-        data,
-      })
-
       if (!response.ok) {
         throw new Error(data.error || 'Could not send message.')
       }
 
       setStatus('sent')
-      console.log('[ContactSection] mail successfully sent', { id: data.id })
 
       const notification = document.createElement('div')
       notification.className = 'fixed bottom-24 right-4 px-4 py-3 rounded-lg shadow-lg z-50 transform translate-y-full transition-transform duration-300'
