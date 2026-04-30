@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, useCallback } from "react"
+import { useEffect, useRef, useCallback, useMemo } from "react"
 import createGlobe from "cobe"
 
 interface Marker {
@@ -64,6 +64,14 @@ export function Globe({
   const thetaOffsetRef = useRef(0)
   const isPausedRef = useRef(false)
   const isVisibleRef = useRef(false)
+  const markerData = useMemo(
+    () => markers.map((m) => ({ location: m.location, size: markerSize, id: m.id })),
+    [markers, markerSize],
+  )
+  const arcData = useMemo(
+    () => arcs.map((a) => ({ from: a.from, to: a.to, id: a.id })),
+    [arcs],
+  )
 
   const handlePointerDown = useCallback(
     (e: React.PointerEvent) => {
@@ -147,16 +155,8 @@ export function Globe({
         markerColor,
         glowColor,
         markerElevation,
-        markers: markers.map((m) => ({
-          location: m.location,
-          size: markerSize,
-          id: m.id,
-        })),
-        arcs: arcs.map((a) => ({
-          from: a.from,
-          to: a.to,
-          id: a.id,
-        })),
+        markers: markerData,
+        arcs: arcData,
         arcColor,
         arcWidth,
         arcHeight,
@@ -197,16 +197,8 @@ export function Globe({
           baseColor,
           arcColor,
           markerElevation,
-          markers: markers.map((m) => ({
-            location: m.location,
-            size: markerSize,
-            id: m.id,
-          })),
-          arcs: arcs.map((a) => ({
-            from: a.from,
-            to: a.to,
-            id: a.id,
-          })),
+          markers: markerData,
+          arcs: arcData,
         })
         animationId = requestAnimationFrame(animate)
       }
@@ -239,7 +231,7 @@ export function Globe({
       observer?.disconnect()
       if (globe) globe.destroy()
     }
-  }, [markers, arcs, markerColor, baseColor, arcColor, glowColor, dark, mapBrightness, markerSize, markerElevation, arcWidth, arcHeight, speed, theta, diffuse, mapSamples])
+  }, [markerData, arcData, markerColor, baseColor, arcColor, glowColor, dark, mapBrightness, markerElevation, arcWidth, arcHeight, speed, theta, diffuse, mapSamples])
 
   return (
     <div className={`relative aspect-square select-none ${className}`}>

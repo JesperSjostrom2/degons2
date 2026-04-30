@@ -89,11 +89,14 @@ export default function Navbar() {
   useEffect(() => {
     if (isMobileMenuOpen) {
       document.body.style.overflow = 'hidden'
+      document.documentElement.classList.add('mobile-menu-open')
     } else {
       document.body.style.overflow = ''
+      document.documentElement.classList.remove('mobile-menu-open')
     }
     return () => {
       document.body.style.overflow = ''
+      document.documentElement.classList.remove('mobile-menu-open')
     }
   }, [isMobileMenuOpen])
 
@@ -193,23 +196,23 @@ export default function Navbar() {
       </div>
 
       {/* Mobile Fullscreen Kinetic Menu */}
-      <div className={`lg:hidden fixed inset-0 h-[100dvh] w-auto max-w-[100dvw] overflow-hidden ${isMobileMenuOpen ? 'pointer-events-auto' : 'pointer-events-none'}`}>
+      <div className={`fixed inset-0 h-[100dvh] w-auto max-w-[100dvw] overflow-hidden [contain:layout_paint_style] lg:hidden ${isMobileMenuOpen ? 'pointer-events-auto' : 'pointer-events-none'}`}>
         
         {/* Kinetic Backdrop Sweeps */}
         <motion.div
-          className="absolute inset-0 bg-[#30302e] z-30"
+          className="absolute inset-0 z-30 bg-[#30302e] will-change-transform"
           initial={{ x: "100%" }}
           animate={{ x: isMobileMenuOpen ? "0%" : "100%" }}
           transition={{ duration: 0.6, ease: [0.65, 0.05, 0, 1], delay: isMobileMenuOpen ? 0 : 0.2 }}
         />
         <motion.div
-          className="absolute inset-0 bg-[#a88c62] z-30"
+          className="absolute inset-0 z-30 bg-[#a88c62] will-change-transform"
           initial={{ x: "100%" }}
           animate={{ x: isMobileMenuOpen ? "0%" : "100%" }}
           transition={{ duration: 0.6, ease: [0.65, 0.05, 0, 1], delay: isMobileMenuOpen ? 0.08 : 0.1 }}
         />
         <motion.div
-          className="absolute inset-0 bg-[#141413] z-30"
+          className="absolute inset-0 z-30 bg-[#141413] will-change-transform"
           initial={{ x: "100%" }}
           animate={{ x: isMobileMenuOpen ? "0%" : "100%" }}
           transition={{ duration: 0.6, ease: [0.65, 0.05, 0, 1], delay: isMobileMenuOpen ? 0.16 : 0 }}
@@ -221,6 +224,7 @@ export default function Navbar() {
             {navItems.map((item, index) => (
               <div key={item.name} className="overflow-hidden py-1">
                 <motion.div
+                  className="will-change-transform"
                   initial={{ y: "140%", rotate: 10, opacity: 0 }}
                   animate={{ 
                     y: isMobileMenuOpen ? "0%" : "140%", 
@@ -252,6 +256,7 @@ export default function Navbar() {
             
             <div className={`overflow-hidden pt-8 mt-8 border-t transition-colors duration-300 ${isMobileMenuOpen ? 'border-white/10' : 'border-transparent'}`}>
               <motion.div
+                className="will-change-transform"
                 initial={{ y: "100%", opacity: 0 }}
                 animate={{ 
                   y: isMobileMenuOpen ? "0%" : "100%",

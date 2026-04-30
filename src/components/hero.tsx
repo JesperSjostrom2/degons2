@@ -9,7 +9,6 @@ import LightRays from '@/components/LightRays'
 
 export default function Hero() {
   const [showLightRays, setShowLightRays] = useState(false)
-  const [theme, setTheme] = useState<'dark' | 'light'>('dark')
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(min-width: 768px)')
@@ -18,25 +17,8 @@ export default function Hero() {
     updateLightRays()
     mediaQuery.addEventListener('change', updateLightRays)
 
-    const checkTheme = () => {
-      setTheme(document.documentElement.classList.contains('dark') ? 'dark' : 'light')
-    }
-    
-    checkTheme()
-
-    const observer = new MutationObserver((mutations) => {
-      for (const mutation of mutations) {
-        if (mutation.attributeName === 'class') {
-          checkTheme()
-        }
-      }
-    })
-
-    observer.observe(document.documentElement, { attributes: true })
-
     return () => {
       mediaQuery.removeEventListener('change', updateLightRays)
-      observer.disconnect()
     }
   }, [])
 
@@ -51,7 +33,7 @@ export default function Hero() {
         {showLightRays ? (
           <LightRays
             raysOrigin="top-center"
-            raysColor={theme === 'dark' ? "#dac5a7" : "#a88c62"}
+            raysColor="#dac5a7"
             raysSpeed={0.75}
             lightSpread={0.6}
             rayLength={2.35}
@@ -62,7 +44,7 @@ export default function Hero() {
             mouseInfluence={0}
             noiseAmount={0}
             distortion={0}
-            className={`h-full w-full transition-all duration-1000 ${theme === 'dark' ? 'opacity-55' : 'opacity-40 mix-blend-multiply'}`}
+            className="h-full w-full opacity-25 saturate-150 dark:opacity-55 dark:saturate-100"
           />
         ) : (
           <div className="h-full w-full bg-[radial-gradient(circle_at_50%_0%,rgba(218,197,167,0.18),transparent_42%),radial-gradient(circle_at_80%_22%,rgba(168,140,98,0.10),transparent_32%)]" />

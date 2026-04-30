@@ -496,6 +496,106 @@
     transform-origin: 70% 70%;
   }
 
+  .floating-star {
+    animation: floating-star-x var(--star-float-duration) linear var(--star-delay) infinite;
+    opacity: 0;
+  }
+
+  .floating-star-inner {
+    animation: floating-star-twinkle var(--star-flicker-duration) ease-in-out var(--star-delay) infinite;
+  }
+
+  .floating-star-glow {
+    width: var(--star-glow-size);
+    height: var(--star-glow-size);
+    left: calc(var(--star-glow-size) / -2);
+    top: calc(var(--star-glow-size) / -2);
+  }
+
+  .floating-star-core {
+    width: var(--star-size);
+    height: var(--star-size);
+    left: calc(var(--star-size) / -2);
+    top: calc(var(--star-size) / -2);
+    box-shadow: 0 0 calc(var(--star-size) * 1.5) rgba(255, 255, 255, 0.6);
+  }
+
+  .floating-star-sparkle-x,
+  .floating-star-sparkle-y {
+    animation: floating-star-sparkle var(--star-sparkle-duration) ease-in-out var(--star-delay) infinite;
+  }
+
+  .floating-star-sparkle-x {
+    left: calc(var(--star-size) * -0.8);
+    top: calc(var(--star-size) * -0.1);
+    width: calc(var(--star-size) * 1.6);
+    height: calc(var(--star-size) * 0.2);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+  }
+
+  .floating-star-sparkle-y {
+    left: calc(var(--star-size) * -0.1);
+    top: calc(var(--star-size) * -0.8);
+    width: calc(var(--star-size) * 0.2);
+    height: calc(var(--star-size) * 1.6);
+    background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+    animation-delay: calc(var(--star-delay) + 0.3s);
+  }
+
+  @keyframes floating-star-x {
+    0% { opacity: 0; translate: 0 0; }
+    8% { opacity: 1; }
+    25% { translate: var(--star-x1) var(--star-y1); }
+    50% { translate: var(--star-x2) var(--star-y2); }
+    75% { translate: var(--star-x3) var(--star-y3); }
+    100% { opacity: 1; translate: 0 0; }
+  }
+
+  @keyframes floating-star-twinkle {
+    0%, 100% {
+      opacity: var(--star-brightness-low);
+      transform: scale(0.9);
+    }
+    25% {
+      opacity: var(--star-brightness);
+      transform: scale(1.1);
+    }
+    50% {
+      opacity: var(--star-brightness-mid);
+      transform: scale(0.95);
+    }
+    75% {
+      opacity: var(--star-brightness);
+      transform: scale(1.05);
+    }
+  }
+
+  @keyframes floating-star-sparkle {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 0.5; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .floating-star,
+    .floating-star-inner,
+    .floating-star-sparkle-x,
+    .floating-star-sparkle-y {
+      animation: none;
+    }
+
+    .floating-star {
+      opacity: var(--star-brightness);
+    }
+  }
+
+  html.mobile-menu-open .floating-star,
+  html.mobile-menu-open .floating-star-inner,
+  html.mobile-menu-open .floating-star-sparkle-x,
+  html.mobile-menu-open .floating-star-sparkle-y,
+  html.mobile-menu-open .animate-waving {
+    animation-play-state: paused;
+  }
+
   .group\/view:hover .project-arrow-out {
     animation: project-arrow-out 620ms cubic-bezier(0.76, 0, 0.24, 1) forwards;
   }

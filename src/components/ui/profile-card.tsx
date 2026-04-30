@@ -172,7 +172,7 @@ export default function ProfileCard({
                   variants={elegantItemVariants}
                   className="flex items-center gap-2 whitespace-nowrap"
                 >
-                  <span className="text-[10px] font-medium text-muted-foreground dark:text-white/60 uppercase tracking-wider">
+                  <span className="text-[10px] font-medium uppercase tracking-wider text-[color:var(--site-text)] dark:text-white/60">
                     {role}
                   </span>
                 </motion.div>

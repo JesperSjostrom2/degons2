@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, useMotionValue } from 'framer-motion'
 
 export default function CustomCursor() {
@@ -8,6 +8,8 @@ export default function CustomCursor() {
   const [isVisible, setIsVisible] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
   const [isClicking, setIsClicking] = useState(false)
+  const isVisibleRef = useRef(false)
+  const isHoveredRef = useRef(false)
 
   const cursorX = useMotionValue(0)
   const cursorY = useMotionValue(0)
@@ -50,11 +52,20 @@ export default function CustomCursor() {
     const updateCursor = (e: MouseEvent) => {
       cursorX.set(e.clientX)
       cursorY.set(e.clientY)
-      setIsVisible(true)
+      if (!isVisibleRef.current) {
+        isVisibleRef.current = true
+        setIsVisible(true)
+      }
     }
 
-    const handleMouseEnter = () => setIsVisible(true)
-    const handleMouseLeave = () => setIsVisible(false)
+    const handleMouseEnter = () => {
+      isVisibleRef.current = true
+      setIsVisible(true)
+    }
+    const handleMouseLeave = () => {
+      isVisibleRef.current = false
+      setIsVisible(false)
+    }
 
     const handleMouseDown = () => setIsClicking(true)
     const handleMouseUp = () => setIsClicking(false)
@@ -70,9 +81,15 @@ export default function CustomCursor() {
         target.closest('a') ||
         target.closest('[role="button"]')
       ) {
-        setIsHovered(true)
+        if (!isHoveredRef.current) {
+          isHoveredRef.current = true
+          setIsHovered(true)
+        }
       } else {
-        setIsHovered(false)
+        if (isHoveredRef.current) {
+          isHoveredRef.current = false
+          setIsHovered(false)
+        }
       }
     }
 
