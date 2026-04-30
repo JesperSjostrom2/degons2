@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { motion, useSpring, useMotionValue } from 'framer-motion'
+import { motion, useMotionValue } from 'framer-motion'
 
 export default function CustomCursor() {
   const [isDisabled, setIsDisabled] = useState(true)
@@ -11,10 +11,6 @@ export default function CustomCursor() {
 
   const cursorX = useMotionValue(0)
   const cursorY = useMotionValue(0)
-  
-  const springConfig = { damping: 24, stiffness: 1600, mass: 0.08 }
-  const cursorXSpring = useSpring(cursorX, springConfig)
-  const cursorYSpring = useSpring(cursorY, springConfig)
 
   useEffect(() => {
     const pointerQuery = window.matchMedia('(hover: hover) and (pointer: fine)')
@@ -107,8 +103,8 @@ export default function CustomCursor() {
       <motion.div
         className="fixed"
         style={{
-          left: cursorXSpring,
-          top: cursorYSpring,
+          left: cursorX,
+          top: cursorY,
         }}
         animate={{
           scale: isClicking ? 0.9 : isHovered ? 1.1 : 1,

@@ -268,8 +268,9 @@ const ParticleCard: React.FC<{
         gsap.to(element, {
           rotateX,
           rotateY,
-          duration: 0.1,
+          duration: 0.04,
           ease: "power2.out",
+          overwrite: "auto",
           transformPerspective: 1000,
         });
       }
@@ -281,8 +282,9 @@ const ParticleCard: React.FC<{
         magnetismAnimationRef.current = gsap.to(element, {
           x: magnetX,
           y: magnetY,
-          duration: 0.3,
+          duration: 0.08,
           ease: "power2.out",
+          overwrite: "auto",
         });
       }
     };
@@ -469,11 +471,9 @@ const GlobalSpotlight: React.FC<{
         );
       });
 
-      gsap.to(spotlightRef.current, {
+      gsap.set(spotlightRef.current, {
         left: e.clientX,
         top: e.clientY,
-        duration: 0.1,
-        ease: "power2.out",
       });
 
       const targetOpacity =
@@ -1516,8 +1516,9 @@ const MagicBento: React.FC<BentoProps> = ({
                       gsap.to(el, {
                         rotateX,
                         rotateY,
-                        duration: 0.1,
+                        duration: 0.04,
                         ease: "power2.out",
+                        overwrite: "auto",
                         transformPerspective: 1000,
                       });
                     }
@@ -1529,8 +1530,9 @@ const MagicBento: React.FC<BentoProps> = ({
                       gsap.to(el, {
                         x: magnetX,
                         y: magnetY,
-                        duration: 0.3,
+                        duration: 0.08,
                         ease: "power2.out",
+                        overwrite: "auto",
                       });
                     }
                   };

@@ -1,7 +1,5 @@
 import Navbar from '@/components/navbar'
 import Hero from '@/components/hero'
-import HeroAboutGenie from '@/components/hero-about-genie'
-import EmailContact from '@/components/email-contact'
 import CVButton from '@/components/cv-button'
 import SocialLinks from '@/components/social-links'
 import GradientText from '@/components/GradientText'
@@ -28,9 +26,7 @@ export default function Home() {
       <div className="fixed inset-0 z-0 bg-[radial-gradient(circle_at_14%_12%,rgba(168,140,98,0.06),transparent_26%),radial-gradient(circle_at_88%_34%,rgba(143,165,138,0.035),transparent_28%),linear-gradient(180deg,#1a1a18_0%,#10100f_34%,#080808_100%)]" />
       <FloatingStars className="pointer-events-none fixed inset-0 z-0 overflow-hidden opacity-80" count={44} mobileCount={18} />
       <div className="relative z-10">
-        <HeroAboutGenie />
         <Navbar />
-        <EmailContact />
         <CVButton />
         <Hero />
       
@@ -130,7 +126,7 @@ export default function Home() {
       {/* Magic Bento Grid Section */}
       <section className="relative -mt-8 overflow-hidden pb-24 pt-16 md:pb-28">
         <div className="absolute left-1/2 top-8 h-px w-full max-w-5xl -translate-x-1/2 bg-gradient-to-r from-transparent via-accent/70 to-transparent" />
-        <div className="absolute left-1/2 top-8 h-24 w-full max-w-4xl -translate-x-1/2 -translate-y-1/2 bg-[radial-gradient(ellipse_at_center,rgba(218,197,167,0.18),transparent_68%)] blur-xl" />
+        <div className="absolute left-1/2 top-8 h-24 w-full max-w-4xl -translate-x-1/2 bg-[radial-gradient(ellipse_at_top,rgba(218,197,167,0.18),transparent_68%)] blur-xl" />
         <div className="relative z-10 mx-auto flex max-w-7xl flex-col items-center px-6">
           <div className="section-header mb-10">
             <p className="section-label">

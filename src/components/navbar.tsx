@@ -199,7 +199,7 @@ export default function Navbar() {
                 >
                   <Link href={item.href} onClick={() => handleNavClick(item.id)}>
                     <motion.div
-                      className={`text-4xl sm:text-5xl font-serif tracking-tight cursor-pointer ${
+                      className={`cursor-pointer font-sans text-4xl font-semibold tracking-tight sm:text-5xl ${
                         activeSection === item.id 
                           ? 'text-accent' 
                           : 'text-[#f5efe4]/80 hover:text-[#f5efe4]'

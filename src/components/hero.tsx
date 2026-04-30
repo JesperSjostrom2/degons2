@@ -2,21 +2,13 @@
 
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
-import { motion, useMotionValue, useSpring } from 'framer-motion'
+import { motion } from 'framer-motion'
 
 import GlareHover from '@/components/GlareHover'
 import LightRays from '@/components/LightRays'
 
-const focusAreas = ['Frontend Engineering', 'Creative Interfaces', 'Performance-minded UI', 'Product Polish']
-
 export default function Hero() {
-  const [activeFocusArea, setActiveFocusArea] = useState(0)
-  const [isFocusAreaPaused, setIsFocusAreaPaused] = useState(false)
   const [showLightRays, setShowLightRays] = useState(false)
-  const faceParallaxX = useMotionValue(0)
-  const faceParallaxY = useMotionValue(0)
-  const smoothFaceParallaxX = useSpring(faceParallaxX, { stiffness: 70, damping: 22, mass: 0.45 })
-  const smoothFaceParallaxY = useSpring(faceParallaxY, { stiffness: 70, damping: 22, mass: 0.45 })
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(min-width: 768px)')
@@ -27,45 +19,6 @@ export default function Hero() {
 
     return () => mediaQuery.removeEventListener('change', updateLightRays)
   }, [])
-
-  useEffect(() => {
-    if (isFocusAreaPaused) {
-      return
-    }
-
-    const timer = window.setInterval(() => {
-      setActiveFocusArea((currentArea) => (currentArea + 1) % focusAreas.length)
-    }, 1400)
-
-    return () => window.clearInterval(timer)
-  }, [isFocusAreaPaused])
-
-  useEffect(() => {
-    if (!window.matchMedia('(pointer: fine) and (min-width: 768px)').matches) {
-      return
-    }
-
-    const updateFaceParallax = (event: PointerEvent) => {
-      const normalizedX = event.clientX / window.innerWidth - 0.5
-      const normalizedY = event.clientY / window.innerHeight - 0.5
-
-      faceParallaxX.set(normalizedX * -30)
-      faceParallaxY.set(normalizedY * -20)
-    }
-
-    const resetFaceParallax = () => {
-      faceParallaxX.set(0)
-      faceParallaxY.set(0)
-    }
-
-    window.addEventListener('pointermove', updateFaceParallax, { passive: true })
-    window.addEventListener('pointerleave', resetFaceParallax)
-
-    return () => {
-      window.removeEventListener('pointermove', updateFaceParallax)
-      window.removeEventListener('pointerleave', resetFaceParallax)
-    }
-  }, [faceParallaxX, faceParallaxY])
 
   const scrollToContact = () => {
     const element = document.querySelector('#contact')
@@ -96,114 +49,96 @@ export default function Hero() {
         )}
       </div>
 
-      <div className="container relative z-10 mx-auto flex min-h-screen items-center px-6 pb-16 pt-28">
-        <div className="relative mx-auto grid w-full max-w-7xl items-center gap-10 lg:grid-cols-[0.8fr_1.4fr_0.8fr]">
+      <div className="container relative z-10 mx-auto flex min-h-screen items-center px-6 pb-16 pt-28 md:pt-32">
+        <div className="relative mx-auto flex w-full max-w-7xl flex-col items-center text-center">
           <motion.div
-            initial={{ opacity: 0, x: -24 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative z-20 max-w-xs justify-self-start lg:pt-36"
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.1 }}
+            className="mb-7 inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-[#dac5a7]/80 shadow-[0_0_38px_rgba(218,197,167,0.08)] backdrop-blur"
           >
-            <p className="text-base font-medium leading-[1.65] text-[#f5efe4] md:text-lg">
-              Hey there. I&apos;m a frontend-focused developer based in Helsinki, building sharp digital
-              experiences with clean code and a strong eye for interaction.
-            </p>
-            <div className="mt-8 inline-flex" onClick={scrollToContact}>
-              <GlareHover
-                width="auto"
-                height="auto"
-                background="#dac5a7"
-                borderRadius="20px"
-                borderColor="#dac5a7"
-                className="relative cursor-pointer px-8 py-2 text-lg font-medium text-[#141413] transition-all duration-300 hover:!border-[#f5efe4] hover:!bg-[#f5efe4]"
-              >
-                Let&apos;s Connect
-              </GlareHover>
-            </div>
+            <span className="h-2 w-2 rounded-full bg-[#4ade80] shadow-[0_0_18px_rgba(74,222,128,0.55)]" />
+            Frontend systems with product taste
           </motion.div>
 
-          <div className="relative min-h-[520px] overflow-visible md:min-h-[620px] lg:min-h-[680px]">
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.9, delay: 0.1 }}
-              className="absolute left-1/2 top-[6%] z-10 w-[120vw] max-w-none -translate-x-1/2 select-none overflow-visible bg-gradient-to-b from-[#f7ead8] via-[#dac5a7] to-[#8b7355] bg-clip-text pb-5 pt-8 text-center text-[3.45rem] font-black uppercase leading-[0.98] tracking-[-0.018em] text-transparent sm:text-[5.45rem] sm:tracking-[-0.025em] md:text-[7.15rem] lg:text-[8.45rem] xl:text-[9.6rem]"
-            >
-              Jesper<br className="sm:hidden" /> Sjöström
-            </motion.h1>
+          <motion.div
+            initial={{ opacity: 0, y: 30, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.9, delay: 0.2, ease: 'easeOut' }}
+            className="relative w-full max-w-6xl"
+          >
+            <div className="pointer-events-none absolute left-[14%] top-[4%] hidden h-7 w-10 rotate-[-3deg] rounded-[48%_52%_46%_54%/56%_44%_56%_44%] border border-[#dac5a7]/18 bg-gradient-to-br from-[#c2a77b] to-[#8b7355] shadow-[0_0_18px_rgba(218,197,167,0.12)] md:block" />
 
-            <motion.div
-              initial={{ opacity: 0, y: 48, scale: 0.96 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ duration: 0.9, delay: 0.25, ease: 'easeOut' }}
-              className="absolute inset-x-0 -bottom-2 z-20 mx-auto flex justify-center sm:-bottom-4 md:-bottom-0"
-            >
-              <motion.div
-                data-hero-face
-                style={{ x: smoothFaceParallaxX, y: smoothFaceParallaxY }}
-                className="relative h-[420px] w-[420px] will-change-transform sm:h-[500px] sm:w-[500px] md:h-[570px] md:w-[570px] lg:h-[630px] lg:w-[630px]"
-              >
-                <Image
-                  src="/assets/memoji.png"
-                  alt="Memoji portrait of Jesper Sjöström"
-                  fill
-                  priority
-                  sizes="(max-width: 768px) 90vw, 620px"
-                  className="object-contain object-bottom drop-shadow-[0_40px_80px_rgba(0,0,0,0.45)]"
-                />
-              </motion.div>
-            </motion.div>
-          </div>
+            <h1 className="mx-auto max-w-[1080px] text-balance text-[clamp(2.2rem,5.2vw,5.1rem)] font-semibold leading-[1.02] tracking-[-0.055em] text-[#f5efe4] drop-shadow-[0_18px_60px_rgba(0,0,0,0.38)]">
+              <span>Hi, I&apos;m</span>{' '}
+              <span className="mx-1.5 inline-block h-[1.08em] w-[1.08em] translate-y-[0.16em] rounded-full border border-[#dac5a7]/30 bg-[#20201d] shadow-[inset_0_1px_0_rgba(245,239,228,0.12),0_0_22px_rgba(218,197,167,0.12)]" />{' '}
+              <span className="text-[#dac5a7]">Jesper.</span>
+              <br />
+              <span>I design</span>{' '}
+              <span className="mx-1.5 inline-flex h-[0.3em] w-[0.64em] translate-y-[-0.04em] rotate-[-2deg] rounded-[46%_54%_50%_50%/58%_42%_58%_42%] border border-[#dac5a7]/16 bg-gradient-to-br from-[#c2a77b] to-[#8b7355] shadow-[0_0_16px_rgba(218,197,167,0.10)]" />{' '}
+              <span className="relative inline-block">
+                interfaces
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 300 34"
+                  className="pointer-events-none absolute -bottom-[0.17em] left-1/2 h-[0.18em] w-[110%] -translate-x-1/2 overflow-visible text-[#dac5a7]"
+                  preserveAspectRatio="none"
+                >
+                  <path
+                    d="M4 24 C42 4, 151 7, 296 13 C221 14, 108 18, 19 29 C9 30, 2 29, 4 24 Z"
+                    fill="currentColor"
+                    opacity="0.95"
+                  />
+                  <path
+                    d="M55 7 C118 5, 199 6, 287 12 C204 10, 123 10, 55 12 Z"
+                    fill="#141413"
+                    opacity="0.22"
+                  />
+                </svg>
+              </span>
+              <br />
+              <span>that help products</span>{' '}
+              <span className="group/card relative mx-2 inline-flex h-[0.82em] w-[1.18em] translate-y-[0.12em] overflow-visible rounded-[0.2em] align-baseline">
+                <span className="relative overflow-hidden rounded-[0.2em] border border-[#dac5a7]/20 bg-[#20201d] shadow-[0_10px_24px_rgba(0,0,0,0.30)] transition-transform duration-300 ease-out group-hover/card:-translate-y-[0.14em]">
+                  <Image
+                    src="/assets/projects/kerma.png"
+                    alt="Kerma project preview"
+                    width={120}
+                    height={84}
+                    priority
+                    className="h-full w-full object-cover"
+                  />
+                </span>
+              </span>{' '}
+              <span className="text-[#dac5a7]">grow.</span>
+            </h1>
+          </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, x: 24 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.35 }}
-            className="relative z-20 max-w-xs justify-self-end lg:pt-48"
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.75, delay: 0.45 }}
+            className="relative z-20 mt-8 flex max-w-3xl flex-col items-center gap-6 md:mt-10"
           >
-            <div
-              onPointerEnter={() => setIsFocusAreaPaused(true)}
-              onPointerLeave={() => setIsFocusAreaPaused(false)}
-              onBlur={(event) => {
-                if (!event.currentTarget.contains(event.relatedTarget)) {
-                  setIsFocusAreaPaused(false)
-                }
-              }}
-              className="space-y-3 text-sm font-semibold md:text-base"
-            >
-              {focusAreas.map((area, index) => (
-                <button
-                  key={area}
-                  type="button"
-                  onPointerEnter={() => {
-                    setIsFocusAreaPaused(true)
-                    setActiveFocusArea(index)
-                  }}
-                  onFocus={() => {
-                    setIsFocusAreaPaused(true)
-                    setActiveFocusArea(index)
-                  }}
-                  className={`block text-left transition-colors duration-300 ${
-                    activeFocusArea === index ? 'text-[#f5efe4]' : 'text-[#b0aea5]/60 hover:text-[#f5efe4]/80'
-                  }`}
+            <div className="flex flex-col items-center gap-3 sm:flex-row">
+              <div className="inline-flex" onClick={scrollToContact}>
+                <GlareHover
+                  width="auto"
+                  height="auto"
+                  background="#dac5a7"
+                  borderRadius="20px"
+                  borderColor="#dac5a7"
+                  className="relative cursor-pointer px-8 py-2 text-lg font-medium text-[#141413] transition-all duration-300 hover:!border-[#f5efe4] hover:!bg-[#f5efe4]"
                 >
-                  {area}
-                </button>
-              ))}
+                  Let&apos;s Connect
+                </GlareHover>
+              </div>
             </div>
           </motion.div>
         </div>
       </div>
 
-      <motion.div
-        className="absolute bottom-0 left-1/2 h-px w-full max-w-4xl -translate-x-1/2"
-        initial={{ opacity: 0, scaleX: 0 }}
-        animate={{ opacity: 1, scaleX: 1 }}
-        transition={{ duration: 1.5, delay: 1.2 }}
-        style={{
-          background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent)',
-        }}
-      />
+      <div className="pointer-events-none absolute bottom-0 left-1/2 z-20 h-px w-full max-w-5xl -translate-x-1/2 bg-gradient-to-r from-transparent via-[#dac5a7]/60 to-transparent" />
     </section>
   )
 }
