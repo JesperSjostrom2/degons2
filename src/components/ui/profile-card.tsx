@@ -68,7 +68,7 @@ export default function ProfileCard({
       <motion.div
         className={cn(
           "relative z-0 flex items-center overflow-hidden p-1",
-          "glass-nav text-white"
+          "glass-nav text-[color:var(--site-text)] dark:text-white"
         )}
         style={{ cursor: "default" }}
         initial={{ borderRadius: 40, width: 48, height: 48 }}
@@ -149,7 +149,7 @@ export default function ProfileCard({
                 <div className="flex items-center justify-between gap-4 mb-0.5">
                   <motion.h3
                     variants={elegantItemVariants}
-                    className="text-sm font-medium text-white tracking-tight whitespace-nowrap"
+                    className="text-sm font-medium text-[color:var(--site-text)] dark:text-white tracking-tight whitespace-nowrap"
                   >
                     {name}
                   </motion.h3>
@@ -160,7 +160,7 @@ export default function ProfileCard({
                       target="_blank"
                       rel="noopener noreferrer"
                       variants={elegantItemVariants}
-                      className="flex items-center justify-center h-6 w-6 rounded-full bg-white/10 hover:bg-white text-white hover:text-black transition-colors"
+                      className="flex items-center justify-center h-6 w-6 rounded-full bg-black/5 hover:bg-black text-black hover:text-white dark:bg-white/10 dark:hover:bg-white dark:text-white dark:hover:text-black transition-colors"
                     >
                       <Github size={14} />
                     </motion.a>
@@ -172,7 +172,7 @@ export default function ProfileCard({
                   variants={elegantItemVariants}
                   className="flex items-center gap-2 whitespace-nowrap"
                 >
-                  <span className="text-[10px] font-medium text-white/60 uppercase tracking-wider">
+                  <span className="text-[10px] font-medium text-muted-foreground dark:text-white/60 uppercase tracking-wider">
                     {role}
                   </span>
                 </motion.div>

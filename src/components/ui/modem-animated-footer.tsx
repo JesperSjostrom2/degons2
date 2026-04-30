@@ -43,7 +43,7 @@ export const Footer = ({
 }: FooterProps) => {
   return (
     <section className={cn("relative w-full overflow-hidden", className)}>
-      <footer className="warm-section-bg relative overflow-hidden border-t border-white/10">
+      <footer className="warm-section-bg relative overflow-hidden border-t border-[color:var(--site-border)] dark:border-accent/30">
         <div className="relative mx-auto flex min-h-[22rem] max-w-7xl flex-col justify-between px-6 py-10 md:min-h-[25rem]">
           <div className="flex flex-col items-center text-center">
             {statusSlot && <div className="mb-8">{statusSlot}</div>}
@@ -89,11 +89,11 @@ export const Footer = ({
         </div>
 
         <div className="absolute bottom-20 left-1/2 z-10 flex w-full max-w-7xl -translate-x-1/2 items-center gap-4 px-6">
-          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/10 to-white/10" />
+          <div className="site-divider-line h-px flex-1" />
           <div className="group/footer-code flex h-11 w-11 items-center justify-center rounded-xl border border-accent/30 bg-accent/10 text-accent transition-all duration-300 hover:border-accent/55 hover:bg-accent/15">
             {brandIcon || <NotepadTextDashed className="h-5 w-5 transition-transform duration-300 ease-out group-hover/footer-code:scale-110" />}
           </div>
-          <div className="h-px flex-1 bg-gradient-to-l from-transparent via-white/10 to-white/10" />
+          <div className="site-divider-line-reverse h-px flex-1" />
         </div>
 
       </footer>

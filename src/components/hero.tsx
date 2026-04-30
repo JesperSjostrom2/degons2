@@ -9,6 +9,7 @@ import LightRays from '@/components/LightRays'
 
 export default function Hero() {
   const [showLightRays, setShowLightRays] = useState(false)
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark')
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(min-width: 768px)')
@@ -17,7 +18,26 @@ export default function Hero() {
     updateLightRays()
     mediaQuery.addEventListener('change', updateLightRays)
 
-    return () => mediaQuery.removeEventListener('change', updateLightRays)
+    const checkTheme = () => {
+      setTheme(document.documentElement.classList.contains('dark') ? 'dark' : 'light')
+    }
+    
+    checkTheme()
+
+    const observer = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        if (mutation.attributeName === 'class') {
+          checkTheme()
+        }
+      }
+    })
+
+    observer.observe(document.documentElement, { attributes: true })
+
+    return () => {
+      mediaQuery.removeEventListener('change', updateLightRays)
+      observer.disconnect()
+    }
   }, [])
 
   const scrollToContact = () => {
@@ -31,21 +51,21 @@ export default function Hero() {
         {showLightRays ? (
           <LightRays
             raysOrigin="top-center"
-            raysColor="#dac5a7"
-            raysSpeed={1}
-            lightSpread={0.8}
-            rayLength={3}
+            raysColor={theme === 'dark' ? "#dac5a7" : "#a88c62"}
+            raysSpeed={0.75}
+            lightSpread={0.6}
+            rayLength={2.35}
             pulsating={false}
-            fadeDistance={1.5}
-            saturation={1}
+            fadeDistance={1.2}
+            saturation={0.85}
             followMouse={false}
             mouseInfluence={0}
             noiseAmount={0}
             distortion={0}
-            className="h-full w-full opacity-80"
+            className={`h-full w-full transition-all duration-1000 ${theme === 'dark' ? 'opacity-55' : 'opacity-40 mix-blend-multiply'}`}
           />
         ) : (
-          <div className="h-full w-full bg-[radial-gradient(circle_at_50%_0%,rgba(218,197,167,0.16),transparent_42%),radial-gradient(circle_at_80%_22%,rgba(168,140,98,0.08),transparent_32%)]" />
+          <div className="h-full w-full bg-[radial-gradient(circle_at_50%_0%,rgba(218,197,167,0.18),transparent_42%),radial-gradient(circle_at_80%_22%,rgba(168,140,98,0.10),transparent_32%)]" />
         )}
       </div>
 
@@ -55,7 +75,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="mb-7 inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-[#dac5a7]/80 shadow-[0_0_38px_rgba(218,197,167,0.08)] backdrop-blur"
+            className="mb-7 inline-flex items-center gap-3 rounded-full border border-[color:var(--site-border)] bg-[color:var(--site-surface)] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-accent shadow-[0_0_38px_rgba(218,197,167,0.08)] backdrop-blur"
           >
             <span className="h-2 w-2 rounded-full bg-[#4ade80] shadow-[0_0_18px_rgba(74,222,128,0.55)]" />
             Frontend systems with product taste
@@ -69,10 +89,10 @@ export default function Hero() {
           >
             <div className="pointer-events-none absolute left-[14%] top-[4%] hidden h-7 w-10 rotate-[-3deg] rounded-[48%_52%_46%_54%/56%_44%_56%_44%] border border-[#dac5a7]/18 bg-gradient-to-br from-[#c2a77b] to-[#8b7355] shadow-[0_0_18px_rgba(218,197,167,0.12)] md:block" />
 
-            <h1 className="mx-auto max-w-[1080px] text-balance text-[clamp(2.2rem,5.2vw,5.1rem)] font-semibold leading-[1.02] tracking-[-0.055em] text-[#f5efe4] drop-shadow-[0_18px_60px_rgba(0,0,0,0.38)]">
+            <h1 className="mx-auto max-w-[1080px] text-balance text-[clamp(2.2rem,5.2vw,5.1rem)] font-semibold leading-[1.02] tracking-[-0.055em] text-[color:var(--site-text)] drop-shadow-[0_18px_60px_rgba(0,0,0,0.18)] dark:drop-shadow-[0_18px_60px_rgba(0,0,0,0.38)]">
               <span>Hi, I&apos;m</span>{' '}
-              <span className="mx-1.5 inline-block h-[1.08em] w-[1.08em] translate-y-[0.16em] rounded-full border border-[#dac5a7]/30 bg-[#20201d] shadow-[inset_0_1px_0_rgba(245,239,228,0.12),0_0_22px_rgba(218,197,167,0.12)]" />{' '}
-              <span className="text-[#dac5a7]">Jesper.</span>
+              <span className="mx-1.5 inline-block h-[1.08em] w-[1.08em] translate-y-[0.16em] rounded-full border border-accent/30 bg-[color:var(--site-surface)] shadow-[inset_0_1px_0_rgba(245,239,228,0.12),0_0_22px_rgba(218,197,167,0.12)]" />{' '}
+              <span className="text-accent">Jesper.</span>
               <br />
               <span>I design</span>{' '}
               <span className="mx-1.5 inline-flex h-[0.3em] w-[0.64em] translate-y-[-0.04em] rotate-[-2deg] rounded-[46%_54%_50%_50%/58%_42%_58%_42%] border border-[#dac5a7]/16 bg-gradient-to-br from-[#c2a77b] to-[#8b7355] shadow-[0_0_16px_rgba(218,197,167,0.10)]" />{' '}
@@ -81,7 +101,7 @@ export default function Hero() {
                 <svg
                   aria-hidden="true"
                   viewBox="0 0 300 34"
-                  className="pointer-events-none absolute -bottom-[0.17em] left-1/2 h-[0.18em] w-[110%] -translate-x-1/2 overflow-visible text-[#dac5a7]"
+                  className="pointer-events-none absolute -bottom-[0.17em] left-1/2 h-[0.18em] w-[110%] -translate-x-1/2 overflow-visible text-accent"
                   preserveAspectRatio="none"
                 >
                   <path
@@ -91,7 +111,7 @@ export default function Hero() {
                   />
                   <path
                     d="M55 7 C118 5, 199 6, 287 12 C204 10, 123 10, 55 12 Z"
-                    fill="#141413"
+                    fill="var(--site-bg-deep)"
                     opacity="0.22"
                   />
                 </svg>
@@ -99,7 +119,7 @@ export default function Hero() {
               <br />
               <span>that help products</span>{' '}
               <span className="group/card relative mx-2 inline-flex h-[0.82em] w-[1.18em] translate-y-[0.12em] overflow-visible rounded-[0.2em] align-baseline">
-                <span className="relative overflow-hidden rounded-[0.2em] border border-[#dac5a7]/20 bg-[#20201d] shadow-[0_10px_24px_rgba(0,0,0,0.30)] transition-transform duration-300 ease-out group-hover/card:-translate-y-[0.14em]">
+                <span className="relative overflow-hidden rounded-[0.2em] border border-accent/20 bg-[color:var(--site-surface)] shadow-[0_10px_24px_rgba(0,0,0,0.18)] transition-transform duration-300 ease-out group-hover/card:-translate-y-[0.14em] dark:shadow-[0_10px_24px_rgba(0,0,0,0.30)]">
                   <Image
                     src="/assets/projects/kerma.png"
                     alt="Kerma project preview"
@@ -110,7 +130,7 @@ export default function Hero() {
                   />
                 </span>
               </span>{' '}
-              <span className="text-[#dac5a7]">grow.</span>
+              <span className="text-accent">grow.</span>
             </h1>
           </motion.div>
 
@@ -138,7 +158,8 @@ export default function Hero() {
         </div>
       </div>
 
-      <div className="pointer-events-none absolute bottom-0 left-1/2 z-20 h-px w-full max-w-5xl -translate-x-1/2 bg-gradient-to-r from-transparent via-[#dac5a7]/60 to-transparent" />
+      <div className="site-divider-center pointer-events-none absolute bottom-0 left-1/2 z-20 h-px w-full max-w-5xl -translate-x-1/2" />
+      <div className="pointer-events-none absolute bottom-[-3.25rem] left-1/2 z-10 h-20 w-full max-w-4xl -translate-x-1/2 bg-[radial-gradient(ellipse_at_top,rgba(139,115,85,0.22),transparent_68%)] blur-xl dark:bg-[radial-gradient(ellipse_at_top,rgba(218,197,167,0.22),transparent_68%)]" />
     </section>
   )
 }

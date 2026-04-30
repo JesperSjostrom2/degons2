@@ -13,18 +13,18 @@ import ContactSection from '@/components/ContactSection'
 import Footer from '@/components/footer'
 import ProgressScrollbar from '@/components/ProgressScrollbar'
 
-const aboutInfoCardClass = 'relative z-10 rounded-xl border border-white/10 bg-[#20201d]/55 p-4 text-center backdrop-blur-sm transition-all duration-300 group-hover:-translate-x-1 group-hover:-translate-y-1 group-hover:rounded-[4px] group-hover:border-accent/35 group-hover:shadow-[4px_4px_0px_rgba(168,140,98,0.72)] group-active:translate-x-0 group-active:translate-y-0 group-active:rounded-xl group-active:shadow-none'
+const aboutInfoCardClass = 'relative z-10 rounded-xl border border-[color:var(--site-border)] bg-[color:var(--site-surface)] p-4 text-center backdrop-blur-sm transition-all duration-300 group-hover:-translate-x-1 group-hover:-translate-y-1 group-hover:rounded-[4px] group-hover:border-accent/35 group-hover:shadow-[4px_4px_0px_rgba(168,140,98,0.72)] group-active:translate-x-0 group-active:translate-y-0 group-active:rounded-xl group-active:shadow-none'
 const aboutInfoDepthClass = 'pointer-events-none absolute inset-0 z-0 rounded-xl border border-accent/30 bg-accent/10 opacity-0 shadow-[0_0_0_1px_rgba(218,197,167,0.08),inset_0_1px_0_rgba(245,239,228,0.12)] transition-all duration-300 group-hover:translate-x-1.5 group-hover:translate-y-1.5 group-hover:opacity-100 group-hover:rounded-[4px]'
 const aboutInfoCardStyle = { boxShadow: '0 1px 0 0 rgba(255, 255, 255, 0.1)' }
 
 export default function Home() {
   return (
-    <main className="isolate relative min-h-screen bg-[#080808]">
+    <main className="isolate relative min-h-screen bg-[color:var(--site-bg)] transition-colors duration-300">
       <SmoothScroll />
       <CustomCursor />
       <ProgressScrollbar />
-      <div className="fixed inset-0 z-0 bg-[radial-gradient(circle_at_14%_12%,rgba(168,140,98,0.06),transparent_26%),radial-gradient(circle_at_88%_34%,rgba(143,165,138,0.035),transparent_28%),linear-gradient(180deg,#1a1a18_0%,#10100f_34%,#080808_100%)]" />
-      <FloatingStars className="pointer-events-none fixed inset-0 z-0 overflow-hidden opacity-80" count={44} mobileCount={18} />
+      <div className="fixed inset-0 z-0 bg-[radial-gradient(circle_at_14%_12%,rgba(168,140,98,0.10),transparent_26%),radial-gradient(circle_at_88%_34%,rgba(143,165,138,0.07),transparent_28%),linear-gradient(180deg,var(--site-bg-deep)_0%,var(--site-bg)_48%,var(--site-bg)_100%)]" />
+      <FloatingStars className="pointer-events-none fixed inset-0 z-0 overflow-hidden opacity-70 invert dark:opacity-80 dark:invert-0" count={44} mobileCount={18} />
       <div className="relative z-10">
         <Navbar />
         <CVButton />
@@ -42,7 +42,7 @@ export default function Home() {
                     MORE ABOUT ME
                   </p>
                   <div className="mb-8">
-                    <h2 className="group cursor-default text-3xl font-bold leading-tight tracking-[-0.035em] text-[#f5efe4] md:text-4xl lg:text-5xl" style={{textShadow: '0 0 10px rgba(245, 239, 228, 0.12), 0 0 20px rgba(218, 197, 167, 0.05)'}}>
+                    <h2 className="group cursor-default text-3xl font-bold leading-tight tracking-[-0.035em] text-[color:var(--site-text)] md:text-4xl lg:text-5xl" style={{textShadow: '0 0 10px rgba(245, 239, 228, 0.12), 0 0 20px rgba(218, 197, 167, 0.05)'}}>
                       I&apos;m Jesper, a<br />
                       creative <span className="relative inline-block">
                         <GradientText className="font-accent" colors={["#8b7355", "#dac5a7", "#8b7355"]}>developer</GradientText>
@@ -63,7 +63,7 @@ export default function Home() {
                       staying curious. Life&apos;s about balance, and I love embracing 
                       every part of it.
                     </p>
-                    <p className="font-medium text-[#f5efe4]">
+                    <p className="font-medium text-[color:var(--site-text)]">
                       I believe in waking up each day eager to make a difference!
                     </p>
                   </div>
@@ -95,14 +95,14 @@ export default function Home() {
                     <div className="about-info-3d group relative cursor-pointer">
                       <div className={aboutInfoDepthClass} />
                       <div className={aboutInfoCardClass} style={aboutInfoCardStyle}>
-                        <div className="text-2xl font-bold text-white">26</div>
+                        <div className="text-2xl font-bold text-[color:var(--site-text)]">26</div>
                         <div className="text-xs text-muted-foreground font-medium">AGE</div>
                       </div>
                     </div>
                     <div className="about-info-3d group relative cursor-pointer">
                       <div className={aboutInfoDepthClass} />
                       <div className={aboutInfoCardClass} style={aboutInfoCardStyle}>
-                        <div className="text-2xl font-bold text-white">4+</div>
+                        <div className="text-2xl font-bold text-[color:var(--site-text)]">4+</div>
                         <div className="text-xs text-muted-foreground font-medium">YEARS EXP</div>
                       </div>
                     </div>
@@ -112,7 +112,7 @@ export default function Home() {
                   <div className="about-info-3d group relative cursor-pointer">
                     <div className={aboutInfoDepthClass} />
                     <div className={`${aboutInfoCardClass} p-5`} style={aboutInfoCardStyle}>
-                      <div className="text-xl font-bold text-white">Helsinki</div>
+                      <div className="text-xl font-bold text-[color:var(--site-text)]">Helsinki</div>
                       <div className="text-xs text-muted-foreground font-medium mt-1">LOCATION</div>
                     </div>
                   </div>
@@ -125,8 +125,10 @@ export default function Home() {
       
       {/* Magic Bento Grid Section */}
       <section className="relative -mt-8 overflow-hidden pb-24 pt-16 md:pb-28">
-        <div className="absolute left-1/2 top-8 h-px w-full max-w-5xl -translate-x-1/2 bg-gradient-to-r from-transparent via-accent/70 to-transparent" />
-        <div className="absolute left-1/2 top-8 h-24 w-full max-w-4xl -translate-x-1/2 bg-[radial-gradient(ellipse_at_top,rgba(218,197,167,0.18),transparent_68%)] blur-xl" />
+        <div className="site-divider-center absolute left-1/2 top-8 h-px w-full max-w-5xl -translate-x-1/2" />
+        <div className="pointer-events-none absolute left-1/2 top-8 z-0 h-24 w-full max-w-4xl -translate-x-1/2 translate-y-px overflow-hidden">
+          <div className="absolute inset-x-0 top-0 h-20 bg-[radial-gradient(ellipse_at_top,rgba(139,115,85,0.22),transparent_68%)] blur-xl dark:bg-[radial-gradient(ellipse_at_top,rgba(218,197,167,0.22),transparent_68%)]" />
+        </div>
         <div className="relative z-10 mx-auto flex max-w-7xl flex-col items-center px-6">
           <div className="section-header mb-10">
             <p className="section-label">

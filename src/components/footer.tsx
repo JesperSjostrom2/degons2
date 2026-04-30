@@ -58,13 +58,13 @@ export default function Footer() {
       <div className="flex flex-col items-center gap-2 sm:flex-row sm:gap-4">
         <div className="flex items-center gap-3">
           <div className="h-3 w-3 rounded-full bg-green-400 shadow-lg shadow-green-400/50 animate-pulse" />
-          <span className="text-sm font-medium text-white/90">Available for work</span>
+          <span className="text-sm font-medium text-[color:var(--site-text)] dark:text-white/90">Available for work</span>
         </div>
-        <div className="hidden h-4 w-px bg-white/20 sm:block" />
+        <div className="hidden h-4 w-px bg-[color:var(--site-border)] dark:bg-white/20 sm:block" />
         <div className="flex items-center gap-2">
-          <span className="text-sm font-medium text-white/90">Local time</span>
-          <span className="font-mono text-sm font-medium text-white/90">{currentTime}</span>
-          <span className="text-xs text-white/60">EEST</span>
+          <span className="text-sm font-medium text-[color:var(--site-text)] dark:text-white/90">Local time</span>
+          <span className="font-mono text-sm font-medium text-[color:var(--site-text)] dark:text-white/90">{currentTime}</span>
+          <span className="text-xs text-[color:var(--site-muted)] dark:text-white/60">EEST</span>
         </div>
       </div>
     </div>

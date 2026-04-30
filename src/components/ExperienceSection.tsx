@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useState } from 'react'
+import { useRef, useState, type CSSProperties } from 'react'
 import Image from 'next/image'
 import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion'
 import { ArrowRight, CheckCircle2, ChevronDown, Sparkles } from 'lucide-react'
@@ -8,7 +8,7 @@ import { ArrowRight, CheckCircle2, ChevronDown, Sparkles } from 'lucide-react'
 import BorderGlow from '@/components/BorderGlow'
 import GlareHover from '@/components/GlareHover'
 
-const BORDER_GLOW_BACKGROUND = '#050505'
+const BORDER_GLOW_BACKGROUND = 'var(--site-card-glow-bg)'
 
 interface Project {
   id: number
@@ -101,37 +101,37 @@ const projectsData: Project[] = [
 ]
 
 const ProjectDetails = ({ project }: { project: Project }) => {
-  const accentLabelStyle = { color: project.accentColor }
+  const accentLabelStyle = { '--project-accent': project.accentColor } as CSSProperties
 
   return (
     <>
       <div className="mb-7 flex items-start justify-between gap-4">
         <div>
-          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em]" style={accentLabelStyle}>Overview</p>
-          <p className="text-sm leading-7 text-white/70">{project.description}</p>
+          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--site-text)] dark:text-[color:var(--project-accent)]" style={accentLabelStyle}>Overview</p>
+          <p className="text-sm leading-7 text-[color:var(--site-text)] dark:text-white/70">{project.description}</p>
         </div>
-        <span className="shrink-0 rounded-full border border-white/15 bg-white/[0.04] px-3 py-1 text-xs font-semibold text-white/72">
+        <span className="shrink-0 rounded-full border border-[color:var(--site-border)] bg-[color:var(--site-hover)] px-3 py-1 text-xs font-semibold text-[color:var(--site-muted)] dark:border-white/15 dark:bg-white/[0.04] dark:text-white/72">
           {project.year}
         </span>
       </div>
 
-      <div className="border-t border-white/10 py-7">
-        <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em]" style={accentLabelStyle}>Key Features</p>
+      <div className="border-t border-[color:var(--site-border)] py-7 dark:border-white/10">
+        <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--site-text)] dark:text-[color:var(--project-accent)]" style={accentLabelStyle}>Key Features</p>
         <ul className="space-y-3">
           {project.bulletPoints.map((point) => (
-            <li key={point} className="flex gap-3 text-sm leading-6 text-white/78">
-              <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" style={accentLabelStyle} />
+            <li key={point} className="flex gap-3 text-sm leading-6 text-[color:var(--site-text)] dark:text-white/78">
+              <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[color:var(--site-text)] dark:text-[color:var(--project-accent)]" style={accentLabelStyle} />
               <span>{point}</span>
             </li>
           ))}
         </ul>
       </div>
 
-      <div className="border-t border-white/10 pt-7">
+      <div className="border-t border-[color:var(--site-border)] pt-7 dark:border-white/10">
         <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-accent">Technologies</p>
         <div className="flex flex-wrap gap-2">
           {project.skills.map((skill) => (
-            <span key={skill} className="rounded-full border border-white/10 bg-white/[0.06] px-3 py-1.5 text-xs text-white/72">
+            <span key={skill} className="rounded-full border border-[color:var(--site-border)] bg-[color:var(--site-hover)] px-3 py-1.5 text-xs text-[color:var(--site-text)] dark:border-white/10 dark:bg-white/[0.06] dark:text-white/72">
               {skill}
             </span>
           ))}
@@ -165,7 +165,7 @@ const ProjectCard = ({ project, index }: { project: Project; index: number }) =>
       fillOpacity={0.4}
     >
     <article className="warm-card-surface group overflow-hidden rounded-[28px] lg:grid lg:grid-cols-[1.45fr_1fr]">
-      <div ref={imageRef} className="relative min-h-[380px] overflow-hidden border-b border-white/10 sm:min-h-[410px] lg:min-h-[520px] lg:border-b-0 lg:border-r">
+      <div ref={imageRef} className="relative min-h-[380px] overflow-hidden border-b border-[color:var(--site-border)] sm:min-h-[410px] lg:min-h-[520px] lg:border-b-0 lg:border-r dark:border-white/10">
         <motion.div style={{ y: imageY }} className="absolute inset-x-0 -inset-y-[12%]">
           <Image
             src={project.image}
@@ -269,13 +269,13 @@ const ExperienceSection: React.FC = () => {
 
         <div className="mx-auto mt-14 max-w-7xl pt-2 text-center">
           <div className="mb-5 flex items-center gap-4">
-            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/10 to-white/10" />
+            <div className="site-divider-line h-px flex-1" />
             <div className="group/sparkles relative flex h-11 w-11 items-center justify-center rounded-xl border border-accent/30 bg-accent/10 text-accent transition-all duration-300 hover:border-accent/55 hover:bg-accent/15">
               <Sparkles className="h-5 w-5 transition-transform duration-300 ease-out group-hover/sparkles:scale-110" />
             </div>
-            <div className="h-px flex-1 bg-gradient-to-l from-transparent via-white/10 to-white/10" />
+            <div className="site-divider-line-reverse h-px flex-1" />
           </div>
-          <p className="text-sm font-medium text-white/78">Have a project in mind?</p>
+          <p className="text-sm font-medium text-[color:var(--site-text)]">Have a project in mind?</p>
           <p className="mt-2 text-xs text-muted-foreground sm:text-sm">
             I&apos;m always open to discussing new opportunities and exciting ideas.
           </p>
@@ -286,7 +286,7 @@ const ExperienceSection: React.FC = () => {
               background="#dac5a7"
               borderRadius="20px"
               borderColor="#dac5a7"
-              className="relative cursor-pointer px-8 py-2 text-lg font-medium text-black transition-all duration-300 hover:!bg-none hover:!bg-transparent hover:!border-accent hover:text-white"
+              className="relative cursor-pointer px-8 py-2 text-lg font-medium text-black transition-all duration-300 hover:!bg-none hover:!bg-transparent hover:!border-accent hover:text-[color:var(--site-text)] dark:hover:text-white"
             >
               <span className="flex cursor-pointer items-center gap-5">
                 Let&apos;s Work Together

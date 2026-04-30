@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 import { MenuCloseIcon } from '@/components/ui/animated-state-icons'
 import ProfileCard from '@/components/ui/profile-card'
 import Link from 'next/link'
-import { FileText } from 'lucide-react'
+import { FileText, Moon, Sun } from 'lucide-react'
 
 const navItems = [
   { name: 'Home', href: '#home', id: 'home' },
@@ -18,6 +18,37 @@ const navItems = [
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('home')
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark')
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme') === 'light' ? 'light' : 'dark'
+
+    setTheme(savedTheme)
+    document.documentElement.classList.toggle('dark', savedTheme === 'dark')
+  }, [])
+
+  const toggleTheme = () => {
+    setTheme((currentTheme) => {
+      const nextTheme = currentTheme === 'dark' ? 'light' : 'dark'
+
+      document.documentElement.classList.toggle('dark', nextTheme === 'dark')
+      localStorage.setItem('theme', nextTheme)
+
+      return nextTheme
+    })
+  }
+
+  const renderThemeToggle = () => (
+    <button
+      type="button"
+      onClick={toggleTheme}
+      className="theme-toggle inline-flex h-9 w-9 items-center justify-center rounded-full border transition-colors duration-300"
+      aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+      aria-pressed={theme === 'light'}
+    >
+      {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+    </button>
+  )
 
   useEffect(() => {
     const observerOptions = {
@@ -80,7 +111,7 @@ export default function Navbar() {
       </div>
       <motion.nav
         className={`fixed z-50 box-border max-w-[100dvw] overflow-x-clip transition-colors duration-300 w-full top-0 left-0 right-0 ${
-        isMobileMenuOpen ? 'bg-transparent border-transparent' : 'bg-[#141413]/70 backdrop-blur-xl border-b border-white/10'
+        isMobileMenuOpen ? 'bg-transparent border-transparent' : 'bg-[color:var(--nav-mobile-bg)] backdrop-blur-xl border-b border-[color:var(--site-border)]'
       } lg:bg-transparent lg:backdrop-blur-none lg:border-none lg:w-auto lg:max-w-[95vw] lg:right-auto lg:left-1/2 lg:-translate-x-1/2 lg:top-8`}
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
@@ -95,8 +126,8 @@ export default function Navbar() {
             onClick={() => handleNavClick(item.id)}
             className={`relative font-normal transition-colors duration-300 whitespace-nowrap cursor-pointer ${
               activeSection === item.id 
-                ? 'text-[#f5efe4]' 
-                : 'text-[#b0aea5] hover:text-[#f5efe4]'
+                ? 'text-[color:var(--site-text)]' 
+                : 'text-[color:var(--site-muted)] hover:text-[color:var(--site-text)]'
             }`}
             style={{ 
               fontSize: '0.875rem',
@@ -123,6 +154,8 @@ export default function Navbar() {
             <span className="relative z-10">{item.name}</span>
           </motion.a>
         ))}
+        <div className="ml-1 h-5 w-px bg-[color:var(--site-border)]" />
+        {renderThemeToggle()}
       </div>
 
       {/* Mobile Header */}
@@ -149,11 +182,14 @@ export default function Navbar() {
         <button
           type="button"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="glass-nav before:hidden absolute right-4 top-3 z-[70] flex h-11 w-11 translate-x-0 items-center justify-center p-0 text-[#f5efe4] transition-colors duration-300 hover:bg-white/10"
+          className="glass-nav before:hidden absolute right-4 top-3 z-[70] flex h-11 w-11 translate-x-0 items-center justify-center p-0 text-[color:var(--site-text)] transition-colors duration-300 hover:bg-[color:var(--site-hover)]"
           aria-label="Toggle navigation menu"
         >
-          <MenuCloseIcon size={24} isAnimating={isMobileMenuOpen} className="text-white" />
+          <MenuCloseIcon size={24} isAnimating={isMobileMenuOpen} />
         </button>
+        <div className="absolute right-[4.75rem] top-4 z-[70]">
+          {renderThemeToggle()}
+        </div>
       </div>
 
       {/* Mobile Fullscreen Kinetic Menu */}

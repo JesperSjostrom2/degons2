@@ -164,11 +164,11 @@ export default function TechStackSection() {
                 onPointerEnter={(event) => moveHoverFill(event.currentTarget, tech.name)}
                 onFocus={(event) => moveHoverFill(event.currentTarget, tech.name)}
                 onBlur={hideHoverFill}
-                className={`group relative z-10 flex basis-1/2 items-center justify-center border-b border-r border-white/10 p-3 transition-colors duration-300 sm:basis-1/3 md:basis-auto ${
+                className={`group relative z-10 flex basis-1/2 items-center justify-center border-b border-r border-[color:var(--site-border)] p-3 transition-colors duration-300 sm:basis-1/3 md:basis-auto dark:border-white/10 ${
                   tech.featured
                     ? 'min-h-[98px] md:col-span-1 md:min-h-[250px] md:p-10 lg:col-span-2 lg:min-h-[330px]'
                     : 'min-h-[86px] md:min-h-[170px] md:p-8 lg:col-span-1 lg:border-b-0'
-                } ${isActive ? 'text-background' : 'text-white/90 hover:text-background'}`}
+                } ${isActive ? 'text-background' : 'text-[color:var(--site-text)] hover:text-background dark:text-white/90'}`}
                 aria-label={`Open ${tech.name} website`}
               >
                 <div className="flex flex-col items-center gap-2 text-center md:gap-4">

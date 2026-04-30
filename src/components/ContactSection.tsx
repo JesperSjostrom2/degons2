@@ -8,7 +8,7 @@ import BorderGlow from '@/components/BorderGlow'
 
 const BORDER_GLOW_COLORS = ['#8b7355', '#dac5a7', '#f5efe4']
 const BORDER_GLOW_HSL = '38 37 76'
-const BORDER_GLOW_BACKGROUND = '#050505'
+const BORDER_GLOW_BACKGROUND = 'var(--site-card-glow-bg)'
 
 const projectTypes = ['Website', 'Frontend app', 'Portfolio', 'UI polish', 'Other']
 
@@ -220,10 +220,10 @@ export default function ContactSection() {
             fillOpacity={0.4}
           >
             <div className="warm-card-surface relative grid overflow-hidden rounded-[28px] backdrop-blur-sm lg:grid-cols-[0.9fr_1.35fr]">
-              <aside className="flex flex-col justify-between border-b border-white/10 p-6 md:p-8 lg:border-b-0 lg:border-r">
+              <aside className="flex flex-col justify-between border-b border-[color:var(--site-border)] p-6 md:p-8 lg:border-b-0 lg:border-r dark:border-white/10">
                 <div>
                   <p className="mb-3 text-sm uppercase tracking-[0.24em] text-accent/70">Find Me</p>
-                  <h3 className="text-2xl font-bold tracking-[-0.025em] text-[#f5efe4] md:text-3xl">More ways to connect</h3>
+                  <h3 className="text-2xl font-bold tracking-[-0.025em] text-[color:var(--site-text)] md:text-3xl">More ways to connect</h3>
                   <p className="mt-4 text-sm leading-6 text-muted-foreground">
                     Prefer a quick intro, code deep-dive, or a direct email? These stay close to the form so the next step feels connected.
                   </p>
@@ -232,7 +232,7 @@ export default function ContactSection() {
                 <div
                   ref={socialGridRef}
                   onPointerLeave={hideSocialFill}
-                  className="relative mt-8 grid overflow-hidden rounded-[24px] border border-white/10 bg-black/30 sm:grid-cols-3 lg:grid-cols-1"
+                  className="relative mt-8 grid overflow-hidden rounded-[24px] border border-[color:var(--site-border)] bg-[color:var(--site-surface)] sm:grid-cols-3 lg:grid-cols-1 dark:border-white/10 dark:bg-black/30"
                 >
                   <div
                     className="pointer-events-none absolute left-0 top-0 z-0 bg-[#a88c62] transition-[transform,width,height,border-radius,opacity] duration-300 ease-out"
@@ -252,14 +252,14 @@ export default function ContactSection() {
                         onPointerEnter={(event) => moveSocialFill(event.currentTarget, social.name)}
                         onFocus={(event) => moveSocialFill(event.currentTarget, social.name)}
                         onBlur={hideSocialFill}
-                        className={`group relative z-10 flex min-h-32 items-center gap-4 border-b border-white/10 p-5 transition-colors duration-300 last:border-b-0 sm:border-b-0 sm:border-r sm:last:border-r-0 lg:border-b lg:border-r-0 ${
-                          isActive ? 'text-background' : 'text-white/90 hover:text-background'
+                        className={`group relative z-10 flex min-h-32 items-center gap-4 border-b border-[color:var(--site-border)] p-5 transition-colors duration-300 last:border-b-0 sm:border-b-0 sm:border-r sm:last:border-r-0 lg:border-b lg:border-r-0 dark:border-white/10 ${
+                          isActive ? 'text-background' : 'text-[color:var(--site-text)] hover:text-background dark:text-white/90'
                         }`}
                       >
                         <Icon className="h-9 w-9 shrink-0 transition-colors duration-300" />
                         <span>
                           <span className="block text-lg font-semibold">{social.name}</span>
-                          <span className={`mt-1 block break-all text-sm transition-colors duration-300 ${isActive ? 'text-background/70' : 'text-white/45 group-hover:text-background/70'}`}>
+                          <span className={`mt-1 block break-all text-sm transition-colors duration-300 ${isActive ? 'text-background/70' : 'text-[color:var(--site-muted)] group-hover:text-background/70 dark:text-white/45'}`}>
                             {social.handle}
                           </span>
                         </span>
@@ -272,65 +272,65 @@ export default function ContactSection() {
               <form onSubmit={handleSubmit} className="p-6 md:p-8">
                 <div className="grid gap-4 md:grid-cols-2">
                   <label className="space-y-2">
-                    <span className="text-sm font-medium text-white/75">Name</span>
+                    <span className="text-sm font-medium text-[color:var(--site-text)]">Name</span>
                     <input
                       value={name}
                       onChange={(event) => setName(event.target.value)}
                       required
-                      className="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none transition-colors duration-300 placeholder:text-white/30 focus:border-accent/45 focus:bg-black/40"
+                      className="w-full rounded-xl border border-[color:var(--site-border)] bg-[color:var(--site-surface)] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[color:var(--site-muted)] focus:border-accent/60 focus:bg-[color:var(--site-surface-strong)] dark:rounded-2xl dark:border-white/10 dark:bg-black/30 dark:text-white dark:placeholder:text-white/30 dark:focus:bg-black/40"
                       placeholder="Your name"
                     />
                   </label>
 
                   <label className="space-y-2">
-                    <span className="text-sm font-medium text-white/75">Email</span>
+                    <span className="text-sm font-medium text-[color:var(--site-text)]">Email</span>
                     <input
                       type="email"
                       value={email}
                       onChange={(event) => setEmail(event.target.value)}
                       required
-                      className="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none transition-colors duration-300 placeholder:text-white/30 focus:border-accent/45 focus:bg-black/40"
+                      className="w-full rounded-xl border border-[color:var(--site-border)] bg-[color:var(--site-surface)] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[color:var(--site-muted)] focus:border-accent/60 focus:bg-[color:var(--site-surface-strong)] dark:rounded-2xl dark:border-white/10 dark:bg-black/30 dark:text-white dark:placeholder:text-white/30 dark:focus:bg-black/40"
                       placeholder="you@example.com"
                     />
                   </label>
 
                   <label className="space-y-2">
-                    <span className="text-sm font-medium text-white/75">Project type</span>
+                    <span className="text-sm font-medium text-[color:var(--site-text)]">Project type</span>
                     <div className="relative">
                       <select
                         value={projectType}
                         onChange={(event) => setProjectType(event.target.value)}
-                        className="w-full appearance-none rounded-2xl border border-white/10 bg-black/30 py-3 pl-4 pr-12 text-white outline-none transition-colors duration-300 focus:border-accent/45 focus:bg-black/40"
+                        className="w-full appearance-none rounded-xl border border-[color:var(--site-border)] bg-[color:var(--site-surface)] py-3 pl-4 pr-12 text-[color:var(--site-text)] outline-none transition-colors duration-300 focus:border-accent/60 focus:bg-[color:var(--site-surface-strong)] dark:rounded-2xl dark:border-white/10 dark:bg-black/30 dark:text-white dark:focus:bg-black/40"
                       >
                         {projectTypes.map((type) => (
-                          <option key={type} value={type} className="bg-[#050505]">
+                          <option key={type} value={type} className="bg-[#faf9f5] text-[#141413] dark:bg-[#050505] dark:text-white">
                             {type}
                           </option>
                         ))}
                       </select>
-                      <ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-white/50" />
+                      <ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[color:var(--site-muted)] dark:text-white/50" />
                     </div>
                   </label>
 
                   <label className="space-y-2">
-                    <span className="text-sm font-medium text-white/75">Budget / timeline</span>
+                    <span className="text-sm font-medium text-[color:var(--site-text)]">Budget / timeline</span>
                     <input
                       value={budget}
                       onChange={(event) => setBudget(event.target.value)}
-                      className="w-full rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none transition-colors duration-300 placeholder:text-white/30 focus:border-accent/45 focus:bg-black/40"
+                      className="w-full rounded-xl border border-[color:var(--site-border)] bg-[color:var(--site-surface)] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[color:var(--site-muted)] focus:border-accent/60 focus:bg-[color:var(--site-surface-strong)] dark:rounded-2xl dark:border-white/10 dark:bg-black/30 dark:text-white dark:placeholder:text-white/30 dark:focus:bg-black/40"
                       placeholder="Optional"
                     />
                   </label>
                 </div>
 
                 <label className="mt-4 block space-y-2">
-                  <span className="text-sm font-medium text-white/75">Message</span>
+                  <span className="text-sm font-medium text-[color:var(--site-text)]">Message</span>
                   <textarea
                     value={message}
                     onChange={(event) => setMessage(event.target.value)}
                     required
                     rows={7}
-                    className="w-full resize-none rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-white outline-none transition-colors duration-300 placeholder:text-white/30 focus:border-accent/45 focus:bg-black/40"
+                    className="w-full resize-none rounded-xl border border-[color:var(--site-border)] bg-[color:var(--site-surface)] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[color:var(--site-muted)] focus:border-accent/60 focus:bg-[color:var(--site-surface-strong)] dark:rounded-2xl dark:border-white/10 dark:bg-black/30 dark:text-white dark:placeholder:text-white/30 dark:focus:bg-black/40"
                     placeholder="A short description of the project, goals, and what you need help with."
                   />
                 </label>
