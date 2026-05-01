@@ -160,9 +160,10 @@ export default function ProfileCard({
                       target="_blank"
                       rel="noopener noreferrer"
                       variants={elegantItemVariants}
-                      className="flex items-center justify-center h-6 w-6 rounded-full bg-black/5 hover:bg-black text-black hover:text-white dark:bg-white/10 dark:hover:bg-white dark:text-white dark:hover:text-black transition-colors"
+                      className="group relative flex h-6 w-6 items-center justify-center rounded-full bg-black/5 text-[color:var(--site-text)] transition-colors duration-200 hover:bg-black dark:bg-white/10 dark:text-white dark:hover:bg-white/10"
                     >
-                      <Github size={14} />
+                      <Github className="h-3.5 w-3.5 transition-all duration-200 group-hover:scale-75 group-hover:opacity-0" />
+                      <Github className="absolute h-3.5 w-3.5 scale-75 fill-white text-white opacity-0 transition-all duration-200 group-hover:scale-100 group-hover:opacity-100" />
                     </motion.a>
                   )}
                 </div>

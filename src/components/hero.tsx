@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
+import { ArrowRight } from 'lucide-react'
 
 import GlareHover from '@/components/GlareHover'
 import LightRays from '@/components/LightRays'
@@ -21,11 +22,6 @@ export default function Hero() {
       mediaQuery.removeEventListener('change', updateLightRays)
     }
   }, [])
-
-  const scrollToContact = () => {
-    const element = document.querySelector('#contact')
-    element?.scrollIntoView({ behavior: 'smooth' })
-  }
 
   return (
     <section id="home" className="relative min-h-screen overflow-hidden noise">
@@ -57,7 +53,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="mb-7 inline-flex items-center gap-3 rounded-full border border-[color:var(--site-border)] bg-[color:var(--site-surface)] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-accent shadow-[0_0_38px_rgba(218,197,167,0.08)] backdrop-blur"
+            className="mb-7 inline-flex items-center gap-2 rounded-full border border-[color:var(--site-border)] bg-[color:var(--site-surface)] px-3 py-2 text-[9px] font-semibold uppercase tracking-[0.18em] text-accent shadow-[0_0_38px_rgba(218,197,167,0.08)] backdrop-blur sm:gap-3 sm:px-4 sm:text-[11px] sm:tracking-[0.24em]"
           >
             <span className="h-2 w-2 rounded-full bg-[#4ade80] shadow-[0_0_18px_rgba(74,222,128,0.55)]" />
             Frontend systems with product taste
@@ -123,18 +119,21 @@ export default function Hero() {
             className="relative z-20 mt-8 flex max-w-3xl flex-col items-center gap-6 md:mt-10"
           >
             <div className="flex flex-col items-center gap-3 sm:flex-row">
-              <div className="inline-flex" onClick={scrollToContact}>
+              <a href="#contact" className="inline-flex">
                 <GlareHover
                   width="auto"
                   height="auto"
                   background="#dac5a7"
                   borderRadius="20px"
                   borderColor="#dac5a7"
-                  className="relative cursor-pointer px-8 py-2 text-lg font-medium text-[#141413] transition-all duration-300 hover:!border-[#f5efe4] hover:!bg-[#f5efe4]"
+                  className="relative cursor-pointer px-8 py-2 text-lg font-medium text-black transition-all duration-300 hover:!bg-none hover:!bg-transparent hover:!border-accent hover:text-[color:var(--site-text)] dark:hover:text-white"
                 >
-                  Let&apos;s Connect
+                  <span className="flex cursor-pointer items-center gap-5">
+                    Let&apos;s Connect
+                    <ArrowRight className="h-4 w-4" />
+                  </span>
                 </GlareHover>
-              </div>
+              </a>
             </div>
           </motion.div>
         </div>

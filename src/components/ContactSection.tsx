@@ -1,10 +1,11 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState, type CSSProperties, type FormEvent } from 'react'
-import { ChevronDown, Github, Linkedin, Loader2, Mail, type LucideIcon } from 'lucide-react'
+import { ArrowRight, ChevronDown, Github, Linkedin, Loader2, Mail, type LucideIcon } from 'lucide-react'
 import { SendIcon } from '@/components/ui/animated-state-icons'
 
 import BorderGlow from '@/components/BorderGlow'
+import GlareHover from '@/components/GlareHover'
 
 const BORDER_GLOW_COLORS = ['#8b7355', '#dac5a7', '#f5efe4']
 const BORDER_GLOW_HSL = '38 37 76'
@@ -31,20 +32,20 @@ interface HoverBounds {
 const socialLinks: SocialLink[] = [
   {
     name: 'GitHub',
-    handle: '@jespersjostrom',
-    href: 'https://github.com/jespersjostrom',
+    handle: '@jespersjostrom2',
+    href: 'https://github.com/jespersjostrom2',
     icon: Github,
   },
   {
     name: 'LinkedIn',
     handle: 'jespersjostrom',
-    href: 'https://linkedin.com/in/jespersjostrom',
+    href: 'https://www.linkedin.com/in/jesper-sj%C3%B6str%C3%B6m-521995232/',
     icon: Linkedin,
   },
   {
     name: 'Email',
     handle: 'contact@jespersjostrom.se',
-    href: 'mailto:contact@jespersjostrom.se',
+    href: '#contact',
     icon: Mail,
   },
 ]
@@ -227,13 +228,14 @@ export default function ContactSection() {
                   {socialLinks.map((social) => {
                     const Icon = social.icon
                     const isActive = activeSocial === social.name
+                    const isExternal = social.href.startsWith('http')
 
                     return (
                       <a
                         key={social.name}
                         href={social.href}
-                        target={social.href.startsWith('mailto:') ? undefined : '_blank'}
-                        rel={social.href.startsWith('mailto:') ? undefined : 'noreferrer'}
+                        target={isExternal ? '_blank' : undefined}
+                        rel={isExternal ? 'noreferrer' : undefined}
                         onPointerEnter={(event) => moveSocialFill(event.currentTarget, social.name)}
                         onFocus={(event) => moveSocialFill(event.currentTarget, social.name)}
                         onBlur={hideSocialFill}
@@ -328,23 +330,37 @@ export default function ContactSection() {
                         ? errorMessage
                         : 'Messages are sent directly through the form.'}
                   </p>
-                  <button
-                    type="submit"
-                    disabled={status === 'sending' || status === 'sent'}
-                    className="btn-primary-warm inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold disabled:pointer-events-none disabled:opacity-70"
+                  <GlareHover
+                    width="auto"
+                    height="auto"
+                    background="#dac5a7"
+                    borderRadius="20px"
+                    borderColor="#dac5a7"
+                    className="relative cursor-pointer text-lg font-medium text-black transition-all duration-300 hover:!bg-none hover:!bg-transparent hover:!border-accent hover:text-[color:var(--site-text)] dark:hover:text-white"
                   >
-                    {status === 'sending' ? (
-                      <>
-                        Sending...
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                      </>
-                    ) : (
-                      <>
-                        {status === 'sent' ? 'Sent!' : 'Send inquiry'}
-                        <SendIcon size={16} isAnimating={status === 'sent'} className="h-4 w-4" />
-                      </>
-                    )}
-                  </button>
+                    <button
+                      type="submit"
+                      disabled={status === 'sending' || status === 'sent'}
+                      className="relative z-10 flex cursor-pointer items-center gap-5 rounded-[20px] px-8 py-2 text-lg font-medium disabled:pointer-events-none disabled:opacity-70"
+                    >
+                      {status === 'sending' ? (
+                        <>
+                          Sending...
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                        </>
+                      ) : status === 'sent' ? (
+                        <>
+                          Sent!
+                          <SendIcon size={16} isAnimating className="h-4 w-4" />
+                        </>
+                      ) : (
+                        <>
+                          Send inquiry
+                          <ArrowRight className="h-4 w-4" />
+                        </>
+                      )}
+                    </button>
+                  </GlareHover>
                 </div>
               </form>
             </div>

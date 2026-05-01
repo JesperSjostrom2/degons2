@@ -7,11 +7,6 @@ export default function SocialLinks() {
   const outlineIconClass = 'h-5 w-5 transition-all duration-200 group-hover:scale-75 group-hover:opacity-0'
   const fillIconClass = 'absolute h-5 w-5 scale-75 fill-current opacity-0 transition-all duration-200 group-hover:scale-100 group-hover:opacity-100'
 
-  const scrollToContact = () => {
-    const element = document.querySelector('#contact')
-    element?.scrollIntoView({ behavior: 'smooth' })
-  }
-
   return (
     <div className="mt-8 flex gap-2">
       <a
@@ -32,14 +27,13 @@ export default function SocialLinks() {
         <Linkedin className={outlineIconClass} />
         <Linkedin className={fillIconClass} />
       </a>
-      <button
-        type="button"
-        onClick={scrollToContact}
+      <a
+        href="#contact"
         className={socialLinkClass}
       >
         <Mail className={outlineIconClass} />
         <Mail className={fillIconClass} />
-      </button>
+      </a>
     </div>
   )
 }

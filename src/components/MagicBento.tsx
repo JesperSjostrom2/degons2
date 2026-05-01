@@ -2,11 +2,9 @@
 
 import React, { useRef, useEffect, useState, useCallback } from "react";
 import { gsap } from "gsap";
-import { Player } from "@remotion/player";
 import { User, Copy, Check } from "lucide-react";
 import Magnet from "@/blocks/Animations/Magnet/Magnet";
 import BorderGlow from "@/components/BorderGlow";
-import { InfiniteBentoPan } from "@/components/ui/infinite-bento-pan";
 import { Globe } from "@/components/ui/cobe-globe";
 
 export interface BentoCardProps {
@@ -564,12 +562,7 @@ const MagicBento: React.FC<BentoProps> = ({
   const copyFeedbackTimeoutRef = useRef<number | null>(null);
   const isMobile = useMobileDetection();
   const shouldDisableAnimations = disableAnimations || isMobile;
-  const [isMounted, setIsMounted] = useState(false);
   const [isContactCopied, setIsContactCopied] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   useEffect(() => {
     return () => {
@@ -585,8 +578,8 @@ const MagicBento: React.FC<BentoProps> = ({
     description: "Flexible with timezones. Based in Finland, available globally.",
     label: "Remote Work",
     customContent: (
-      <div className="relative flex h-full flex-col overflow-hidden">
-        <div className="relative z-20 flex flex-col p-6 pb-3">
+      <div className="remote-card relative flex h-full flex-col overflow-hidden">
+        <div className="remote-card-copy relative z-20 flex flex-col p-6 pb-3">
             <h2 className="mb-2 text-2xl font-bold leading-tight text-white">
               Flexible with<br />
               <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.blue }}>timezones</span>
@@ -597,10 +590,10 @@ const MagicBento: React.FC<BentoProps> = ({
 
         </div>
 
-        <div className="relative z-10 mt-auto min-h-[220px] h-[52%] overflow-visible">
-          <div className="absolute inset-x-0 bottom-[-65%] h-[180%] flex justify-center items-center pointer-events-auto">
+        <div className="remote-card-globe-shell relative z-10 mt-auto min-h-[220px] h-[52%] overflow-visible">
+          <div className="remote-card-globe-position absolute inset-x-0 bottom-[-65%] h-[180%] flex justify-center items-center pointer-events-auto">
             <Globe 
-              className="w-full max-w-[600px] relative z-10 scale-[1.15]"
+              className="remote-card-globe w-full max-w-[600px] relative z-10 scale-[1.15]"
               dark={1}
               baseColor={[0.1, 0.1, 0.1]}
               glowColor={[1, 1, 1]}
@@ -671,57 +664,61 @@ const MagicBento: React.FC<BentoProps> = ({
     },
     {
       color: BENTO_ACCENTS.gold,
-      title: "⚡ Product Systems",
-      description: "Interfaces, dashboards, automation, and deployment flows",
-      label: "Technologies",
+      title: "Attention by Design",
+      description: "I shape the first impression so visitors understand, trust, and want to keep exploring.",
+      label: "First Impression",
       customContent: (
-        <div className="relative -m-8 h-[calc(100%+4rem)] overflow-hidden bg-transparent">
-          <div className="relative z-10 h-[56%] p-8 pb-5">
-            <div className="flex h-full flex-col justify-between">
-              <div>
-                <h2 className="text-2xl font-bold leading-tight text-white">
-                  Interfaces that<br />
-                  feel <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.olive }}>alive</span><br />
-                  under the hood
-                </h2>
-              </div>
-              <p className="max-w-xs text-sm leading-6 text-white/72">
-                I build dashboards, workflows, and deployment-ready frontend systems with motion,
-                data clarity, and performance in mind.
-              </p>
-            </div>
-          </div>
+        <div className="group/attention relative -m-8 h-[calc(100%+4rem)] overflow-hidden bg-transparent p-8">
+          <div className="attention-card-bg absolute inset-0" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(218,197,167,0.16),transparent_32%),radial-gradient(circle_at_86%_70%,rgba(127,167,200,0.1),transparent_36%)]" />
 
-          <div className="absolute inset-x-0 bottom-0 h-[44%] overflow-hidden">
-            {isMounted && !isMobile && (
-              <Player
-                component={InfiniteBentoPan}
-                inputProps={{ speed: 0.82, panSpeed: 0.92, accentColor: BENTO_ACCENTS.gold }}
-                durationInFrames={360}
-                fps={30}
-                compositionWidth={1280}
-                compositionHeight={720}
-                autoPlay
-                loop
-                controls={false}
-                clickToPlay={false}
-                style={{
-                  position: 'absolute',
-                  left: '-1.5rem',
-                  right: '-1.5rem',
-                  top: 0,
-                  bottom: '-2rem',
-                  width: 'calc(100% + 3rem)',
-                  height: 'calc(100% + 2rem)',
-                  background: 'transparent',
-                }}
-              />
-            )}
-            {isMobile && (
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_35%_30%,rgba(218,197,167,0.22),transparent_32%),linear-gradient(135deg,rgba(218,197,167,0.12),transparent_62%)]" />
-            )}
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/10 to-black/55" />
-            <div className="site-divider-center absolute inset-x-0 top-0 z-30 h-px" />
+          <div className="relative z-20 h-full">
+            <div className="flex h-full flex-col justify-between">
+              <div className="max-w-[17rem]">
+                <p className="mb-3 text-xs uppercase tracking-[0.24em] text-[color:var(--site-muted)] dark:text-white/50">First Impression</p>
+                <h2 className="text-2xl font-bold leading-tight text-[color:var(--site-text)] dark:text-white">
+                  Attention<br />
+                  <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.gold }}>by design</span>
+                </h2>
+                <p className="mt-4 max-w-xs text-sm leading-6 text-[color:var(--site-muted)] dark:text-white/70">
+                  People decide fast. I guide the eye toward what matters before they read every word.
+                </p>
+              </div>
+
+              <div className="relative h-[48%] min-h-40 overflow-hidden rounded-3xl border border-[color:var(--site-border)] bg-white/16 p-4 shadow-[inset_0_1px_0_rgba(245,239,228,0.22)] backdrop-blur-sm dark:border-white/10 dark:bg-black/20 dark:shadow-[inset_0_1px_0_rgba(245,239,228,0.12)]">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_35%,rgba(218,197,167,0.16),transparent_24%),radial-gradient(circle_at_68%_48%,rgba(127,167,200,0.1),transparent_25%),linear-gradient(135deg,rgba(139,115,85,0.07),transparent_52%)] dark:bg-[radial-gradient(circle_at_25%_35%,rgba(218,197,167,0.14),transparent_24%),radial-gradient(circle_at_68%_48%,rgba(127,167,200,0.12),transparent_25%),linear-gradient(135deg,rgba(245,239,228,0.06),transparent_52%)]" />
+                <div className="attention-browser absolute left-5 top-5 h-[calc(100%-2.5rem)] w-[58%] rounded-2xl border border-[color:var(--site-border)] bg-[color:var(--site-surface)]/80 shadow-[0_18px_60px_rgba(20,20,19,0.14)] dark:border-white/10 dark:bg-white/8">
+                  <div className="flex h-8 items-center gap-1.5 border-b border-[color:var(--site-border)] px-3 dark:border-white/10">
+                    <span className="h-2 w-2 rounded-full bg-[#dac5a7]/70" />
+                    <span className="h-2 w-2 rounded-full bg-white/30" />
+                    <span className="h-2 w-2 rounded-full bg-white/20" />
+                  </div>
+                  <div className="space-y-3 p-4">
+                    <div className="attention-line h-3 w-24 rounded-full bg-[#dac5a7]/70" />
+                    <div className="h-2 w-36 rounded-full bg-[color:var(--site-muted)]/18 dark:bg-white/14" />
+                    <div className="h-2 w-28 rounded-full bg-[color:var(--site-muted)]/14 dark:bg-white/10" />
+                    <div className="mt-4 grid grid-cols-2 gap-2">
+                      <span className="h-10 rounded-xl border border-[color:var(--site-border)] bg-white/20 dark:border-white/10 dark:bg-white/8" />
+                      <span className="h-10 rounded-xl border border-[color:var(--site-border)] bg-white/12 dark:border-white/10 dark:bg-white/5" />
+                    </div>
+                  </div>
+                </div>
+                <svg className="absolute inset-0 h-full w-full" viewBox="0 0 420 220" fill="none" aria-hidden="true">
+                  <path className="attention-path-shadow" d="M68 126 C120 52 205 66 242 112 S311 180 363 76" stroke="rgba(245,239,228,0.12)" strokeWidth="12" strokeLinecap="round" />
+                  <path className="attention-path" d="M68 126 C120 52 205 66 242 112 S311 180 363 76" stroke="rgba(218,197,167,0.82)" strokeWidth="2" strokeLinecap="round" />
+                </svg>
+                <div className="attention-heat attention-heat-a" />
+                <div className="attention-heat attention-heat-b" />
+                <div className="attention-heat attention-heat-c" />
+                <div className="attention-reticle absolute right-[9%] top-[22%] h-20 w-20 rounded-full border border-[#dac5a7]/30">
+                  <span />
+                </div>
+                <div className="absolute bottom-4 right-4 flex items-center gap-2 rounded-full border border-[#dac5a7]/24 bg-[#dac5a7]/10 px-3 py-1 text-[0.65rem] uppercase tracking-[0.18em] text-[color:var(--site-muted)] dark:text-white/60">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#dac5a7] shadow-[0_0_14px_rgba(218,197,167,0.85)]" />
+                  3 sec hook
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       ),
@@ -748,15 +745,15 @@ const MagicBento: React.FC<BentoProps> = ({
           <div className="contact-card-orbit contact-card-orbit-b" />
           <div className="contact-card-frost absolute inset-0" />
 
-          <div className="relative z-10 text-center">
-            <div className="mb-8 flex justify-center">
-              <div className="flex h-16 w-16 items-center justify-center rounded-full" style={{ background: BENTO_ACCENTS.champagne }}>
+          <div className="contact-card-content relative z-10 text-center">
+            <div className="contact-card-icon-wrap mb-8 flex justify-center">
+              <div className="contact-card-icon flex h-16 w-16 items-center justify-center rounded-full" style={{ background: BENTO_ACCENTS.champagne }}>
                 <User className="w-8 h-8 text-white" />
               </div>
             </div>
             
-            <div className="mb-8">
-              <h2 className="mx-auto max-w-[15rem] text-2xl font-bold leading-tight text-[#f5efe4]">
+            <div className="contact-card-title-wrap mb-8">
+              <h2 className="contact-card-title mx-auto max-w-[15rem] text-2xl font-bold leading-tight text-[#f5efe4]">
                 Let&apos;s work together on your next <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.champagne }}>project</span>
               </h2>
             </div>
@@ -767,7 +764,7 @@ const MagicBento: React.FC<BentoProps> = ({
               wrapperClassName="flex justify-center"
             >
               <button 
-                className="btn-neutral-dark relative flex items-center gap-2 overflow-hidden rounded-lg !bg-transparent px-4 py-2 text-sm font-medium text-white backdrop-blur-sm transition-all duration-300 hover:!bg-white/10"
+                className="contact-card-button btn-neutral-dark relative flex items-center gap-2 overflow-hidden rounded-lg !bg-transparent px-4 py-2 text-sm font-medium text-white backdrop-blur-sm transition-all duration-300 hover:!bg-white/10"
                 onClick={async () => {
                   try {
                     await navigator.clipboard.writeText('contact@jespersjostrom.se');
@@ -819,7 +816,7 @@ const MagicBento: React.FC<BentoProps> = ({
                   <Copy className={`absolute left-0 top-0 h-4 w-4 transition-all duration-200 ${isContactCopied ? 'scale-75 opacity-0' : 'scale-100 opacity-100'}`} />
                   <Check className={`absolute left-0 top-0 h-4 w-4 text-emerald-300 transition-all duration-200 ${isContactCopied ? 'scale-100 opacity-100' : 'scale-75 opacity-0'}`} />
                 </span>
-                <span className="relative z-10">contact@jespersjostrom.se</span>
+                <span className="contact-card-email relative z-10">contact@jespersjostrom.se</span>
               </button>
             </Magnet>
           </div>
@@ -1478,12 +1475,13 @@ const MagicBento: React.FC<BentoProps> = ({
           
           @media (max-width: 599px) {
             .bento-section {
-              padding-left: 0.75rem;
-              padding-right: 0.75rem;
+              padding-left: 0;
+              padding-right: 0;
             }
 
             .card-responsive {
               grid-template-columns: 1fr;
+              gap: 0.75rem;
               width: 100%;
               margin: 0 auto;
               padding: 0;
@@ -1491,7 +1489,103 @@ const MagicBento: React.FC<BentoProps> = ({
 
             .card-responsive .card {
               width: 100%;
-              min-height: 280px;
+              min-height: 240px;
+            }
+
+            .card-responsive .card:nth-child(2) {
+              order: 1;
+              min-height: 270px;
+            }
+
+            .card-responsive .card:nth-child(5) {
+              order: 2;
+              min-height: 255px;
+            }
+
+            .card-responsive .card:nth-child(1) {
+              order: 3;
+              min-height: 255px;
+            }
+
+            .card-responsive .card:nth-child(4) {
+              order: 4;
+              min-height: 245px;
+            }
+
+            .card-responsive .card:nth-child(3) {
+              order: 5;
+              min-height: 235px;
+            }
+
+            .card-responsive .card:nth-child(3) .contact-card-content {
+              width: 100%;
+              padding: 1rem;
+            }
+
+            .card-responsive .card:nth-child(3) .contact-card-icon-wrap,
+            .card-responsive .card:nth-child(3) .contact-card-title-wrap {
+              margin-bottom: 0.9rem;
+            }
+
+            .card-responsive .card:nth-child(3) .contact-card-icon {
+              width: 3rem;
+              height: 3rem;
+            }
+
+            .card-responsive .card:nth-child(3) .contact-card-icon svg {
+              width: 1.5rem;
+              height: 1.5rem;
+            }
+
+            .card-responsive .card:nth-child(3) .contact-card-title {
+              max-width: 12rem;
+              font-size: 1.2rem;
+              line-height: 1.2;
+            }
+
+            .card-responsive .card:nth-child(3) .contact-card-button {
+              max-width: 100%;
+              gap: 0.5rem;
+              padding: 0.5rem 0.8rem;
+              font-size: 0.78rem;
+            }
+
+            .card-responsive .card:nth-child(3) .contact-card-email {
+              display: block;
+              max-width: 10.25rem;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+            }
+
+            .card-responsive .card:nth-child(4) .remote-card-copy {
+              padding: 1.1rem 1.1rem 0;
+            }
+
+            .card-responsive .card:nth-child(4) .remote-card-copy h2 {
+              margin-bottom: 0.45rem;
+              font-size: 1.2rem;
+              line-height: 1.2;
+            }
+
+            .card-responsive .card:nth-child(4) .remote-card-copy p {
+              margin-bottom: 0;
+              font-size: 0.8rem;
+              line-height: 1.3;
+            }
+
+            .card-responsive .card:nth-child(4) .remote-card-globe-shell {
+              min-height: 7.5rem;
+              height: 52%;
+            }
+
+            .card-responsive .card:nth-child(4) .remote-card-globe-position {
+              bottom: -68%;
+              height: 170%;
+            }
+
+            .card-responsive .card:nth-child(4) .remote-card-globe {
+              transform: scale(1);
             }
           }
         `}

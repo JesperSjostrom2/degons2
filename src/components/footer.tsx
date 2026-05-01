@@ -54,14 +54,14 @@ export default function Footer() {
   }, [])
 
   const statusSlot = (
-    <div className="glass-nav relative px-4 py-2">
-      <div className="flex flex-col items-center gap-2 sm:flex-row sm:gap-4">
-        <div className="flex items-center gap-3">
-          <div className="h-3 w-3 rounded-full bg-green-400 shadow-lg shadow-green-400/50 animate-pulse" />
-          <span className="text-sm font-medium text-[color:var(--site-text)] dark:text-white/90">Available for work</span>
+    <div className="glass-nav relative w-max max-w-[calc(100vw-1rem)] px-3 py-2 sm:px-5">
+      <div className="flex items-center gap-2 whitespace-nowrap sm:gap-4">
+        <div className="flex min-w-max shrink-0 items-center gap-3 whitespace-nowrap">
+          <div className="h-3 w-3 shrink-0 rounded-full bg-green-400 shadow-lg shadow-green-400/50 animate-pulse" />
+          <span className="whitespace-nowrap text-sm font-medium text-[color:var(--site-text)] dark:text-white/90">Available for work</span>
         </div>
-        <div className="hidden h-4 w-px bg-[color:var(--site-border)] dark:bg-white/20 sm:block" />
-        <div className="flex items-center gap-2">
+        <div className="h-4 w-px shrink-0 bg-[color:var(--site-border)] dark:bg-white/20" />
+        <div className="flex min-w-max shrink-0 items-center gap-1.5 sm:gap-2">
           <span className="text-sm font-medium text-[color:var(--site-text)] dark:text-white/90">Local time</span>
           <span className="font-mono text-sm font-medium text-[color:var(--site-text)] dark:text-white/90">{currentTime}</span>
           <span className="text-xs text-[color:var(--site-muted)] dark:text-white/60">EEST</span>
