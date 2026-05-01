@@ -28,6 +28,7 @@ const socialLinks = [
 
 const navLinks = [
   { label: 'Home', href: '#home' },
+  { label: 'Why Me', href: '#why-me' },
   { label: 'About', href: '#about' },
   { label: 'Projects', href: '#projects' },
   { label: 'Skills', href: '#skills' },

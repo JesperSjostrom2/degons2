@@ -31,7 +31,7 @@ export default function Home() {
         <Hero />
 
       {/* Magic Bento Grid Section */}
-      <section className="warm-section-overlay relative -mt-8 pb-24 pt-12 md:-mt-8 md:pb-28 md:pt-16">
+      <section id="why-me" className="warm-section-overlay relative -mt-8 scroll-mt-24 pb-24 pt-12 md:-mt-8 md:pb-28 md:pt-16">
         <div className="container relative z-10 mx-auto flex flex-col items-center px-6">
           <div className="section-header mb-10">
             <p className="section-label">

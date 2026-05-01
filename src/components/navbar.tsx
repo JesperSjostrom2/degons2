@@ -9,6 +9,7 @@ import { FileText, Moon, Sun } from 'lucide-react'
 
 const navItems = [
   { name: 'Home', href: '#home', id: 'home' },
+  { name: 'Why Me', href: '#why-me', id: 'why-me' },
   { name: 'About', href: '#about', id: 'about' },
   { name: 'Projects', href: '#projects', id: 'projects' },
   { name: 'Skills', href: '#skills', id: 'skills' },
