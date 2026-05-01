@@ -92,17 +92,7 @@ export default function Hero() {
       </div>
 
       <div className="container relative z-10 mx-auto flex min-h-screen items-center px-6 pb-12 pt-24 md:pb-16 md:pt-32">
-        <div className="relative mx-auto flex w-full max-w-7xl flex-col items-center text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.1 }}
-            className="mb-7 inline-flex items-center gap-2 rounded-full border border-[color:var(--site-border)] bg-[color:var(--site-surface)] px-3 py-2 text-[9px] font-semibold uppercase tracking-[0.18em] text-accent shadow-[0_0_38px_rgba(218,197,167,0.08)] backdrop-blur sm:gap-3 sm:px-4 sm:text-[11px] sm:tracking-[0.24em]"
-          >
-            <span className="h-2 w-2 rounded-full bg-[#4ade80] shadow-[0_0_18px_rgba(74,222,128,0.55)]" />
-            Frontend systems with product taste
-          </motion.div>
-
+        <div className="relative mx-auto flex w-full max-w-7xl -translate-y-6 flex-col items-center text-center md:-translate-y-8">
           <motion.div
             initial={{ opacity: 0, y: 30, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
