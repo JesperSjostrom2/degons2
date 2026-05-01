@@ -42,6 +42,8 @@ const BENTO_ACCENTS = {
   bronze: "#8b7355",
   olive: "#8fa58a",
   blue: "#7fa7c8",
+  silver: "#b0aea5",
+  lavender: "#a79ac7",
 };
 
 const COLLABORATION_AVATARS = [
@@ -621,7 +623,7 @@ const MagicBento: React.FC<BentoProps> = ({
   // Create cardData array with the remote work card that has access to state
   const cardData = [
     {
-      color: BENTO_ACCENTS.brass,
+      color: BENTO_ACCENTS.champagne,
       title: "🤝 Easy Collaboration",
       description: "Clear updates, quick changes, and room for feedback until it feels right",
       label: "Client Process",
@@ -654,61 +656,48 @@ const MagicBento: React.FC<BentoProps> = ({
             />
           ))}
 
-          <div className={`absolute left-1/2 top-[56%] z-30 h-28 w-28 -translate-x-1/2 -translate-y-1/2 rounded-full border border-accent/40 bg-black/40 bg-contain bg-center bg-no-repeat shadow-[0_20px_60px_rgba(0,0,0,0.45),0_0_40px_rgba(218,197,167,0.18)] transition-transform duration-700 ease-out sm:h-32 sm:w-32 ${isMobile ? 'scale-105' : 'group-hover/collab:scale-105'}`} style={{ backgroundImage: "url('/assets/memoji.png')" }} />
+          <div className={`absolute left-1/2 top-[56%] z-30 flex h-24 w-24 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-accent/40 bg-[radial-gradient(circle_at_35%_25%,rgba(245,239,228,0.22),transparent_34%),linear-gradient(135deg,rgba(218,197,167,0.28),rgba(139,115,85,0.18))] text-2xl font-semibold text-[#f5efe4] shadow-[0_20px_60px_rgba(0,0,0,0.45),0_0_40px_rgba(218,197,167,0.18)] transition-transform duration-700 ease-out sm:h-28 sm:w-28 ${isMobile ? 'scale-105' : 'group-hover/collab:scale-105'}`}>JS</div>
         </div>
       ),
     },
     {
-      color: BENTO_ACCENTS.gold,
-      title: "Attention by Design",
-      description: "I shape the first impression so visitors understand, trust, and want to keep exploring.",
-      label: "First Impression",
+      color: BENTO_ACCENTS.olive,
+      title: "No chasing, no confusion.",
+      description: "You'll always know what's happening with quick replies and straightforward updates.",
+      label: "Clear Communication",
       customContent: (
         <div className="group/attention relative -m-8 h-[calc(100%+4rem)] overflow-hidden bg-transparent p-8">
           <div className="attention-mobile-frost absolute inset-0" />
           <div className="relative z-20 h-full">
             <div className="flex h-full flex-col justify-between">
               <div className="bento-mobile-readable max-w-[17rem]">
-                <p className="mb-3 text-xs uppercase tracking-[0.24em] text-[color:var(--site-muted)] dark:text-white/50">First Impression</p>
+                <p className="mb-3 text-xs uppercase tracking-[0.24em] text-[color:var(--site-muted)] dark:text-white/50">Clear Communication</p>
                 <h2 className="text-2xl font-bold leading-tight text-[color:var(--site-text)] dark:text-white">
-                  Attention<br />
-                  <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.gold }}>by design</span>
+                  No chasing,<br />
+                  <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.olive }}>no confusion.</span>
                 </h2>
                 <p className="mt-4 max-w-xs text-sm leading-6 text-[color:var(--site-muted)] dark:text-white/70">
-                  People decide fast. I guide the eye toward what matters before they read every word.
+                  You&apos;ll always know what&apos;s happening &mdash; with quick replies and straightforward updates.
                 </p>
               </div>
 
-              <div className="relative h-[48%] min-h-40 overflow-hidden rounded-3xl border border-[color:var(--site-border)] bg-transparent p-4 shadow-[inset_0_1px_0_rgba(245,239,228,0.18)] dark:border-white/10 dark:shadow-[inset_0_1px_0_rgba(245,239,228,0.1)]">
-                <div className="attention-browser absolute left-5 top-5 h-[calc(100%-2.5rem)] w-[58%] rounded-2xl border border-[color:var(--site-border)] bg-[color:var(--site-surface)]/80 shadow-[0_18px_60px_rgba(20,20,19,0.14)] dark:border-white/10 dark:bg-white/8">
-                  <div className="flex h-8 items-center gap-1.5 border-b border-[color:var(--site-border)] px-3 dark:border-white/10">
-                    <span className="h-2 w-2 rounded-full bg-[#dac5a7]/70" />
-                    <span className="h-2 w-2 rounded-full bg-white/30" />
-                    <span className="h-2 w-2 rounded-full bg-white/20" />
+              <div className="live-chat-panel relative h-[48%] min-h-40 overflow-hidden rounded-3xl p-4">
+                <div className="live-chat-header mb-3 flex items-center justify-between border-b border-[color:var(--site-border)]/70 pb-3 dark:border-white/8">
+                  <div className="flex items-center gap-2">
+                    <span className="h-2 w-2 rounded-full bg-[#4ade80]" />
+                    <span className="text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-[color:var(--site-muted)] dark:text-white/55">Live updates</span>
                   </div>
-                  <div className="space-y-3 p-4">
-                    <div className="attention-line h-3 w-24 rounded-full bg-[#dac5a7]/70" />
-                    <div className="h-2 w-36 rounded-full bg-[color:var(--site-muted)]/18 dark:bg-white/14" />
-                    <div className="h-2 w-28 rounded-full bg-[color:var(--site-muted)]/14 dark:bg-white/10" />
-                    <div className="mt-4 grid grid-cols-2 gap-2">
-                      <span className="h-10 rounded-xl border border-[color:var(--site-border)] bg-white/20 dark:border-white/10 dark:bg-white/8" />
-                      <span className="h-10 rounded-xl border border-[color:var(--site-border)] bg-white/12 dark:border-white/10 dark:bg-white/5" />
-                    </div>
+                  <span className="text-[0.65rem] text-[color:var(--site-muted)]/70 dark:text-white/35">now</span>
+                </div>
+                <div className="live-chat-thread space-y-2">
+                  <div className="live-chat-bubble live-chat-bubble-left">Quick update?</div>
+                  <div className="live-chat-bubble live-chat-bubble-right">On it. Sending notes now.</div>
+                  <div className="live-chat-bubble live-chat-bubble-left">Perfect, thanks.</div>
+                  <div className="live-chat-bubble live-chat-bubble-right live-chat-typing" aria-hidden="true">
+                    <span />
+                    <span />
+                    <span />
                   </div>
-                </div>
-                <svg className="absolute inset-0 h-full w-full" viewBox="0 0 420 220" fill="none" aria-hidden="true">
-                  <path className="attention-path-shadow" d="M68 126 C120 52 205 66 242 112 S311 180 363 76" stroke="rgba(245,239,228,0.12)" strokeWidth="12" strokeLinecap="round" />
-                  <path className="attention-path" d="M68 126 C120 52 205 66 242 112 S311 180 363 76" stroke="rgba(218,197,167,0.82)" strokeWidth="2" strokeLinecap="round" />
-                </svg>
-                <div className="attention-heat attention-heat-a" />
-                <div className="attention-heat attention-heat-b" />
-                <div className="attention-heat attention-heat-c" />
-                <div className="attention-reticle absolute right-[9%] top-[22%] h-20 w-20 rounded-full border border-[#dac5a7]/30">
-                  <span />
-                </div>
-                <div className="absolute bottom-4 right-4 flex items-center gap-2 rounded-full border border-[#dac5a7]/24 bg-[#dac5a7]/10 px-3 py-1 text-[0.65rem] uppercase tracking-[0.18em] text-[color:var(--site-muted)] dark:text-white/60">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#dac5a7] shadow-[0_0_14px_rgba(218,197,167,0.85)]" />
-                  3 sec hook
                 </div>
               </div>
             </div>
@@ -717,7 +706,7 @@ const MagicBento: React.FC<BentoProps> = ({
       ),
     },
     {
-      color: BENTO_ACCENTS.gold,
+      color: BENTO_ACCENTS.lavender,
       title: "📩 Let's Work Together",
       description: "Ready for your next project collaboration",
       label: "Contact",
@@ -738,16 +727,16 @@ const MagicBento: React.FC<BentoProps> = ({
           <div className="contact-card-orbit contact-card-orbit-b" />
           <div className="contact-card-frost absolute inset-0" />
 
-          <div className="contact-card-content bento-mobile-readable relative z-10 text-center">
+          <div className="contact-card-content bento-mobile-readable relative z-10 rounded-2xl bg-black/16 px-5 py-6 text-center backdrop-blur-md">
             <div className="contact-card-icon-wrap mb-8 flex justify-center">
-              <div className="contact-card-icon flex h-16 w-16 items-center justify-center rounded-full" style={{ background: BENTO_ACCENTS.champagne }}>
+              <div className="contact-card-icon flex h-16 w-16 items-center justify-center rounded-full" style={{ background: BENTO_ACCENTS.lavender }}>
                 <User className="w-8 h-8 text-white" />
               </div>
             </div>
             
             <div className="contact-card-title-wrap mb-8">
               <h2 className="contact-card-title mx-auto max-w-[15rem] text-2xl font-bold leading-tight text-[#f5efe4]">
-                Let&apos;s work together on your next <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.champagne }}>project</span>
+                Let&apos;s work together on your next <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.lavender }}>project</span>
               </h2>
             </div>
             
@@ -818,7 +807,7 @@ const MagicBento: React.FC<BentoProps> = ({
     },
     getRemoteWorkCard(),
     {
-      color: BENTO_ACCENTS.bronze,
+      color: BENTO_ACCENTS.champagne,
       title: "✨ Websites That Make a Difference",
       description: "Websites that stand out and turn attention into results",
       label: "Services",
@@ -1159,15 +1148,15 @@ const MagicBento: React.FC<BentoProps> = ({
 
           .contact-card-bg {
             background:
-              radial-gradient(circle at 24% 20%, rgba(245, 239, 228, 0.14), transparent 42%),
-              radial-gradient(circle at 78% 72%, rgba(127, 167, 200, 0.18), transparent 46%),
+              radial-gradient(circle at 24% 20%, rgba(245, 239, 228, 0.07), transparent 42%),
+              radial-gradient(circle at 78% 72%, rgba(127, 167, 200, 0.07), transparent 46%),
               linear-gradient(145deg, rgba(12, 12, 11, 0.6), rgba(6, 6, 6, 0.82));
             filter: saturate(1.08);
             animation: contact-mesh-drift 11s ease-in-out infinite;
           }
 
           .contact-card-frost {
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.012));
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.016), rgba(255, 255, 255, 0.006));
             backdrop-filter: blur(6px);
             -webkit-backdrop-filter: blur(6px);
             z-index: 1;
@@ -1176,8 +1165,8 @@ const MagicBento: React.FC<BentoProps> = ({
 
           .contact-card-grid {
             background-image:
-              linear-gradient(rgba(245, 239, 228, 0.045) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(245, 239, 228, 0.045) 1px, transparent 1px);
+              linear-gradient(rgba(245, 239, 228, 0.022) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(245, 239, 228, 0.022) 1px, transparent 1px);
             background-size: 34px 34px;
             -webkit-mask-image: radial-gradient(circle at 50% 50%, black, transparent 75%);
             mask-image: radial-gradient(circle at 50% 50%, black, transparent 75%);
@@ -1188,7 +1177,7 @@ const MagicBento: React.FC<BentoProps> = ({
             left: 50%;
             top: 50%;
             border-radius: 9999px;
-            border: 1px solid rgba(245, 239, 228, 0.15);
+            border: 1px solid rgba(245, 239, 228, 0.07);
             pointer-events: none;
             animation: contact-orbit-spin linear infinite;
             z-index: 0;
@@ -1202,8 +1191,8 @@ const MagicBento: React.FC<BentoProps> = ({
             width: 8px;
             height: 8px;
             border-radius: 9999px;
-            background: rgba(194, 167, 123, 0.9);
-            box-shadow: 0 0 0 6px rgba(194, 167, 123, 0.12);
+            background: rgba(194, 167, 123, 0.46);
+            box-shadow: 0 0 0 6px rgba(194, 167, 123, 0.045);
             transform: translateX(-50%);
           }
 
@@ -1216,14 +1205,14 @@ const MagicBento: React.FC<BentoProps> = ({
           .contact-card-orbit-b {
             width: 300px;
             height: 300px;
-            border-color: rgba(127, 167, 200, 0.24);
+            border-color: rgba(127, 167, 200, 0.09);
             animation-duration: 26s;
             animation-direction: reverse;
           }
 
           .contact-card-orbit-b::after {
-            background: rgba(127, 167, 200, 0.92);
-            box-shadow: 0 0 0 7px rgba(127, 167, 200, 0.14);
+            background: rgba(127, 167, 200, 0.36);
+            box-shadow: 0 0 0 7px rgba(127, 167, 200, 0.045);
           }
 
           .collab-avatar-mobile {
@@ -1260,6 +1249,25 @@ const MagicBento: React.FC<BentoProps> = ({
             box-shadow: none !important;
             backdrop-filter: blur(16px) saturate(115%);
             -webkit-backdrop-filter: blur(16px) saturate(115%);
+          }
+
+          .bento-card-surface::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0;
+            background: radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--bento-accent, #dac5a7) 18%, transparent), transparent 54%);
+            transition: opacity 300ms ease;
+          }
+
+          .card:hover .bento-card-surface::after {
+            opacity: 1;
+          }
+
+          .card-responsive .card:nth-child(1):hover .bento-card-surface::after {
+            opacity: 0.45;
           }
 
           .bento-card-surface .contact-card-bg,

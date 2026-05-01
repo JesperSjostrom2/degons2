@@ -104,7 +104,7 @@ export default function Navbar() {
     <>
       <div className="hidden lg:block fixed top-6 left-6 z-50">
         <ProfileCard
-          imageSrc="https://ik.imagekit.io/kqmrslzuq/21st.dev%20Components/ProfileCard/logo.png"
+          imageSrc="/assets/testlogo.png"
           name="Jesper Sjöström"
           role="Front End Developer"
           socials={{
@@ -170,7 +170,7 @@ export default function Navbar() {
             transition={{ delay: 0.2 }}
           >
             <ProfileCard
-              imageSrc="https://ik.imagekit.io/kqmrslzuq/21st.dev%20Components/ProfileCard/logo.png"
+              imageSrc="/assets/testlogo.png"
               name="Jesper Sjöström"
               role="Front End Developer"
               expandedWidth={190}

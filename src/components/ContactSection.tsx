@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState, type CSSProperties, type FormEvent } from 'react'
-import { ArrowRight, ChevronDown, Github, Linkedin, Loader2, Mail, type LucideIcon } from 'lucide-react'
+import { ChevronDown, Github, Linkedin, Loader2, Mail, type LucideIcon } from 'lucide-react'
 import { SendIcon } from '@/components/ui/animated-state-icons'
 
 import BorderGlow from '@/components/BorderGlow'
@@ -356,7 +356,6 @@ export default function ContactSection() {
                       ) : (
                         <>
                           Send inquiry
-                          <ArrowRight className="h-4 w-4" />
                         </>
                       )}
                     </button>

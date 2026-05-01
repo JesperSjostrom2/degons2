@@ -1,9 +1,9 @@
 "use client"
 
-import { useRef, useState, type CSSProperties } from 'react'
+import { useRef } from 'react'
 import Image from 'next/image'
-import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion'
-import { ArrowRight, CheckCircle2, ChevronDown, Sparkles } from 'lucide-react'
+import { motion, useScroll, useTransform } from 'framer-motion'
+import { ArrowLeft, ArrowRight, CalendarDays, CheckCircle2, ExternalLink, Layers3, Sparkles, UserRound } from 'lucide-react'
 
 import BorderGlow from '@/components/BorderGlow'
 import GlareHover from '@/components/GlareHover'
@@ -100,56 +100,14 @@ const projectsData: Project[] = [
   },
 ]
 
-const ProjectDetails = ({ project }: { project: Project }) => {
-  const accentLabelStyle = { '--project-accent': project.accentColor } as CSSProperties
-
-  return (
-    <>
-      <div className="mb-7 flex items-start justify-between gap-4">
-        <div>
-          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--site-text)] dark:text-[color:var(--project-accent)]" style={accentLabelStyle}>Overview</p>
-          <p className="text-sm leading-7 text-[color:var(--site-text)] dark:text-white/70">{project.description}</p>
-        </div>
-        <span className="shrink-0 rounded-full border border-[color:var(--site-border)] bg-[color:var(--site-hover)] px-3 py-1 text-xs font-semibold text-[color:var(--site-muted)] dark:border-white/15 dark:bg-white/[0.04] dark:text-white/72">
-          {project.year}
-        </span>
-      </div>
-
-      <div className="border-t border-[color:var(--site-border)] py-7 dark:border-white/10">
-        <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-[color:var(--site-text)] dark:text-[color:var(--project-accent)]" style={accentLabelStyle}>Key Features</p>
-        <ul className="space-y-3">
-          {project.bulletPoints.map((point) => (
-            <li key={point} className="flex gap-3 text-sm leading-6 text-[color:var(--site-text)] dark:text-white/78">
-              <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[color:var(--site-text)] dark:text-[color:var(--project-accent)]" style={accentLabelStyle} />
-              <span>{point}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div className="border-t border-[color:var(--site-border)] pt-7 dark:border-white/10">
-        <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-accent">Technologies</p>
-        <div className="flex flex-wrap gap-2">
-          {project.skills.map((skill) => (
-            <span key={skill} className="rounded-full border border-[color:var(--site-border)] bg-[color:var(--site-hover)] px-3 py-1.5 text-xs text-[color:var(--site-text)] dark:border-white/10 dark:bg-white/[0.06] dark:text-white/72">
-              {skill}
-            </span>
-          ))}
-        </div>
-      </div>
-    </>
-  )
-}
-
-const ProjectCard = ({ project, index }: { project: Project; index: number }) => {
+const ProjectCard = ({ project, index, total }: { project: Project; index: number; total: number }) => {
   const imageRef = useRef<HTMLDivElement>(null)
-  const [detailsOpen, setDetailsOpen] = useState(false)
   const { scrollYProgress } = useScroll({
     target: imageRef,
     offset: ['start end', 'end start'],
   })
   const imageY = useTransform(scrollYProgress, [0, 1], ['-8%', '8%'])
-  const detailsId = `project-details-${project.id}`
+  const accentLabelStyle = { '--project-accent': project.accentColor } as CSSProperties
 
   return (
     <BorderGlow
@@ -164,81 +122,90 @@ const ProjectCard = ({ project, index }: { project: Project; index: number }) =>
       colors={project.glowColors}
       fillOpacity={0.4}
     >
-    <article className="warm-card-surface group overflow-hidden rounded-[28px] lg:grid lg:grid-cols-[1.45fr_1fr]">
-      <div ref={imageRef} className="relative min-h-[380px] overflow-hidden border-b border-[color:var(--site-border)] sm:min-h-[410px] lg:min-h-[520px] lg:border-b-0 lg:border-r dark:border-white/10">
-        <motion.div style={{ y: imageY }} className="absolute inset-x-0 -inset-y-[12%]">
-          <Image
-            src={project.image}
-            alt={project.title}
-            fill
-            sizes="(max-width: 1024px) 100vw, 58vw"
-            className="object-cover object-center opacity-70 transition-all duration-700 group-hover:scale-[1.035] group-hover:opacity-82"
-          />
-        </motion.div>
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.86),rgba(0,0,0,0.42)_48%,rgba(0,0,0,0.1)),linear-gradient(180deg,rgba(0,0,0,0.08),rgba(0,0,0,0.88))]" />
-
-        <div className="absolute left-6 top-6 flex h-12 w-12 items-center justify-center rounded-xl border border-white/20 bg-black/45 text-lg font-semibold text-white backdrop-blur-md">
-          {String(index + 1).padStart(2, '0')}
-        </div>
-
-        <div className="absolute bottom-8 left-6 right-6 md:bottom-10 md:left-10 md:right-10">
-          <div className="mb-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em]" style={{ color: project.accentColor }}>
-            <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: project.accentColor }} />
-            {project.category}
+    <article className="warm-card-surface group overflow-hidden rounded-[28px]">
+      <div className="grid border-b border-[color:var(--site-border)] lg:grid-cols-[1.2fr_1fr] dark:border-white/10">
+        <div ref={imageRef} className="relative min-h-[360px] overflow-hidden p-6 sm:p-8 lg:min-h-[520px]">
+          <div className="absolute left-6 top-6 z-20 rounded-full border border-white/15 bg-black/45 px-3 py-1 text-xs font-semibold tracking-[0.12em] text-white/85">
+            {String(index + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}
           </div>
-          <h3 className="max-w-xl text-3xl font-bold uppercase leading-tight tracking-tight text-white md:text-4xl">
-            {project.displayTitle}
-          </h3>
-          <p className="mt-4 max-w-md text-sm leading-6 text-white/78 md:text-base">
-            {project.summary}
-          </p>
+          <button className="absolute left-6 top-1/2 z-20 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white/85 backdrop-blur-sm lg:inline-flex" aria-label="Previous project image">
+            <ArrowLeft className="h-4 w-4" />
+          </button>
+          <button className="absolute right-6 top-1/2 z-20 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white/85 backdrop-blur-sm lg:inline-flex" aria-label="Next project image">
+            <ArrowRight className="h-4 w-4" />
+          </button>
 
-          <div className="mt-8 flex flex-wrap items-center gap-3 sm:gap-4">
-            <a
-              href="#contact"
-              className="btn-neutral-dark group/view inline-flex items-center gap-5 rounded-full px-6 py-3 text-sm font-semibold backdrop-blur-sm"
-            >
-              View Project
-              <span className="relative h-4 w-4 overflow-hidden">
-                <ArrowRight className="project-arrow-out absolute inset-0 h-4 w-4" />
-                <ArrowRight className="project-arrow-in absolute inset-0 h-4 w-4" />
-              </span>
-            </a>
-
-            <button
-              type="button"
-              className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/30 px-5 py-3 text-sm font-semibold text-white/82 backdrop-blur-sm transition-all duration-300 hover:border-accent/45 hover:text-accent lg:hidden"
-              aria-expanded={detailsOpen}
-              aria-controls={detailsId}
-              onClick={() => setDetailsOpen((open) => !open)}
-            >
-              {detailsOpen ? 'Hide details' : 'Show details'}
-              <ChevronDown className={`h-4 w-4 transition-transform duration-300 ${detailsOpen ? 'rotate-180' : ''}`} />
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div className="hidden flex-col justify-center p-10 lg:flex">
-        <ProjectDetails project={project} />
-      </div>
-
-      <AnimatePresence initial={false}>
-        {detailsOpen && (
-          <motion.div
-            id={detailsId}
-            className="overflow-hidden lg:hidden"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.52, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <div className="flex flex-col justify-center p-6 md:p-8">
-              <ProjectDetails project={project} />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(127,167,200,0.22),transparent_48%)]" />
+          <motion.div style={{ y: imageY }} className="relative z-10 mx-auto mt-10 max-w-[640px] overflow-hidden rounded-2xl border border-white/10 bg-black/30 shadow-[0_24px_60px_rgba(0,0,0,0.45)]">
+            <div className="relative aspect-[16/10]">
+              <Image
+                src={project.image}
+                alt={project.title}
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover object-top"
+              />
             </div>
           </motion.div>
-        )}
-      </AnimatePresence>
+
+          <div className="relative z-20 mt-5 flex gap-3 overflow-x-auto pb-1">
+            {[0, 1, 2, 3].map((thumb) => (
+              <div key={`${project.id}-${thumb}`} className={`relative h-16 w-28 shrink-0 overflow-hidden rounded-lg border ${thumb === 0 ? 'border-[color:var(--project-accent)]' : 'border-white/10'} bg-black/25`} style={accentLabelStyle}>
+                <Image src={project.image} alt={`${project.title} preview ${thumb + 1}`} fill sizes="112px" className="object-cover object-center opacity-75" />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="p-6 sm:p-8 lg:p-10">
+          <div className="mb-6 flex items-center justify-between gap-3">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--project-accent)]" style={accentLabelStyle}>{project.category}</p>
+            <span className="rounded-full border border-[color:var(--site-border)] bg-[color:var(--site-hover)] px-3 py-1 text-xs font-semibold text-[color:var(--site-muted)] dark:border-white/15 dark:bg-white/[0.04] dark:text-white/72">{project.year}</span>
+          </div>
+          <h3 className="text-4xl font-bold uppercase leading-tight tracking-tight text-[color:var(--site-text)] dark:text-white">{project.displayTitle}</h3>
+          <p className="mt-5 border-b border-[color:var(--site-border)] pb-6 text-sm leading-7 text-[color:var(--site-muted)] dark:border-white/10 dark:text-white/72">{project.description}</p>
+
+          <div className="border-b border-[color:var(--site-border)] py-6 dark:border-white/10">
+            <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--project-accent)]" style={accentLabelStyle}>Key Features</p>
+            <ul className="space-y-2.5">
+              {project.bulletPoints.map((point) => (
+                <li key={point} className="flex items-start gap-3 rounded-full border border-[color:var(--site-border)] bg-[color:var(--site-hover)] px-3 py-2 text-sm text-[color:var(--site-text)] dark:border-white/10 dark:bg-white/[0.03] dark:text-white/80">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[color:var(--project-accent)]" style={accentLabelStyle} />
+                  <span>{point}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="pt-6">
+            <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--project-accent)]" style={accentLabelStyle}>Technologies</p>
+            <div className="flex flex-wrap gap-2">
+              {project.skills.map((skill) => (
+                <span key={skill} className="rounded-full border border-[color:var(--site-border)] bg-[color:var(--site-hover)] px-3 py-1.5 text-xs text-[color:var(--site-text)] dark:border-white/10 dark:bg-white/[0.06] dark:text-white/72">{skill}</span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid gap-5 px-6 py-6 sm:grid-cols-2 sm:px-8 lg:grid-cols-4 lg:px-10">
+        <div className="flex items-center gap-3 border-b border-[color:var(--site-border)] pb-3 sm:border-b-0 sm:pb-0 sm:border-r dark:border-white/10">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[color:var(--site-border)] bg-[color:var(--site-hover)] dark:border-white/15 dark:bg-white/[0.04]"><UserRound className="h-4 w-4" /></div>
+          <div><p className="text-[0.65rem] uppercase tracking-[0.18em] text-[color:var(--site-muted)]">Role</p><p className="text-sm text-[color:var(--site-text)] dark:text-white/80">Designer & Developer</p></div>
+        </div>
+        <div className="flex items-center gap-3 border-b border-[color:var(--site-border)] pb-3 sm:border-b-0 sm:pb-0 sm:border-r dark:border-white/10">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[color:var(--site-border)] bg-[color:var(--site-hover)] dark:border-white/15 dark:bg-white/[0.04]"><CalendarDays className="h-4 w-4" /></div>
+          <div><p className="text-[0.65rem] uppercase tracking-[0.18em] text-[color:var(--site-muted)]">Duration</p><p className="text-sm text-[color:var(--site-text)] dark:text-white/80">3 Weeks</p></div>
+        </div>
+        <div className="flex items-center gap-3 border-b border-[color:var(--site-border)] pb-3 sm:border-b-0 sm:pb-0 sm:border-r dark:border-white/10">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[color:var(--site-border)] bg-[color:var(--site-hover)] dark:border-white/15 dark:bg-white/[0.04]"><Layers3 className="h-4 w-4" /></div>
+          <div><p className="text-[0.65rem] uppercase tracking-[0.18em] text-[color:var(--site-muted)]">Type</p><p className="text-sm text-[color:var(--site-text)] dark:text-white/80">Web Application</p></div>
+        </div>
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[color:var(--site-border)] bg-[color:var(--site-hover)] dark:border-white/15 dark:bg-white/[0.04]"><ExternalLink className="h-4 w-4" /></div>
+          <div><p className="text-[0.65rem] uppercase tracking-[0.18em] text-[color:var(--site-muted)]">Live Site</p><p className="text-sm text-[color:var(--site-text)] dark:text-white/80">{project.title.toLowerCase().replace(/\s+/g, '')}.se</p></div>
+        </div>
+      </div>
     </article>
     </BorderGlow>
   )
@@ -263,7 +230,7 @@ const ExperienceSection: React.FC = () => {
 
         <div className="mx-auto flex max-w-7xl flex-col gap-7">
           {projectsData.map((project, index) => (
-            <ProjectCard key={project.id} project={project} index={index} />
+            <ProjectCard key={project.id} project={project} index={index} total={projectsData.length} />
           ))}
         </div>
 
