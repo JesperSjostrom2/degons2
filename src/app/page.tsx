@@ -5,7 +5,6 @@ import SocialLinks from '@/components/social-links'
 import GradientText from '@/components/GradientText'
 import CustomCursor from '@/components/custom-cursor'
 import FloatingStars from '@/components/floating-stars'
-import SmoothScroll from '@/components/smooth-scroll'
 import MagicBento from '@/components/MagicBento'
 import ExperienceSection from '@/components/ExperienceSection'
 import TechStackSection from '@/components/TechStackSection'
@@ -20,18 +19,32 @@ const aboutInfoCardStyle = { boxShadow: '0 1px 0 0 rgba(255, 255, 255, 0.1)' }
 export default function Home() {
   return (
     <main className="isolate relative min-h-screen bg-[color:var(--site-bg)] transition-colors duration-300">
-      <SmoothScroll />
       <CustomCursor />
       <ProgressScrollbar />
-      <div className="fixed inset-0 z-0 bg-[radial-gradient(circle_at_14%_12%,rgba(168,140,98,0.10),transparent_26%),radial-gradient(circle_at_88%_34%,rgba(143,165,138,0.07),transparent_28%),linear-gradient(180deg,var(--site-bg-deep)_0%,var(--site-bg)_48%,var(--site-bg)_100%)]" />
+      <div className="fixed inset-0 z-0 bg-[linear-gradient(180deg,var(--site-bg-deep)_0%,var(--site-bg)_48%,var(--site-bg)_100%)]" />
       <FloatingStars className="pointer-events-none fixed inset-0 z-0 overflow-hidden opacity-70 invert dark:opacity-80 dark:invert-0" count={44} mobileCount={18} />
       <div className="relative z-10">
         <Navbar />
         <CVButton />
         <Hero />
-      
+
+      {/* Magic Bento Grid Section */}
+      <section className="warm-section-overlay relative -mt-8 pb-24 pt-12 md:-mt-8 md:pb-28 md:pt-16">
+        <div className="container relative z-10 mx-auto flex flex-col items-center px-6">
+          <div className="section-header mb-10">
+            <p className="section-label">
+              Why choose me
+            </p>
+            <h2 className="section-title">
+              A smoother way to bring your website to life
+            </h2>
+          </div>
+          <MagicBento />
+        </div>
+      </section>
+       
       {/* About Section */}
-      <section id="about" className="warm-section-bg relative flex min-h-screen items-center overflow-hidden py-20 md:py-24">
+      <section id="about" className="relative flex min-h-screen items-center overflow-hidden py-20 md:py-24">
         <div className="container relative z-10 mx-auto px-6">
           <div className="flex justify-center items-center">
             <div className="grid lg:grid-cols-5 gap-12 lg:gap-20 items-center max-w-6xl w-full">
@@ -42,29 +55,27 @@ export default function Home() {
                     MORE ABOUT ME
                   </p>
                   <div className="mb-8">
-                    <h2 className="group cursor-default text-3xl font-bold leading-tight tracking-[-0.035em] text-[color:var(--site-text)] md:text-4xl lg:text-5xl" style={{textShadow: '0 0 10px rgba(245, 239, 228, 0.12), 0 0 20px rgba(218, 197, 167, 0.05)'}}>
-                      I&apos;m Jesper, a<br />
-                      creative <span className="relative inline-block">
-                        <GradientText className="font-accent" colors={["#8b7355", "#dac5a7", "#8b7355"]}>developer</GradientText>
+                    <h2 className="section-title group cursor-default leading-tight" style={{textShadow: '0 0 10px rgba(245, 239, 228, 0.12), 0 0 20px rgba(218, 197, 167, 0.05)'}}>
+                      Always learning,<br />
+                      always <span className="relative inline-block">
+                        <GradientText className="font-accent" colors={["#8b7355", "#dac5a7", "#8b7355"]}>moving</GradientText>
                         <span className="absolute -right-16 top-1/2 hidden -translate-y-1/2 text-2xl opacity-0 transition-all duration-300 group-hover:opacity-100 md:block md:text-3xl lg:text-4xl animate-waving">👋</span>
                       </span>
                     </h2>
                   </div>
                   <div className="max-w-xl space-y-6 text-lg leading-[1.65] text-muted-foreground">
                     <p>
-                      I&apos;m Jesper Sjöström, a proactive full-stack developer passionate 
-                      about creating dynamic web experiences. From frontend to 
-                      backend, I thrive on solving complex problems with clean, 
-                      efficient code. My expertise spans React, Next.js, and Node.js, 
-                      and I&apos;m always eager to learn more.
+                      I&apos;ve always been drawn to situations that push me out of autopilot. Moving countries,
+                      learning new things, and building a life in a new environment have shaped me into someone
+                      who values independence, adaptability, and steady progress.
                     </p>
                     <p>
-                      When I&apos;m not immersed in work, I&apos;m exploring new ideas and 
-                      staying curious. Life&apos;s about balance, and I love embracing 
-                      every part of it.
+                      Outside work I like keeping life active and social, whether that means training, gaming,
+                      spending time with friends, or thinking through ideas with people close to me. I enjoy
+                      anything that mixes focus, momentum, and a bit of friendly pressure.
                     </p>
                     <p className="font-medium text-[color:var(--site-text)]">
-                      I believe in waking up each day eager to make a difference!
+                      I&apos;m at my best when I&apos;m improving, solving problems, and not standing still for too long.
                     </p>
                   </div>
                   
@@ -120,25 +131,6 @@ export default function Home() {
               </div>
             </div>
           </div>
-        </div>
-      </section>
-      
-      {/* Magic Bento Grid Section */}
-      <section className="relative -mt-8 overflow-hidden pb-24 pt-16 md:pb-28">
-        <div className="site-divider-center absolute left-1/2 top-8 h-px w-full max-w-5xl -translate-x-1/2" />
-        <div className="pointer-events-none absolute left-1/2 top-8 z-0 h-24 w-full max-w-4xl -translate-x-1/2 translate-y-px overflow-hidden">
-          <div className="absolute inset-x-0 top-0 h-20 bg-[radial-gradient(ellipse_at_top,rgba(139,115,85,0.22),transparent_68%)] blur-xl dark:bg-[radial-gradient(ellipse_at_top,rgba(218,197,167,0.22),transparent_68%)]" />
-        </div>
-        <div className="relative z-10 mx-auto flex max-w-7xl flex-col items-center px-6">
-          <div className="section-header mb-10">
-            <p className="section-label">
-              Why choose me
-            </p>
-            <h2 className="section-title">
-              A smoother way to bring your website to life
-            </h2>
-          </div>
-          <MagicBento />
         </div>
       </section>
       

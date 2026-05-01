@@ -4,7 +4,6 @@ import React, { useRef, useEffect, useState, useCallback } from "react";
 import { gsap } from "gsap";
 import { User, Copy, Check } from "lucide-react";
 import Magnet from "@/blocks/Animations/Magnet/Magnet";
-import BorderGlow from "@/components/BorderGlow";
 import { Globe } from "@/components/ui/cobe-globe";
 
 export interface BentoCardProps {
@@ -36,9 +35,6 @@ const DEFAULT_PARTICLE_COUNT = 12;
 const DEFAULT_SPOTLIGHT_RADIUS = 300;
 const DEFAULT_GLOW_COLOR = "218, 197, 167";
 const MOBILE_BREAKPOINT = 768;
-const BORDER_GLOW_COLORS = ["#8b7355", "#dac5a7", "#f5efe4"];
-const BORDER_GLOW_HSL = "38 37 76";
-const BORDER_GLOW_BACKGROUND = "var(--site-card-glow-bg)";
 const BENTO_ACCENTS = {
   brass: "#a88c62",
   champagne: "#c2a77b",
@@ -521,7 +517,7 @@ const BentoCardGrid: React.FC<{
   gridRef?: React.RefObject<HTMLDivElement | null>;
 }> = ({ children, gridRef }) => (
   <div
-    className="bento-section grid gap-4 p-6 w-full max-w-7xl mx-auto select-none relative"
+    className="bento-section grid gap-4 w-full max-w-7xl mx-auto select-none relative"
     style={{ fontSize: "clamp(1rem, 0.9rem + 0.5vw, 1.5rem)" }}
     ref={gridRef}
   >
@@ -637,7 +633,7 @@ const MagicBento: React.FC<BentoProps> = ({
           <div className={`absolute inset-0 z-[25] bg-white/40 dark:bg-black/5 backdrop-blur-md dark:backdrop-blur-sm transition-opacity duration-700 ${isMobile ? 'opacity-100' : 'opacity-0 group-hover/collab:opacity-100'}`} />
           <div className="bento-mobile-frost absolute inset-0 z-[25]" />
 
-          <div className="relative z-30 max-w-[15rem]">
+          <div className="bento-mobile-readable relative z-30 max-w-[15rem]">
             <h2 className="mb-3 text-2xl font-bold leading-tight text-white">
               Easy feedback,<br />
               <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.champagne }}>better results.</span>
@@ -669,12 +665,10 @@ const MagicBento: React.FC<BentoProps> = ({
       label: "First Impression",
       customContent: (
         <div className="group/attention relative -m-8 h-[calc(100%+4rem)] overflow-hidden bg-transparent p-8">
-          <div className="attention-card-bg absolute inset-0" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(218,197,167,0.16),transparent_32%),radial-gradient(circle_at_86%_70%,rgba(127,167,200,0.1),transparent_36%)]" />
-
+          <div className="attention-mobile-frost absolute inset-0" />
           <div className="relative z-20 h-full">
             <div className="flex h-full flex-col justify-between">
-              <div className="max-w-[17rem]">
+              <div className="bento-mobile-readable max-w-[17rem]">
                 <p className="mb-3 text-xs uppercase tracking-[0.24em] text-[color:var(--site-muted)] dark:text-white/50">First Impression</p>
                 <h2 className="text-2xl font-bold leading-tight text-[color:var(--site-text)] dark:text-white">
                   Attention<br />
@@ -685,8 +679,7 @@ const MagicBento: React.FC<BentoProps> = ({
                 </p>
               </div>
 
-              <div className="relative h-[48%] min-h-40 overflow-hidden rounded-3xl border border-[color:var(--site-border)] bg-white/16 p-4 shadow-[inset_0_1px_0_rgba(245,239,228,0.22)] backdrop-blur-sm dark:border-white/10 dark:bg-black/20 dark:shadow-[inset_0_1px_0_rgba(245,239,228,0.12)]">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_35%,rgba(218,197,167,0.16),transparent_24%),radial-gradient(circle_at_68%_48%,rgba(127,167,200,0.1),transparent_25%),linear-gradient(135deg,rgba(139,115,85,0.07),transparent_52%)] dark:bg-[radial-gradient(circle_at_25%_35%,rgba(218,197,167,0.14),transparent_24%),radial-gradient(circle_at_68%_48%,rgba(127,167,200,0.12),transparent_25%),linear-gradient(135deg,rgba(245,239,228,0.06),transparent_52%)]" />
+              <div className="relative h-[48%] min-h-40 overflow-hidden rounded-3xl border border-[color:var(--site-border)] bg-transparent p-4 shadow-[inset_0_1px_0_rgba(245,239,228,0.18)] dark:border-white/10 dark:shadow-[inset_0_1px_0_rgba(245,239,228,0.1)]">
                 <div className="attention-browser absolute left-5 top-5 h-[calc(100%-2.5rem)] w-[58%] rounded-2xl border border-[color:var(--site-border)] bg-[color:var(--site-surface)]/80 shadow-[0_18px_60px_rgba(20,20,19,0.14)] dark:border-white/10 dark:bg-white/8">
                   <div className="flex h-8 items-center gap-1.5 border-b border-[color:var(--site-border)] px-3 dark:border-white/10">
                     <span className="h-2 w-2 rounded-full bg-[#dac5a7]/70" />
@@ -745,7 +738,7 @@ const MagicBento: React.FC<BentoProps> = ({
           <div className="contact-card-orbit contact-card-orbit-b" />
           <div className="contact-card-frost absolute inset-0" />
 
-          <div className="contact-card-content relative z-10 text-center">
+          <div className="contact-card-content bento-mobile-readable relative z-10 text-center">
             <div className="contact-card-icon-wrap mb-8 flex justify-center">
               <div className="contact-card-icon flex h-16 w-16 items-center justify-center rounded-full" style={{ background: BENTO_ACCENTS.champagne }}>
                 <User className="w-8 h-8 text-white" />
@@ -836,7 +829,7 @@ const MagicBento: React.FC<BentoProps> = ({
           <div className="selling-radial absolute bottom-[-16%] right-[-10%] z-0 h-[86%] w-[78%]" />
           <div className="selling-mobile-frost absolute inset-0" />
 
-          <div className="relative z-20 max-w-[18rem]">
+          <div className="bento-mobile-readable relative z-20 max-w-[18rem]">
             <h2 className="mb-3 text-2xl font-bold leading-tight text-white">
               Websites that<br />
               <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.champagne }}>stand out</span> and<br />
@@ -990,13 +983,21 @@ const MagicBento: React.FC<BentoProps> = ({
             pointer-events: none;
           }
 
+          .attention-mobile-frost {
+            display: none;
+            z-index: 10;
+            pointer-events: none;
+          }
+
           @media (max-width: 750px) {
             .selling-mobile-frost,
-            .bento-mobile-frost {
+            .bento-mobile-frost,
+            .attention-mobile-frost {
               display: block;
-              background: rgba(8, 8, 8, 0.12);
-              backdrop-filter: blur(3.5px);
-              -webkit-backdrop-filter: blur(3.5px);
+              opacity: 1 !important;
+              background: rgba(8, 8, 8, 0.1);
+              backdrop-filter: blur(2px);
+              -webkit-backdrop-filter: blur(2px);
             }
           }
 
@@ -1238,7 +1239,6 @@ const MagicBento: React.FC<BentoProps> = ({
             margin: 0 auto;
             padding: 0.5rem;
             position: relative;
-            isolation: isolate;
           }
 
           .card-responsive .card {
@@ -1246,26 +1246,38 @@ const MagicBento: React.FC<BentoProps> = ({
           }
 
           .bento-card-surface {
-            background:
-              linear-gradient(180deg, rgba(20, 20, 19, 0.66), rgba(8, 8, 8, 0.82)),
-              radial-gradient(circle at 20% 16%, color-mix(in srgb, var(--bento-accent, #dac5a7) 24%, transparent), transparent 42%),
-              radial-gradient(circle at 82% 88%, rgba(245, 239, 228, 0.08), transparent 46%),
-              linear-gradient(145deg, color-mix(in srgb, var(--bento-accent, #dac5a7) 10%, transparent), transparent 42%, rgba(255, 255, 255, 0.04)),
-              linear-gradient(135deg, #080808 0%, #141413 25%, #20201d 50%, #141413 75%, #080808 100%),
-              radial-gradient(circle at 20% 30%, rgba(40, 40, 40, 0.3) 0%, transparent 50%),
-              radial-gradient(circle at 80% 70%, rgba(60, 60, 60, 0.2) 0%, transparent 50%),
-              linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.02) 50%, transparent 70%) !important;
-            background-attachment: scroll, scroll, scroll, scroll, fixed, fixed, fixed, fixed !important;
-            background-blend-mode: normal, screen, soft-light, soft-light, multiply, overlay, normal, overlay !important;
+            background: rgba(5, 5, 5, 0.045) !important;
+            border: 1px solid rgba(245, 239, 228, 0.12);
+            box-shadow: none;
+            backdrop-filter: blur(4px) saturate(130%);
+            -webkit-backdrop-filter: blur(4px) saturate(130%);
           }
 
           :root:not(.dark) .bento-card-surface {
-            background:
-              linear-gradient(180deg, #efe9de, #e8e0d2) !important;
-            background-attachment: scroll !important;
-            background-blend-mode: normal !important;
+            background: rgba(250, 249, 245, 0.22) !important;
+            border: 1px solid rgba(36, 31, 24, 0.12);
             color: var(--site-text) !important;
-            box-shadow: 0 1px 3px rgba(20, 20, 19, 0.08) !important;
+            box-shadow: none !important;
+            backdrop-filter: blur(16px) saturate(115%);
+            -webkit-backdrop-filter: blur(16px) saturate(115%);
+          }
+
+          .bento-card-surface .contact-card-bg,
+          .bento-card-surface .collab-card-bg,
+          .bento-card-surface .selling-site-bg,
+          .bento-card-surface .attention-card-bg {
+            opacity: 0 !important;
+          }
+
+          .bento-card-surface .contact-card-grid,
+          .bento-card-surface .collab-card-ambient,
+          .bento-card-surface .selling-site-ambient {
+            opacity: 0.12 !important;
+          }
+
+          .bento-card-surface [class*="bg-[radial-gradient"],
+          .bento-card-surface [class*="bg-[linear-gradient"] {
+            opacity: 0.16 !important;
           }
 
           :root:not(.dark) .bento-card-surface > [style] {
@@ -1304,9 +1316,8 @@ const MagicBento: React.FC<BentoProps> = ({
           :root:not(.dark) .bento-card-surface .selling-site-bg,
           :root:not(.dark) .bento-card-surface .contact-card-grid,
           :root:not(.dark) .bento-card-surface .collab-card-ambient,
-          :root:not(.dark) .bento-card-surface .bento-mobile-frost,
           :root:not(.dark) .bento-card-surface .selling-site-ambient,
-          :root:not(.dark) .bento-card-surface .selling-mobile-frost {
+          :root:not(.dark) .bento-card-surface .attention-mobile-frost {
             opacity: 0 !important;
           }
 
@@ -1379,7 +1390,7 @@ const MagicBento: React.FC<BentoProps> = ({
               grid-row: 1 / 2;
             }
             
-            /* Card 2: Tech Stack - tall right column extending to top */
+            /* Card 2: Attention - tall right column extending to top */
             .card-responsive .card:nth-child(2) {
               grid-column: 6 / 9;
               grid-row: 1 / 3;
@@ -1397,10 +1408,31 @@ const MagicBento: React.FC<BentoProps> = ({
               grid-row: 2 / 3;
             }
             
-            /* Card 5: Currently Building - bottom right under Tech Stack */
+            /* Card 5: Services - bottom right under Attention */
             .card-responsive .card:nth-child(5) {
               grid-column: 4 / 9;
               grid-row: 3 / 4;
+            }
+          }
+
+          @media (max-width: 767px) {
+            .bento-card-surface .bento-mobile-frost,
+            .bento-card-surface .selling-mobile-frost,
+            .bento-card-surface .attention-mobile-frost,
+            .bento-card-surface .contact-card-frost {
+              display: block;
+              opacity: 1 !important;
+              background: rgba(8, 8, 8, 0.1);
+              backdrop-filter: blur(2px);
+              -webkit-backdrop-filter: blur(2px);
+            }
+
+            :root:not(.dark) .bento-card-surface .bento-mobile-frost,
+            :root:not(.dark) .bento-card-surface .selling-mobile-frost,
+            :root:not(.dark) .bento-card-surface .attention-mobile-frost,
+            :root:not(.dark) .bento-card-surface .contact-card-frost {
+              opacity: 1 !important;
+              background: rgba(250, 249, 245, 0.18);
             }
           }
           
@@ -1452,7 +1484,7 @@ const MagicBento: React.FC<BentoProps> = ({
           }
           
           .particle-container:hover {
-            box-shadow: 0 4px 20px rgba(61, 47, 40, 0.2), 0 0 30px rgba(${glowColor}, 0.2);
+            box-shadow: none;
           }
           
           .text-clamp-1 {
@@ -1607,20 +1639,11 @@ const MagicBento: React.FC<BentoProps> = ({
             const baseClassName = `card relative ${index === 2 ? 'min-h-[240px]' : 'min-h-[280px]'} w-full max-w-full rounded-[20px]`;
             const cardInnerClassName = `bento-card-surface relative flex h-full flex-col justify-between overflow-hidden rounded-[20px] font-light transition-all duration-300 ease-in-out ${index === 2 || index === 3 ? 'p-0' : 'p-8'}`;
 
-            const defaultGradient = {
-              background: `
-                linear-gradient(135deg, #000000 0%, #1a1a1a 25%, #2d2d2d 50%, #1a1a1a 75%, #000000 100%),
-                radial-gradient(circle at 20% 30%, rgba(40, 40, 40, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(60, 60, 60, 0.2) 0%, transparent 50%),
-                linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.02) 50%, transparent 70%)
-              `,
-              backgroundBlendMode: 'multiply, overlay, normal, overlay'
-            };
-
             const cardStyle = {
               '--bento-accent': card.color,
-              backdropFilter: "blur(12px)",
-              ...(card.customBackground || defaultGradient)
+              backdropFilter: "blur(4px) saturate(130%)",
+              WebkitBackdropFilter: "blur(4px) saturate(130%)",
+              background: 'transparent',
             } as React.CSSProperties;
 
             const content = card.customContent || (
@@ -1722,21 +1745,9 @@ const MagicBento: React.FC<BentoProps> = ({
 
             if (enableBorderGlow) {
               return (
-                <BorderGlow
-                  key={index}
-                  className={baseClassName}
-                  edgeSensitivity={26}
-                  glowColor={BORDER_GLOW_HSL}
-                  backgroundColor={BORDER_GLOW_BACKGROUND}
-                  borderRadius={20}
-                  glowRadius={34}
-                  glowIntensity={1.35}
-                  coneSpread={24}
-                  colors={BORDER_GLOW_COLORS}
-                  fillOpacity={0.4}
-                >
+                <div key={index} className={baseClassName}>
                   {cardBody}
-                </BorderGlow>
+                </div>
               );
             }
 
