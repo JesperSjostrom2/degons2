@@ -14,12 +14,7 @@ export default function CVButton() {
     >
       <Link href="/cv">
         <motion.div
-          className="px-4 py-2 bg-accent/90 hover:bg-accent text-accent-foreground rounded-full flex items-center justify-center gap-2 shadow-lg backdrop-blur-sm border border-white/10 transition-all duration-300 cursor-pointer font-medium text-sm"
-          whileHover={{ 
-            scale: 1.05,
-            boxShadow: '0 8px 25px rgba(218, 197, 167, 0.3)'
-          }}
-          whileTap={{ scale: 0.95 }}
+          className="inline-flex h-[42px] items-center gap-2 rounded-full border border-[color:var(--site-border)] bg-[color:var(--site-surface)] px-4 text-sm font-medium text-[color:var(--site-text)] backdrop-blur-[4px] transition-colors duration-300 hover:border-accent/55 hover:text-accent dark:border-white/12 dark:bg-white/[0.04]"
         >
           <FileText className="w-4 h-4" />
           Resume
