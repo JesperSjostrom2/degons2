@@ -76,10 +76,10 @@ export default function Hero() {
             <h1 className="mx-auto max-w-[1080px] text-balance text-[clamp(2.45rem,5.6vw,5.1rem)] font-semibold leading-[1.02] tracking-[-0.055em] text-[color:var(--site-text)] drop-shadow-[0_18px_60px_rgba(0,0,0,0.18)] dark:drop-shadow-[0_18px_60px_rgba(0,0,0,0.38)]">
               <span>Hi, I&apos;m</span> <span className="text-accent">Jesper.</span>
               <br />
-              <span>I design</span>{' '}
+              <span>I build</span>{' '}
               <span className="mx-1.5 inline-flex h-[0.3em] w-[0.64em] translate-y-[-0.04em] rotate-[-2deg] rounded-[46%_54%_50%_50%/58%_42%_58%_42%] border border-[#dac5a7]/16 bg-gradient-to-br from-[#c2a77b] to-[#8b7355] shadow-[0_0_16px_rgba(218,197,167,0.10)]" />{' '}
               <span className="relative inline-block">
-                interfaces
+                websites
                 <motion.svg
                   aria-hidden="true"
                   viewBox="0 0 300 34"
@@ -102,8 +102,8 @@ export default function Hero() {
                 </motion.svg>
               </span>
               <br />
-              <span>that help products</span>{' '}
-              <span className="text-accent">grow.</span>
+              <span>people quickly</span>{' '}
+              <span className="text-accent">trust.</span>
             </h1>
           </motion.div>
 
@@ -113,6 +113,9 @@ export default function Hero() {
             transition={{ duration: 0.75, delay: 0.45 }}
             className="relative z-20 mt-8 flex max-w-3xl flex-col items-center gap-6 md:mt-10"
           >
+            <p className="max-w-2xl text-balance text-base leading-7 text-[color:var(--site-muted)] md:text-lg">
+              I&apos;m Jesper, a frontend developer in Helsinki building landing pages, portfolios, and polished websites for people who need a stronger presence online.
+            </p>
             <div className="flex w-full flex-col items-center gap-3 sm:w-auto sm:flex-row sm:gap-4">
               <a href="#contact" className="inline-flex">
                 <GlareHover
@@ -124,7 +127,7 @@ export default function Hero() {
                   className="relative cursor-pointer text-black transition-all duration-300 hover:!bg-none hover:!bg-transparent hover:!border-accent hover:text-[color:var(--site-text)] dark:hover:text-white"
                 >
                   <span className="flex h-[42px] cursor-pointer items-center gap-3 rounded-[20px] px-7 text-base font-medium">
-                    Let&apos;s Connect
+                    Start a Project
                     <ArrowRight className="h-4 w-4" />
                   </span>
                 </GlareHover>

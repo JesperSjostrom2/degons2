@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { AnimatePresence, motion, type Transition, type Variants } from "framer-motion";
 import { Github } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -114,13 +115,20 @@ export default function ProfileCard({
           />
 
           {/* Avatar Image */}
-          <motion.img
-            src={imageSrc}
-            alt={name}
-            className="relative h-full w-full rounded-full object-cover border-[1.5px] border-white/20 shadow-sm"
+          <motion.div
+            className="relative h-full w-full overflow-hidden rounded-full border-[1.5px] border-white/20 shadow-sm"
             animate={{ scale: isHovered ? 1 : 0.96 }}
             transition={fluidTransition}
-          />
+          >
+            <Image
+              src={imageSrc}
+              alt={name}
+              fill
+              sizes="40px"
+              className="object-cover"
+              priority
+            />
+          </motion.div>
 
           {/* Status Dot Pop-in */}
           <motion.div

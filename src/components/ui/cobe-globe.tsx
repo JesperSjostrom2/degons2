@@ -131,7 +131,7 @@ export function Globe({
     if (!canvasRef.current) return
     const canvas = canvasRef.current
     let globe: ReturnType<typeof createGlobe> | null = null
-    let animationId: number
+    let animationId = 0
     let observer: IntersectionObserver | null = null
     let phi = 0
 
@@ -164,11 +164,6 @@ export function Globe({
       })
 
       function animate() {
-        if (!isVisibleRef.current) {
-          animationId = requestAnimationFrame(animate)
-          return
-        }
-
         if (!isPausedRef.current) {
           phi += speed
           if (
@@ -202,15 +197,31 @@ export function Globe({
         })
         animationId = requestAnimationFrame(animate)
       }
+
+      function startAnimating() {
+        if (animationId) return
+        animationId = requestAnimationFrame(animate)
+      }
+
+      function stopAnimating() {
+        if (!animationId) return
+        cancelAnimationFrame(animationId)
+        animationId = 0
+      }
+
       observer = new IntersectionObserver(
         ([entry]) => {
           isVisibleRef.current = entry.isIntersecting
+          if (entry.isIntersecting) {
+            startAnimating()
+          } else {
+            stopAnimating()
+          }
         },
         { threshold: 0.05 },
       )
       observer.observe(canvas)
 
-      animate()
       setTimeout(() => canvas && (canvas.style.opacity = "1"))
     }
 

@@ -144,8 +144,11 @@ export default function TechStackSection() {
           viewport={{ once: true, amount: 0.45 }}
           transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
         >
-          <p className="section-label">My Personal Toolkit</p>
-          <h2 className="section-title">Tech Stack</h2>
+          <p className="section-label">Tech Stack</p>
+          <h2 className="section-title">Modern web tools</h2>
+          <p className="section-description">
+            The tools I use to design, build, and ship responsive websites with clean frontend foundations.
+          </p>
         </motion.div>
 
         <motion.div

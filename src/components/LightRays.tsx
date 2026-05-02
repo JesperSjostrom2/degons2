@@ -453,11 +453,11 @@ void main() {
       mouseRef.current = { x, y };
     };
 
-    if (followMouse) {
+    if (followMouse && isVisible) {
       window.addEventListener("mousemove", handleMouseMove);
       return () => window.removeEventListener("mousemove", handleMouseMove);
     }
-  }, [followMouse]);
+  }, [followMouse, isVisible]);
 
   return (
     <div

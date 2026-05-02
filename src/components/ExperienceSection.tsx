@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, type CSSProperties } from 'react'
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import Image from 'next/image'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowLeft, ArrowRight, CalendarDays, ChevronDown, Code2, ExternalLink, Figma, Layers3, Palette, Sparkles, UserRound, type LucideIcon } from 'lucide-react'
@@ -43,14 +43,14 @@ const projectsData: Project[] = [
     title: 'ANDCREATIVE',
     displayTitle: 'ANDCREATIVE',
     category: 'Web Design',
-    summary: 'A creative agency website focused on high-end visuals and storytelling.',
+    summary: 'A visual agency site built to make the work feel premium before a visitor reads a word.',
     description:
-      "A modern, premium website built for a creative agency. 'VISUALS WITH MEANING' turns ideas into timeless visuals through photo and film.",
+      "A dark, visual-first website concept for a creative agency. The goal was to make the brand feel sharp, cinematic, and easy to understand from the first scroll.",
     bulletPoints: [
-      'Sleek, dark-themed UI with a visual-first approach',
-      'Smooth interactions and scroll animations',
-      'Optimized media loading for high-resolution assets',
-      'Responsive layout across all devices',
+      'Visual direction for a premium creative brand',
+      'Responsive pages with motion used to support the story',
+      'Media-heavy sections structured to stay usable',
+      'Clear path from first impression to contact',
     ],
     skills: ['Next.js', 'Tailwind CSS', 'Framer Motion', 'UI/UX', 'Web Design'],
     year: '2026',
@@ -72,14 +72,14 @@ const projectsData: Project[] = [
     title: 'Café & Bistro Kerma',
     displayTitle: 'TAHKON KERMA',
     category: 'Brand & Web',
-    summary: 'A restaurant website that reflects warmth, comfort, and a memorable guest experience.',
+    summary: 'A warm restaurant site focused on atmosphere, practical info, and local trust.',
     description:
-      'A website for Tahkon Kerma Café & Bistro designed to offer a cozy digital experience while showcasing menu, events, and ambience.',
+      'A cozy web direction for Tahkon Kerma Café & Bistro, balancing atmosphere with the basics visitors need quickly: what it is, where it is, and why it feels worth visiting.',
     bulletPoints: [
-      'Warm and inviting interface',
-      'Integrated menu and reservation flow',
-      'Brand identity and logo direction',
-      'Smooth scrolling and subtle animations',
+      'Warm visual style matched to the restaurant setting',
+      'Layout built around menu, location, and visit planning',
+      'Brand and logo direction for a more finished identity',
+      'Mobile-first structure for people checking details on the go',
     ],
     skills: ['Web Design', 'Logo Design', 'Brand Identity', 'UI/UX', 'HTML/CSS', 'JavaScript'],
     year: '2024',
@@ -101,14 +101,14 @@ const projectsData: Project[] = [
     title: 'Portfolio Website',
     displayTitle: 'PORTFOLIO SYSTEM',
     category: 'Development',
-    summary: 'An interactive portfolio built around motion, performance, and polished presentation.',
+    summary: 'My own portfolio, built to test how far I can push motion and presentation without losing usability.',
     description:
-      'A modern portfolio experience showcasing projects, experience, and technical strengths through a responsive interactive interface.',
+      'My personal portfolio and playground for polished frontend work. It is built to show taste, technical range, and the kind of detail I bring into client-facing websites.',
     bulletPoints: [
-      'Custom interactive components and visual effects',
-      'Responsive layouts across device sizes',
-      'Motion-led sections with polished transitions',
-      'Performance-minded structure and SEO foundations',
+      'Custom interactive sections instead of a template layout',
+      'Responsive structure tuned for desktop and mobile',
+      'Motion and WebGL details balanced with performance work',
+      'Clearer positioning for both portfolio and freelance inquiries',
     ],
     skills: ['Next.js', 'Tailwind CSS', 'Framer Motion', 'TypeScript', 'GSAP', 'Three.js'],
     year: '2023',
@@ -146,12 +146,27 @@ const fallbackSkillIcons: Record<string, LucideIcon> = {
 }
 
 const ProjectCard = ({ project }: { project: Project }) => {
+  const cardRef = useRef<HTMLElement>(null)
   const [activeSlide, setActiveSlide] = useState(0)
   const [direction, setDirection] = useState<1 | -1>(1)
   const [detailsOpen, setDetailsOpen] = useState(false)
+  const [isInView, setIsInView] = useState(false)
   const accentLabelStyle = { '--project-accent': project.accentColor } as CSSProperties
   const slideCount = project.slides.length
   const currentSlide = project.slides[activeSlide]
+
+  useEffect(() => {
+    if (!cardRef.current) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsInView(entry.isIntersecting),
+      { rootMargin: '200px 0px', threshold: 0.05 },
+    )
+
+    observer.observe(cardRef.current)
+
+    return () => observer.disconnect()
+  }, [])
 
   const nextSlide = () => {
     setDirection(1)
@@ -182,7 +197,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
       colors={project.glowColors}
       fillOpacity={0.4}
     >
-    <article className="group overflow-hidden rounded-[28px] border border-[color:var(--site-border)] bg-[rgba(5,5,5,0.045)] text-[color:var(--site-text)] backdrop-blur-[4px] [backdrop-filter:blur(4px)_saturate(130%)] [-webkit-backdrop-filter:blur(4px)_saturate(130%)] dark:border-white/10">
+    <article ref={cardRef} className="group overflow-hidden rounded-[28px] border border-[color:var(--site-border)] bg-[rgba(5,5,5,0.045)] text-[color:var(--site-text)] backdrop-blur-[4px] [backdrop-filter:blur(4px)_saturate(130%)] [-webkit-backdrop-filter:blur(4px)_saturate(130%)] dark:border-white/10">
       <div className="grid border-b border-[color:var(--site-border)] lg:grid-cols-[1.2fr_1fr] dark:border-white/10">
         <div className="relative min-h-[260px] overflow-hidden p-0 sm:min-h-[320px] lg:min-h-[520px] lg:p-8">
           <div className="relative z-10 mx-auto max-w-[760px] overflow-hidden rounded-t-[28px] border-b border-[color:var(--site-border)] bg-[rgba(5,5,5,0.045)] backdrop-blur-[4px] [backdrop-filter:blur(4px)_saturate(130%)] [-webkit-backdrop-filter:blur(4px)_saturate(130%)] dark:border-white/10 lg:mt-2 lg:rounded-2xl lg:border">
@@ -200,11 +215,11 @@ const ProjectCard = ({ project }: { project: Project }) => {
                     <video
                       src={currentSlide.src}
                       className="h-full w-full object-cover opacity-90"
-                      autoPlay
+                      autoPlay={isInView}
                       muted
                       loop
                       playsInline
-                      preload="metadata"
+                      preload={isInView ? 'metadata' : 'none'}
                       aria-label={`${project.title} preview ${activeSlide + 1}`}
                     />
                   ) : (
@@ -247,11 +262,11 @@ const ProjectCard = ({ project }: { project: Project }) => {
                   <video
                     src={slide.src}
                     className="h-full w-full object-cover opacity-72"
-                    autoPlay
+                    autoPlay={thumb === activeSlide && isInView}
                     muted
                     loop
                     playsInline
-                    preload="metadata"
+                    preload={thumb === activeSlide && isInView ? 'metadata' : 'none'}
                     aria-label={`${project.title} preview ${thumb + 1}`}
                   />
                 ) : (
@@ -403,9 +418,9 @@ const ExperienceSection: React.FC = () => {
           transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
         >
           <p className="section-label">Selected Work</p>
-          <h2 className="section-title hidden md:block">Featured Projects</h2>
+          <h2 className="section-title hidden md:block">Past Work</h2>
           <p className="section-description hidden md:block">
-            A collection of projects that demonstrate technical skills and creative problem-solving abilities.
+            A selection of websites and interface projects I&apos;ve designed, built, or refined.
           </p>
         </motion.div>
 
@@ -435,9 +450,9 @@ const ExperienceSection: React.FC = () => {
             </div>
             <div className="site-divider-line-reverse h-px flex-1" />
           </div>
-          <p className="text-sm font-medium text-[color:var(--site-text)]">Have a project in mind?</p>
+          <p className="text-sm font-medium text-[color:var(--site-text)]">Have a website in mind?</p>
           <p className="mt-2 text-xs text-muted-foreground sm:text-sm">
-            I&apos;m always open to discussing new opportunities and exciting ideas.
+            Send the idea and I&apos;ll help you figure out the best next step.
           </p>
           <a href="#contact" className="mt-6 inline-flex cursor-pointer">
             <GlareHover

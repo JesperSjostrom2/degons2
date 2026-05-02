@@ -40,13 +40,16 @@ export default function Home() {
               Why choose me
             </p>
             <h2 className="section-title">
-              A smoother way to bring your website to life
+              A smoother way to get your website online
             </h2>
           </div>
           <MagicBento />
         </div>
       </section>
        
+      {/* Projects Section */}
+      <ExperienceSection />
+      
       {/* About Section */}
       <section id="about" className="relative flex min-h-screen items-center overflow-hidden py-20 md:py-24">
         <div className="container relative z-10 mx-auto px-6">
@@ -71,17 +74,13 @@ export default function Home() {
                   </ScrollReveal>
                   <ScrollReveal className="max-w-xl space-y-6 text-lg leading-[1.65] text-muted-foreground" delay={0.18}>
                     <p>
-                      I&apos;ve always been drawn to situations that push me out of autopilot. Moving countries,
-                      learning new things, and building a life in a new environment have shaped me into someone
-                      who values independence, adaptability, and steady progress.
+                      I like building websites because they sit right between design, problem solving, and first impressions. A good site should feel good, but it should also make the next step obvious.
                     </p>
                     <p>
-                      Outside work I like keeping life active and social, whether that means training, gaming,
-                      spending time with friends, or thinking through ideas with people close to me. I enjoy
-                      anything that mixes focus, momentum, and a bit of friendly pressure.
+                      My focus is frontend work with a strong eye for layout, motion, and small details. Landing pages, portfolios, redesigns, and business sites are the kind of projects I enjoy shaping from rough idea to finished experience.
                     </p>
                     <p className="font-medium text-[color:var(--site-text)]">
-                      I&apos;m at my best when I&apos;m improving, solving problems, and not standing still for too long.
+                      I&apos;m at my best when I can keep improving something until it feels clear, useful, and worth showing.
                     </p>
                   </ScrollReveal>
                   
@@ -139,9 +138,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-      
-      {/* Projects Section */}
-      <ExperienceSection />
       
       {/* Skills Section */}
       <TechStackSection />

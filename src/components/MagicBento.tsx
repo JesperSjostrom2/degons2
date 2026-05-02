@@ -54,6 +54,21 @@ const COLLABORATION_AVATARS = [
   { seed: "Lina", className: "right-[13%] bottom-[9%]", delayClass: "group-hover/collab:delay-[800ms]", mobileDelay: "800ms" },
 ];
 
+const REMOTE_GLOBE_MARKERS = [
+  { id: "helsinki", location: [60.1699, 24.9384] as [number, number], label: "Helsinki" },
+  { id: "tokyo", location: [35.6762, 139.6503] as [number, number], label: "Tokyo" },
+  { id: "sydney", location: [-33.8688, 151.2093] as [number, number], label: "Sydney" },
+  { id: "newyork", location: [40.7128, -74.006] as [number, number], label: "New York" },
+  { id: "capetown", location: [-33.9249, 18.4241] as [number, number], label: "Cape Town" },
+];
+
+const REMOTE_GLOBE_ARCS = [
+  { id: "ny-hel", from: [40.7128, -74.006] as [number, number], to: [60.1699, 24.9384] as [number, number] },
+  { id: "hel-ct", from: [60.1699, 24.9384] as [number, number], to: [-33.9249, 18.4241] as [number, number] },
+  { id: "ct-tokyo", from: [-33.9249, 18.4241] as [number, number], to: [35.6762, 139.6503] as [number, number] },
+  { id: "tokyo-syd", from: [35.6762, 139.6503] as [number, number], to: [-33.8688, 151.2093] as [number, number] },
+];
+
 
 const createParticleElement = (
   x: number,
@@ -531,13 +546,13 @@ const useMobileDetection = () => {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const checkMobile = () =>
-      setIsMobile(window.innerWidth <= MOBILE_BREAKPOINT);
+    const mediaQuery = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT}px)`);
+    const checkMobile = () => setIsMobile(mediaQuery.matches);
 
     checkMobile();
-    window.addEventListener("resize", checkMobile);
+    mediaQuery.addEventListener("change", checkMobile);
 
-    return () => window.removeEventListener("resize", checkMobile);
+    return () => mediaQuery.removeEventListener("change", checkMobile);
   }, []);
 
   return isMobile;
@@ -572,18 +587,18 @@ const MagicBento: React.FC<BentoProps> = ({
 
   const getRemoteWorkCard = () => ({
     color: BENTO_ACCENTS.blue,
-    title: "🌍 Global Availability",
-    description: "Flexible with timezones. Based in Finland, available globally.",
-    label: "Remote Work",
+    title: "🌍 Remote friendly",
+    description: "Based in Finland, working with people wherever the project makes sense.",
+    label: "Availability",
     customContent: (
       <div className="remote-card relative flex h-full flex-col overflow-hidden">
         <div className="remote-card-copy relative z-20 flex flex-col p-6 pb-3">
             <h2 className="mb-2 text-2xl font-bold leading-tight text-white">
-              Flexible with<br />
-              <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.blue }}>timezones</span>
+              Based in Finland,<br />
+              <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.blue }}>open globally</span>
             </h2>
           <p className="text-white/70 text-sm mb-4">
-            Based in Finland, available globally
+            Remote-friendly for website projects and frontend work
           </p>
 
         </div>
@@ -600,19 +615,8 @@ const MagicBento: React.FC<BentoProps> = ({
               theta={0.1}
               mapSamples={isMobile ? 5000 : 12000}
               speed={isMobile ? 0.0015 : 0.003}
-              markers={[
-                { id: "helsinki", location: [60.1699, 24.9384] as [number, number], label: "Helsinki" },
-                { id: "tokyo", location: [35.6762, 139.6503] as [number, number], label: "Tokyo" },
-                { id: "sydney", location: [-33.8688, 151.2093] as [number, number], label: "Sydney" },
-                { id: "newyork", location: [40.7128, -74.006] as [number, number], label: "New York" },
-                { id: "capetown", location: [-33.9249, 18.4241] as [number, number], label: "Cape Town" },
-              ]}
-              arcs={[
-                { id: "ny-hel", from: [40.7128, -74.006] as [number, number], to: [60.1699, 24.9384] as [number, number] },
-                { id: "hel-ct", from: [60.1699, 24.9384] as [number, number], to: [-33.9249, 18.4241] as [number, number] },
-                { id: "ct-tokyo", from: [-33.9249, 18.4241] as [number, number], to: [35.6762, 139.6503] as [number, number] },
-                { id: "tokyo-syd", from: [35.6762, 139.6503] as [number, number], to: [-33.8688, 151.2093] as [number, number] },
-              ]}
+              markers={REMOTE_GLOBE_MARKERS}
+              arcs={REMOTE_GLOBE_ARCS}
             />
           </div>
         </div>
@@ -624,9 +628,9 @@ const MagicBento: React.FC<BentoProps> = ({
   const cardData = [
     {
       color: BENTO_ACCENTS.champagne,
-      title: "🤝 Easy Collaboration",
-      description: "Clear updates, quick changes, and room for feedback until it feels right",
-      label: "Client Process",
+      title: "🤝 Clear feedback loops",
+      description: "You see the work early, give notes, and we keep improving it until it feels right.",
+      label: "Process",
       customContent: (
         <div className="group/collab relative -m-8 h-[calc(100%+4rem)] overflow-hidden p-6 sm:p-8">
           <div className="collab-card-bg absolute inset-0" />
@@ -637,11 +641,11 @@ const MagicBento: React.FC<BentoProps> = ({
 
           <div className="bento-mobile-readable relative z-30 max-w-[15rem]">
             <h2 className="mb-3 text-2xl font-bold leading-tight text-white">
-              Easy feedback,<br />
-              <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.champagne }}>better results.</span>
+              Feedback early,<br />
+              <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.champagne }}>not at the end.</span>
             </h2>
             <p className="text-sm leading-6 text-white/70">
-              We can go back and forth with changes until you are satisfied.
+              You get room to react while the site is still easy to shape.
             </p>
           </div>
 
@@ -663,7 +667,7 @@ const MagicBento: React.FC<BentoProps> = ({
     {
       color: BENTO_ACCENTS.olive,
       title: "No chasing, no confusion.",
-      description: "You'll always know what's happening with quick replies and straightforward updates.",
+      description: "Short updates, quick replies, and clear next steps while the site comes together.",
       label: "Clear Communication",
       customContent: (
         <div className="group/attention relative -m-8 h-[calc(100%+4rem)] overflow-hidden bg-transparent p-8">
@@ -673,11 +677,11 @@ const MagicBento: React.FC<BentoProps> = ({
               <div className="bento-mobile-readable max-w-[17rem]">
                 <p className="mb-3 text-xs uppercase tracking-[0.24em] text-[color:var(--site-muted)] dark:text-white/50">Clear Communication</p>
                 <h2 className="text-2xl font-bold leading-tight text-[color:var(--site-text)] dark:text-white">
-                  No chasing,<br />
-                  <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.olive }}>no confusion.</span>
+                  Clear replies,<br />
+                  <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.olive }}>less guessing.</span>
                 </h2>
                 <p className="mt-4 max-w-xs text-sm leading-6 text-[color:var(--site-muted)] dark:text-white/70">
-                  You&apos;ll always know what&apos;s happening &mdash; with quick replies and straightforward updates.
+                  You should not have to wonder what is done, what is next, or what I need from you.
                 </p>
               </div>
 
@@ -707,8 +711,8 @@ const MagicBento: React.FC<BentoProps> = ({
     },
     {
       color: BENTO_ACCENTS.lavender,
-      title: "📩 Let's Work Together",
-      description: "Ready for your next project collaboration",
+      title: "📩 Have a website in mind?",
+      description: "Send the idea, goal, or messy first version and I can help shape it.",
       label: "Contact",
       customBackground: {
         background: `
@@ -736,7 +740,7 @@ const MagicBento: React.FC<BentoProps> = ({
             
             <div className="contact-card-title-wrap mb-8">
               <h2 className="contact-card-title mx-auto max-w-[15rem] text-2xl font-bold leading-tight text-[#f5efe4]">
-                Let&apos;s work together on your next <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.lavender }}>project</span>
+                Have a site idea? <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.lavender }}>Send it over</span>
               </h2>
             </div>
             
@@ -781,8 +785,8 @@ const MagicBento: React.FC<BentoProps> = ({
     getRemoteWorkCard(),
     {
       color: BENTO_ACCENTS.champagne,
-      title: "✨ Websites That Make a Difference",
-      description: "Websites that stand out and turn attention into results",
+      title: "✨ Websites with a job to do",
+      description: "Landing pages, portfolios, and business sites built to explain, impress, and convert.",
       label: "Services",
       customContent: (
         <div className="group/selling relative -m-8 flex h-[calc(100%+4rem)] flex-col overflow-hidden p-8">
@@ -794,11 +798,11 @@ const MagicBento: React.FC<BentoProps> = ({
           <div className="bento-mobile-readable relative z-20 max-w-[18rem]">
             <h2 className="mb-3 text-2xl font-bold leading-tight text-white">
               Websites that<br />
-              <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.champagne }}>stand out</span> and<br />
-              make a difference
+              <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.champagne }}>look sharp</span> and<br />
+              explain fast
             </h2>
             <p className="text-sm leading-6 text-white/72">
-              Tailored experiences that look premium, perform fast, and help people trust your brand.
+              Landing pages, portfolios, and business sites that make the next step obvious.
             </p>
           </div>
 
@@ -1502,7 +1506,7 @@ const MagicBento: React.FC<BentoProps> = ({
 
             .card-responsive .card:nth-child(2) {
               order: 1;
-              min-height: 270px;
+              min-height: 245px;
             }
 
             .card-responsive .card:nth-child(5) {
@@ -1588,12 +1592,12 @@ const MagicBento: React.FC<BentoProps> = ({
             }
 
             .card-responsive .card:nth-child(4) .remote-card-globe-position {
-              bottom: -38%;
+              bottom: -56%;
               height: 138%;
             }
 
             .card-responsive .card:nth-child(4) .remote-card-globe {
-              transform: scale(0.78);
+              transform: translateY(12%) scale(0.78);
             }
           }
         `}

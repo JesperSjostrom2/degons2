@@ -10,6 +10,8 @@ export default function CustomCursor() {
   const [isClicking, setIsClicking] = useState(false)
   const isVisibleRef = useRef(false)
   const isHoveredRef = useRef(false)
+  const cursorFrameRef = useRef(0)
+  const cursorPositionRef = useRef({ x: 0, y: 0 })
 
   const cursorX = useMotionValue(0)
   const cursorY = useMotionValue(0)
@@ -50,8 +52,14 @@ export default function CustomCursor() {
     document.documentElement.classList.add('custom-cursor-active')
 
     const updateCursor = (e: MouseEvent) => {
-      cursorX.set(e.clientX)
-      cursorY.set(e.clientY)
+      cursorPositionRef.current = { x: e.clientX, y: e.clientY }
+      if (!cursorFrameRef.current) {
+        cursorFrameRef.current = requestAnimationFrame(() => {
+          cursorFrameRef.current = 0
+          cursorX.set(cursorPositionRef.current.x)
+          cursorY.set(cursorPositionRef.current.y)
+        })
+      }
       if (!isVisibleRef.current) {
         isVisibleRef.current = true
         setIsVisible(true)
@@ -108,6 +116,8 @@ export default function CustomCursor() {
       document.removeEventListener('mousedown', handleMouseDown)
       document.removeEventListener('mouseup', handleMouseUp)
       document.removeEventListener('mouseover', handleMouseOver)
+      cancelAnimationFrame(cursorFrameRef.current)
+      cursorFrameRef.current = 0
     }
   }, [cursorX, cursorY, isDisabled])
 

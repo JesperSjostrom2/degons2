@@ -12,7 +12,7 @@ const BORDER_GLOW_COLORS = ['#8b7355', '#dac5a7', '#f5efe4']
 const BORDER_GLOW_HSL = '38 37 76'
 const BORDER_GLOW_BACKGROUND = 'var(--site-card-glow-bg)'
 
-const projectTypes = ['Website', 'Frontend app', 'Portfolio', 'UI polish', 'Other']
+const projectTypes = ['Landing page', 'Business website', 'Portfolio', 'Redesign / UI polish', 'Frontend build', 'Other']
 
 interface SocialLink {
   name: string
@@ -164,9 +164,9 @@ export default function ContactSection() {
           transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
         >
           <p className="section-label">Contact</p>
-          <h2 className="section-title">Let&apos;s Build Something</h2>
+          <h2 className="section-title">Let&apos;s talk about your site</h2>
           <p className="section-description">
-            Tell me what you want to create, improve, or launch. Send the details here or reach me through the links beside it.
+            Tell me what you need online: a landing page, portfolio, business site, redesign, or just a better first impression.
           </p>
         </motion.div>
 
@@ -193,9 +193,9 @@ export default function ContactSection() {
               <aside className="flex flex-col justify-between border-b border-[color:var(--site-border)] p-6 md:p-8 lg:border-b-0 lg:border-r dark:border-white/10">
                 <div>
                   <p className="mb-3 text-sm uppercase tracking-[0.24em] text-accent/70">Find Me</p>
-                  <h3 className="text-2xl font-bold tracking-[-0.025em] text-[color:var(--site-text)] md:text-3xl">More ways to connect</h3>
+                  <h3 className="text-2xl font-bold tracking-[-0.025em] text-[color:var(--site-text)] md:text-3xl">Send the rough version</h3>
                   <p className="mt-4 text-sm leading-6 text-muted-foreground">
-                    Prefer a quick intro, code deep-dive, or a direct email? These stay close to the form so the next step feels connected.
+                    You do not need a polished brief. A goal, a link, or a few notes is enough to start the conversation.
                   </p>
                 </div>
 
@@ -289,7 +289,7 @@ export default function ContactSection() {
                       value={budget}
                       onChange={(event) => setBudget(event.target.value)}
                       className="w-full rounded-xl border border-[color:var(--site-border)] bg-[color:var(--site-surface)] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[color:var(--site-muted)] focus:border-accent/60 focus:bg-[color:var(--site-surface-strong)] dark:rounded-2xl dark:border-white/10 dark:bg-black/30 dark:text-white dark:placeholder:text-white/30 dark:focus:bg-black/40"
-                      placeholder="Optional"
+                      placeholder="Optional, even a rough range helps"
                     />
                   </label>
                 </div>
@@ -302,7 +302,7 @@ export default function ContactSection() {
                     required
                     rows={7}
                     className="w-full resize-none rounded-xl border border-[color:var(--site-border)] bg-[color:var(--site-surface)] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[color:var(--site-muted)] focus:border-accent/60 focus:bg-[color:var(--site-surface-strong)] dark:rounded-2xl dark:border-white/10 dark:bg-black/30 dark:text-white dark:placeholder:text-white/30 dark:focus:bg-black/40"
-                    placeholder="A short description of the project, goals, and what you need help with."
+                    placeholder="What are you trying to put online, improve, or explain better?"
                   />
                 </label>
 
@@ -312,7 +312,7 @@ export default function ContactSection() {
                       ? 'Message sent. I will get back to you soon.'
                       : status === 'error'
                         ? errorMessage
-                        : 'Messages are sent directly through the form.'}
+                        : 'I read every message myself and reply with an honest next step.'}
                   </p>
                   <div className="relative shrink-0">
                     <GlareHover
