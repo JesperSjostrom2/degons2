@@ -428,6 +428,18 @@
     background: #f5efe4;
   }
 
+  .btn-primary-consistent {
+    height: 42px;
+    padding-left: 1.75rem;
+    padding-right: 1.75rem;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
   @media (max-width: 599px) {
     #home > .container,
     .site-section .container {

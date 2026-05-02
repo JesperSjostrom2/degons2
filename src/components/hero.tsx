@@ -113,7 +113,7 @@ export default function Hero() {
                 <svg
                   aria-hidden="true"
                   viewBox="0 0 300 34"
-                  className="pointer-events-none absolute -bottom-[0.17em] left-1/2 h-[0.18em] w-[110%] -translate-x-1/2 overflow-visible text-accent"
+                  className="pointer-events-none absolute -bottom-[0.17em] left-1/2 h-[0.18em] w-[110%] -translate-x-1/2 overflow-visible text-[#8fa58a]"
                   preserveAspectRatio="none"
                 >
                   <path
@@ -148,9 +148,9 @@ export default function Hero() {
                   background="#dac5a7"
                   borderRadius="20px"
                   borderColor="#dac5a7"
-                  className="relative cursor-pointer px-6 py-2 text-base font-medium text-black transition-all duration-300 hover:!bg-none hover:!bg-transparent hover:!border-accent hover:text-[color:var(--site-text)] dark:hover:text-white"
+                  className="relative cursor-pointer text-black transition-all duration-300 hover:!bg-none hover:!bg-transparent hover:!border-accent hover:text-[color:var(--site-text)] dark:hover:text-white"
                 >
-                  <span className="flex cursor-pointer items-center gap-3">
+                  <span className="flex h-[42px] cursor-pointer items-center gap-3 rounded-[20px] px-7 text-base font-medium">
                     Let&apos;s Connect
                     <ArrowRight className="h-4 w-4" />
                   </span>

@@ -1,8 +1,8 @@
 "use client"
 
-import { useRef, useState, type CSSProperties } from 'react'
+import { useState, type CSSProperties } from 'react'
 import Image from 'next/image'
-import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowLeft, ArrowRight, CalendarDays, ChevronDown, Code2, ExternalLink, Figma, Layers3, Palette, Sparkles, UserRound, type LucideIcon } from 'lucide-react'
 import { SiFramer, SiGreensock, SiHtml5, SiJavascript, SiNextdotjs, SiTailwindcss, SiThreedotjs, SiTypescript } from 'react-icons/si'
 import type { IconType } from 'react-icons'
@@ -11,6 +11,12 @@ import BorderGlow from '@/components/BorderGlow'
 import GlareHover from '@/components/GlareHover'
 
 const BORDER_GLOW_BACKGROUND = 'var(--site-card-glow-bg)'
+
+interface ProjectSlide {
+  type: 'image' | 'video'
+  src: string
+  objectPosition?: string
+}
 
 interface Project {
   id: number
@@ -22,7 +28,7 @@ interface Project {
   bulletPoints: string[]
   skills: string[]
   year: string
-  image: string
+  slides: ProjectSlide[]
   accentColor: string
   accentSoftColor: string
   accentBorderColor: string
@@ -48,10 +54,15 @@ const projectsData: Project[] = [
     ],
     skills: ['Next.js', 'Tailwind CSS', 'Framer Motion', 'UI/UX', 'Web Design'],
     year: '2026',
-    image: '/assets/projects/andcreative.png',
-    accentColor: '#f3f3f3',
-    accentSoftColor: 'rgba(243, 243, 243, 0.1)',
-    accentBorderColor: 'rgba(243, 243, 243, 0.34)',
+    slides: [
+      { type: 'image', src: '/assets/projects/andcreativeproduct.png', objectPosition: 'top' },
+      { type: 'video', src: '/assets/projects/creativehero.optimized.mp4' },
+      { type: 'video', src: '/assets/projects/creativevisuals.optimized.mp4' },
+      { type: 'image', src: '/assets/projects/andcreative.png', objectPosition: '52% 70%' },
+    ],
+    accentColor: '#1f1f1f',
+    accentSoftColor: 'rgba(31, 31, 31, 0.1)',
+    accentBorderColor: 'rgba(31, 31, 31, 0.34)',
     glowColor: '0 0 92',
     glowColors: ['#f3f3f3', '#f3f3f3', '#f3f3f3'],
     liveSite: 'andcreative.se',
@@ -72,7 +83,12 @@ const projectsData: Project[] = [
     ],
     skills: ['Web Design', 'Logo Design', 'Brand Identity', 'UI/UX', 'HTML/CSS', 'JavaScript'],
     year: '2024',
-    image: '/assets/projects/kerma.png',
+    slides: [
+      { type: 'image', src: '/assets/projects/kermaproduct.png', objectPosition: 'top' },
+      { type: 'image', src: '/assets/projects/kerma.png', objectPosition: 'center' },
+      { type: 'image', src: '/assets/projects/kermaproduct.png', objectPosition: '45% 35%' },
+      { type: 'image', src: '/assets/projects/kermaproduct.png', objectPosition: '52% 70%' },
+    ],
     accentColor: '#d4af37',
     accentSoftColor: 'rgba(212, 175, 55, 0.14)',
     accentBorderColor: 'rgba(212, 175, 55, 0.42)',
@@ -96,7 +112,12 @@ const projectsData: Project[] = [
     ],
     skills: ['Next.js', 'Tailwind CSS', 'Framer Motion', 'TypeScript', 'GSAP', 'Three.js'],
     year: '2023',
-    image: '/assets/projects/ogportfolio.png',
+    slides: [
+      { type: 'image', src: '/assets/projects/portfolioproduct.png', objectPosition: 'top' },
+      { type: 'image', src: '/assets/projects/ogportfolio.png', objectPosition: 'center' },
+      { type: 'image', src: '/assets/projects/portfolioproduct.png', objectPosition: '45% 35%' },
+      { type: 'image', src: '/assets/projects/portfolioproduct.png', objectPosition: '52% 70%' },
+    ],
     accentColor: '#ff0066',
     accentSoftColor: 'rgba(255, 0, 102, 0.14)',
     accentBorderColor: 'rgba(255, 0, 102, 0.42)',
@@ -125,18 +146,12 @@ const fallbackSkillIcons: Record<string, LucideIcon> = {
 }
 
 const ProjectCard = ({ project }: { project: Project }) => {
-  const imageRef = useRef<HTMLDivElement>(null)
   const [activeSlide, setActiveSlide] = useState(0)
   const [direction, setDirection] = useState<1 | -1>(1)
   const [detailsOpen, setDetailsOpen] = useState(false)
-  const { scrollYProgress } = useScroll({
-    target: imageRef,
-    offset: ['start end', 'end start'],
-  })
-  const imageY = useTransform(scrollYProgress, [0, 1], ['-8%', '8%'])
   const accentLabelStyle = { '--project-accent': project.accentColor } as CSSProperties
-  const slideCount = 4
-  const slideObjectPositions = ['top', 'center', '45% 35%', '52% 70%']
+  const slideCount = project.slides.length
+  const currentSlide = project.slides[activeSlide]
 
   const nextSlide = () => {
     setDirection(1)
@@ -169,9 +184,9 @@ const ProjectCard = ({ project }: { project: Project }) => {
     >
     <article className="group overflow-hidden rounded-[28px] border border-[color:var(--site-border)] bg-[rgba(5,5,5,0.045)] text-[color:var(--site-text)] backdrop-blur-[4px] [backdrop-filter:blur(4px)_saturate(130%)] [-webkit-backdrop-filter:blur(4px)_saturate(130%)] dark:border-white/10">
       <div className="grid border-b border-[color:var(--site-border)] lg:grid-cols-[1.2fr_1fr] dark:border-white/10">
-        <div ref={imageRef} className="relative min-h-[260px] overflow-hidden p-0 sm:min-h-[320px] lg:min-h-[520px] lg:p-8">
-          <motion.div style={{ y: imageY }} className="relative z-10 mx-auto max-w-[640px] overflow-hidden rounded-t-[28px] border-b border-[color:var(--site-border)] bg-[rgba(5,5,5,0.045)] backdrop-blur-[4px] [backdrop-filter:blur(4px)_saturate(130%)] [-webkit-backdrop-filter:blur(4px)_saturate(130%)] dark:border-white/10 lg:mt-10 lg:rounded-2xl lg:border">
-            <div className="relative aspect-[16/10]">
+        <div className="relative min-h-[260px] overflow-hidden p-0 sm:min-h-[320px] lg:min-h-[520px] lg:p-8">
+          <div className="relative z-10 mx-auto max-w-[760px] overflow-hidden rounded-t-[28px] border-b border-[color:var(--site-border)] bg-[rgba(5,5,5,0.045)] backdrop-blur-[4px] [backdrop-filter:blur(4px)_saturate(130%)] [-webkit-backdrop-filter:blur(4px)_saturate(130%)] dark:border-white/10 lg:mt-2 lg:rounded-2xl lg:border">
+            <div className="group/image relative aspect-[16/10] lg:aspect-[4/3]">
               <AnimatePresence mode="wait" initial={false}>
                 <motion.div
                   key={`${project.id}-${activeSlide}`}
@@ -179,16 +194,29 @@ const ProjectCard = ({ project }: { project: Project }) => {
                   animate={{ x: 0, opacity: 1 }}
                   exit={{ x: direction > 0 ? -32 : 32, opacity: 0 }}
                   transition={{ duration: 0.36, ease: [0.22, 1, 0.36, 1] }}
-                  className="absolute inset-0"
+                  className="absolute inset-0 transition-transform duration-500 ease-out group-hover/image:scale-[1.02]"
                 >
-                  <Image
-                    src={project.image}
-                    alt={`${project.title} preview ${activeSlide + 1}`}
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                    className="object-cover opacity-90"
-                    style={{ objectPosition: slideObjectPositions[activeSlide] }}
-                  />
+                  {currentSlide.type === 'video' ? (
+                    <video
+                      src={currentSlide.src}
+                      className="h-full w-full object-cover opacity-90"
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      preload="metadata"
+                      aria-label={`${project.title} preview ${activeSlide + 1}`}
+                    />
+                  ) : (
+                    <Image
+                      src={currentSlide.src}
+                      alt={`${project.title} preview ${activeSlide + 1}`}
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                      className="object-cover opacity-90"
+                      style={{ objectPosition: currentSlide.objectPosition ?? 'center' }}
+                    />
+                  )}
                 </motion.div>
               </AnimatePresence>
 
@@ -209,13 +237,33 @@ const ProjectCard = ({ project }: { project: Project }) => {
                 <ArrowRight className="h-3.5 w-3.5" />
               </button>
             </div>
-          </motion.div>
+          </div>
 
           <div className="relative z-20 mt-5 hidden gap-3 overflow-x-auto pb-1 lg:flex">
-            {[0, 1, 2, 3].map((thumb) => (
+            {project.slides.map((slide, thumb) => (
               <button type="button" onClick={() => goToSlide(thumb)} key={`${project.id}-${thumb}`} className={`relative h-16 w-28 shrink-0 overflow-hidden rounded-lg border bg-[rgba(5,5,5,0.045)] backdrop-blur-[4px] [backdrop-filter:blur(4px)_saturate(130%)] [-webkit-backdrop-filter:blur(4px)_saturate(130%)] ${thumb === activeSlide ? 'border-accent ring-1 ring-accent/60' : 'border-[color:var(--site-border)] dark:border-white/10'}`} style={accentLabelStyle} aria-label={`Show preview ${thumb + 1}`} aria-pressed={thumb === activeSlide}>
                 {thumb === activeSlide && <span className="absolute inset-0 z-10 bg-accent/10" />}
-                <Image src={project.image} alt={`${project.title} preview ${thumb + 1}`} fill sizes="112px" className="object-cover opacity-72" style={{ objectPosition: slideObjectPositions[thumb] }} />
+                {slide.type === 'video' ? (
+                  <video
+                    src={slide.src}
+                    className="h-full w-full object-cover opacity-72"
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="metadata"
+                    aria-label={`${project.title} preview ${thumb + 1}`}
+                  />
+                ) : (
+                  <Image
+                    src={slide.src}
+                    alt={`${project.title} preview ${thumb + 1}`}
+                    fill
+                    sizes="112px"
+                    className="object-cover opacity-72"
+                    style={{ objectPosition: slide.objectPosition ?? 'center' }}
+                  />
+                )}
               </button>
             ))}
           </div>
@@ -255,9 +303,9 @@ const ProjectCard = ({ project }: { project: Project }) => {
                 <div className="flex h-9 w-9 items-center justify-center rounded-full border border-[color:var(--site-border)] bg-[color:var(--site-hover)] dark:border-white/15 dark:bg-white/[0.04]"><Layers3 className="h-4 w-4" /></div>
                 <div><p className="text-[0.65rem] uppercase tracking-[0.18em] text-[color:var(--site-muted)]">Type</p><p className="text-sm dark:text-white/80">Web Application</p></div>
               </div>
-              <a href={`https://${project.liveSite}`} target="_blank" rel="noopener noreferrer" className="group/meta flex items-center gap-3 text-left text-[color:var(--site-text)] transition-colors hover:text-accent">
-                <div className="flex h-9 w-9 items-center justify-center rounded-full border border-[color:var(--site-border)] bg-[color:var(--site-hover)] transition-colors group-hover/meta:border-accent/70 group-hover/meta:text-accent dark:border-white/15 dark:bg-white/[0.04]"><ExternalLink className="h-4 w-4" /></div>
-                <div><p className="text-[0.65rem] uppercase tracking-[0.18em] text-[color:var(--site-muted)]">Live Site</p><p className="text-sm dark:text-white/80">{project.liveSite}</p></div>
+              <a href={`https://${project.liveSite}`} target="_blank" rel="noopener noreferrer" className="group/meta flex cursor-pointer items-center gap-3 text-left text-[color:var(--site-text)] transition-all duration-200 hover:text-accent">
+                <div className="flex h-9 w-9 items-center justify-center rounded-full border border-[color:var(--site-border)] bg-[color:var(--site-hover)] transition-all duration-200 group-hover/meta:-translate-y-0.5 group-hover/meta:translate-x-0.5 group-hover/meta:border-accent/70 group-hover/meta:text-accent dark:border-white/15 dark:bg-white/[0.04]"><ExternalLink className="h-4 w-4" /></div>
+                <div><p className="text-[0.65rem] uppercase tracking-[0.18em] text-[color:var(--site-muted)]">Live Site</p><p className="text-sm transition-transform duration-200 group-hover/meta:translate-x-0.5 dark:text-white/80">{project.liveSite}</p></div>
               </a>
             </div>
           </div>
@@ -307,9 +355,9 @@ const ProjectCard = ({ project }: { project: Project }) => {
                       <div className="flex h-9 w-9 items-center justify-center rounded-full border border-[color:var(--site-border)] bg-[color:var(--site-hover)] dark:border-white/15 dark:bg-white/[0.04]"><Layers3 className="h-4 w-4" /></div>
                       <div><p className="text-[0.65rem] uppercase tracking-[0.18em] text-[color:var(--site-muted)]">Type</p><p className="text-sm dark:text-white/80">Web Application</p></div>
                     </div>
-                    <a href={`https://${project.liveSite}`} target="_blank" rel="noopener noreferrer" className="group/meta flex items-center gap-3 text-left text-[color:var(--site-text)] transition-colors hover:text-accent">
-                      <div className="flex h-9 w-9 items-center justify-center rounded-full border border-[color:var(--site-border)] bg-[color:var(--site-hover)] transition-colors group-hover/meta:border-accent/70 group-hover/meta:text-accent dark:border-white/15 dark:bg-white/[0.04]"><ExternalLink className="h-4 w-4" /></div>
-                      <div><p className="text-[0.65rem] uppercase tracking-[0.18em] text-[color:var(--site-muted)]">Live Site</p><p className="text-sm dark:text-white/80">{project.liveSite}</p></div>
+                    <a href={`https://${project.liveSite}`} target="_blank" rel="noopener noreferrer" className="group/meta flex cursor-pointer items-center gap-3 text-left text-[color:var(--site-text)] transition-all duration-200 hover:text-accent">
+                      <div className="flex h-9 w-9 items-center justify-center rounded-full border border-[color:var(--site-border)] bg-[color:var(--site-hover)] transition-all duration-200 group-hover/meta:-translate-y-0.5 group-hover/meta:translate-x-0.5 group-hover/meta:border-accent/70 group-hover/meta:text-accent dark:border-white/15 dark:bg-white/[0.04]"><ExternalLink className="h-4 w-4" /></div>
+                      <div><p className="text-[0.65rem] uppercase tracking-[0.18em] text-[color:var(--site-muted)]">Live Site</p><p className="text-sm transition-transform duration-200 group-hover/meta:translate-x-0.5 dark:text-white/80">{project.liveSite}</p></div>
                     </a>
                   </div>
                 </div>
@@ -344,11 +392,6 @@ const ProjectCard = ({ project }: { project: Project }) => {
 }
 
 const ExperienceSection: React.FC = () => {
-  const scrollToContact = () => {
-    const element = document.querySelector('#contact')
-    element?.scrollIntoView({ behavior: 'smooth' })
-  }
-
   return (
     <section id="projects" className="site-section">
       <div className="container mx-auto px-6">
@@ -378,21 +421,21 @@ const ExperienceSection: React.FC = () => {
           <p className="mt-2 text-xs text-muted-foreground sm:text-sm">
             I&apos;m always open to discussing new opportunities and exciting ideas.
           </p>
-          <div className="mt-6 inline-flex cursor-pointer" onClick={scrollToContact}>
+          <a href="#contact" className="mt-6 inline-flex cursor-pointer">
             <GlareHover
               width="auto"
               height="auto"
               background="#dac5a7"
               borderRadius="20px"
               borderColor="#dac5a7"
-              className="relative cursor-pointer px-8 py-2 text-lg font-medium text-black transition-all duration-300 hover:!bg-none hover:!bg-transparent hover:!border-accent hover:text-[color:var(--site-text)] dark:hover:text-white"
+              className="relative cursor-pointer text-black transition-all duration-300 hover:!bg-none hover:!bg-transparent hover:!border-accent hover:text-[color:var(--site-text)] dark:hover:text-white"
             >
-              <span className="flex cursor-pointer items-center gap-5">
+              <span className="flex h-[42px] cursor-pointer items-center gap-3 rounded-[20px] px-7 text-base font-medium">
                 Let&apos;s Work Together
                 <ArrowRight className="h-4 w-4" />
               </span>
             </GlareHover>
-          </div>
+          </a>
         </div>
       </div>
     </section>

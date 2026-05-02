@@ -588,10 +588,10 @@ const MagicBento: React.FC<BentoProps> = ({
 
         </div>
 
-        <div className="remote-card-globe-shell relative z-10 mt-auto min-h-[220px] h-[52%] overflow-visible">
-          <div className="remote-card-globe-position absolute inset-x-0 bottom-[-65%] h-[180%] flex justify-center items-center pointer-events-auto">
+        <div className="remote-card-globe-shell relative z-10 mt-auto min-h-[220px] h-[52%] overflow-hidden">
+          <div className="remote-card-globe-position absolute inset-x-0 bottom-[-65%] h-[180%] flex items-center justify-center pointer-events-none">
             <Globe 
-              className="remote-card-globe w-full max-w-[600px] relative z-10 scale-[1.15]"
+              className="remote-card-globe relative z-10 w-full max-w-[600px] scale-[1.15] overflow-hidden"
               dark={1}
               baseColor={[0.1, 0.1, 0.1]}
               glowColor={[1, 1, 1]}
@@ -725,9 +725,9 @@ const MagicBento: React.FC<BentoProps> = ({
           <div className="contact-card-grid absolute inset-0 opacity-45" />
           <div className="contact-card-orbit contact-card-orbit-a" />
           <div className="contact-card-orbit contact-card-orbit-b" />
-          <div className="contact-card-frost absolute inset-0" />
+          <div className="contact-card-overlay absolute inset-0" />
 
-          <div className="contact-card-content bento-mobile-readable relative z-10 rounded-2xl bg-black/16 px-5 py-6 text-center backdrop-blur-md">
+          <div className="contact-card-content bento-mobile-readable relative z-20 px-5 py-6 text-center">
             <div className="contact-card-icon-wrap mb-8 flex justify-center">
               <div className="contact-card-icon flex h-16 w-16 items-center justify-center rounded-full" style={{ background: BENTO_ACCENTS.lavender }}>
                 <User className="w-8 h-8 text-white" />
@@ -1155,13 +1155,14 @@ const MagicBento: React.FC<BentoProps> = ({
             animation: contact-mesh-drift 11s ease-in-out infinite;
           }
 
-          .contact-card-frost {
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.016), rgba(255, 255, 255, 0.006));
+          .contact-card-overlay {
+            z-index: 10;
+            background: rgba(8, 8, 8, 0.08);
             backdrop-filter: blur(6px);
             -webkit-backdrop-filter: blur(6px);
-            z-index: 1;
             pointer-events: none;
           }
+
 
           .contact-card-grid {
             background-image:
@@ -1314,6 +1315,10 @@ const MagicBento: React.FC<BentoProps> = ({
             color: inherit;
           }
 
+          :root:not(.dark) .bento-card-surface .contact-card-overlay {
+            background: rgba(250, 249, 245, 0.14);
+          }
+
           :root:not(.dark) .bento-card-surface .btn-neutral-dark {
             border-color: rgba(36, 31, 24, 0.2) !important;
             color: var(--site-text) !important;
@@ -1327,14 +1332,6 @@ const MagicBento: React.FC<BentoProps> = ({
           :root:not(.dark) .bento-card-surface .selling-site-ambient,
           :root:not(.dark) .bento-card-surface .attention-mobile-frost {
             opacity: 0 !important;
-          }
-
-          :root:not(.dark) .bento-card-surface .contact-card-frost {
-            inset: 0 !important;
-            opacity: 1 !important;
-            z-index: 5 !important;
-            backdrop-filter: blur(8px);
-            background: rgba(250, 249, 245, 0.16);
           }
 
           :root:not(.dark) .bento-card-surface [class*="bg-gradient"],
@@ -1426,8 +1423,7 @@ const MagicBento: React.FC<BentoProps> = ({
           @media (max-width: 767px) {
             .bento-card-surface .bento-mobile-frost,
             .bento-card-surface .selling-mobile-frost,
-            .bento-card-surface .attention-mobile-frost,
-            .bento-card-surface .contact-card-frost {
+            .bento-card-surface .attention-mobile-frost {
               display: block;
               opacity: 1 !important;
               background: rgba(8, 8, 8, 0.1);
@@ -1437,8 +1433,7 @@ const MagicBento: React.FC<BentoProps> = ({
 
             :root:not(.dark) .bento-card-surface .bento-mobile-frost,
             :root:not(.dark) .bento-card-surface .selling-mobile-frost,
-            :root:not(.dark) .bento-card-surface .attention-mobile-frost,
-            :root:not(.dark) .bento-card-surface .contact-card-frost {
+            :root:not(.dark) .bento-card-surface .attention-mobile-frost {
               opacity: 1 !important;
               background: rgba(250, 249, 245, 0.18);
             }
@@ -1616,16 +1611,16 @@ const MagicBento: React.FC<BentoProps> = ({
 
             .card-responsive .card:nth-child(4) .remote-card-globe-shell {
               min-height: 7.5rem;
-              height: 52%;
+              height: 38%;
             }
 
             .card-responsive .card:nth-child(4) .remote-card-globe-position {
-              bottom: -68%;
-              height: 170%;
+              bottom: -56%;
+              height: 128%;
             }
 
             .card-responsive .card:nth-child(4) .remote-card-globe {
-              transform: scale(1);
+              transform: scale(0.72);
             }
           }
         `}

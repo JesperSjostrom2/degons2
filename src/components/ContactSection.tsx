@@ -323,7 +323,7 @@ export default function ContactSection() {
                 </label>
 
                 <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                  <p className="text-sm text-muted-foreground">
+                  <p className="min-w-0 flex-1 text-sm text-muted-foreground">
                     {status === 'sent'
                       ? 'Message sent. I will get back to you soon.'
                       : status === 'error'
@@ -336,12 +336,12 @@ export default function ContactSection() {
                     background="#dac5a7"
                     borderRadius="20px"
                     borderColor="#dac5a7"
-                    className="relative cursor-pointer text-lg font-medium text-black transition-all duration-300 hover:!bg-none hover:!bg-transparent hover:!border-accent hover:text-[color:var(--site-text)] dark:hover:text-white"
+                    className="relative shrink-0 cursor-pointer text-black transition-all duration-300 hover:!bg-none hover:!bg-transparent hover:!border-accent hover:text-[color:var(--site-text)] dark:hover:text-white"
                   >
                     <button
                       type="submit"
                       disabled={status === 'sending' || status === 'sent'}
-                      className="relative z-10 flex cursor-pointer items-center gap-5 rounded-[20px] px-8 py-2 text-lg font-medium disabled:pointer-events-none disabled:opacity-70"
+                      className="relative z-10 flex h-[42px] min-w-max cursor-pointer items-center gap-3 whitespace-nowrap rounded-[20px] px-7 text-base font-medium disabled:pointer-events-none disabled:opacity-70"
                     >
                       {status === 'sending' ? (
                         <>

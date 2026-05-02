@@ -136,7 +136,7 @@ export default function TechStackSection() {
   return (
     <section id="skills" className="site-section">
       <div className="container mx-auto px-6">
-        <div className="section-header mb-10">
+        <div className="section-header">
           <p className="section-label">My Personal Toolkit</p>
           <h2 className="section-title">Tech Stack</h2>
         </div>

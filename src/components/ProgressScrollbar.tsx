@@ -45,7 +45,7 @@ const ProgressScrollbar: React.FC = () => {
       `}</style>
       
       {/* Custom Vertical Progress Bar - Middle of page vertically */}
-      <div className="fixed right-16 top-1/2 z-50 hidden -translate-y-1/2 md:block">
+      <div className="fixed right-16 top-1/2 z-50 hidden -translate-y-1/2 xl:block">
         <div className="relative h-32 w-1 overflow-hidden rounded-full border border-[color:var(--site-border)] bg-[rgba(20,20,19,0.18)] shadow-[0_0_0_1px_rgba(250,249,245,0.36)] dark:border-white/10 dark:bg-white/20 dark:shadow-none">
           {/* Progress Fill - Inside the background, fills from top to bottom */}
           <motion.div
