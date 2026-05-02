@@ -759,35 +759,6 @@ const MagicBento: React.FC<BentoProps> = ({
                       setIsContactCopied(false);
                       copyFeedbackTimeoutRef.current = null;
                     }, 1600);
-                    
-                    const notification = document.createElement('div');
-                    notification.className = 'fixed bottom-24 right-4 px-4 py-3 rounded-lg shadow-lg z-50 transform translate-y-full transition-transform duration-300';
-                    notification.style.background = '#2a2a2a';
-                    notification.style.border = '1px solid #4a4a4a';
-                    notification.style.color = '#ffffff';
-                    notification.innerHTML = `
-                      <div class="flex items-center gap-2">
-                        <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                        <div>
-                          <div class="font-medium">Copied to clipboard!</div>
-                          <div class="text-sm opacity-70">Email address copied successfully</div>
-                        </div>
-                      </div>
-                    `;
-                    document.body.appendChild(notification);
-                    
-                    setTimeout(() => {
-                      notification.style.transform = 'translateY(0)';
-                    }, 10);
-                    
-                    setTimeout(() => {
-                      notification.style.transform = 'translateY(100%)';
-                      setTimeout(() => {
-                        document.body.removeChild(notification);
-                      }, 300);
-                    }, 3000);
                   } catch (err) {
                     console.error('Failed to copy: ', err);
                   }
@@ -798,7 +769,9 @@ const MagicBento: React.FC<BentoProps> = ({
                   <Copy className={`absolute left-0 top-0 h-4 w-4 transition-all duration-200 ${isContactCopied ? 'scale-75 opacity-0' : 'scale-100 opacity-100'}`} />
                   <Check className={`absolute left-0 top-0 h-4 w-4 text-emerald-300 transition-all duration-200 ${isContactCopied ? 'scale-100 opacity-100' : 'scale-75 opacity-0'}`} />
                 </span>
-                <span className="contact-card-email relative z-10">contact@jespersjostrom.se</span>
+                <span className="contact-card-email relative z-10">
+                  {isContactCopied ? 'Copied to clipboard' : 'contact@jespersjostrom.se'}
+                </span>
               </button>
             </Magnet>
           </div>

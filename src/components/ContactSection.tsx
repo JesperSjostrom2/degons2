@@ -140,35 +140,6 @@ export default function ContactSection() {
 
       setStatus('sent')
 
-      const notification = document.createElement('div')
-      notification.className = 'fixed bottom-24 right-4 px-4 py-3 rounded-lg shadow-lg z-50 transform translate-y-full transition-transform duration-300'
-      notification.style.background = '#2a2a2a'
-      notification.style.border = '1px solid #4a4a4a'
-      notification.style.color = '#ffffff'
-      notification.innerHTML = `
-        <div class="flex items-center gap-2">
-          <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-          </svg>
-          <div>
-            <div class="font-medium">Message sent!</div>
-            <div class="text-sm opacity-70">Your inquiry has been successfully sent.</div>
-          </div>
-        </div>
-      `
-      document.body.appendChild(notification)
-      
-      setTimeout(() => {
-        notification.style.transform = 'translateY(0)'
-      }, 10)
-      
-      setTimeout(() => {
-        notification.style.transform = 'translateY(100%)'
-        setTimeout(() => {
-          document.body.removeChild(notification)
-        }, 300)
-      }, 3000)
-
       setName('')
       setEmail('')
       setProjectType(projectTypes[0])

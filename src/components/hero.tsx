@@ -31,37 +31,6 @@ export default function Hero() {
       await navigator.clipboard.writeText('contact@jespersjostrom.se')
       setCopied(true)
 
-      const notification = document.createElement('div')
-      notification.className = 'fixed bottom-24 right-4 px-4 py-3 rounded-lg shadow-lg z-50 transform translate-y-full transition-transform duration-300'
-      notification.style.background = '#2a2a2a'
-      notification.style.border = '1px solid #4a4a4a'
-      notification.style.color = '#ffffff'
-      notification.innerHTML = `
-        <div class="flex items-center gap-2">
-          <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-          </svg>
-          <div>
-            <div class="font-medium">Copied to clipboard!</div>
-            <div class="text-sm opacity-70">Email address copied successfully</div>
-          </div>
-        </div>
-      `
-      document.body.appendChild(notification)
-
-      setTimeout(() => {
-        notification.style.transform = 'translateY(0)'
-      }, 10)
-
-      setTimeout(() => {
-        notification.style.transform = 'translateY(100%)'
-        setTimeout(() => {
-          if (document.body.contains(notification)) {
-            document.body.removeChild(notification)
-          }
-        }, 300)
-      }, 3000)
-
       setTimeout(() => {
         setCopied(false)
       }, 1600)
@@ -105,9 +74,7 @@ export default function Hero() {
             <motion.span className="space-micro-planet left-[13%] top-[3%] hidden md:block" style={{ y: microPlanetY }} />
 
             <h1 className="mx-auto max-w-[1080px] text-balance text-[clamp(2.45rem,5.6vw,5.1rem)] font-semibold leading-[1.02] tracking-[-0.055em] text-[color:var(--site-text)] drop-shadow-[0_18px_60px_rgba(0,0,0,0.18)] dark:drop-shadow-[0_18px_60px_rgba(0,0,0,0.38)]">
-              <span>Hi, I&apos;m</span>{' '}
-              <span className="mx-1.5 inline-block h-[1.08em] w-[1.08em] translate-y-[0.16em] rounded-full border border-accent/30 bg-[color:var(--site-surface)] shadow-[inset_0_1px_0_rgba(245,239,228,0.12),0_0_22px_rgba(218,197,167,0.12)]" />{' '}
-              <span className="text-accent">Jesper.</span>
+              <span>Hi, I&apos;m</span> <span className="text-accent">Jesper.</span>
               <br />
               <span>I design</span>{' '}
               <span className="mx-1.5 inline-flex h-[0.3em] w-[0.64em] translate-y-[-0.04em] rotate-[-2deg] rounded-[46%_54%_50%_50%/58%_42%_58%_42%] border border-[#dac5a7]/16 bg-gradient-to-br from-[#c2a77b] to-[#8b7355] shadow-[0_0_16px_rgba(218,197,167,0.10)]" />{' '}
