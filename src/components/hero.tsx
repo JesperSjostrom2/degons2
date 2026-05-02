@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import { ArrowRight, Copy } from 'lucide-react'
 
 import GlareHover from '@/components/GlareHover'
@@ -10,6 +10,9 @@ import LightRays from '@/components/LightRays'
 export default function Hero() {
   const [showLightRays, setShowLightRays] = useState(false)
   const [copied, setCopied] = useState(false)
+  const { scrollYProgress } = useScroll()
+  const planetY = useTransform(scrollYProgress, [0, 0.32], [0, 240])
+  const microPlanetY = useTransform(scrollYProgress, [0, 0.32], [0, -140])
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(min-width: 768px)')
@@ -99,7 +102,7 @@ export default function Hero() {
             transition={{ duration: 0.9, delay: 0.2, ease: 'easeOut' }}
             className="relative w-full max-w-6xl"
           >
-            <div className="pointer-events-none absolute left-[14%] top-[4%] hidden h-7 w-10 rotate-[-3deg] rounded-[48%_52%_46%_54%/56%_44%_56%_44%] border border-[#dac5a7]/18 bg-gradient-to-br from-[#c2a77b] to-[#8b7355] shadow-[0_0_18px_rgba(218,197,167,0.12)] md:block" />
+            <motion.span className="space-micro-planet left-[13%] top-[3%] hidden md:block" style={{ y: microPlanetY }} />
 
             <h1 className="mx-auto max-w-[1080px] text-balance text-[clamp(2.45rem,5.6vw,5.1rem)] font-semibold leading-[1.02] tracking-[-0.055em] text-[color:var(--site-text)] drop-shadow-[0_18px_60px_rgba(0,0,0,0.18)] dark:drop-shadow-[0_18px_60px_rgba(0,0,0,0.38)]">
               <span>Hi, I&apos;m</span>{' '}
@@ -184,7 +187,13 @@ export default function Hero() {
         </div>
       </div>
 
-      <div className="planet-horizon pointer-events-none absolute bottom-[-13rem] left-1/2 z-10 h-[20rem] w-[96vw] max-w-[1320px] -translate-x-1/2 md:bottom-[-22rem] md:h-[28rem] md:w-[118vw]" />
+      <motion.div
+        className="planet-horizon pointer-events-none absolute bottom-[-13rem] left-1/2 z-10 h-[20rem] w-[96vw] max-w-[1320px] md:bottom-[-22rem] md:h-[28rem] md:w-[118vw]"
+        initial={{ clipPath: 'inset(0 100% 0 0)' }}
+        animate={{ clipPath: 'inset(0 0% 0 0)' }}
+        transition={{ duration: 1.65, delay: 0.85, ease: [0.22, 1, 0.36, 1] }}
+        style={{ x: '-50%', y: planetY }}
+      />
     </section>
   )
 }

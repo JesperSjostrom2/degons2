@@ -449,6 +449,101 @@
     background: #f5efe4;
   }
 
+  .space-background-meteor {
+    left: -7rem;
+    top: 12vh;
+    width: 3.25rem;
+    height: 1px;
+    border-radius: 9999px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.46) 0%, rgba(218, 197, 167, 0.14) 34%, rgba(218, 197, 167, 0.03) 68%, transparent 100%);
+    box-shadow:
+      0 0 5px rgba(255, 255, 255, 0.22),
+      0 0 14px rgba(218, 197, 167, 0.1);
+    opacity: 0;
+    transform: rotate(-158deg);
+    transform-origin: 0% 50%;
+    animation: space-background-meteor-pass 18s linear infinite;
+  }
+
+  .space-background-meteor::after {
+    content: '';
+    position: absolute;
+    left: -1px;
+    top: 50%;
+    width: 0.12rem;
+    height: 0.12rem;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.52);
+    box-shadow: 0 0 7px rgba(255, 255, 255, 0.32);
+    transform: translateY(-50%);
+  }
+
+  .space-micro-planet {
+    position: absolute;
+    width: 2.45rem;
+    height: 2.45rem;
+    border-radius: 9999px;
+    border: 1px solid color-mix(in srgb, var(--accent) 24%, transparent);
+    background:
+      radial-gradient(circle at 32% 24%, rgba(255, 255, 255, 0.42), transparent 18%),
+      radial-gradient(circle at 72% 78%, color-mix(in srgb, var(--accent) 24%, transparent), transparent 36%),
+      linear-gradient(135deg, #c2a77b 0%, #8b7355 46%, #3a332b 100%);
+    box-shadow:
+      inset -0.45rem -0.45rem 0.9rem rgba(0, 0, 0, 0.26),
+      inset 0.2rem 0.2rem 0.55rem rgba(255, 255, 255, 0.12),
+      0 0 24px color-mix(in srgb, var(--accent) 16%, transparent);
+    pointer-events: none;
+    transform: rotate(-13deg);
+  }
+
+  .space-micro-planet::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(110deg, transparent 0 48%, rgba(255, 255, 255, 0.12) 49%, transparent 58%);
+    pointer-events: none;
+  }
+
+  .space-micro-planet::before {
+    content: '';
+    position: absolute;
+    left: 0.62rem;
+    top: 0.82rem;
+    width: 0.34rem;
+    height: 0.34rem;
+    border-radius: 9999px;
+    background: rgba(245, 239, 228, 0.2);
+    box-shadow:
+      0.72rem 0.36rem 0 -0.08rem rgba(245, 239, 228, 0.12),
+      0.38rem 0.92rem 0 -0.1rem rgba(20, 20, 19, 0.16);
+  }
+
+  @keyframes space-background-meteor-pass {
+    0%, 72% {
+      opacity: 0;
+      transform: translate3d(0, 0, 0) rotate(-158deg);
+    }
+
+    73% {
+      opacity: 0.26;
+    }
+
+    80% {
+      opacity: 0.26;
+    }
+
+    86% {
+      opacity: 0;
+      transform: translate3d(calc(100vw + 12rem), 38vh, 0) rotate(-158deg);
+    }
+
+    100% {
+      opacity: 0;
+      transform: translate3d(calc(100vw + 12rem), 38vh, 0) rotate(-158deg);
+    }
+  }
+
   .btn-primary-consistent {
     height: 42px;
     padding-left: 1.75rem;
@@ -541,8 +636,18 @@
 
   .live-chat-panel {
     background:
+      radial-gradient(circle at 50% 0%, rgba(139, 115, 85, 0.1), transparent 42%),
+      linear-gradient(180deg, rgba(250, 249, 245, 0.62), rgba(239, 233, 222, 0.4));
+    border: 1px solid rgba(36, 31, 24, 0.08);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.42);
+  }
+
+  .dark .live-chat-panel {
+    background:
       radial-gradient(circle at 50% 0%, rgba(218, 197, 167, 0.055), transparent 42%),
       linear-gradient(180deg, rgba(245, 239, 228, 0.026), rgba(245, 239, 228, 0.008));
+    border: 0;
+    box-shadow: none;
   }
 
   .live-chat-bubble {
@@ -559,23 +664,27 @@
 
   .live-chat-bubble-left {
     margin-right: auto;
-    background: rgba(245, 239, 228, 0.055);
-    border: 1px solid rgba(245, 239, 228, 0.075);
+    background: rgba(250, 249, 245, 0.78);
+    border: 1px solid rgba(36, 31, 24, 0.08);
     color: var(--site-text);
   }
 
   .dark .live-chat-bubble-left {
+    background: rgba(245, 239, 228, 0.055);
+    border: 1px solid rgba(245, 239, 228, 0.075);
     color: rgba(245, 239, 228, 0.82);
   }
 
   .live-chat-bubble-right {
     margin-left: auto;
-    background: rgba(143, 165, 138, 0.12);
-    border: 1px solid rgba(143, 165, 138, 0.16);
+    background: rgba(143, 165, 138, 0.22);
+    border: 1px solid rgba(95, 119, 89, 0.2);
     color: var(--site-text);
   }
 
   .dark .live-chat-bubble-right {
+    background: rgba(143, 165, 138, 0.12);
+    border: 1px solid rgba(143, 165, 138, 0.16);
     color: #f5efe4;
   }
 

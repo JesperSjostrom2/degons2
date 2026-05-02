@@ -342,7 +342,7 @@ export default function ContactSection() {
                       <button
                         type="submit"
                         disabled={status === 'sending' || status === 'sent'}
-                        className="relative z-10 flex h-[42px] min-w-max cursor-pointer items-center gap-3 whitespace-nowrap rounded-[20px] px-7 text-base font-medium disabled:pointer-events-none disabled:opacity-70"
+                        className="group relative z-10 flex h-[42px] min-w-max cursor-pointer items-center gap-3 whitespace-nowrap rounded-[20px] px-7 text-base font-medium disabled:pointer-events-none disabled:opacity-70"
                       >
                         {status === 'sending' ? (
                           <>
@@ -357,7 +357,7 @@ export default function ContactSection() {
                         ) : (
                           <>
                             Send inquiry
-                            <SendIcon size={16} className="h-4 w-4" />
+                            <SendIcon size={16} className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                           </>
                         )}
                       </button>
