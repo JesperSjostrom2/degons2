@@ -588,7 +588,7 @@ const MagicBento: React.FC<BentoProps> = ({
 
         </div>
 
-        <div className="remote-card-globe-shell relative z-10 mt-auto min-h-[220px] h-[52%] overflow-hidden">
+        <div className="remote-card-globe-shell relative z-10 mt-auto min-h-[220px] h-[52%] overflow-visible">
           <div className="remote-card-globe-position absolute inset-x-0 bottom-[-65%] h-[180%] flex items-center justify-center pointer-events-none">
             <Globe 
               className="remote-card-globe relative z-10 w-full max-w-[600px] scale-[1.15] overflow-hidden"
@@ -1610,17 +1610,17 @@ const MagicBento: React.FC<BentoProps> = ({
             }
 
             .card-responsive .card:nth-child(4) .remote-card-globe-shell {
-              min-height: 7.5rem;
-              height: 38%;
+              min-height: 9.5rem;
+              height: 52%;
             }
 
             .card-responsive .card:nth-child(4) .remote-card-globe-position {
-              bottom: -56%;
-              height: 128%;
+              bottom: -38%;
+              height: 138%;
             }
 
             .card-responsive .card:nth-child(4) .remote-card-globe {
-              transform: scale(0.72);
+              transform: scale(0.78);
             }
           }
         `}
