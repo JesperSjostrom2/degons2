@@ -330,36 +330,39 @@ export default function ContactSection() {
                         ? errorMessage
                         : 'Messages are sent directly through the form.'}
                   </p>
-                  <GlareHover
-                    width="auto"
-                    height="auto"
-                    background="#dac5a7"
-                    borderRadius="20px"
-                    borderColor="#dac5a7"
-                    className="relative shrink-0 cursor-pointer text-black transition-all duration-300 hover:!bg-none hover:!bg-transparent hover:!border-accent hover:text-[color:var(--site-text)] dark:hover:text-white"
-                  >
-                    <button
-                      type="submit"
-                      disabled={status === 'sending' || status === 'sent'}
-                      className="relative z-10 flex h-[42px] min-w-max cursor-pointer items-center gap-3 whitespace-nowrap rounded-[20px] px-7 text-base font-medium disabled:pointer-events-none disabled:opacity-70"
+                  <div className="relative shrink-0">
+                    <GlareHover
+                      width="auto"
+                      height="auto"
+                      background="#dac5a7"
+                      borderRadius="20px"
+                      borderColor="#dac5a7"
+                      className="relative cursor-pointer text-black transition-all duration-300 hover:!bg-none hover:!bg-transparent hover:!border-accent hover:text-[color:var(--site-text)] dark:hover:text-white"
                     >
-                      {status === 'sending' ? (
-                        <>
-                          Sending...
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                        </>
-                      ) : status === 'sent' ? (
-                        <>
-                          Sent!
-                          <SendIcon size={16} isAnimating className="h-4 w-4" />
-                        </>
-                      ) : (
-                        <>
-                          Send inquiry
-                        </>
-                      )}
-                    </button>
-                  </GlareHover>
+                      <button
+                        type="submit"
+                        disabled={status === 'sending' || status === 'sent'}
+                        className="relative z-10 flex h-[42px] min-w-max cursor-pointer items-center gap-3 whitespace-nowrap rounded-[20px] px-7 text-base font-medium disabled:pointer-events-none disabled:opacity-70"
+                      >
+                        {status === 'sending' ? (
+                          <>
+                            Sending...
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                          </>
+                        ) : status === 'sent' ? (
+                          <>
+                            Sent!
+                            <SendIcon size={16} isAnimating className="h-4 w-4" />
+                          </>
+                        ) : (
+                          <>
+                            Send inquiry
+                            <SendIcon size={16} className="h-4 w-4" />
+                          </>
+                        )}
+                      </button>
+                    </GlareHover>
+                  </div>
                 </div>
               </form>
             </div>
