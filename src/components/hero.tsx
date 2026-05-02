@@ -80,11 +80,14 @@ export default function Hero() {
               <span className="mx-1.5 inline-flex h-[0.3em] w-[0.64em] translate-y-[-0.04em] rotate-[-2deg] rounded-[46%_54%_50%_50%/58%_42%_58%_42%] border border-[#dac5a7]/16 bg-gradient-to-br from-[#c2a77b] to-[#8b7355] shadow-[0_0_16px_rgba(218,197,167,0.10)]" />{' '}
               <span className="relative inline-block">
                 interfaces
-                <svg
+                <motion.svg
                   aria-hidden="true"
                   viewBox="0 0 300 34"
                   className="pointer-events-none absolute -bottom-[0.17em] left-1/2 h-[0.18em] w-[110%] -translate-x-1/2 overflow-visible text-[#8fa58a]"
                   preserveAspectRatio="none"
+                  initial={{ clipPath: 'inset(0 100% 0 0)' }}
+                  animate={{ clipPath: 'inset(0 0% 0 0)' }}
+                  transition={{ duration: 1.15, delay: 1.6, ease: [0.22, 1, 0.36, 1] }}
                 >
                   <path
                     d="M4 24 C42 4, 151 7, 296 13 C221 14, 108 18, 19 29 C9 30, 2 29, 4 24 Z"
@@ -96,7 +99,7 @@ export default function Hero() {
                     fill="var(--site-bg-deep)"
                     opacity="0.22"
                   />
-                </svg>
+                </motion.svg>
               </span>
               <br />
               <span>that help products</span>{' '}

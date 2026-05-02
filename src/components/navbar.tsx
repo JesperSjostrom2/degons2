@@ -123,8 +123,8 @@ export default function Navbar() {
     >
       {/* Desktop Menu */}
       <div className="hidden lg:flex glass-nav relative items-center justify-center" style={{ padding: '0.35rem 0.85rem', gap: '0.55rem' }}>
-        {navItems.map((item, index) => (
-          <motion.a
+        {navItems.map((item) => (
+          <a
             key={item.name}
             href={item.href}
             onClick={() => handleNavClick(item.id)}
@@ -137,9 +137,6 @@ export default function Navbar() {
               fontSize: '0.875rem',
               padding: '0.35rem 0.7rem'
             }}
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 + 0.2, duration: 0.6 }}
           >
             {activeSection === item.id && (
               <motion.div
@@ -156,7 +153,7 @@ export default function Navbar() {
             )}
             
             <span className="relative z-10">{item.name}</span>
-          </motion.a>
+          </a>
         ))}
         <div className="ml-1 h-5 w-px bg-[color:var(--site-border)]" />
         {renderThemeToggle()}

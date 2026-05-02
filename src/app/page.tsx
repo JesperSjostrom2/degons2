@@ -12,6 +12,7 @@ import TechStackSection from '@/components/TechStackSection'
 import ContactSection from '@/components/ContactSection'
 import Footer from '@/components/footer'
 import ProgressScrollbar from '@/components/ProgressScrollbar'
+import ScrollReveal from '@/components/scroll-reveal'
 
 const aboutInfoCardClass = 'relative z-10 rounded-xl border border-[color:var(--site-border)] bg-[color:var(--site-surface)] p-4 text-center backdrop-blur-sm transition-all duration-300 group-hover:-translate-x-1 group-hover:-translate-y-1 group-hover:rounded-[4px] group-hover:border-accent/35 group-hover:shadow-[4px_4px_0px_rgba(168,140,98,0.72)] group-active:translate-x-0 group-active:translate-y-0 group-active:rounded-xl group-active:shadow-none'
 const aboutInfoDepthClass = 'pointer-events-none absolute inset-0 z-0 rounded-xl border border-accent/30 bg-accent/10 opacity-0 shadow-[0_0_0_1px_rgba(218,197,167,0.08),inset_0_1px_0_rgba(245,239,228,0.12)] transition-all duration-300 group-hover:translate-x-1.5 group-hover:translate-y-1.5 group-hover:opacity-100 group-hover:rounded-[4px]'
@@ -54,10 +55,12 @@ export default function Home() {
               {/* Left Content */}
               <div className="lg:col-span-3 lg:col-start-1 space-y-8">
                 <div className="text-left md:ml-8">
-                  <p className="section-label text-left">
-                    MORE ABOUT ME
-                  </p>
-                  <div className="mb-8">
+                  <ScrollReveal delay={0} blur>
+                    <p className="section-label text-left">
+                      MORE ABOUT ME
+                    </p>
+                  </ScrollReveal>
+                  <ScrollReveal className="mb-8" delay={0.08} blur>
                     <h2 className="section-title group cursor-default leading-tight" style={{textShadow: '0 0 10px rgba(245, 239, 228, 0.12), 0 0 20px rgba(218, 197, 167, 0.05)'}}>
                       Always learning,<br />
                       always <span className="relative inline-block">
@@ -65,8 +68,8 @@ export default function Home() {
                         <span className="absolute -right-16 top-1/2 hidden -translate-y-1/2 text-2xl opacity-0 transition-all duration-300 group-hover:opacity-100 md:block md:text-3xl lg:text-4xl animate-waving">👋</span>
                       </span>
                     </h2>
-                  </div>
-                  <div className="max-w-xl space-y-6 text-lg leading-[1.65] text-muted-foreground">
+                  </ScrollReveal>
+                  <ScrollReveal className="max-w-xl space-y-6 text-lg leading-[1.65] text-muted-foreground" delay={0.18}>
                     <p>
                       I&apos;ve always been drawn to situations that push me out of autopilot. Moving countries,
                       learning new things, and building a life in a new environment have shaped me into someone
@@ -80,7 +83,7 @@ export default function Home() {
                     <p className="font-medium text-[color:var(--site-text)]">
                       I&apos;m at my best when I&apos;m improving, solving problems, and not standing still for too long.
                     </p>
-                  </div>
+                  </ScrollReveal>
                   
                   {/* Social Links */}
                   <SocialLinks />

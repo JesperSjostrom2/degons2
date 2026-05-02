@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState, type CSSProperties, type FormEvent } from 'react'
+import { motion } from 'framer-motion'
 import { ChevronDown, Github, Linkedin, Loader2, Mail, type LucideIcon } from 'lucide-react'
 import { SendIcon } from '@/components/ui/animated-state-icons'
 
@@ -155,15 +156,27 @@ export default function ContactSection() {
   return (
     <section id="contact" className="site-section min-h-screen">
       <div className="container mx-auto px-6">
-        <div className="section-header">
+        <motion.div
+          className="section-header"
+          initial={{ opacity: 0, y: 34, filter: 'blur(8px)' }}
+          whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+          viewport={{ once: true, amount: 0.45 }}
+          transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
+        >
           <p className="section-label">Contact</p>
           <h2 className="section-title">Let&apos;s Build Something</h2>
           <p className="section-description">
             Tell me what you want to create, improve, or launch. Send the details here or reach me through the links beside it.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="mx-auto max-w-6xl">
+        <motion.div
+          className="mx-auto max-w-6xl"
+          initial={{ opacity: 0, y: 52, scale: 0.985 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true, amount: 0.22 }}
+          transition={{ duration: 1, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+        >
           <BorderGlow
             className="rounded-[28px]"
             edgeSensitivity={26}
@@ -338,7 +351,7 @@ export default function ContactSection() {
               </form>
             </div>
           </BorderGlow>
-        </div>
+        </motion.div>
       </div>
     </section>
   )

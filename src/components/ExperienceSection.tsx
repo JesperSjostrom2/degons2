@@ -395,21 +395,39 @@ const ExperienceSection: React.FC = () => {
   return (
     <section id="projects" className="site-section">
       <div className="container mx-auto px-6">
-        <div className="section-header">
+        <motion.div
+          className="section-header"
+          initial={{ opacity: 0, y: 34, filter: 'blur(8px)' }}
+          whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+          viewport={{ once: true, amount: 0.45 }}
+          transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
+        >
           <p className="section-label">Selected Work</p>
           <h2 className="section-title hidden md:block">Featured Projects</h2>
           <p className="section-description hidden md:block">
             A collection of projects that demonstrate technical skills and creative problem-solving abilities.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="mx-auto flex max-w-7xl flex-col gap-7">
+        <motion.div
+          className="mx-auto flex max-w-7xl flex-col gap-7"
+          initial={{ opacity: 0, y: 52, scale: 0.985 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true, amount: 0.16 }}
+          transition={{ duration: 1, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+        >
           {projectsData.map((project) => (
             <ProjectCard key={project.id} project={project} />
           ))}
-        </div>
+        </motion.div>
 
-        <div className="mx-auto mt-14 max-w-7xl pt-2 text-center">
+        <motion.div
+          className="mx-auto mt-14 max-w-7xl pt-2 text-center"
+          initial={{ opacity: 0, y: 28 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.55 }}
+          transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+        >
           <div className="mb-5 flex items-center gap-4">
             <div className="site-divider-line h-px flex-1" />
             <div className="group/sparkles relative flex h-11 w-11 items-center justify-center rounded-xl border border-accent/30 bg-accent/10 text-accent transition-all duration-300 hover:border-accent/55 hover:bg-accent/15">
@@ -436,7 +454,7 @@ const ExperienceSection: React.FC = () => {
               </span>
             </GlareHover>
           </a>
-        </div>
+        </motion.div>
       </div>
     </section>
   )
