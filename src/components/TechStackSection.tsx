@@ -147,7 +147,7 @@ export default function TechStackSection() {
           <p className="section-label">Tech Stack</p>
           <h2 className="section-title">Modern web tools</h2>
           <p className="section-description">
-            The tools I use to design, build, and ship responsive websites with clean frontend foundations.
+            The tools I use to design, build and ship responsive websites.
           </p>
         </motion.div>
 
@@ -178,19 +178,17 @@ export default function TechStackSection() {
                 onPointerEnter={(event) => moveHoverFill(event.currentTarget, tech.name)}
                 onFocus={(event) => moveHoverFill(event.currentTarget, tech.name)}
                 onBlur={hideHoverFill}
-                className={`group relative z-10 flex basis-1/2 items-center justify-center border-b border-r border-[color:var(--site-border)] p-3 transition-colors duration-300 sm:basis-1/3 md:basis-auto dark:border-white/10 ${
-                  tech.featured
+                className={`group relative z-10 flex basis-1/2 items-center justify-center border-b border-r border-[color:var(--site-border)] p-3 transition-colors duration-300 sm:basis-1/3 md:basis-auto dark:border-white/10 ${tech.featured
                     ? 'min-h-[98px] md:col-span-1 md:min-h-[250px] md:p-10 lg:col-span-2 lg:min-h-[330px]'
                     : 'min-h-[86px] md:min-h-[170px] md:p-8 lg:col-span-1 lg:border-b-0'
-                } ${isActive ? 'text-background' : 'text-[color:var(--site-text)] hover:text-background dark:text-white/90'}`}
+                  } ${isActive ? 'text-background' : 'text-[color:var(--site-text)] hover:text-background dark:text-white/90'}`}
                 aria-label={`Open ${tech.name} website`}
               >
                 <div className="flex flex-col items-center gap-2 text-center md:gap-4">
                   {Icon ? (
                     <Icon
-                      className={`transition-colors duration-300 ${
-                        tech.featured ? 'h-9 w-9 md:h-24 md:w-24' : 'h-7 w-7 md:h-14 md:w-14'
-                      }`}
+                      className={`transition-colors duration-300 ${tech.featured ? 'h-9 w-9 md:h-24 md:w-24' : 'h-7 w-7 md:h-14 md:w-14'
+                        }`}
                     />
                   ) : (
                     <span className="text-[1.35rem] font-black italic leading-none tracking-[-0.12em] transition-colors duration-300 md:text-[3rem]">
@@ -198,9 +196,8 @@ export default function TechStackSection() {
                     </span>
                   )}
                   <span
-                    className={`font-semibold transition-colors duration-300 ${
-                      tech.featured ? 'text-xs md:text-2xl' : 'text-[0.7rem] md:text-base'
-                    }`}
+                    className={`font-semibold transition-colors duration-300 ${tech.featured ? 'text-xs md:text-2xl' : 'text-[0.7rem] md:text-base'
+                      }`}
                   >
                     {tech.name}
                   </span>
