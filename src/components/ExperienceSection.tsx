@@ -60,9 +60,9 @@ const projectsData: Project[] = [
       { type: 'video', src: '/assets/projects/creativevisuals.optimized.mp4' },
       { type: 'image', src: '/assets/projects/andcreative.png', objectPosition: '52% 70%' },
     ],
-    accentColor: '#1f1f1f',
-    accentSoftColor: 'rgba(31, 31, 31, 0.1)',
-    accentBorderColor: 'rgba(31, 31, 31, 0.34)',
+    accentColor: '#f3f3f3',
+    accentSoftColor: 'rgba(243, 243, 243, 0.14)',
+    accentBorderColor: 'rgba(243, 243, 243, 0.42)',
     glowColor: '0 0 92',
     glowColors: ['#f3f3f3', '#f3f3f3', '#f3f3f3'],
     liveSite: 'andcreative.se',
@@ -151,6 +151,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
   const [direction, setDirection] = useState<1 | -1>(1)
   const [detailsOpen, setDetailsOpen] = useState(false)
   const [isInView, setIsInView] = useState(false)
+  const [canAutoplayMedia, setCanAutoplayMedia] = useState(false)
   const accentLabelStyle = { '--project-accent': project.accentColor } as CSSProperties
   const slideCount = project.slides.length
   const currentSlide = project.slides[activeSlide]
@@ -167,6 +168,34 @@ const ProjectCard = ({ project }: { project: Project }) => {
 
     return () => observer.disconnect()
   }, [])
+
+  useEffect(() => {
+    const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const updateAutoplayPreference = () => setCanAutoplayMedia(!reducedMotionQuery.matches)
+
+    updateAutoplayPreference()
+    reducedMotionQuery.addEventListener('change', updateAutoplayPreference)
+
+    return () => reducedMotionQuery.removeEventListener('change', updateAutoplayPreference)
+  }, [])
+
+  useEffect(() => {
+    if (!cardRef.current) return
+
+    const videos = Array.from(cardRef.current.querySelectorAll<HTMLVideoElement>('video[data-autoplay-preview]'))
+
+    videos.forEach((video) => {
+      const isVisible = video.getClientRects().length > 0
+
+      if (canAutoplayMedia && isInView && isVisible) {
+        video.muted = true
+        void video.play().catch(() => undefined)
+        return
+      }
+
+      video.pause()
+    })
+  }, [activeSlide, canAutoplayMedia, isInView])
 
   const nextSlide = () => {
     setDirection(1)
@@ -213,9 +242,10 @@ const ProjectCard = ({ project }: { project: Project }) => {
                   >
                     {currentSlide.type === 'video' ? (
                       <video
+                        data-autoplay-preview
                         src={currentSlide.src}
                         className="h-full w-full object-cover opacity-90"
-                        autoPlay={isInView}
+                        autoPlay={canAutoplayMedia && isInView}
                         muted
                         loop
                         playsInline
@@ -260,13 +290,14 @@ const ProjectCard = ({ project }: { project: Project }) => {
                   {thumb === activeSlide && <span className="absolute inset-0 z-10 bg-accent/10" />}
                   {slide.type === 'video' ? (
                     <video
+                      data-autoplay-preview
                       src={slide.src}
                       className="h-full w-full object-cover opacity-72"
-                      autoPlay={thumb === activeSlide && isInView}
+                      autoPlay={canAutoplayMedia && isInView}
                       muted
                       loop
                       playsInline
-                      preload={thumb === activeSlide && isInView ? 'metadata' : 'none'}
+                      preload={isInView ? 'metadata' : 'none'}
                       aria-label={`${project.title} preview ${thumb + 1}`}
                     />
                   ) : (
@@ -418,7 +449,7 @@ const ExperienceSection: React.FC = () => {
           transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
         >
           <p className="section-label">Selected Work</p>
-          <h2 className="section-title hidden md:block">Past Work</h2>
+          <h2 className="section-title hidden md:block">My Past Projects</h2>
           <p className="section-description hidden md:block">
             A selection of websites and interface projects I&apos;ve designed and built.
           </p>
