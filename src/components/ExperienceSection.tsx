@@ -8,7 +8,7 @@ import { SiFramer, SiGreensock, SiHtml5, SiJavascript, SiNextdotjs, SiTailwindcs
 import type { IconType } from 'react-icons'
 
 import BorderGlow from '@/components/BorderGlow'
-import GlareHover from '@/components/GlareHover'
+
 
 const BORDER_GLOW_BACKGROUND = 'var(--site-card-glow-bg)'
 
@@ -467,40 +467,7 @@ const ExperienceSection: React.FC = () => {
           ))}
         </motion.div>
 
-        <motion.div
-          className="mx-auto mt-14 max-w-7xl pt-2 text-center"
-          initial={{ opacity: 0, y: 28 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.55 }}
-          transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <div className="mb-5 flex items-center gap-4">
-            <div className="site-divider-line h-px flex-1" />
-            <div className="group/sparkles relative flex h-11 w-11 items-center justify-center rounded-xl border border-accent/30 bg-accent/10 text-accent transition-all duration-300 hover:border-accent/55 hover:bg-accent/15">
-              <Sparkles className="h-5 w-5 transition-transform duration-300 ease-out group-hover/sparkles:scale-110" />
-            </div>
-            <div className="site-divider-line-reverse h-px flex-1" />
-          </div>
-          <p className="text-sm font-medium text-[color:var(--site-text)]">Have a website in mind?</p>
-          <p className="mt-2 text-xs text-muted-foreground sm:text-sm">
-            Send the idea and I&apos;ll help you figure out the best next step.
-          </p>
-          <a href="#contact" className="mt-6 inline-flex cursor-pointer">
-            <GlareHover
-              width="auto"
-              height="auto"
-              background="#dac5a7"
-              borderRadius="20px"
-              borderColor="#dac5a7"
-              className="relative cursor-pointer text-black transition-all duration-300 hover:!bg-none hover:!bg-transparent hover:!border-accent hover:text-[color:var(--site-text)] dark:hover:text-white"
-            >
-              <span className="flex h-[42px] cursor-pointer items-center gap-3 rounded-[20px] px-7 text-base font-medium">
-                Let&apos;s Work Together
-                <ArrowRight className="h-4 w-4" />
-              </span>
-            </GlareHover>
-          </a>
-        </motion.div>
+
       </div>
     </section>
   )
