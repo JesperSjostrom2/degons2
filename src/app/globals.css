@@ -135,6 +135,7 @@
   --sidebar-foreground: #ffffff;
   --sidebar-primary: #dac5a7;
   --sidebar-primary-foreground: #141413;
+
   --sidebar-accent: #30302e;
   --sidebar-accent-foreground: #ffffff;
   --sidebar-border: rgba(255, 255, 255, 0.1);
@@ -152,7 +153,7 @@
   }
   
   html {
-    scroll-padding-top: 100px;
+    scroll-padding-top: 140px;
   }
   
   body {
@@ -659,8 +660,150 @@
     line-height: 1.25rem;
     opacity: 0;
     transform: translateY(10px) scale(0.96);
-    animation: live-chat-message 5.8s ease-in-out infinite;
+    animation: live-chat-message 10s ease-in-out infinite;
   }
+
+  /* ---- Realistic chat UI v2 ---- */
+
+  .live-chat-msg {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.5rem;
+    opacity: 0;
+    transform: translateY(8px);
+    animation: live-chat-message 10s ease-in-out infinite;
+  }
+
+  .live-chat-msg-client {
+    justify-content: flex-start;
+  }
+
+  .live-chat-msg-jesper {
+    justify-content: flex-end;
+    animation-delay: 2s;
+  }
+
+  .live-chat-typing-row {
+    animation-delay: 4.2s;
+  }
+
+  .live-chat-msg-avatar {
+    flex-shrink: 0;
+    width: 1.6rem;
+    height: 1.6rem;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.55rem;
+    font-weight: 700;
+    color: rgba(245, 239, 228, 0.9);
+    letter-spacing: 0.02em;
+  }
+
+  :root:not(.dark) .live-chat-msg-avatar {
+    background: rgba(36, 31, 24, 0.08);
+    border-color: rgba(36, 31, 24, 0.1);
+    color: var(--site-text);
+  }
+
+  .live-chat-avatar-jesper {
+    color: white;
+  }
+
+  .live-chat-msg-body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.2rem;
+    min-width: 0;
+    max-width: 78%;
+  }
+
+  .live-chat-msg-body-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.2rem;
+    min-width: 0;
+    max-width: 78%;
+  }
+
+  .live-chat-msg-name {
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--site-muted);
+    padding-left: 0.3rem;
+  }
+
+  .live-chat-msg-name-right {
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--site-muted);
+    padding-right: 0.3rem;
+  }
+
+  .dark .live-chat-msg-name,
+  .dark .live-chat-msg-name-right {
+    color: rgba(255, 255, 255, 0.35);
+  }
+
+  .live-chat-bubble-v2 {
+    padding: 0.55rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.72rem;
+    line-height: 1.35;
+  }
+
+  .live-chat-bubble-client {
+    border-radius: 0.25rem 1rem 1rem 1rem;
+    background: rgba(250, 249, 245, 0.78);
+    border: 1px solid rgba(36, 31, 24, 0.08);
+    color: var(--site-text);
+  }
+
+  .dark .live-chat-bubble-client {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: rgba(245, 239, 228, 0.85);
+  }
+
+  .live-chat-bubble-jesper {
+    border-radius: 1rem 0.25rem 1rem 1rem;
+    background: rgba(100, 112, 78, 0.25);
+    border: 1px solid rgba(100, 112, 78, 0.3);
+    color: var(--site-text);
+  }
+
+  .dark .live-chat-bubble-jesper {
+    background: rgba(143, 165, 138, 0.18);
+    border: 1px solid rgba(143, 165, 138, 0.22);
+    color: rgba(245, 239, 228, 0.9);
+  }
+
+  .live-chat-typing-v2 {
+    display: inline-flex;
+    gap: 0.22rem;
+    align-items: center;
+    padding: 0.6rem 0.75rem;
+  }
+
+  .live-chat-typing-v2 span {
+    width: 0.3rem;
+    height: 0.3rem;
+    border-radius: 9999px;
+    background: currentColor;
+    opacity: 0.5;
+    animation: live-chat-dot 1.1s ease-in-out infinite;
+  }
+
+  .live-chat-typing-v2 span:nth-child(2) { animation-delay: 0.14s; }
+  .live-chat-typing-v2 span:nth-child(3) { animation-delay: 0.28s; }
+
 
   .live-chat-bubble-left {
     margin-right: auto;
@@ -689,15 +832,15 @@
   }
 
   .live-chat-bubble:nth-child(2) {
-    animation-delay: 0.7s;
+    animation-delay: 1.5s;
   }
 
   .live-chat-bubble:nth-child(3) {
-    animation-delay: 1.45s;
+    animation-delay: 3s;
   }
 
   .live-chat-bubble:nth-child(4) {
-    animation-delay: 2.15s;
+    animation-delay: 4.5s;
   }
 
   .live-chat-typing {

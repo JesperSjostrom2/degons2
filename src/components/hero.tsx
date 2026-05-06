@@ -87,7 +87,7 @@ export default function Hero() {
                   preserveAspectRatio="none"
                   initial={{ clipPath: 'inset(0 100% 0 0)' }}
                   animate={{ clipPath: 'inset(0 0% 0 0)' }}
-                  transition={{ duration: 1.15, delay: 1.6, ease: [0.22, 1, 0.36, 1] }}
+                  transition={{ duration: 1.35, delay: 1.6, ease: [0.65, 0, 0.35, 1] }}
                 >
                   <path
                     d="M4 24 C42 4, 151 7, 296 13 C221 14, 108 18, 19 29 C9 30, 2 29, 4 24 Z"
@@ -103,7 +103,7 @@ export default function Hero() {
               </span>
               <br />
               <span>people quickly</span>{' '}
-              <span className="text-accent">trust.</span>
+              <span style={{ color: '#8b7355' }}>trust.</span>
             </h1>
           </motion.div>
 
@@ -114,7 +114,7 @@ export default function Hero() {
             className="relative z-20 mt-8 flex max-w-3xl flex-col items-center gap-6 md:mt-10"
           >
             <p className="max-w-2xl text-balance text-base leading-7 text-[color:var(--site-muted)] md:text-lg">
-              I&apos;m Jesper, a frontend developer in Helsinki building landing pages, portfolios, and polished websites for people who need a stronger presence online.
+              A frontend developer in Helsinki building landing pages, portfolios, and polished websites for people who need a stronger presence online.
             </p>
             <div className="flex w-full flex-col items-center gap-3 sm:w-auto sm:flex-row sm:gap-4">
               <a href="#contact" className="inline-flex">
