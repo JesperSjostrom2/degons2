@@ -2,7 +2,7 @@
 
 import React, { useRef, useEffect, useState, useCallback } from "react";
 import { gsap } from "gsap";
-import { Copy, Check, User, Layers, Search, Code, Cloud, FileText, Smile, Send, Globe as GlobeIcon } from "lucide-react";
+import { Copy, Check, User, Search, FileText, Smile, Send, Globe as GlobeIcon, Braces, Gift, ScanLine } from "lucide-react";
 import { Globe } from "@/components/ui/cobe-globe";
 import TextType from "@/components/ui/TextType";
 
@@ -48,11 +48,13 @@ const BENTO_ACCENTS = {
 
 type ChatPhase = "idle" | "shrinking" | "typing";
 
-const SERVICE_ITEMS = [
-  { name: "Web Design", title: "Design", icon: Layers, color: "#dac5a7", connector: "design", label: "Shape", description: "Clean interfaces that convert." },
-  { name: "Web Development", title: "Development", icon: Code, color: "#8fa58a", connector: "development", label: "Build", description: "Scalable code built to last." },
-  { name: "SEO", title: "SEO", icon: Search, color: "#7fa7c8", connector: "seo", label: "Rank", description: "Improve visibility and rank higher." },
-  { name: "Hosting", title: "Hosting", icon: Cloud, color: "#a79ac7", connector: "hosting", label: "Launch", description: "Fast, secure, reliable hosting." },
+const WORKFLOW_ITEMS = [
+  { key: "structure", title: "Structure", icon: Braces, color: "#dac5a7", position: "left-top" },
+  { key: "frontend", title: "Frontend", icon: FileText, color: "#8fa58a", position: "left-middle" },
+  { key: "launch", title: "Launch", icon: ScanLine, color: "#a79ac7", position: "left-bottom" },
+  { key: "seo", title: "SEO", icon: Gift, color: "#7fa7c8", position: "right-top" },
+  { key: "refine", title: "Refine", icon: Search, color: "#b0aea5", position: "right-middle" },
+  { key: "ready", title: "Ready", icon: User, color: "#dac5a7", position: "right-bottom" },
 ];
 
 const REMOTE_GLOBE_MARKERS = [
@@ -69,58 +71,125 @@ const REMOTE_GLOBE_ARCS = [
   { id: "ct-tokyo", from: [-33.9249, 18.4241] as [number, number], to: [35.6762, 139.6503] as [number, number] },
   { id: "tokyo-syd", from: [35.6762, 139.6503] as [number, number], to: [-33.8688, 151.2093] as [number, number] },
 ];
-const ServicesSystemMap = () => {
-  const services = {
-    seo: SERVICE_ITEMS[2],
-    hosting: SERVICE_ITEMS[3],
-    development: SERVICE_ITEMS[1],
-    design: SERVICE_ITEMS[0],
-  };
-
+const ExecutionWorkflowMap = () => {
   return (
-    <div className="services-system pointer-events-none relative h-full min-h-[19rem] w-full" aria-hidden="true">
-      <div className="services-system-grid" />
-      <div className="services-system-ambient" />
-      <div className="services-system-canvas">
-        <span className="services-system-canvas-kicker">System Ready</span>
-        <span className="services-system-canvas-line" />
-        <span className="services-system-canvas-line short" />
-      </div>
-      <div className="services-system-lines">
-        <span className="services-system-line services-system-line-seo" />
-        <span className="services-system-line services-system-line-hosting" />
-        <span className="services-system-line services-system-line-development" />
-        <span className="services-system-line services-system-line-design" />
-        <span className="services-system-node services-system-node-seo" />
-        <span className="services-system-node services-system-node-hosting" />
-        <span className="services-system-node services-system-node-development" />
-        <span className="services-system-node services-system-node-design" />
-        <span className="services-system-flow services-system-flow-seo" />
-        <span className="services-system-flow services-system-flow-development" />
-        <span className="services-system-flow services-system-flow-hosting" />
-        <span className="services-system-flow services-system-flow-design" />
+    <div className="execution-map pointer-events-none relative h-full min-h-[14rem] w-full" aria-hidden="true">
+      <svg className="execution-graphic" viewBox="0 0 520 260" preserveAspectRatio="none">
+        <defs>
+          <radialGradient id="executionBgGlow" cx="50%" cy="47%" r="58%">
+            <stop offset="0%" stopColor="#dac5a7" stopOpacity="0.14" />
+            <stop offset="42%" stopColor="#f5efe4" stopOpacity="0.035" />
+            <stop offset="100%" stopColor="#000000" stopOpacity="0" />
+          </radialGradient>
+          <radialGradient id="executionHubGradient" cx="48%" cy="18%" r="78%">
+            <stop offset="0%" stopColor="#8b8a84" stopOpacity="0.72" />
+            <stop offset="46%" stopColor="#3c3c39" stopOpacity="0.96" />
+            <stop offset="100%" stopColor="#171716" stopOpacity="1" />
+          </radialGradient>
+          <radialGradient id="executionNodeGradient" cx="42%" cy="18%" r="80%">
+            <stop offset="0%" stopColor="#8f8e88" stopOpacity="0.68" />
+            <stop offset="48%" stopColor="#4a4a46" stopOpacity="0.96" />
+            <stop offset="100%" stopColor="#242421" stopOpacity="1" />
+          </radialGradient>
+          <filter id="executionHubShadow" x="-45%" y="-45%" width="190%" height="190%">
+            <feDropShadow dx="0" dy="12" stdDeviation="9" floodColor="#000000" floodOpacity="0.45" />
+            <feDropShadow dx="0" dy="0" stdDeviation="8" floodColor="#dac5a7" floodOpacity="0.08" />
+          </filter>
+          <filter id="executionNodeShadow" x="-60%" y="-60%" width="220%" height="220%">
+            <feDropShadow dx="0" dy="8" stdDeviation="7" floodColor="#000000" floodOpacity="0.38" />
+            <feDropShadow dx="0" dy="0" stdDeviation="4" floodColor="#f5efe4" floodOpacity="0.06" />
+          </filter>
+          <pattern id="executionDots" width="18" height="18" patternUnits="userSpaceOnUse">
+            <circle cx="9" cy="9" r="1.1" fill="#f5efe4" opacity="0.16" />
+          </pattern>
+          <mask id="executionDotFade">
+            <rect width="520" height="260" fill="black" />
+            <ellipse cx="260" cy="124" rx="210" ry="118" fill="white" />
+          </mask>
+        </defs>
+
+        <rect width="520" height="260" fill="url(#executionBgGlow)" />
+        <rect x="36" y="0" width="448" height="240" fill="url(#executionDots)" mask="url(#executionDotFade)" />
+        <ellipse className="execution-side-arc" cx="-28" cy="132" rx="142" ry="128" />
+        <ellipse className="execution-side-arc" cx="548" cy="132" rx="142" ry="128" />
+
+        <g className="execution-rails">
+          <path className="execution-wall-rail" d="M0 130 C20 130 31 72 50 72" />
+          <path className="execution-wall-rail" d="M0 130 C20 130 31 188 50 188" />
+          <path className="execution-wall-rail" d="M520 130 C500 130 489 72 470 72" />
+          <path className="execution-wall-rail" d="M520 130 C500 130 489 188 470 188" />
+          <path className="execution-rail" d="M226 130 H178 C154 130 154 72 126 72 H58" />
+          <path className="execution-rail" d="M226 130 H158 C142 130 136 130 116 130 H90" />
+          <path className="execution-rail" d="M226 130 H178 C154 130 154 188 126 188 H58" />
+          <path className="execution-rail" d="M294 130 H342 C366 130 366 72 394 72 H462" />
+          <path className="execution-rail" d="M294 130 H362 C378 130 384 130 404 130 H430" />
+          <path className="execution-rail" d="M294 130 H342 C366 130 366 188 394 188 H462" />
+          <path className="execution-rail execution-rail-soft" d="M88 72 C116 104 113 154 88 188" />
+          <path className="execution-rail execution-rail-soft" d="M432 72 C404 104 407 154 432 188" />
+          <path className="execution-stub" d="M58 72 H82" />
+          <path className="execution-stub" d="M82 130 H106" />
+          <path className="execution-stub" d="M58 188 H82" />
+          <path className="execution-stub" d="M438 72 H462" />
+          <path className="execution-stub" d="M414 130 H438" />
+          <path className="execution-stub" d="M438 188 H462" />
+        </g>
+
+        <g className="execution-flows">
+          <path className="execution-flow-path execution-flow-a" d="M58 72 H126 C154 72 154 130 178 130 H226" />
+          <path className="execution-flow-path execution-flow-b" d="M90 130 H226" />
+          <path className="execution-flow-path execution-flow-c" d="M58 188 H126 C154 188 154 130 178 130 H226" />
+          <path className="execution-flow-path execution-flow-d" d="M294 130 H342 C366 130 366 72 394 72 H462" />
+          <path className="execution-flow-path execution-flow-e" d="M294 130 H430" />
+          <path className="execution-flow-path execution-flow-f" d="M294 130 H342 C366 130 366 188 394 188 H462" />
+        </g>
+
+        <g className="execution-svg-nodes">
+          <circle cx="58" cy="72" r="28" />
+          <circle cx="90" cy="130" r="28" />
+          <circle cx="58" cy="188" r="28" />
+          <circle cx="462" cy="72" r="28" />
+          <circle cx="430" cy="130" r="28" />
+          <circle cx="462" cy="188" r="28" />
+        </g>
+
+        <rect className="execution-svg-hub" x="225" y="95" width="70" height="70" rx="17" />
+        <g className="execution-svg-dots">
+          <circle cx="249" cy="121" r="2.45" />
+          <circle cx="260" cy="121" r="2.45" />
+          <circle cx="271" cy="121" r="2.45" />
+          <circle cx="249" cy="130" r="2.45" />
+          <circle cx="260" cy="130" r="2.45" />
+          <circle cx="271" cy="130" r="2.45" />
+          <circle cx="249" cy="139" r="2.45" />
+          <circle cx="260" cy="139" r="2.45" />
+          <circle cx="271" cy="139" r="2.45" />
+        </g>
+        <circle className="execution-corner-dot-svg" cx="28" cy="130" r="4" />
+        <circle className="execution-corner-dot-svg" cx="492" cy="130" r="4" />
+      </svg>
+
+      <div className="execution-hub">
+        <span />
+        <span />
+        <span />
+        <span />
+        <span />
+        <span />
+        <span />
+        <span />
+        <span />
       </div>
 
-      {Object.entries(services).map(([position, item]) => {
+      {WORKFLOW_ITEMS.map((item) => {
         const Icon = item.icon;
         return (
           <div
-            key={item.name}
-            className={`services-system-card services-system-card-${position}`}
+            key={item.key}
+            className={`execution-node execution-node-${item.position}`}
             style={{ '--service-color': item.color } as React.CSSProperties}
           >
-            <div className="services-system-icon">
-              <Icon className="h-4 w-4" strokeWidth={1.8} />
-            </div>
-            <div className="services-system-copy">
-              <span>{item.label}</span>
-              <strong>{item.title}</strong>
-              <p>{item.description}</p>
-              <div className="services-system-copy-micro">
-                <span />
-                <span />
-              </div>
-            </div>
+            <Icon className="h-4 w-4" strokeWidth={1.85} />
+            <span>{item.title}</span>
           </div>
         );
       })}
@@ -229,214 +298,214 @@ const ParticleCard: React.FC<{
   clickEffect = false,
   enableMagnetism = false,
 }) => {
-  const cardRef = useRef<HTMLDivElement>(null);
-  const particlesRef = useRef<HTMLDivElement[]>([]);
-  const timeoutsRef = useRef<NodeJS.Timeout[]>([]);
-  const isHoveredRef = useRef(false);
-  const memoizedParticles = useRef<HTMLDivElement[]>([]);
-  const particlesInitialized = useRef(false);
-  const magnetismAnimationRef = useRef<gsap.core.Tween | null>(null);
+    const cardRef = useRef<HTMLDivElement>(null);
+    const particlesRef = useRef<HTMLDivElement[]>([]);
+    const timeoutsRef = useRef<NodeJS.Timeout[]>([]);
+    const isHoveredRef = useRef(false);
+    const memoizedParticles = useRef<HTMLDivElement[]>([]);
+    const particlesInitialized = useRef(false);
+    const magnetismAnimationRef = useRef<gsap.core.Tween | null>(null);
 
-  const initializeParticles = useCallback(() => {
-    if (particlesInitialized.current || !cardRef.current) return;
+    const initializeParticles = useCallback(() => {
+      if (particlesInitialized.current || !cardRef.current) return;
 
-    const { width, height } = cardRef.current.getBoundingClientRect();
-    memoizedParticles.current = Array.from({ length: particleCount }, () =>
-      createParticleElement(
-        Math.random() * width,
-        Math.random() * height,
-        glowColor,
-      ),
-    );
-    particlesInitialized.current = true;
-  }, [particleCount, glowColor]);
+      const { width, height } = cardRef.current.getBoundingClientRect();
+      memoizedParticles.current = Array.from({ length: particleCount }, () =>
+        createParticleElement(
+          Math.random() * width,
+          Math.random() * height,
+          glowColor,
+        ),
+      );
+      particlesInitialized.current = true;
+    }, [particleCount, glowColor]);
 
-  const clearAllParticles = useCallback(() => {
-    timeoutsRef.current.forEach(clearTimeout);
-    timeoutsRef.current = [];
-    magnetismAnimationRef.current?.kill();
+    const clearAllParticles = useCallback(() => {
+      timeoutsRef.current.forEach(clearTimeout);
+      timeoutsRef.current = [];
+      magnetismAnimationRef.current?.kill();
 
-    particlesRef.current.forEach((particle) => {
-      gsap.to(particle, {
-        scale: 0,
-        opacity: 0,
-        duration: 0.3,
-        ease: "back.in(1.7)",
-        onComplete: () => {
-          particle.parentNode?.removeChild(particle);
-        },
+      particlesRef.current.forEach((particle) => {
+        gsap.to(particle, {
+          scale: 0,
+          opacity: 0,
+          duration: 0.3,
+          ease: "back.in(1.7)",
+          onComplete: () => {
+            particle.parentNode?.removeChild(particle);
+          },
+        });
       });
-    });
-    particlesRef.current = [];
-  }, []);
+      particlesRef.current = [];
+    }, []);
 
-  const animateParticles = useCallback(() => {
-    if (!cardRef.current || !isHoveredRef.current) return;
+    const animateParticles = useCallback(() => {
+      if (!cardRef.current || !isHoveredRef.current) return;
 
-    if (!particlesInitialized.current) {
-      initializeParticles();
-    }
-
-    memoizedParticles.current.forEach((particle, index) => {
-      const timeoutId = setTimeout(() => {
-        if (!isHoveredRef.current || !cardRef.current) return;
-
-        const clone = particle.cloneNode(true) as HTMLDivElement;
-        cardRef.current.appendChild(clone);
-        particlesRef.current.push(clone);
-
-        gsap.fromTo(
-          clone,
-          { scale: 0, opacity: 0 },
-          { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(1.7)" },
-        );
-
-        gsap.to(clone, {
-          x: (Math.random() - 0.5) * 100,
-          y: (Math.random() - 0.5) * 100,
-          rotation: Math.random() * 360,
-          duration: 2 + Math.random() * 2,
-          ease: "none",
-          repeat: -1,
-          yoyo: true,
-        });
-
-        gsap.to(clone, {
-          opacity: 0.3,
-          duration: 1.5,
-          ease: "power2.inOut",
-          repeat: -1,
-          yoyo: true,
-        });
-      }, index * 100);
-
-      timeoutsRef.current.push(timeoutId);
-    });
-  }, [initializeParticles]);
-
-  useEffect(() => {
-    if (disableAnimations || !cardRef.current) return;
-
-    const element = cardRef.current;
-
-    const handleMouseEnter = () => {
-      isHoveredRef.current = true;
-      animateParticles();
-
-      if (enableTilt) {
-        gsap.to(element, {
-          rotateX: 5,
-          rotateY: 5,
-          duration: 0.3,
-          ease: "power2.out",
-          transformPerspective: 1000,
-        });
-      }
-    };
-
-    const handleMouseLeave = () => {
-      isHoveredRef.current = false;
-      clearAllParticles();
-
-      if (enableTilt) {
-        gsap.to(element, {
-          rotateX: 0,
-          rotateY: 0,
-          duration: 0.3,
-          ease: "power2.out",
-        });
+      if (!particlesInitialized.current) {
+        initializeParticles();
       }
 
-      if (enableMagnetism) {
-        gsap.to(element, {
-          x: 0,
-          y: 0,
-          duration: 0.3,
-          ease: "power2.out",
-        });
-      }
-    };
+      memoizedParticles.current.forEach((particle, index) => {
+        const timeoutId = setTimeout(() => {
+          if (!isHoveredRef.current || !cardRef.current) return;
 
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!enableTilt && !enableMagnetism) return;
+          const clone = particle.cloneNode(true) as HTMLDivElement;
+          cardRef.current.appendChild(clone);
+          particlesRef.current.push(clone);
 
-      const rect = element.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
+          gsap.fromTo(
+            clone,
+            { scale: 0, opacity: 0 },
+            { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(1.7)" },
+          );
 
-      if (enableTilt) {
-        const rotateX = ((y - centerY) / centerY) * -10;
-        const rotateY = ((x - centerX) / centerX) * 10;
+          gsap.to(clone, {
+            x: (Math.random() - 0.5) * 100,
+            y: (Math.random() - 0.5) * 100,
+            rotation: Math.random() * 360,
+            duration: 2 + Math.random() * 2,
+            ease: "none",
+            repeat: -1,
+            yoyo: true,
+          });
 
-        gsap.to(element, {
-          rotateX,
-          rotateY,
-          duration: 0.04,
-          ease: "power2.out",
-          overwrite: "auto",
-          transformPerspective: 1000,
-        });
-      }
+          gsap.to(clone, {
+            opacity: 0.3,
+            duration: 1.5,
+            ease: "power2.inOut",
+            repeat: -1,
+            yoyo: true,
+          });
+        }, index * 100);
 
-      if (enableMagnetism) {
-        const magnetX = (x - centerX) * 0.05;
-        const magnetY = (y - centerY) * 0.05;
+        timeoutsRef.current.push(timeoutId);
+      });
+    }, [initializeParticles]);
 
-        magnetismAnimationRef.current = gsap.to(element, {
-          x: magnetX,
-          y: magnetY,
-          duration: 0.08,
-          ease: "power2.out",
-          overwrite: "auto",
-        });
-      }
-    };
+    useEffect(() => {
+      if (disableAnimations || !cardRef.current) return;
 
-    const handleClick = (e: MouseEvent) => {
-      if (!clickEffect) return;
+      const element = cardRef.current;
 
-      const rect = element.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      const handleMouseEnter = () => {
+        isHoveredRef.current = true;
+        animateParticles();
 
-      createRipple(element, x, y, glowColor);
-    };
+        if (enableTilt) {
+          gsap.to(element, {
+            rotateX: 5,
+            rotateY: 5,
+            duration: 0.3,
+            ease: "power2.out",
+            transformPerspective: 1000,
+          });
+        }
+      };
 
-    element.addEventListener("mouseenter", handleMouseEnter);
-    element.addEventListener("mouseleave", handleMouseLeave);
-    element.addEventListener("mousemove", handleMouseMove);
-    element.addEventListener("click", handleClick);
+      const handleMouseLeave = () => {
+        isHoveredRef.current = false;
+        clearAllParticles();
 
-    return () => {
-      isHoveredRef.current = false;
-      element.removeEventListener("mouseenter", handleMouseEnter);
-      element.removeEventListener("mouseleave", handleMouseLeave);
-      element.removeEventListener("mousemove", handleMouseMove);
-      element.removeEventListener("click", handleClick);
-      clearAllParticles();
-    };
-  }, [
-    animateParticles,
-    clearAllParticles,
-    disableAnimations,
-    enableTilt,
-    enableMagnetism,
-    clickEffect,
-    glowColor,
-  ]);
+        if (enableTilt) {
+          gsap.to(element, {
+            rotateX: 0,
+            rotateY: 0,
+            duration: 0.3,
+            ease: "power2.out",
+          });
+        }
 
-  return (
-    <div
-      ref={cardRef}
-      className={`${className} relative overflow-hidden`}
-      style={{ ...style, position: "relative", overflow: "hidden" }}
-    >
-      {children}
-    </div>
-  );
-};
+        if (enableMagnetism) {
+          gsap.to(element, {
+            x: 0,
+            y: 0,
+            duration: 0.3,
+            ease: "power2.out",
+          });
+        }
+      };
+
+      const handleMouseMove = (e: MouseEvent) => {
+        if (!enableTilt && !enableMagnetism) return;
+
+        const rect = element.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+
+        if (enableTilt) {
+          const rotateX = ((y - centerY) / centerY) * -10;
+          const rotateY = ((x - centerX) / centerX) * 10;
+
+          gsap.to(element, {
+            rotateX,
+            rotateY,
+            duration: 0.04,
+            ease: "power2.out",
+            overwrite: "auto",
+            transformPerspective: 1000,
+          });
+        }
+
+        if (enableMagnetism) {
+          const magnetX = (x - centerX) * 0.05;
+          const magnetY = (y - centerY) * 0.05;
+
+          magnetismAnimationRef.current = gsap.to(element, {
+            x: magnetX,
+            y: magnetY,
+            duration: 0.08,
+            ease: "power2.out",
+            overwrite: "auto",
+          });
+        }
+      };
+
+      const handleClick = (e: MouseEvent) => {
+        if (!clickEffect) return;
+
+        const rect = element.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        createRipple(element, x, y, glowColor);
+      };
+
+      element.addEventListener("mouseenter", handleMouseEnter);
+      element.addEventListener("mouseleave", handleMouseLeave);
+      element.addEventListener("mousemove", handleMouseMove);
+      element.addEventListener("click", handleClick);
+
+      return () => {
+        isHoveredRef.current = false;
+        element.removeEventListener("mouseenter", handleMouseEnter);
+        element.removeEventListener("mouseleave", handleMouseLeave);
+        element.removeEventListener("mousemove", handleMouseMove);
+        element.removeEventListener("click", handleClick);
+        clearAllParticles();
+      };
+    }, [
+      animateParticles,
+      clearAllParticles,
+      disableAnimations,
+      enableTilt,
+      enableMagnetism,
+      clickEffect,
+      glowColor,
+    ]);
+
+    return (
+      <div
+        ref={cardRef}
+        className={`${className} relative overflow-hidden`}
+        style={{ ...style, position: "relative", overflow: "hidden" }}
+      >
+        {children}
+      </div>
+    );
+  };
 
 const GlobalSpotlight: React.FC<{
   gridRef: React.RefObject<HTMLDivElement | null>;
@@ -451,15 +520,15 @@ const GlobalSpotlight: React.FC<{
   spotlightRadius = DEFAULT_SPOTLIGHT_RADIUS,
   glowColor = DEFAULT_GLOW_COLOR,
 }) => {
-  const spotlightRef = useRef<HTMLDivElement | null>(null);
-  const isInsideSection = useRef(false);
+    const spotlightRef = useRef<HTMLDivElement | null>(null);
+    const isInsideSection = useRef(false);
 
-  useEffect(() => {
-    if (disableAnimations || !gridRef?.current || !enabled) return;
+    useEffect(() => {
+      if (disableAnimations || !gridRef?.current || !enabled) return;
 
-    const spotlight = document.createElement("div");
-    spotlight.className = "global-spotlight";
-    spotlight.style.cssText = `
+      const spotlight = document.createElement("div");
+      spotlight.className = "global-spotlight";
+      spotlight.style.cssText = `
       position: fixed;
       width: 800px;
       height: 800px;
@@ -478,114 +547,114 @@ const GlobalSpotlight: React.FC<{
       transform: translate(-50%, -50%);
       mix-blend-mode: screen;
     `;
-    document.body.appendChild(spotlight);
-    spotlightRef.current = spotlight;
+      document.body.appendChild(spotlight);
+      spotlightRef.current = spotlight;
 
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!spotlightRef.current || !gridRef.current) return;
+      const handleMouseMove = (e: MouseEvent) => {
+        if (!spotlightRef.current || !gridRef.current) return;
 
-      const section = gridRef.current.closest(".bento-section");
-      const rect = section?.getBoundingClientRect();
-      const mouseInside =
-        rect &&
-        e.clientX >= rect.left &&
-        e.clientX <= rect.right &&
-        e.clientY >= rect.top &&
-        e.clientY <= rect.bottom;
+        const section = gridRef.current.closest(".bento-section");
+        const rect = section?.getBoundingClientRect();
+        const mouseInside =
+          rect &&
+          e.clientX >= rect.left &&
+          e.clientX <= rect.right &&
+          e.clientY >= rect.top &&
+          e.clientY <= rect.bottom;
 
-      isInsideSection.current = mouseInside || false;
-      const cards = gridRef.current.querySelectorAll(".card");
+        isInsideSection.current = mouseInside || false;
+        const cards = gridRef.current.querySelectorAll(".card");
 
-      if (!mouseInside) {
-        gsap.to(spotlightRef.current, {
-          opacity: 0,
-          duration: 0.3,
-          ease: "power2.out",
-        });
-        cards.forEach((card) => {
-          (card as HTMLElement).style.setProperty("--glow-intensity", "0");
-        });
-        return;
-      }
-
-      const { proximity, fadeDistance } =
-        calculateSpotlightValues(spotlightRadius);
-      let minDistance = Infinity;
-
-      cards.forEach((card) => {
-        const cardElement = card as HTMLElement;
-        const cardRect = cardElement.getBoundingClientRect();
-        const centerX = cardRect.left + cardRect.width / 2;
-        const centerY = cardRect.top + cardRect.height / 2;
-        const distance =
-          Math.hypot(e.clientX - centerX, e.clientY - centerY) -
-          Math.max(cardRect.width, cardRect.height) / 2;
-        const effectiveDistance = Math.max(0, distance);
-
-        minDistance = Math.min(minDistance, effectiveDistance);
-
-        let glowIntensity = 0;
-        if (effectiveDistance <= proximity) {
-          glowIntensity = 1;
-        } else if (effectiveDistance <= fadeDistance) {
-          glowIntensity =
-            (fadeDistance - effectiveDistance) / (fadeDistance - proximity);
+        if (!mouseInside) {
+          gsap.to(spotlightRef.current, {
+            opacity: 0,
+            duration: 0.3,
+            ease: "power2.out",
+          });
+          cards.forEach((card) => {
+            (card as HTMLElement).style.setProperty("--glow-intensity", "0");
+          });
+          return;
         }
 
-        updateCardGlowProperties(
-          cardElement,
-          e.clientX,
-          e.clientY,
-          glowIntensity,
-          spotlightRadius,
-        );
-      });
+        const { proximity, fadeDistance } =
+          calculateSpotlightValues(spotlightRadius);
+        let minDistance = Infinity;
 
-      gsap.set(spotlightRef.current, {
-        left: e.clientX,
-        top: e.clientY,
-      });
+        cards.forEach((card) => {
+          const cardElement = card as HTMLElement;
+          const cardRect = cardElement.getBoundingClientRect();
+          const centerX = cardRect.left + cardRect.width / 2;
+          const centerY = cardRect.top + cardRect.height / 2;
+          const distance =
+            Math.hypot(e.clientX - centerX, e.clientY - centerY) -
+            Math.max(cardRect.width, cardRect.height) / 2;
+          const effectiveDistance = Math.max(0, distance);
 
-      const targetOpacity =
-        minDistance <= proximity
-          ? 0.8
-          : minDistance <= fadeDistance
-            ? ((fadeDistance - minDistance) / (fadeDistance - proximity)) * 0.8
-            : 0;
+          minDistance = Math.min(minDistance, effectiveDistance);
 
-      gsap.to(spotlightRef.current, {
-        opacity: targetOpacity,
-        duration: targetOpacity > 0 ? 0.2 : 0.5,
-        ease: "power2.out",
-      });
-    };
+          let glowIntensity = 0;
+          if (effectiveDistance <= proximity) {
+            glowIntensity = 1;
+          } else if (effectiveDistance <= fadeDistance) {
+            glowIntensity =
+              (fadeDistance - effectiveDistance) / (fadeDistance - proximity);
+          }
 
-    const handleMouseLeave = () => {
-      isInsideSection.current = false;
-      gridRef.current?.querySelectorAll(".card").forEach((card) => {
-        (card as HTMLElement).style.setProperty("--glow-intensity", "0");
-      });
-      if (spotlightRef.current) {
+          updateCardGlowProperties(
+            cardElement,
+            e.clientX,
+            e.clientY,
+            glowIntensity,
+            spotlightRadius,
+          );
+        });
+
+        gsap.set(spotlightRef.current, {
+          left: e.clientX,
+          top: e.clientY,
+        });
+
+        const targetOpacity =
+          minDistance <= proximity
+            ? 0.8
+            : minDistance <= fadeDistance
+              ? ((fadeDistance - minDistance) / (fadeDistance - proximity)) * 0.8
+              : 0;
+
         gsap.to(spotlightRef.current, {
-          opacity: 0,
-          duration: 0.3,
+          opacity: targetOpacity,
+          duration: targetOpacity > 0 ? 0.2 : 0.5,
           ease: "power2.out",
         });
-      }
-    };
+      };
 
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseleave", handleMouseLeave);
+      const handleMouseLeave = () => {
+        isInsideSection.current = false;
+        gridRef.current?.querySelectorAll(".card").forEach((card) => {
+          (card as HTMLElement).style.setProperty("--glow-intensity", "0");
+        });
+        if (spotlightRef.current) {
+          gsap.to(spotlightRef.current, {
+            opacity: 0,
+            duration: 0.3,
+            ease: "power2.out",
+          });
+        }
+      };
 
-    return () => {
-      document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseleave", handleMouseLeave);
-      spotlightRef.current?.parentNode?.removeChild(spotlightRef.current);
-    };
-  }, [gridRef, disableAnimations, enabled, spotlightRadius, glowColor]);
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseleave", handleMouseLeave);
 
-  return null;
-};
+      return () => {
+        document.removeEventListener("mousemove", handleMouseMove);
+        document.removeEventListener("mouseleave", handleMouseLeave);
+        spotlightRef.current?.parentNode?.removeChild(spotlightRef.current);
+      };
+    }, [gridRef, disableAnimations, enabled, spotlightRadius, glowColor]);
+
+    return null;
+  };
 
 const BentoCardGrid: React.FC<{
   children: React.ReactNode;
@@ -637,6 +706,7 @@ const MagicBento: React.FC<BentoProps> = ({
   const [isContactCopied, setIsContactCopied] = useState(false);
   const [chatTypingRun, setChatTypingRun] = useState(0);
   const [chatPhase, setChatPhase] = useState<ChatPhase>("idle");
+  const [endToEndSvg, setEndToEndSvg] = useState<string>("");
 
   useEffect(() => {
     return () => {
@@ -649,37 +719,54 @@ const MagicBento: React.FC<BentoProps> = ({
     };
   }, []);
 
+  useEffect(() => {
+    let isMounted = true;
+
+    fetch("/assets/bento-cards/end-to-end-delivery/path.svg")
+      .then((response) => response.text())
+      .then((svg) => {
+        if (isMounted) {
+          setEndToEndSvg(svg);
+        }
+      })
+      .catch((error) => {
+        console.error("Failed to load end-to-end SVG", error);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   const getRemoteWorkCard = () => ({
     color: BENTO_ACCENTS.blue,
     title: "🌍 Remote friendly",
     description: "Based in Finland, working with people wherever the project makes sense.",
     label: "Availability",
     customContent: (
-        <div className="remote-card relative flex h-full flex-col overflow-hidden">
+      <div className="remote-card relative flex h-full flex-col overflow-hidden">
         <div className="remote-card-copy relative z-20 flex flex-col p-6 pb-3">
-          <p className="mb-3 text-xs uppercase tracking-[0.24em] text-white/45">Availability</p>
-            <h2 className="mb-3 text-2xl font-bold leading-tight text-white">
-              Based in Finland,<br />
-              <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.blue }}>open globally</span>
-            </h2>
-          <p className="text-sm leading-6 text-white/70">
-            Remote-friendly for website projects and frontend work
-          </p>
+          <p className="bento-card-kicker">Availability</p>
+          <h2 className="bento-card-heading text-white">
+            Based in Finland,<br />
+            <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.blue }}>open globally.</span>
+          </h2>
+          <p className="bento-card-caption">Remote-friendly website work without location friction.</p>
 
         </div>
 
-        <div className="remote-card-globe-shell relative z-10 mt-auto min-h-[220px] h-[52%] overflow-visible pointer-events-none">
-          <div className="remote-card-globe-position absolute inset-x-0 bottom-[-65%] h-[180%] flex items-center justify-center pointer-events-auto">
-            <Globe 
-              className="remote-card-globe relative z-10 w-full max-w-[600px] scale-[1.15] overflow-hidden"
+        <div className="remote-card-globe-shell relative z-10 mt-auto min-h-[220px] h-[52%] overflow-hidden pointer-events-none">
+          <div className="remote-card-globe-position absolute inset-x-0 bottom-[-72%] h-[168%] flex items-center justify-center pointer-events-auto">
+            <Globe
+              className="remote-card-globe relative z-10 w-full max-w-[520px] scale-[0.95] overflow-hidden"
               dark={1}
               baseColor={[0.1, 0.1, 0.1]}
               glowColor={[1, 1, 1]}
-              markerColor={[0.2, 0.5, 1.0]}
-              arcColor={[0.2, 0.5, 1.0]}
+              markerColor={[0.5, 0.64, 0.78]}
+              arcColor={[0.42, 0.55, 0.68]}
               theta={0.1}
               mapSamples={isMobile ? 5000 : 12000}
-              speed={isMobile ? 0.0015 : 0.003}
+              speed={isMobile ? 0.0008 : 0.0016}
               markers={REMOTE_GLOBE_MARKERS}
               arcs={REMOTE_GLOBE_ARCS}
             />
@@ -693,32 +780,26 @@ const MagicBento: React.FC<BentoProps> = ({
   const cardData = [
     {
       color: BENTO_ACCENTS.champagne,
-      title: "What services I offer",
-      description: "UI/UX, SEO, branding, frontend, and launch support.",
-      label: "Services",
+      title: "One workflow from idea to launch",
+      description: "Structure, frontend, deployment, SEO, and post-launch refinement handled as one connected delivery.",
+      label: "End-to-end delivery",
       customContent: (
         <div className="group/engine service-engine-card relative -m-8 flex h-[calc(100%+4rem)] flex-col overflow-hidden">
-          <div className="deliverables-card-bg absolute inset-0" />
-          <div className="deliverables-card-grid absolute inset-0 opacity-40" />
-          <div className="bento-mobile-frost absolute inset-0 z-[25]" />
+          {endToEndSvg ? (
+            <div
+              className="end-to-end-svg pointer-events-none absolute inset-0 z-10 h-full w-full"
+              aria-hidden="true"
+              dangerouslySetInnerHTML={{ __html: endToEndSvg }}
+            />
+          ) : null}
 
-          <div className="relative z-30 flex h-full flex-col gap-5 p-6 sm:p-8 md:flex-row md:items-start md:gap-0">
-            <div className="relative z-40 flex w-full flex-col md:w-[38%]">
-              <div className="bento-mobile-readable">
-                <p className="mb-2 text-xs uppercase tracking-[0.24em] text-white/45">Services</p>
-                <h2 className="mb-2 text-2xl font-bold leading-tight text-white">
-                  What services<br />
-                  <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.champagne }}>I offer</span>
-                </h2>
-                <p className="max-w-[14rem] text-[13px] leading-[1.55] text-white/55">
-                  Each service tailored to your project —<br className="hidden sm:block" /> pick what you need.
-                </p>
-              </div>
-            </div>
-
-            <div className="relative z-30 flex min-h-[17.5rem] w-full flex-1 items-center md:min-h-full md:w-[62%]">
-              <ServicesSystemMap />
-            </div>
+          <div className="bento-mobile-readable relative z-30 max-w-[15.5rem] p-6 sm:p-8">
+            <p className="bento-card-kicker">End-to-end delivery</p>
+            <h2 className="bento-card-heading text-white">
+              One workflow,<br />
+              <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.champagne }}>finished cleanly.</span>
+            </h2>
+            <p className="bento-card-caption">Structure, build, launch, and polish handled together.</p>
           </div>
 
           <div className="pointer-events-none absolute inset-0 z-20 rounded-[inherit] shadow-[inset_0_0_60px_rgba(218,197,167,0.03)]" />
@@ -731,203 +812,82 @@ const MagicBento: React.FC<BentoProps> = ({
       description: "Short updates, quick replies, and clear next steps while the site comes together.",
       label: "Clear Communication",
       customContent: (
-        <div
-          className="group/attention relative -m-8 flex h-[calc(100%+4rem)] flex-col overflow-hidden p-8 pb-0"
-          onMouseEnter={() => {
-            if (chatFadeTimeoutRef.current !== null) {
-              window.clearTimeout(chatFadeTimeoutRef.current);
-            }
-            setChatPhase("shrinking");
-            chatFadeTimeoutRef.current = window.setTimeout(() => {
-              setChatTypingRun((value) => value + 1);
-              setChatPhase("typing");
-              chatFadeTimeoutRef.current = null;
-            }, 520);
-          }}
-          onMouseLeave={() => {
-            if (chatFadeTimeoutRef.current !== null) {
-              window.clearTimeout(chatFadeTimeoutRef.current);
-              chatFadeTimeoutRef.current = null;
-            }
-            setChatPhase("idle");
-          }}
-        >
-          <div className="attention-mobile-frost absolute inset-0 z-10" />
+        <div className="group/attention attention-chat-card relative -m-8 flex h-[calc(100%+4rem)] flex-col overflow-hidden">
 
-          {/* Card header — restored */}
-          <div className="bento-mobile-readable relative z-20 mb-8 max-w-[17rem] sm:mb-10">
-            <p className="mb-3 text-xs uppercase tracking-[0.24em] text-[color:var(--site-muted)] dark:text-white/50">Clear Communication</p>
-            <h2 className="mb-3 text-2xl font-bold leading-tight text-[color:var(--site-text)] dark:text-white">
-              Clear replies,<br />
-              <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.olive }}>less guessing.</span>
+          <div className="bento-mobile-readable relative z-20 px-6 pb-2 pt-6">
+            <p className="bento-card-kicker">Clear communication</p>
+            <h2 className="bento-card-heading text-[#f5efe4]">
+              Communication is<br />
+              <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.olive }}>the key.</span>
             </h2>
-            <p className="max-w-xs text-sm leading-6 text-[color:var(--site-muted)] dark:text-white/70">
-              You should not have to wonder what is done, what is next, or what I need from you.
-            </p>
+            <p className="bento-card-caption">Short updates, quick replies, clear next steps.</p>
           </div>
 
-          <div className="relative z-20 -mx-8 mt-auto flex flex-1 flex-col overflow-hidden border-t border-[color:var(--site-border)]/40 bg-[color:var(--site-bg)]/35 backdrop-blur-sm dark:border-white/[0.06] dark:bg-white/[0.02]">
-              <div className="flex shrink-0 items-start justify-between border-b border-white/10 px-5 py-3.5">
-                <div>
-                  <p className="text-[0.92rem] font-semibold leading-none text-[#f5efe4]">Communicate.</p>
-                  <p className="mt-1 text-[0.66rem] leading-4 text-[#b0aea5]">Fast updates and clear next steps.</p>
-                </div>
-                <div className="mt-0.5 flex h-7 w-7 items-center justify-center rounded-full border border-[#8fa58a]/35 bg-[#8fa58a]/20 text-[9px] font-bold text-[#8fa58a]">JS</div>
+          <div className="chat-showcase-messages relative z-30 mt-1 flex flex-col gap-1.5 px-6 pb-16">
+            <div className="chat-line chat-line-in">
+              <div className="chat-avatar">
+                <span>C</span>
               </div>
-
-              <div className="chat-showcase-messages flex flex-1 flex-col gap-6 px-5 py-4">
-                <div className="chat-line chat-line-in">
-                  <div className="chat-avatar">C</div>
-                  <div className="chat-bubble chat-bubble-in">
-                    <span className="chat-meta">Client • 7:26 PM</span>
-                    {chatPhase === "typing" ? (
-                      <TextType
-                        key={`chat-1-${chatTypingRun}`}
-                        as="span"
-                        className="chat-typed"
-                        text="Have there been login issues this morning?"
-                        typingSpeed={34}
-                        initialDelay={80}
-                        loop={false}
-                        pauseDuration={0}
-                        showCursor={false}
-                        variableSpeed={{ min: 28, max: 46 }}
-                      />
-                    ) : (
-                      <span className={`chat-typed transition-opacity duration-500 ${chatPhase === "shrinking" ? "opacity-0" : "opacity-100"}`}>Have there been login issues this morning?</span>
-                    )}
-                  </div>
-                </div>
-
-                <div className="chat-line chat-line-out">
-                  <div className="chat-bubble chat-bubble-out">
-                    <span className="chat-meta">Jesper • 7:30 PM</span>
-                    {chatPhase === "typing" ? (
-                      <TextType
-                        key={`chat-2-${chatTypingRun}`}
-                        as="span"
-                        className="chat-typed"
-                        text="Fixed now, cache was stale after deploy."
-                        typingSpeed={33}
-                        initialDelay={1480}
-                        loop={false}
-                        pauseDuration={0}
-                        showCursor={false}
-                        variableSpeed={{ min: 28, max: 44 }}
-                      />
-                    ) : (
-                      <span className={`chat-typed transition-opacity duration-500 ${chatPhase === "shrinking" ? "opacity-0" : "opacity-100"}`}>Fixed now, cache was stale after deploy.</span>
-                    )}
-                  </div>
-                  <div className="chat-avatar chat-avatar-self">JS</div>
-                </div>
-
-                <div className="chat-line chat-line-in">
-                  <div className="chat-avatar">C</div>
-                  <div className="chat-bubble chat-bubble-in">
-                    <span className="chat-meta">Client • 7:33 PM</span>
-                    {chatPhase === "typing" ? (
-                      <TextType
-                        key={`chat-3-${chatTypingRun}`}
-                        as="span"
-                        className="chat-typed"
-                        text="Great, thanks. Looks smooth now."
-                        typingSpeed={32}
-                        initialDelay={2980}
-                        loop={false}
-                        pauseDuration={0}
-                        showCursor={false}
-                        variableSpeed={{ min: 27, max: 42 }}
-                      />
-                    ) : (
-                      <span className={`chat-typed transition-opacity duration-500 ${chatPhase === "shrinking" ? "opacity-0" : "opacity-100"}`}>Great, thanks. Looks smooth now.</span>
-                    )}
-                  </div>
-                </div>
+              <div className="chat-bubble chat-bubble-in">
+                <div className="chat-meta">Client · now</div>
+                <p className="chat-typed chat-typed-in">Login issues this morning?</p>
               </div>
+            </div>
 
-              <div className="chat-input-bar mt-auto flex items-center gap-2.5 border-t border-white/10 px-5 py-3">
-                <FileText className="h-3.5 w-3.5 text-[#87867f]" />
-                <GlobeIcon className="h-3.5 w-3.5 text-[#87867f]" />
-                <Smile className="h-3.5 w-3.5 text-[#87867f]" />
-                <span className="chat-input-text text-[0.7rem] text-[#87867f]">Type a message</span>
-                <div className="ml-auto flex h-7 w-7 items-center justify-center rounded-full border border-[#8fa58a]/40 bg-[#8fa58a]/18 text-[#8fa58a]">
-                  <Send className="ml-0.5 h-3.5 w-3.5" />
-                </div>
+            <div className="chat-writing" aria-hidden="true">
+              <span className="chat-writing-label">Jesper is typing</span>
+              <span className="chat-writing-dots">
+                <span />
+                <span />
+                <span />
+              </span>
+            </div>
+
+            <div className="chat-line chat-line-out chat-line-outgoing">
+              <div className="chat-bubble chat-bubble-out">
+                <div className="chat-meta">Jesper · now</div>
+                <p className="chat-typed chat-typed-out">Fixed. You can log in now.</p>
               </div>
+              <div className="chat-avatar chat-avatar-self">
+                <span>J</span>
+              </div>
+            </div>
+
           </div>
 
+          <div className="chat-input-bar absolute inset-x-6 bottom-4 z-40 flex items-center gap-3 rounded-[0.85rem] border border-[color:var(--site-border)]/40 bg-[color:var(--site-bg)]/60 px-3.5 py-2 shadow-inner backdrop-blur-md dark:border-white/10 dark:bg-white/[0.02]">
+            <span className="text-[1.05rem] font-light leading-none text-[color:var(--site-muted)] dark:text-white/50">+</span>
+            <span className="chat-input-text flex-1 text-[12px] text-[color:var(--site-muted)] dark:text-white/40">Type a message</span>
+            <Send className="h-3 w-3 text-[color:var(--site-muted)] dark:text-white/40" />
+          </div>
         </div>
       ),
     },
     {
       color: BENTO_ACCENTS.lavender,
-      title: "📩 Have a website in mind?",
-      description: "Send the idea, goal, or messy first version and I can help shape it.",
-      label: "Contact",
-      customBackground: {
-        background: `
-          linear-gradient(135deg, #000000 0%, #1a1a1a 25%, #2d2d2d 50%, #1a1a1a 75%, #000000 100%),
-          radial-gradient(circle at 20% 30%, rgba(40, 40, 40, 0.3) 0%, transparent 50%),
-          radial-gradient(circle at 80% 70%, rgba(60, 60, 60, 0.2) 0%, transparent 50%),
-          linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.02) 50%, transparent 70%)
-        `,
-        backgroundBlendMode: 'multiply, overlay, normal, normal, overlay'
-      },
+      title: "Fast delivery",
+      description: "Focused builds that move quickly without losing structure, polish, or clarity.",
+      label: "Fast Delivery",
       customContent: (
-        <div className="relative flex h-full flex-col items-center justify-center overflow-hidden">
-          <div className="contact-card-bg absolute inset-0" />
-          <div className="contact-card-overlay absolute inset-0" />
+        <div className="group/conversion relative flex h-full flex-col overflow-hidden">
+          <div className="conversion-card-bg absolute inset-0" />
 
-          <div className="contact-card-content bento-mobile-readable relative z-20 px-5 py-6 text-center">
-            <div className="contact-card-icon-wrap relative mb-6 flex justify-center">
-              <span className="contact-card-pulse contact-card-pulse-a" />
-              <span className="contact-card-pulse contact-card-pulse-b" />
-              <div className="contact-card-icon flex h-16 w-16 items-center justify-center rounded-full" style={{ background: BENTO_ACCENTS.lavender }}>
-                <User className="w-8 h-8 text-white" />
-              </div>
-            </div>
-            
-            <div className="contact-card-title-wrap mb-5">
-              <h2 className="contact-card-title mx-auto max-w-[15rem] text-2xl font-bold leading-tight text-[#f5efe4]">
-                Have a site idea? <span className="block font-accent-strong" style={{ color: BENTO_ACCENTS.lavender }}>Send it over</span>
-              </h2>
-            </div>
+          <div className="contact-card-content conversion-flow-copy bento-mobile-readable relative z-30 max-w-[17.5rem] p-6 sm:p-8">
+            <p className="bento-card-kicker">Fast delivery</p>
+            <h2 className="bento-card-heading text-[#f5efe4]">
+              Move fast,<br />
+              <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.lavender }}>launch clean.</span>
+            </h2>
+            <p className="bento-card-caption">Focused execution from first idea to a polished live site.</p>
+          </div>
 
-            <p className="contact-card-description mx-auto mb-6 max-w-[15.5rem] text-sm leading-6 text-white/50">
-              I&apos;d love to hear about your project and help turn it into something great.
-            </p>
-            
-            <div className="flex justify-center">
-              <button 
-                className="contact-card-button btn-neutral-dark relative flex items-center gap-2 overflow-hidden rounded-lg !bg-transparent px-4 py-2 text-sm font-medium text-white backdrop-blur-sm transition-all duration-300 hover:!bg-white/10"
-                onClick={async () => {
-                  try {
-                    await navigator.clipboard.writeText('contact@jespersjostrom.se');
-
-                    setIsContactCopied(true);
-                    if (copyFeedbackTimeoutRef.current !== null) {
-                      window.clearTimeout(copyFeedbackTimeoutRef.current);
-                    }
-                    copyFeedbackTimeoutRef.current = window.setTimeout(() => {
-                      setIsContactCopied(false);
-                      copyFeedbackTimeoutRef.current = null;
-                    }, 1600);
-                  } catch (err) {
-                    console.error('Failed to copy: ', err);
-                  }
-                }}
-                title="Click to copy: contact@jespersjostrom.se"
-              >
-                <span className="relative h-4 w-4">
-                  <Copy className={`absolute left-0 top-0 h-4 w-4 transition-all duration-200 ${isContactCopied ? 'scale-75 opacity-0' : 'scale-100 opacity-100'}`} />
-                  <Check className={`absolute left-0 top-0 h-4 w-4 text-emerald-300 transition-all duration-200 ${isContactCopied ? 'scale-100 opacity-100' : 'scale-75 opacity-0'}`} />
-                </span>
-                <span className="contact-card-email relative z-10">
-                  {isContactCopied ? 'Copied to clipboard' : 'contact@jespersjostrom.se'}
-                </span>
-              </button>
-            </div>
+          <div className="conversion-phone-wrap pointer-events-none absolute inset-0 z-20 flex items-center justify-center overflow-visible">
+            <img
+              className="conversion-phone-svg conversion-flow-svg"
+              src="/assets/bento-cards/visitor-flow/time.svg"
+              alt=""
+              aria-hidden="true"
+            />
           </div>
         </div>
       ),
@@ -935,30 +895,34 @@ const MagicBento: React.FC<BentoProps> = ({
     getRemoteWorkCard(),
     {
       color: BENTO_ACCENTS.champagne,
-      title: "✨ Websites with a job to do",
-      description: "Landing pages, portfolios, and business sites built to explain, impress, and convert.",
+      title: "✨ First impressions that feel polished",
+      description: "Landing pages, portfolios, and business sites with clear structure, smooth detail, and visual hierarchy.",
       label: "Services",
       customContent: (
-        <div className="group/selling relative -m-8 flex h-[calc(100%+4rem)] flex-col overflow-hidden p-8">
+        <div className="group/selling relative -m-8 flex h-[calc(100%+4rem)] flex-col overflow-hidden">
           <div className="selling-site-bg absolute inset-0" />
           <div className="selling-site-ambient absolute inset-0" />
-          <div className="selling-radial absolute bottom-[-16%] right-[-10%] z-0 h-[86%] w-[78%]" />
+          <div className="selling-site-grid absolute inset-0" />
+          <div className="selling-site-panels absolute inset-0" />
+          <div className="selling-soundwaves absolute inset-0" aria-hidden="true">
+            <span />
+            <span />
+            <span />
+          </div>
           <div className="selling-mobile-frost absolute inset-0" />
 
-          <div className="bento-mobile-readable relative z-20 max-w-[18rem]">
-            <p className="mb-3 text-xs uppercase tracking-[0.24em] text-white/45">Website types</p>
-            <h2 className="mb-3 text-2xl font-bold leading-tight text-white">
-              Websites that<br />
-              <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.champagne }}>look sharp</span> and<br />
-              explain fast
+          <div className="bento-mobile-readable relative z-20 max-w-[18rem] p-6 sm:p-8">
+            <p className="bento-card-kicker">First impression</p>
+            <h2 className="bento-card-heading text-white">
+              A site that<br />
+              <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.champagne }}>feels polished.</span>
             </h2>
-            <p className="text-sm leading-6 text-white/72">
-              Landing pages, portfolios, and business sites that make the next step obvious.
-            </p>
+            <p className="bento-card-caption">Strong first read, smooth details, confident structure.</p>
           </div>
 
-          <div className="pointer-events-none absolute bottom-0 right-[-8%] z-10 w-[82%] sm:right-[-6%] sm:w-[74%]">
-            <div className={`selling-browser ml-auto w-full max-w-[26rem] transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${isMobile ? 'translate-y-[30%]' : 'translate-y-[52%] group-hover/selling:translate-y-[28%]'}`}>
+          <div className="selling-browser-shell pointer-events-none absolute bottom-[-36%] right-[-3%] z-10 w-[70%] max-w-[34rem] sm:right-[2%] sm:w-[64%]">
+            <div className="selling-browser ml-auto w-full">
+              <div className="selling-browser-sheen" />
               <div className="selling-browser-top">
                 <div className="selling-dots">
                   <span />
@@ -966,12 +930,37 @@ const MagicBento: React.FC<BentoProps> = ({
                   <span />
                 </div>
                 <div className="selling-url" />
+                <div className="selling-nav-pills">
+                  <span />
+                  <span />
+                  <span />
+                </div>
               </div>
 
               <div className="selling-browser-body">
-                <div className="selling-hero-line selling-line-lg" />
-                <div className="selling-hero-line selling-line-md" />
-                <div className="selling-cta" />
+                <div className="selling-hero-copy">
+                  <div className="selling-page-kicker" />
+                  <div className="selling-hero-line selling-line-lg" />
+                  <div className="selling-hero-line selling-line-md" />
+                  <div className="selling-copy-lines">
+                    <span />
+                    <span />
+                    <span />
+                  </div>
+                  <div className="selling-cta" />
+                </div>
+                <div className="selling-hero-visual">
+                  <div className="selling-preview-window">
+                    <span className="selling-preview-badge" />
+                    <span className="selling-preview-heading" />
+                    <span className="selling-preview-copy" />
+                  </div>
+                  <div className="selling-preview-strip">
+                    <span />
+                    <span />
+                    <span />
+                  </div>
+                </div>
 
                 <div className="selling-cards-row">
                   <div className="selling-card">
@@ -987,8 +976,6 @@ const MagicBento: React.FC<BentoProps> = ({
                     <span className="selling-stat-bar short" />
                   </div>
                 </div>
-
-                <div className="selling-cursor" aria-hidden="true" />
               </div>
             </div>
           </div>
@@ -1001,33 +988,6 @@ const MagicBento: React.FC<BentoProps> = ({
     <>
       <style>
         {`
-          @keyframes selling-cursor-move {
-            0% {
-              transform: translate(14px, 18px) rotate(-10deg);
-              opacity: 0.75;
-            }
-            35% {
-              transform: translate(148px, 44px) rotate(-10deg);
-              opacity: 1;
-            }
-            40% {
-              transform: translate(148px, 44px) rotate(-10deg) scale(0.94);
-              opacity: 1;
-            }
-            45% {
-              transform: translate(148px, 44px) rotate(-10deg);
-              opacity: 1;
-            }
-            74% {
-              transform: translate(92px, 114px) rotate(-10deg);
-              opacity: 0.92;
-            }
-            100% {
-              transform: translate(14px, 18px) rotate(-10deg);
-              opacity: 0.75;
-            }
-          }
-
           @keyframes selling-bars-pulse {
             0%,
             100% {
@@ -1042,9 +1002,10 @@ const MagicBento: React.FC<BentoProps> = ({
 
           .selling-site-bg {
             background:
-              radial-gradient(circle at 14% 16%, rgba(245, 239, 228, 0.055), transparent 42%),
-              radial-gradient(circle at 84% 78%, rgba(127, 167, 200, 0.2), transparent 38%),
-              linear-gradient(180deg, rgba(17, 17, 16, 0.72), rgba(8, 8, 8, 0.9));
+              radial-gradient(circle at 18% 16%, rgba(245, 239, 228, 0.055), transparent 42%),
+              radial-gradient(circle at 72% 50%, rgba(218, 197, 167, 0.12), transparent 34%),
+              radial-gradient(circle at 86% 66%, rgba(127, 167, 200, 0.14), transparent 38%),
+              linear-gradient(180deg, rgba(17, 17, 16, 0.74), rgba(8, 8, 8, 0.92));
           }
 
           .deliverables-card-bg {
@@ -1067,6 +1028,381 @@ const MagicBento: React.FC<BentoProps> = ({
           .service-engine-card {
             --engine-ease: cubic-bezier(0.22, 1, 0.36, 1);
             --services-ease: cubic-bezier(0.22, 1, 0.36, 1);
+          }
+
+          .end-to-end-svg {
+            display: block;
+            opacity: 1;
+            transform-origin: center center;
+            transform: translate3d(-1%, 3%, 0) scale(0.96);
+            transition: opacity 760ms var(--services-ease), transform 900ms var(--services-ease), filter 900ms var(--services-ease);
+          }
+
+          .end-to-end-svg svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+          }
+
+          .end-to-end-svg .workflow-flow {
+            animation: none;
+            opacity: 0;
+          }
+
+          .end-to-end-svg .workflow-icon,
+          .end-to-end-svg .workflow-icon-glyph {
+            transform-box: fill-box;
+            transform-origin: center;
+            transition: transform 760ms var(--services-ease), filter 760ms var(--services-ease);
+          }
+
+          .end-to-end-svg .workflow-center-dot {
+            transform-box: fill-box;
+            transform-origin: center;
+            transition: fill-opacity 240ms var(--services-ease), transform 240ms var(--services-ease), filter 240ms var(--services-ease);
+          }
+
+          .card:hover .service-engine-card .end-to-end-svg {
+            opacity: 1;
+          }
+
+          .card:hover .service-engine-card .end-to-end-svg .workflow-icon,
+          .card:hover .service-engine-card .end-to-end-svg .workflow-icon-glyph {
+            transform: scale(1.16);
+            filter: drop-shadow(0 0 10px rgba(248, 248, 248, 0.18));
+          }
+
+          .card:hover .service-engine-card .end-to-end-svg .workflow-flow {
+            animation: workflow-flow-inward 1.25s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+          }
+
+          .card:hover .service-engine-card .end-to-end-svg .workflow-center-dot {
+            animation: workflow-center-dot-scan 1.35s steps(1, end) infinite;
+          }
+
+          .card:hover .service-engine-card .end-to-end-svg .workflow-center-dot-2 {
+            animation-delay: 150ms;
+          }
+
+          .card:hover .service-engine-card .end-to-end-svg .workflow-center-dot-3 {
+            animation-delay: 300ms;
+          }
+
+          .card:hover .service-engine-card .end-to-end-svg .workflow-center-dot-4 {
+            animation-delay: 450ms;
+          }
+
+          .card:hover .service-engine-card .end-to-end-svg .workflow-center-dot-5 {
+            animation-delay: 600ms;
+          }
+
+          .card:hover .service-engine-card .end-to-end-svg .workflow-flow-middle {
+            animation-delay: 90ms;
+          }
+
+          .card:hover .service-engine-card .end-to-end-svg .workflow-flow-bottom {
+            animation-delay: 180ms;
+          }
+
+          @keyframes workflow-flow-inward {
+            0% { opacity: 0; stroke-dashoffset: 150; }
+            38% { opacity: 0.78; }
+            100% { opacity: 0; stroke-dashoffset: -60; }
+          }
+
+          @keyframes workflow-center-dot-scan {
+            0%, 100% { fill-opacity: 0.5; transform: scale(1); filter: none; }
+            35% { fill-opacity: 1; transform: scale(1.38); filter: drop-shadow(0 0 7px rgba(248, 248, 248, 0.32)); }
+            70% { fill-opacity: 0.5; transform: scale(1); filter: none; }
+          }
+
+          .execution-map {
+            isolation: isolate;
+            aspect-ratio: 2 / 1;
+            width: 100%;
+            height: auto;
+            min-height: 0;
+            max-height: 15rem;
+            margin: 0;
+          }
+
+          .execution-map::before,
+          .execution-map::after {
+            display: none;
+          }
+
+          .execution-graphic {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+          }
+
+          .execution-side-arc {
+            fill: none;
+            stroke: rgba(245, 239, 228, 0.045);
+            stroke-width: 1;
+          }
+
+          .execution-wall-rail,
+          .execution-rail,
+          .execution-stub {
+            fill: none;
+            stroke: rgba(245, 239, 228, 0.16);
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-width: 1.35;
+            vector-effect: non-scaling-stroke;
+            transition: stroke 760ms var(--services-ease), opacity 760ms var(--services-ease), filter 760ms var(--services-ease);
+          }
+
+          .execution-wall-rail {
+            stroke: rgba(245, 239, 228, 0.055);
+            stroke-width: 1;
+          }
+
+          .execution-rail-soft {
+            opacity: 0.44;
+          }
+
+          .execution-stub {
+            stroke: rgba(245, 239, 228, 0.58);
+            stroke-width: 1.55;
+          }
+
+          .execution-flow-path {
+            fill: none;
+            stroke: rgba(218, 197, 167, 0.9);
+            stroke-dasharray: 42 220;
+            stroke-dashoffset: 180;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-width: 1.8;
+            opacity: 0;
+            vector-effect: non-scaling-stroke;
+            filter: drop-shadow(0 0 5px rgba(218, 197, 167, 0.18));
+          }
+
+          .execution-svg-nodes circle {
+            fill: url(#executionNodeGradient);
+            stroke: rgba(245, 239, 228, 0.14);
+            stroke-width: 1.2;
+            filter: url(#executionNodeShadow);
+            transition: stroke 760ms var(--services-ease), filter 760ms var(--services-ease), transform 760ms var(--services-ease);
+            transform-box: fill-box;
+            transform-origin: center;
+          }
+
+          .execution-svg-hub {
+            fill: url(#executionHubGradient);
+            stroke: rgba(245, 239, 228, 0.18);
+            stroke-width: 1.2;
+            filter: url(#executionHubShadow);
+            transition: stroke 760ms var(--services-ease), filter 760ms var(--services-ease), transform 760ms var(--services-ease);
+            transform-box: fill-box;
+            transform-origin: center;
+          }
+
+          .execution-svg-dots circle {
+            fill: rgba(245, 239, 228, 0.48);
+            transition: fill 760ms var(--services-ease), opacity 760ms var(--services-ease), transform 760ms var(--services-ease);
+            transform-box: fill-box;
+            transform-origin: center;
+          }
+
+          .execution-corner-dot-svg {
+            fill: rgba(245, 239, 228, 0.16);
+            filter: drop-shadow(0 0 8px rgba(245, 239, 228, 0.08));
+          }
+
+          .execution-hub {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            z-index: 4;
+            display: grid;
+            width: 5.35rem;
+            height: 5.35rem;
+            grid-template-columns: repeat(3, 0.34rem);
+            grid-template-rows: repeat(3, 0.34rem);
+            place-content: center;
+            gap: 0.34rem;
+            border-radius: 1.15rem;
+            border: 0;
+            background: transparent;
+            box-shadow: none;
+            transform: translate(-50%, -50%);
+            transition: border-color 760ms var(--services-ease), box-shadow 760ms var(--services-ease), transform 760ms var(--services-ease);
+          }
+
+          .execution-hub span {
+            width: 0.34rem;
+            height: 0.34rem;
+            border-radius: 999px;
+            background: rgba(245, 239, 228, 0.38);
+            transition: background-color 760ms var(--services-ease), transform 760ms var(--services-ease), opacity 760ms var(--services-ease);
+          }
+
+          .execution-node {
+            position: absolute;
+            z-index: 3;
+            display: flex;
+            width: clamp(2.65rem, 10.8%, 3.42rem);
+            height: clamp(2.65rem, 21.6%, 3.42rem);
+            align-items: center;
+            justify-content: center;
+            border-radius: 999px;
+            border: 0;
+            background: transparent;
+            box-shadow: none;
+            color: rgba(245, 239, 228, 0.74);
+            transform: translate(-50%, -50%);
+            transition: transform 760ms var(--services-ease), border-color 760ms var(--services-ease), box-shadow 760ms var(--services-ease), color 760ms var(--services-ease), background 760ms var(--services-ease);
+          }
+
+          .execution-node span {
+            position: absolute;
+            top: calc(100% + 0.42rem);
+            left: 50%;
+            padding: 0.18rem 0.42rem;
+            border-radius: 999px;
+            background: rgba(8, 8, 8, 0.46);
+            color: rgba(245, 239, 228, 0.66);
+            font-size: 0.55rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            line-height: 1;
+            text-transform: uppercase;
+            opacity: 0;
+            transform: translateX(-50%) translateY(-0.24rem);
+            transition: opacity 560ms var(--services-ease), transform 560ms var(--services-ease);
+            white-space: nowrap;
+          }
+
+          .execution-node-left-top { left: 11.15%; top: 27.7%; }
+          .execution-node-left-middle { left: 17.3%; top: 50%; }
+          .execution-node-left-bottom { left: 11.15%; top: 72.3%; }
+          .execution-node-right-top { left: 88.85%; top: 27.7%; }
+          .execution-node-right-middle { left: 82.7%; top: 50%; }
+          .execution-node-right-bottom { left: 88.85%; top: 72.3%; }
+
+          .card:hover .service-engine-card .execution-graphic {
+            transform: scale(1.01);
+          }
+
+          .card:hover .service-engine-card .execution-svg-hub {
+            stroke: rgba(218, 197, 167, 0.32);
+            transform: scale(1.035);
+          }
+
+          .card:hover .service-engine-card .execution-wall-rail,
+          .card:hover .service-engine-card .execution-rail,
+          .card:hover .service-engine-card .execution-stub {
+            stroke: rgba(218, 197, 167, 0.34);
+            opacity: 0.9;
+            filter: drop-shadow(0 0 6px rgba(218, 197, 167, 0.08));
+          }
+
+          .card:hover .service-engine-card .execution-stub {
+            stroke: rgba(245, 239, 228, 0.72);
+          }
+
+          .card:hover .service-engine-card .execution-flow-path {
+            animation: execution-flow-run 1.7s var(--services-ease) infinite;
+          }
+
+          .card:hover .service-engine-card .execution-flow-d,
+          .card:hover .service-engine-card .execution-flow-e,
+          .card:hover .service-engine-card .execution-flow-f {
+            animation-name: execution-flow-run-reverse;
+          }
+
+          .card:hover .service-engine-card .execution-flow-b,
+          .card:hover .service-engine-card .execution-flow-e {
+            animation-delay: 120ms;
+          }
+
+          .card:hover .service-engine-card .execution-flow-c,
+          .card:hover .service-engine-card .execution-flow-f {
+            animation-delay: 240ms;
+          }
+
+          .card:hover .service-engine-card .execution-hub {
+            transform: translate(-50%, -50%) scale(1.04);
+          }
+
+          .card:hover .service-engine-card .execution-hub span {
+            background-color: rgba(218, 197, 167, 0.82);
+          }
+
+          .card:hover .service-engine-card .execution-hub span:nth-child(2),
+          .card:hover .service-engine-card .execution-hub span:nth-child(4),
+          .card:hover .service-engine-card .execution-hub span:nth-child(6),
+          .card:hover .service-engine-card .execution-hub span:nth-child(8) {
+            transform: scale(1.28);
+          }
+
+          .card:hover .service-engine-card .execution-node {
+            color: color-mix(in srgb, var(--service-color) 72%, white 18%);
+            transform: translate(-50%, -50%) translateY(-3px);
+          }
+
+          .card:hover .service-engine-card .execution-svg-nodes circle {
+            stroke: rgba(218, 197, 167, 0.24);
+            transform: translateY(-3px);
+          }
+
+          .card:hover .service-engine-card .execution-node span {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+          }
+
+          .card:hover .service-engine-card .execution-node-left-middle,
+          .card:hover .service-engine-card .execution-node-right-middle {
+            transform: translate(-50%, -50%) translateY(-5px);
+          }
+
+          @keyframes execution-flow-run {
+            0% { opacity: 0; stroke-dashoffset: 220; }
+            34% { opacity: 0.82; }
+            100% { opacity: 0; stroke-dashoffset: -80; }
+          }
+
+          @keyframes execution-flow-run-reverse {
+            0% { opacity: 0; stroke-dashoffset: -80; }
+            34% { opacity: 0.82; }
+            100% { opacity: 0; stroke-dashoffset: 220; }
+          }
+
+          @media (max-width: 639px) {
+            .execution-map {
+              min-height: 16rem;
+            }
+
+            .execution-hub {
+              width: 4rem;
+              height: 4rem;
+              border-radius: 1rem;
+            }
+
+            .execution-node {
+              width: 2.65rem;
+              height: 2.65rem;
+            }
+
+            .execution-node span {
+              display: none;
+            }
+
+            .execution-node-left-top { left: 11.15%; top: 27.7%; }
+            .execution-node-left-middle { left: 17.3%; top: 50%; }
+            .execution-node-left-bottom { left: 11.15%; top: 72.3%; }
+            .execution-node-right-top { left: 88.85%; top: 27.7%; }
+            .execution-node-right-middle { left: 82.7%; top: 50%; }
+            .execution-node-right-bottom { left: 88.85%; top: 72.3%; }
           }
 
           .services-system {
@@ -1586,25 +1922,34 @@ const MagicBento: React.FC<BentoProps> = ({
           }
 
           .chat-showcase-messages {
-            background:
-              radial-gradient(circle at 86% 8%, rgba(127, 167, 200, 0.1), transparent 42%),
-              linear-gradient(180deg, rgba(245, 239, 228, 0.028), transparent 46%);
+            overflow: visible;
           }
 
           .chat-line {
             display: flex;
             align-items: flex-end;
-            gap: 0.5rem;
+            gap: 0.4rem;
+            width: 100%;
+          }
+
+          .chat-line-in {
+            opacity: 1;
+            transform: translateY(0);
           }
 
           .chat-line-out {
             justify-content: flex-end;
           }
 
+          .chat-line-outgoing {
+            opacity: 1;
+            transform: translateY(0);
+          }
+
           .chat-avatar {
             display: flex;
-            width: 1.6rem;
-            height: 1.6rem;
+            width: 1.45rem;
+            height: 1.45rem;
             flex-shrink: 0;
             align-items: center;
             justify-content: center;
@@ -1612,7 +1957,7 @@ const MagicBento: React.FC<BentoProps> = ({
             border: 1px solid rgba(245, 239, 228, 0.22);
             background: linear-gradient(160deg, rgba(245, 239, 228, 0.16), rgba(245, 239, 228, 0.04));
             box-shadow: inset 0 1px 0 rgba(245, 239, 228, 0.24), 0 6px 12px rgba(0, 0, 0, 0.22);
-            font-size: 0.58rem;
+            font-size: 0.54rem;
             font-weight: 700;
             color: #f5efe4;
           }
@@ -1625,12 +1970,12 @@ const MagicBento: React.FC<BentoProps> = ({
 
           .chat-bubble {
             display: flex;
-            max-width: 86%;
+            max-width: calc(100% - 1.55rem);
             flex-direction: column;
             gap: 0.26rem;
             border-radius: 0.92rem;
             border: 1px solid rgba(255, 255, 255, 0.14);
-            padding: 0.62rem 0.72rem;
+            padding: 0.5rem 0.62rem;
             box-shadow: inset 0 1px 0 rgba(245, 239, 228, 0.1);
             position: relative;
           }
@@ -1648,7 +1993,7 @@ const MagicBento: React.FC<BentoProps> = ({
           }
 
           .chat-meta {
-            font-size: 0.62rem;
+            font-size: 0.56rem;
             letter-spacing: 0.02em;
             color: #b0aea5;
           }
@@ -1663,10 +2008,148 @@ const MagicBento: React.FC<BentoProps> = ({
 
           .chat-typed {
             display: block;
-            font-size: 0.82rem;
-            line-height: 1.42;
+            font-size: 0.74rem;
+            line-height: 1.34;
             min-height: 1.42em;
             color: #f5efe4;
+          }
+
+          .chat-typed-in {
+            max-width: 23ch;
+          }
+
+          .chat-typed-out {
+            display: inline-block;
+            max-width: 26ch;
+          }
+
+          .chat-writing {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.38rem;
+            margin-left: 1.85rem;
+            padding: 0.1rem 0.42rem;
+            border-radius: 999px;
+            border: 1px solid rgba(245, 239, 228, 0.14);
+            background: rgba(245, 239, 228, 0.04);
+            color: #b0aea5;
+            font-size: 0.54rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            width: fit-content;
+            opacity: 0;
+            transform: translateY(4px);
+          }
+
+          .chat-writing-dots {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.15rem;
+          }
+
+          .chat-writing-dots span {
+            width: 0.24rem;
+            height: 0.24rem;
+            border-radius: 999px;
+            background: rgba(143, 165, 138, 0.9);
+            opacity: 0.28;
+            animation: chat-dot-bounce 0.9s ease-in-out infinite;
+            animation-play-state: paused;
+          }
+
+          .chat-line-outgoing {
+            opacity: 1;
+            transform: translateY(0);
+          }
+
+          .chat-writing-dots span:nth-child(2) {
+            animation-delay: 0.12s;
+          }
+
+          .chat-writing-dots span:nth-child(3) {
+            animation-delay: 0.24s;
+          }
+
+          .card:hover .attention-chat-card .chat-line-in,
+          .card:active .attention-chat-card .chat-line-in {
+            opacity: 0;
+            transform: translateY(6px);
+            animation: chat-message-enter 4.2s linear forwards;
+          }
+
+          .card:hover .attention-chat-card .chat-line-outgoing,
+          .card:active .attention-chat-card .chat-line-outgoing {
+            opacity: 0;
+            transform: translateY(6px);
+            animation: chat-reply-enter 4.2s linear forwards;
+          }
+
+          .card:hover .attention-chat-card .chat-typed,
+          .card:active .attention-chat-card .chat-typed {
+            white-space: nowrap;
+            overflow: hidden;
+            width: auto;
+            max-width: 0;
+            border-right: 1px solid transparent;
+          }
+
+          .card:hover .attention-chat-card .chat-typed-in,
+          .card:active .attention-chat-card .chat-typed-in {
+            animation: chat-type-in 4.2s steps(24, end) forwards;
+          }
+
+          .card:hover .attention-chat-card .chat-typed-out,
+          .card:active .attention-chat-card .chat-typed-out {
+            animation: chat-type-out 4.2s steps(24, end) forwards;
+          }
+
+          .card:hover .attention-chat-card .chat-writing,
+          .card:active .attention-chat-card .chat-writing {
+            animation: chat-typing-presence 4.2s linear forwards;
+          }
+
+          .card:hover .attention-chat-card .chat-writing-dots span,
+          .card:active .attention-chat-card .chat-writing-dots span {
+            animation-play-state: running;
+          }
+
+          @keyframes chat-message-enter {
+            0%, 4% { opacity: 0; transform: translateY(6px); }
+            8%, 100% { opacity: 1; transform: translateY(0); }
+          }
+
+          @keyframes chat-type-in {
+            0%, 8% { max-width: 0; border-right-color: rgba(245, 239, 228, 0); }
+            14%, 38% { border-right-color: rgba(245, 239, 228, 0.85); }
+            44%, 100% { max-width: 23ch; border-right-color: rgba(245, 239, 228, 0); }
+          }
+
+          @keyframes chat-typing-presence {
+            0%, 44% { opacity: 0; transform: translateY(2px); }
+            48%, 72% { opacity: 1; transform: translateY(0); }
+            80%, 100% { opacity: 0; transform: translateY(2px); }
+          }
+
+          @keyframes chat-reply-enter {
+            0%, 62% { opacity: 0; transform: translateY(6px); }
+            68%, 100% { opacity: 1; transform: translateY(0); }
+          }
+
+          @keyframes chat-type-out {
+            0%, 68% { max-width: 0; border-right-color: rgba(143, 165, 138, 0); }
+            74%, 96% { border-right-color: rgba(143, 165, 138, 0.9); }
+            100% { max-width: 26ch; border-right-color: rgba(143, 165, 138, 0); }
+          }
+
+          @keyframes chat-dot-bounce {
+            0%, 80%, 100% {
+              transform: translateY(0);
+              opacity: 0.28;
+            }
+            40% {
+              transform: translateY(-2px);
+              opacity: 1;
+            }
           }
 
           .chat-input-bar {
@@ -1782,19 +2265,59 @@ const MagicBento: React.FC<BentoProps> = ({
           }
 
           .selling-site-ambient {
-            background: linear-gradient(125deg, transparent 18%, rgba(245, 239, 228, 0.06) 46%, transparent 78%);
+            background: linear-gradient(125deg, transparent 18%, rgba(245, 239, 228, 0.048) 46%, transparent 78%);
           }
 
-          .selling-radial {
+          .selling-site-grid {
+            z-index: 0;
+            background-image: radial-gradient(circle, rgba(245, 239, 228, 0.14) 1px, transparent 1px);
+            background-size: 18px 18px;
+            opacity: 0.16;
+            -webkit-mask-image: radial-gradient(circle at 70% 50%, black 0 44%, transparent 76%);
+            mask-image: radial-gradient(circle at 70% 50%, black 0 44%, transparent 76%);
+            transition: opacity 760ms cubic-bezier(0.22, 1, 0.36, 1);
+          }
+
+          .selling-site-panels {
+            z-index: 0;
             background:
-              repeating-radial-gradient(
-                ellipse at 56% 92%,
-                rgba(245, 239, 228, 0.22) 0 2px,
-                rgba(245, 239, 228, 0) 2px 48px
-              );
-            opacity: 0.68;
-            -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.98) 10%, rgba(0, 0, 0, 0.72) 62%, rgba(0, 0, 0, 0.12));
-            mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.98) 10%, rgba(0, 0, 0, 0.72) 62%, rgba(0, 0, 0, 0.12));
+              linear-gradient(90deg, rgba(245, 239, 228, 0.055) 1px, transparent 1px),
+              linear-gradient(180deg, rgba(245, 239, 228, 0.04) 1px, transparent 1px);
+            background-size: 7.2rem 4.7rem;
+            opacity: 0.12;
+            -webkit-mask-image: radial-gradient(circle at 72% 54%, black 0 52%, transparent 78%);
+            mask-image: radial-gradient(circle at 72% 54%, black 0 52%, transparent 78%);
+            transition: opacity 760ms cubic-bezier(0.22, 1, 0.36, 1);
+          }
+
+          .selling-soundwaves {
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.36;
+            -webkit-mask-image: radial-gradient(circle at 73% 52%, black 0 52%, transparent 78%);
+            mask-image: radial-gradient(circle at 73% 52%, black 0 52%, transparent 78%);
+          }
+
+          .selling-soundwaves span {
+            position: absolute;
+            left: 62%;
+            top: 40%;
+            width: 9rem;
+            height: 9rem;
+            border-radius: 999px;
+            border: 1px solid rgba(245, 239, 228, 0.08);
+            transform: translate(-50%, -50%) scale(0.72);
+            opacity: 0;
+          }
+
+          .selling-soundwaves span:nth-child(2) {
+            width: 13rem;
+            height: 13rem;
+          }
+
+          .selling-soundwaves span:nth-child(3) {
+            width: 17rem;
+            height: 17rem;
           }
 
           .selling-mobile-frost {
@@ -1828,12 +2351,35 @@ const MagicBento: React.FC<BentoProps> = ({
           }
 
           .selling-browser {
-            border-radius: 16px;
-            border: 1px solid rgba(245, 239, 228, 0.2);
-            background: linear-gradient(180deg, rgba(20, 20, 19, 0.94), rgba(8, 8, 8, 0.94));
-            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(245, 239, 228, 0.12);
+            position: relative;
+            border-radius: 18px;
+            border: 1px solid rgba(218, 197, 167, 0.22);
+            background: linear-gradient(180deg, rgba(22, 22, 20, 0.92), rgba(8, 8, 8, 0.9));
+            box-shadow: 0 18px 42px rgba(0, 0, 0, 0.38), 0 0 28px rgba(218, 197, 167, 0.06), inset 0 1px 0 rgba(245, 239, 228, 0.12);
             overflow: hidden;
-            min-height: 20.5rem;
+            min-height: 21.5rem;
+            transition: transform 820ms cubic-bezier(0.22, 1, 0.36, 1), border-color 820ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 820ms cubic-bezier(0.22, 1, 0.36, 1);
+          }
+
+          .selling-browser-shell {
+            transform: translate3d(0, 0, 0);
+            transition: transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: transform;
+          }
+
+          .card:hover .selling-browser-shell {
+            transform: translate3d(0, -48px, 0);
+          }
+
+          .selling-browser-sheen {
+            position: absolute;
+            inset: 0;
+            z-index: 3;
+            pointer-events: none;
+            opacity: 0;
+            background: linear-gradient(112deg, transparent 18%, rgba(245, 239, 228, 0.12) 43%, transparent 68%);
+            transform: translateX(-28%);
+            transition: opacity 820ms cubic-bezier(0.22, 1, 0.36, 1), transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
           }
 
           .selling-browser-top {
@@ -1864,13 +2410,44 @@ const MagicBento: React.FC<BentoProps> = ({
             background: rgba(245, 239, 228, 0.16);
           }
 
+          .selling-nav-pills {
+            display: flex;
+            gap: 0.42rem;
+            margin-left: auto;
+          }
+
+          .selling-nav-pills span {
+            width: 1.25rem;
+            height: 0.34rem;
+            border-radius: 9999px;
+            background: rgba(245, 239, 228, 0.12);
+          }
+
           .selling-browser-body {
             position: relative;
+            display: grid;
+            grid-template-columns: 1.08fr 0.78fr;
+            column-gap: 1rem;
             padding: 1rem;
             background:
-              radial-gradient(circle at 80% 18%, rgba(127, 167, 200, 0.12), transparent 34%),
+              radial-gradient(circle at 82% 18%, rgba(127, 167, 200, 0.12), transparent 34%),
+              radial-gradient(circle at 18% 38%, rgba(218, 197, 167, 0.09), transparent 38%),
               linear-gradient(180deg, rgba(245, 239, 228, 0.02), transparent 40%);
-            min-height: 18.4rem;
+            min-height: 19.8rem;
+          }
+
+          .selling-hero-copy {
+            position: relative;
+            z-index: 2;
+            padding-top: 0.15rem;
+          }
+
+          .selling-page-kicker {
+            width: 4.2rem;
+            height: 0.42rem;
+            margin-bottom: 0.72rem;
+            border-radius: 9999px;
+            background: rgba(218, 197, 167, 0.36);
           }
 
           .selling-hero-line {
@@ -1878,29 +2455,139 @@ const MagicBento: React.FC<BentoProps> = ({
             border-radius: 9999px;
             background: rgba(245, 239, 228, 0.75);
             margin-bottom: 0.45rem;
+            transform-origin: left center;
+            transition: transform 820ms cubic-bezier(0.22, 1, 0.36, 1), opacity 820ms cubic-bezier(0.22, 1, 0.36, 1);
           }
 
           .selling-line-lg {
-            width: 72%;
+            width: 84%;
           }
 
           .selling-line-md {
-            width: 48%;
-            opacity: 0.8;
+            width: 66%;
+            opacity: 0.74;
+          }
+
+          .selling-copy-lines {
+            display: grid;
+            gap: 0.34rem;
+            margin: 0.85rem 0 1rem;
+          }
+
+          .selling-copy-lines span {
+            display: block;
+            height: 0.34rem;
+            border-radius: 9999px;
+            background: rgba(176, 174, 165, 0.24);
+            transform-origin: left center;
+            transition: transform 820ms cubic-bezier(0.22, 1, 0.36, 1), background-color 820ms cubic-bezier(0.22, 1, 0.36, 1);
+          }
+
+          .selling-copy-lines span:nth-child(1) {
+            width: 82%;
+          }
+
+          .selling-copy-lines span:nth-child(2) {
+            width: 72%;
+          }
+
+          .selling-copy-lines span:nth-child(3) {
+            width: 58%;
           }
 
           .selling-cta {
-            width: 38%;
-            height: 0.52rem;
+            width: 46%;
+            height: 0.72rem;
             border-radius: 9999px;
             margin-bottom: 0.9rem;
             background: linear-gradient(90deg, rgba(194, 167, 123, 0.95), rgba(218, 197, 167, 0.95));
+            box-shadow: 0 0 16px rgba(218, 197, 167, 0.12);
+            transition: transform 760ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 760ms cubic-bezier(0.22, 1, 0.36, 1), filter 760ms cubic-bezier(0.22, 1, 0.36, 1);
+          }
+
+          .selling-hero-visual {
+            position: relative;
+            z-index: 1;
+            min-height: 7.25rem;
+            border-radius: 14px;
+            border: 1px solid rgba(218, 197, 167, 0.18);
+            background:
+              radial-gradient(circle at 76% 18%, rgba(218, 197, 167, 0.13), transparent 34%),
+              linear-gradient(145deg, rgba(245, 239, 228, 0.075), rgba(8, 8, 8, 0.12));
+            box-shadow: inset 0 1px 0 rgba(245, 239, 228, 0.08);
+            overflow: hidden;
+            transition: border-color 820ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 820ms cubic-bezier(0.22, 1, 0.36, 1), transform 820ms cubic-bezier(0.22, 1, 0.36, 1);
+          }
+
+          .selling-preview-window {
+            position: absolute;
+            inset: 0.8rem 0.8rem 2.55rem;
+            border-radius: 12px;
+            border: 1px solid rgba(245, 239, 228, 0.12);
+            background:
+              radial-gradient(circle at 72% 18%, rgba(218, 197, 167, 0.18), transparent 32%),
+              linear-gradient(155deg, rgba(245, 239, 228, 0.075), rgba(245, 239, 228, 0.025));
+            box-shadow: inset 0 1px 0 rgba(245, 239, 228, 0.09);
+            transition: transform 820ms cubic-bezier(0.22, 1, 0.36, 1), border-color 820ms cubic-bezier(0.22, 1, 0.36, 1), background-color 820ms cubic-bezier(0.22, 1, 0.36, 1);
+          }
+
+          .selling-preview-badge,
+          .selling-preview-heading,
+          .selling-preview-copy {
+            position: absolute;
+            border-radius: 999px;
+            display: block;
+          }
+
+          .selling-preview-badge {
+            left: 0.8rem;
+            top: 0.78rem;
+            width: 2.6rem;
+            height: 0.42rem;
+            background: rgba(218, 197, 167, 0.36);
+          }
+
+          .selling-preview-heading {
+            left: 0.8rem;
+            right: 2.2rem;
+            top: 1.68rem;
+            height: 0.58rem;
+            background: rgba(245, 239, 228, 0.58);
+          }
+
+          .selling-preview-copy {
+            left: 0.8rem;
+            top: 2.56rem;
+            width: 58%;
+            height: 0.34rem;
+            background: rgba(176, 174, 165, 0.3);
+          }
+
+          .selling-preview-strip {
+            position: absolute;
+            left: 0.8rem;
+            right: 0.8rem;
+            bottom: 0.75rem;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.38rem;
+          }
+
+          .selling-preview-strip span {
+            height: 1.15rem;
+            border-radius: 8px;
+            border: 1px solid rgba(245, 239, 228, 0.1);
+            background: rgba(245, 239, 228, 0.045);
+            box-shadow: inset 0 1px 0 rgba(245, 239, 228, 0.06);
+            transition: transform 820ms cubic-bezier(0.22, 1, 0.36, 1), border-color 820ms cubic-bezier(0.22, 1, 0.36, 1), background-color 820ms cubic-bezier(0.22, 1, 0.36, 1);
           }
 
           .selling-cards-row {
             display: grid;
+            grid-column: 1 / -1;
             grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 0.45rem;
+            gap: 0.5rem;
+            margin-top: 0.95rem;
           }
 
           .selling-card {
@@ -1908,7 +2595,8 @@ const MagicBento: React.FC<BentoProps> = ({
             border-radius: 10px;
             background: rgba(245, 239, 228, 0.04);
             padding: 0.45rem;
-            min-height: 3rem;
+            min-height: 2.85rem;
+            transition: border-color 760ms cubic-bezier(0.22, 1, 0.36, 1), background-color 760ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 760ms cubic-bezier(0.22, 1, 0.36, 1), transform 760ms cubic-bezier(0.22, 1, 0.36, 1);
           }
 
           .selling-stat-bar {
@@ -1936,27 +2624,100 @@ const MagicBento: React.FC<BentoProps> = ({
             animation-delay: 0.3s;
           }
 
-          .selling-cursor {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 0.95rem;
-            height: 1.3rem;
-            background: #f5efe4;
-            clip-path: polygon(0 0, 0 100%, 30% 74%, 45% 100%, 56% 95%, 42% 66%, 84% 66%);
-            filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.7)) drop-shadow(0 8px 10px rgba(0, 0, 0, 0.32));
-            animation: selling-cursor-move 6s ease-in-out infinite;
+          .card:hover .group\/selling .bento-mobile-readable {
+            transform: none;
           }
 
-          .selling-cursor::after {
-            content: '';
-            position: absolute;
-            left: 2px;
-            top: 2px;
-            width: 0.52rem;
-            height: 0.74rem;
-            background: rgba(14, 14, 14, 0.48);
-            clip-path: polygon(0 0, 0 100%, 30% 72%, 45% 100%, 56% 95%, 42% 64%, 84% 64%);
+          .card:hover .group\/selling .selling-site-grid,
+          .card:hover .group\/selling .selling-site-panels {
+            opacity: 0.26;
+          }
+
+          .card:hover .group\/selling .selling-soundwaves span {
+            animation: selling-wave-pulse 1.8s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+          }
+
+          .card:hover .group\/selling .selling-soundwaves span:nth-child(2) {
+            animation-delay: 160ms;
+          }
+
+          .card:hover .group\/selling .selling-soundwaves span:nth-child(3) {
+            animation-delay: 320ms;
+          }
+
+          .card:hover .group\/selling .selling-browser {
+            border-color: rgba(218, 197, 167, 0.34);
+            box-shadow: 0 22px 48px rgba(0, 0, 0, 0.4), 0 0 34px rgba(218, 197, 167, 0.1), inset 0 1px 0 rgba(245, 239, 228, 0.14);
+          }
+
+          .card:hover .group\/selling .selling-line-lg,
+          .group\/selling:hover .selling-line-lg {
+            transform: scaleX(1.06);
+          }
+
+          .card:hover .group\/selling .selling-line-md,
+          .group\/selling:hover .selling-line-md {
+            transform: scaleX(1.1);
+          }
+
+          .card:hover .group\/selling .selling-copy-lines span,
+          .group\/selling:hover .selling-copy-lines span {
+            background-color: rgba(176, 174, 165, 0.32);
+            transform: scaleX(1.05);
+          }
+
+          .card:hover .group\/selling .selling-hero-visual,
+          .group\/selling:hover .selling-hero-visual {
+            transform: translateY(-2px);
+            border-color: rgba(218, 197, 167, 0.28);
+            box-shadow: inset 0 1px 0 rgba(245, 239, 228, 0.1), 0 0 22px rgba(218, 197, 167, 0.06);
+          }
+
+          .card:hover .group\/selling .selling-preview-window,
+          .group\/selling:hover .selling-preview-window {
+            transform: translateY(-3px);
+            border-color: rgba(218, 197, 167, 0.22);
+          }
+
+          .card:hover .group\/selling .selling-preview-strip span,
+          .group\/selling:hover .selling-preview-strip span {
+            transform: translateY(-2px);
+            border-color: rgba(218, 197, 167, 0.16);
+            background-color: rgba(245, 239, 228, 0.065);
+          }
+
+          .card:hover .group\/selling .selling-preview-strip span:nth-child(2),
+          .group\/selling:hover .selling-preview-strip span:nth-child(2) {
+            transition-delay: 80ms;
+          }
+
+          .card:hover .group\/selling .selling-preview-strip span:nth-child(3),
+          .group\/selling:hover .selling-preview-strip span:nth-child(3) {
+            transition-delay: 160ms;
+          }
+
+          .card:hover .group\/selling .selling-browser-sheen {
+            opacity: 0.68;
+            transform: translateX(24%);
+          }
+
+          .card:hover .group\/selling .selling-cta {
+            transform: translateY(-1px) scale(1.04);
+            filter: brightness(1.08);
+            box-shadow: 0 0 20px rgba(218, 197, 167, 0.2);
+          }
+
+          .card:hover .group\/selling .selling-card:nth-child(2) {
+            transform: translateY(-2px);
+            border-color: rgba(127, 167, 200, 0.3);
+            background-color: rgba(127, 167, 200, 0.07);
+            box-shadow: 0 0 18px rgba(127, 167, 200, 0.08);
+          }
+
+          @keyframes selling-wave-pulse {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.72); }
+            38% { opacity: 0.72; }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(1.08); }
           }
 
           @keyframes contact-radial-pulse {
@@ -1972,6 +2733,178 @@ const MagicBento: React.FC<BentoProps> = ({
               transform: translate(-50%, -50%) scale(0.96);
               opacity: 0.18;
             }
+          }
+
+          .conversion-card-bg {
+            background:
+              radial-gradient(circle at 78% 72%, rgba(167, 154, 199, 0.08), transparent 38%),
+              linear-gradient(180deg, rgba(255, 255, 255, 0.025), transparent 48%);
+          }
+
+          .conversion-card-dots {
+            display: none;
+          }
+
+          .conversion-card-lines {
+            display: none;
+          }
+
+          .conversion-card-glow {
+            display: none;
+          }
+
+          .conversion-phone-wrap {
+            transform: translate3d(0, 0, 0);
+          }
+
+          .conversion-flow-copy {
+            max-width: 13.25rem;
+          }
+
+          .conversion-flow-copy .bento-card-caption {
+            max-width: 12.5rem;
+          }
+
+          .conversion-phone-svg {
+            width: min(100%, 20rem);
+            height: auto;
+            overflow: visible;
+            filter: none;
+          }
+
+          .conversion-flow-svg {
+            width: min(88%, 18rem);
+            transform: translateY(1.35rem);
+            transition: transform 800ms cubic-bezier(0.22, 1, 0.36, 1), filter 800ms cubic-bezier(0.22, 1, 0.36, 1);
+          }
+
+          .card:hover .group\/conversion .conversion-flow-svg {
+            transform: translateY(0.95rem) scale(1.025);
+            filter: none;
+          }
+
+          .conversion-wire,
+          .conversion-floor {
+            fill: none;
+            stroke: rgba(245, 239, 228, 0.08);
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-width: 1.1;
+            vector-effect: non-scaling-stroke;
+            transition: stroke 760ms cubic-bezier(0.22, 1, 0.36, 1), opacity 760ms cubic-bezier(0.22, 1, 0.36, 1);
+          }
+
+          .conversion-floor {
+            stroke: rgba(245, 239, 228, 0.22);
+          }
+
+          .conversion-phone {
+            transform-box: fill-box;
+            transform-origin: center;
+            transition: transform 800ms cubic-bezier(0.22, 1, 0.36, 1);
+          }
+
+          .conversion-panel,
+          .conversion-hero,
+          .conversion-cta {
+            transform-box: fill-box;
+            transform-origin: center;
+            transition: filter 760ms cubic-bezier(0.22, 1, 0.36, 1), opacity 760ms cubic-bezier(0.22, 1, 0.36, 1), transform 760ms cubic-bezier(0.22, 1, 0.36, 1), stroke 760ms cubic-bezier(0.22, 1, 0.36, 1);
+          }
+
+          .conversion-cta {
+            filter: drop-shadow(0 0 8px rgba(245, 239, 228, 0.1));
+          }
+
+          .conversion-click-ring {
+            fill: none;
+            stroke: rgba(218, 197, 167, 0.78);
+            stroke-linecap: round;
+            stroke-width: 1.8;
+            stroke-dasharray: 22 90;
+            opacity: 0;
+            filter: drop-shadow(0 0 6px rgba(218, 197, 167, 0.18));
+          }
+
+          .conversion-cursor {
+            transform-box: fill-box;
+            transform-origin: center;
+            filter: drop-shadow(0 8px 10px rgba(0, 0, 0, 0.36));
+            transition: transform 760ms cubic-bezier(0.22, 1, 0.36, 1), filter 760ms cubic-bezier(0.22, 1, 0.36, 1);
+          }
+
+          .conversion-card-button {
+            border-color: rgba(167, 154, 199, 0.42) !important;
+            box-shadow: 0 0 22px rgba(167, 154, 199, 0.12), inset 0 1px 0 rgba(245, 239, 228, 0.08);
+          }
+
+          .card:hover .group\/conversion .conversion-card-dots {
+            opacity: 0;
+          }
+
+          .card:hover .group\/conversion .conversion-card-glow {
+            opacity: 0;
+            transform: none;
+          }
+
+          .card:hover .group\/conversion .conversion-wire,
+          .card:hover .group\/conversion .conversion-floor {
+            stroke: rgba(218, 197, 167, 0.22);
+          }
+
+          .card:hover .group\/conversion .conversion-phone {
+            transform: translateY(-4px);
+          }
+
+          .card:hover .group\/conversion .conversion-panel-a {
+            transform: translateY(-2px);
+          }
+
+          .card:hover .group\/conversion .conversion-panel-b {
+            transform: translateY(-3px);
+            transition-delay: 70ms;
+          }
+
+          .card:hover .group\/conversion .conversion-hero {
+            stroke: rgba(245, 239, 228, 0.32);
+            filter: drop-shadow(0 0 10px rgba(245, 239, 228, 0.08));
+            transform: translateY(-3px);
+            transition-delay: 120ms;
+          }
+
+          .card:hover .group\/conversion .conversion-panel-c,
+          .card:hover .group\/conversion .conversion-panel-d {
+            transform: translateY(-2px);
+            transition-delay: 180ms;
+          }
+
+          .card:hover .group\/conversion .conversion-cta {
+            stroke: rgba(218, 197, 167, 0.68);
+            filter: drop-shadow(0 0 12px rgba(218, 197, 167, 0.18));
+            transform: translateY(-2px);
+            transition-delay: 240ms;
+          }
+
+          .card:hover .group\/conversion .conversion-cursor {
+            animation: conversion-cursor-click 1.7s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+          }
+
+          .card:hover .group\/conversion .conversion-click-ring {
+            animation: conversion-click-ring 1.7s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+          }
+
+          @keyframes conversion-cursor-click {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            42% { transform: translate(-7px, -8px) scale(1); }
+            52% { transform: translate(-7px, -8px) scale(0.92); }
+            66% { transform: translate(-7px, -8px) scale(1); }
+          }
+
+          @keyframes conversion-click-ring {
+            0% { opacity: 0; stroke-dashoffset: 68; }
+            42% { opacity: 0; stroke-dashoffset: 68; }
+            56% { opacity: 0.9; }
+            100% { opacity: 0; stroke-dashoffset: -18; }
           }
 
           .contact-card-bg {
@@ -2078,6 +3011,54 @@ const MagicBento: React.FC<BentoProps> = ({
             transition: opacity 300ms ease;
           }
 
+          .bento-card-kicker {
+            margin-bottom: 0.38rem;
+            font-size: 0.68rem;
+            font-weight: 600;
+            letter-spacing: 0.22em;
+            line-height: 1.25;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.45);
+          }
+
+          .bento-card-heading {
+            margin-bottom: 0.42rem;
+            font-size: clamp(1.14rem, 0.92rem + 0.5vw, 1.32rem);
+            font-weight: 700;
+            line-height: 1.12;
+            letter-spacing: -0.02em;
+          }
+
+          .bento-card-caption {
+            max-width: 14.75rem;
+            font-size: 0.75rem;
+            font-weight: 450;
+            line-height: 1.38;
+            color: rgba(255, 255, 255, 0.54);
+          }
+
+          .remote-card-copy,
+          .bento-mobile-readable,
+          .contact-card-content {
+            max-width: 16rem;
+          }
+
+          .conversion-phone-wrap,
+          .remote-card-globe-shell,
+          .selling-browser-shell,
+          .chat-showcase-messages {
+            --bento-visual-scale: 0.92;
+          }
+
+          .remote-card-globe,
+          .remote-card-globe canvas {
+            cursor: pointer !important;
+          }
+
+          .remote-card-globe canvas:active {
+            cursor: grabbing !important;
+          }
+
           .card .bento-mobile-readable,
           .card .remote-card-copy,
           .card .contact-card-content,
@@ -2180,8 +3161,8 @@ const MagicBento: React.FC<BentoProps> = ({
               grid-template-columns: repeat(6, 1fr);
               grid-template-rows: repeat(4, minmax(0, 1fr));
               gap: 0.65rem;
-              height: 960px;
-              min-height: 960px;
+              height: 1040px;
+              min-height: 1040px;
             }
 
             .card-responsive .card {
@@ -2220,8 +3201,8 @@ const MagicBento: React.FC<BentoProps> = ({
               grid-template-columns: repeat(12, 1fr);
               grid-template-rows: repeat(2, minmax(0, 1fr));
               gap: 0.65rem;
-              height: 680px;
-              min-height: 680px;
+              height: 740px;
+              min-height: 740px;
               max-width: 1400px;
               margin: 0 auto;
             }
@@ -2254,6 +3235,45 @@ const MagicBento: React.FC<BentoProps> = ({
             .card-responsive .card:nth-child(3) {
               grid-column: 9 / 13;
               grid-row: 2 / 3;
+            }
+
+            .card-responsive .card:nth-child(1) .end-to-end-svg {
+              transform: translate3d(-1%, 3%, 0) scale(0.96);
+            }
+
+            .card-responsive .card:nth-child(2) .chat-showcase-messages {
+              margin-top: 0;
+              padding-bottom: 4rem;
+            }
+
+            .card-responsive .card:nth-child(3) .conversion-phone-wrap {
+              bottom: 0;
+            }
+
+            .card-responsive .card:nth-child(3) .conversion-phone-svg {
+              width: min(88%, 18rem);
+            }
+
+            .card-responsive .card:nth-child(4) .remote-card-globe-shell {
+              min-height: 12.5rem;
+              height: 50%;
+            }
+
+            .card-responsive .card:nth-child(4) .remote-card-globe-position {
+              bottom: -62%;
+              height: 148%;
+            }
+
+            .card-responsive .card:nth-child(4) .remote-card-globe {
+              opacity: 0.82;
+              transform: translateY(1%) scale(0.94);
+            }
+
+            .card-responsive .card:nth-child(5) .selling-browser-shell {
+              bottom: -28%;
+              right: 2%;
+              width: 58%;
+              max-width: 30rem;
             }
           }
 
@@ -2455,19 +3475,19 @@ const MagicBento: React.FC<BentoProps> = ({
             }
 
             .card-responsive .card:nth-child(4) .remote-card-globe-position {
-              bottom: -56%;
-              height: 138%;
+              bottom: -64%;
+              height: 132%;
             }
 
             .card-responsive .card:nth-child(4) .remote-card-globe {
-              transform: translateY(12%) scale(0.78);
+              opacity: 0.82;
+              transform: translateY(6%) scale(0.8);
             }
           }
 
-          /* Desktop: pull globe higher so it sits closer to the text */
           @media (min-width: 1024px) {
             .remote-card-globe-position {
-              bottom: -30%;
+              bottom: -62%;
             }
           }
         `}
@@ -2486,7 +3506,7 @@ const MagicBento: React.FC<BentoProps> = ({
       <BentoCardGrid gridRef={gridRef}>
         <div className="card-responsive grid gap-2">
           {cardData.map((card, index) => {
-            const baseClassName = `card relative ${index === 2 ? 'min-h-[170px]' : 'min-h-[180px]'} w-full max-w-full rounded-[20px]`;
+            const baseClassName = `card group/bento relative ${index === 2 ? 'min-h-[170px]' : 'min-h-[180px]'} w-full max-w-full rounded-[20px]`;
             const cardInnerClassName = `bento-card-surface relative flex h-full flex-col justify-between overflow-hidden rounded-[20px] font-light transition-all duration-300 ease-in-out ${index === 2 || index === 3 ? 'p-0' : 'p-8'}`;
 
             const cardStyle = {

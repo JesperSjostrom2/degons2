@@ -114,7 +114,7 @@ export function Globe({
       lastPointer.current = null
     }
     pointerInteracting.current = null
-    if (canvasRef.current) canvasRef.current.style.cursor = "grab"
+    if (canvasRef.current) canvasRef.current.style.cursor = "pointer"
     isPausedRef.current = false
   }, [])
 
@@ -252,7 +252,7 @@ export function Globe({
         style={{
           width: "100%",
           height: "100%",
-          cursor: "grab",
+          cursor: "pointer",
           opacity: 0,
           transition: "opacity 1.2s ease",
           borderRadius: "50%",
