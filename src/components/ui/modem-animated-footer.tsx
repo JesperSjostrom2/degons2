@@ -1,7 +1,6 @@
 "use client"
 
 import Link from "next/link"
-import { NotepadTextDashed } from "lucide-react"
 import type { ReactNode } from "react"
 
 import { cn } from "@/lib/utils"
@@ -25,7 +24,6 @@ interface FooterProps {
   navLinks?: FooterLink[]
   creatorName?: string
   creatorUrl?: string
-  brandIcon?: ReactNode
   statusSlot?: ReactNode
   className?: string
 }
@@ -37,14 +35,14 @@ export const Footer = ({
   navLinks = [],
   creatorName,
   creatorUrl,
-  brandIcon,
   statusSlot,
   className,
 }: FooterProps) => {
   return (
     <section className={cn("relative w-full overflow-hidden", className)}>
-      <footer className="warm-section-bg relative overflow-hidden border-t border-[color:var(--site-border)] dark:border-accent/30">
-        <div className="relative mx-auto flex min-h-[22rem] max-w-7xl flex-col justify-between px-6 py-10 md:min-h-[25rem]">
+      <footer className="relative overflow-hidden bg-[color:var(--site-bg)]">
+        <div className="footer-top-glow pointer-events-none absolute left-1/2 top-0 z-20 h-px w-[94%] max-w-7xl -translate-x-1/2" />
+        <div className="relative mx-auto flex max-w-7xl flex-col px-6 py-10 md:py-12">
           <div className="flex flex-col items-center text-center">
             {statusSlot && <div className="mb-8">{statusSlot}</div>}
 
@@ -54,7 +52,7 @@ export const Footer = ({
                   <Link
                     key={link.label}
                     href={link.href}
-                    className="group relative inline-flex h-11 w-11 items-center justify-center rounded-full text-muted-foreground transition-all duration-200 hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/45"
+                    className="group relative inline-flex h-11 w-11 items-center justify-center rounded-full border border-[color:var(--site-border)] bg-[rgba(5,5,5,0.045)] text-[color:var(--site-muted)] backdrop-blur-[4px] [backdrop-filter:blur(4px)_saturate(130%)] [-webkit-backdrop-filter:blur(4px)_saturate(130%)] transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/70 hover:text-accent dark:hover:border-accent/70 dark:hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/45 dark:border-white/15 dark:bg-[rgba(5,5,5,0.045)] dark:text-white/72"
                     target={link.href.startsWith("http") ? "_blank" : undefined}
                     rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
                   >
@@ -81,19 +79,16 @@ export const Footer = ({
             )}
           </div>
 
-          <div className="relative z-10 mt-20 flex flex-col items-center justify-center gap-3 md:mt-24">
-            <p className="text-center text-sm font-medium text-muted-foreground md:text-left">
-              © {new Date().getFullYear()} {brandName}. All rights reserved.
+          <div className="relative z-10 mt-10 flex flex-col items-center gap-3 md:mt-12">
+            <p className="text-center text-sm font-medium text-muted-foreground">
+              Design & built by {brandName}
             </p>
+            {creatorName && creatorUrl && (
+              <Link href={creatorUrl} className="text-xs text-[color:var(--site-muted)] transition-colors duration-300 hover:text-accent">
+                Built by {creatorName}
+              </Link>
+            )}
           </div>
-        </div>
-
-        <div className="absolute bottom-20 left-1/2 z-10 flex w-full max-w-7xl -translate-x-1/2 items-center gap-4 px-6">
-          <div className="site-divider-line h-px flex-1" />
-          <div className="group/footer-code flex h-11 w-11 items-center justify-center rounded-xl border border-accent/30 bg-accent/10 text-accent transition-all duration-300 hover:border-accent/55 hover:bg-accent/15">
-            {brandIcon || <NotepadTextDashed className="h-5 w-5 transition-transform duration-300 ease-out group-hover/footer-code:scale-110" />}
-          </div>
-          <div className="site-divider-line-reverse h-px flex-1" />
         </div>
 
       </footer>
