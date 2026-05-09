@@ -5,12 +5,7 @@ import { motion } from 'framer-motion'
 import { ChevronDown, Github, Linkedin, Loader2, Mail, type LucideIcon } from 'lucide-react'
 import { SendIcon } from '@/components/ui/animated-state-icons'
 
-import BorderGlow from '@/components/BorderGlow'
 import GlareHover from '@/components/GlareHover'
-
-const BORDER_GLOW_COLORS = ['#8b7355', '#dac5a7', '#f5efe4']
-const BORDER_GLOW_HSL = '38 37 76'
-const BORDER_GLOW_BACKGROUND = 'var(--site-card-glow-bg)'
 
 const projectTypes = ['Landing page', 'Business website', 'Portfolio', 'Redesign / UI polish', 'Frontend build', 'Other']
 
@@ -177,19 +172,7 @@ export default function ContactSection() {
           viewport={{ once: true, amount: 0.22 }}
           transition={{ duration: 1, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
         >
-          <BorderGlow
-            className="rounded-[28px]"
-            edgeSensitivity={26}
-            glowColor={BORDER_GLOW_HSL}
-            backgroundColor={BORDER_GLOW_BACKGROUND}
-            borderRadius={28}
-            glowRadius={34}
-            glowIntensity={1.35}
-            coneSpread={24}
-            colors={BORDER_GLOW_COLORS}
-            fillOpacity={0.4}
-          >
-            <div className="warm-card-surface relative grid overflow-hidden rounded-[28px] backdrop-blur-sm lg:grid-cols-[0.9fr_1.35fr]">
+            <div className="surface-hover-glow premium-glass-surface relative grid overflow-hidden rounded-[28px] backdrop-blur-sm lg:grid-cols-[0.9fr_1.35fr]">
               <aside className="flex flex-col justify-between border-b border-[color:var(--site-border)] p-6 md:p-8 lg:border-b-0 lg:border-r dark:border-white/10">
                 <div>
                   <p className="mb-3 text-sm uppercase tracking-[0.24em] text-accent/70">Find Me</p>
@@ -202,7 +185,7 @@ export default function ContactSection() {
                 <div
                   ref={socialGridRef}
                   onPointerLeave={hideSocialFill}
-                  className="relative mt-8 grid overflow-hidden rounded-[24px] border border-[color:var(--site-border)] bg-[color:var(--site-surface)] sm:grid-cols-3 lg:grid-cols-1 dark:border-white/10 dark:bg-black/30"
+                  className="premium-glass-surface relative mt-8 grid overflow-hidden rounded-[24px] sm:grid-cols-3 lg:grid-cols-1"
                 >
                   <div
                     className="pointer-events-none absolute left-0 top-0 z-0 bg-[#a88c62] transition-[transform,width,height,border-radius,opacity] duration-300 ease-out"
@@ -248,9 +231,9 @@ export default function ContactSection() {
                       value={name}
                       onChange={(event) => setName(event.target.value)}
                       required
-                      className="w-full rounded-xl border border-[color:var(--site-border)] bg-[color:var(--site-surface)] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[color:var(--site-muted)] focus:border-accent/60 focus:bg-[color:var(--site-surface-strong)] dark:rounded-2xl dark:border-white/10 dark:bg-black/30 dark:text-white dark:placeholder:text-white/30 dark:focus:bg-black/40"
-                      placeholder="Your name"
-                    />
+                        className="w-full rounded-xl border border-[color:var(--site-border)] bg-[rgba(5,5,5,0.045)] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[color:var(--site-muted)] focus:border-accent/60 focus:bg-[rgba(5,5,5,0.1)] dark:rounded-2xl dark:border-white/10 dark:bg-[rgba(5,5,5,0.045)] dark:text-white dark:placeholder:text-white/30 dark:focus:bg-[rgba(5,5,5,0.1)]"
+                        placeholder="Your name"
+                      />
                   </label>
 
                   <label className="space-y-2">
@@ -260,9 +243,9 @@ export default function ContactSection() {
                       value={email}
                       onChange={(event) => setEmail(event.target.value)}
                       required
-                      className="w-full rounded-xl border border-[color:var(--site-border)] bg-[color:var(--site-surface)] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[color:var(--site-muted)] focus:border-accent/60 focus:bg-[color:var(--site-surface-strong)] dark:rounded-2xl dark:border-white/10 dark:bg-black/30 dark:text-white dark:placeholder:text-white/30 dark:focus:bg-black/40"
-                      placeholder="you@example.com"
-                    />
+                        className="w-full rounded-xl border border-[color:var(--site-border)] bg-[rgba(5,5,5,0.045)] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[color:var(--site-muted)] focus:border-accent/60 focus:bg-[rgba(5,5,5,0.1)] dark:rounded-2xl dark:border-white/10 dark:bg-[rgba(5,5,5,0.045)] dark:text-white dark:placeholder:text-white/30 dark:focus:bg-[rgba(5,5,5,0.1)]"
+                        placeholder="you@example.com"
+                      />
                   </label>
 
                   <label className="space-y-2">
@@ -271,7 +254,7 @@ export default function ContactSection() {
                       <select
                         value={projectType}
                         onChange={(event) => setProjectType(event.target.value)}
-                        className="w-full appearance-none rounded-xl border border-[color:var(--site-border)] bg-[color:var(--site-surface)] py-3 pl-4 pr-12 text-[color:var(--site-text)] outline-none transition-colors duration-300 focus:border-accent/60 focus:bg-[color:var(--site-surface-strong)] dark:rounded-2xl dark:border-white/10 dark:bg-black/30 dark:text-white dark:focus:bg-black/40"
+                        className="w-full appearance-none rounded-xl border border-[color:var(--site-border)] bg-[rgba(5,5,5,0.045)] py-3 pl-4 pr-12 text-[color:var(--site-text)] outline-none transition-colors duration-300 focus:border-accent/60 focus:bg-[rgba(5,5,5,0.1)] dark:rounded-2xl dark:border-white/10 dark:bg-[rgba(5,5,5,0.045)] dark:text-white dark:focus:bg-[rgba(5,5,5,0.1)]"
                       >
                         {projectTypes.map((type) => (
                           <option key={type} value={type} className="bg-[#050505] text-white">
@@ -288,9 +271,9 @@ export default function ContactSection() {
                     <input
                       value={budget}
                       onChange={(event) => setBudget(event.target.value)}
-                      className="w-full rounded-xl border border-[color:var(--site-border)] bg-[color:var(--site-surface)] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[color:var(--site-muted)] focus:border-accent/60 focus:bg-[color:var(--site-surface-strong)] dark:rounded-2xl dark:border-white/10 dark:bg-black/30 dark:text-white dark:placeholder:text-white/30 dark:focus:bg-black/40"
-                      placeholder="Optional, even a rough range helps"
-                    />
+                        className="w-full rounded-xl border border-[color:var(--site-border)] bg-[rgba(5,5,5,0.045)] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[color:var(--site-muted)] focus:border-accent/60 focus:bg-[rgba(5,5,5,0.1)] dark:rounded-2xl dark:border-white/10 dark:bg-[rgba(5,5,5,0.045)] dark:text-white dark:placeholder:text-white/30 dark:focus:bg-[rgba(5,5,5,0.1)]"
+                        placeholder="Optional, even a rough range helps"
+                      />
                   </label>
                 </div>
 
@@ -301,7 +284,7 @@ export default function ContactSection() {
                     onChange={(event) => setMessage(event.target.value)}
                     required
                     rows={7}
-                    className="w-full resize-none rounded-xl border border-[color:var(--site-border)] bg-[color:var(--site-surface)] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[color:var(--site-muted)] focus:border-accent/60 focus:bg-[color:var(--site-surface-strong)] dark:rounded-2xl dark:border-white/10 dark:bg-black/30 dark:text-white dark:placeholder:text-white/30 dark:focus:bg-black/40"
+                    className="w-full resize-none rounded-xl border border-[color:var(--site-border)] bg-[rgba(5,5,5,0.045)] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[color:var(--site-muted)] focus:border-accent/60 focus:bg-[rgba(5,5,5,0.1)] dark:rounded-2xl dark:border-white/10 dark:bg-[rgba(5,5,5,0.045)] dark:text-white dark:placeholder:text-white/30 dark:focus:bg-[rgba(5,5,5,0.1)]"
                     placeholder="What are you trying to put online, improve, or explain better?"
                   />
                 </label>
@@ -350,7 +333,6 @@ export default function ContactSection() {
                 </div>
               </form>
             </div>
-          </BorderGlow>
         </motion.div>
       </div>
     </section>

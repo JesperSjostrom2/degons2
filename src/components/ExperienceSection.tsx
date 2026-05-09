@@ -7,11 +7,6 @@ import { ArrowLeft, ArrowRight, CalendarDays, ChevronDown, Code2, ExternalLink, 
 import { SiFramer, SiGreensock, SiHtml5, SiJavascript, SiNextdotjs, SiTailwindcss, SiThreedotjs, SiTypescript } from 'react-icons/si'
 import type { IconType } from 'react-icons'
 
-import BorderGlow from '@/components/BorderGlow'
-
-
-const BORDER_GLOW_BACKGROUND = 'var(--site-card-glow-bg)'
-
 interface ProjectSlide {
   type: 'image' | 'video'
   src: string
@@ -34,6 +29,7 @@ interface Project {
   accentBorderColor: string
   glowColor: string
   glowColors: string[]
+  atmosphereColor: string
   liveSite: string
 }
 
@@ -65,6 +61,7 @@ const projectsData: Project[] = [
     accentBorderColor: 'rgba(243, 243, 243, 0.42)',
     glowColor: '0 0 92',
     glowColors: ['#f3f3f3', '#f3f3f3', '#f3f3f3'],
+    atmosphereColor: 'rgba(242, 243, 245, 0.11)',
     liveSite: 'andcreative.se',
   },
   {
@@ -94,6 +91,7 @@ const projectsData: Project[] = [
     accentBorderColor: 'rgba(212, 175, 55, 0.42)',
     glowColor: '43 63 55',
     glowColors: ['#d4af37', '#d4af37', '#d4af37'],
+    atmosphereColor: 'rgba(181, 133, 76, 0.12)',
     liveSite: 'tahkonkerma.fi',
   },
   {
@@ -123,6 +121,7 @@ const projectsData: Project[] = [
     accentBorderColor: 'rgba(255, 0, 102, 0.42)',
     glowColor: '332 100 58',
     glowColors: ['#ff0066', '#ff0066', '#ff0066'],
+    atmosphereColor: 'rgba(124, 99, 166, 0.11)',
     liveSite: 'jespersjostrom.se',
   },
 ]
@@ -153,6 +152,10 @@ const ProjectCard = ({ project }: { project: Project }) => {
   const [isInView, setIsInView] = useState(false)
   const [canAutoplayMedia, setCanAutoplayMedia] = useState(false)
   const accentLabelStyle = { '--project-accent': project.accentColor } as CSSProperties
+  const projectCardStyle = {
+    '--project-accent': project.accentColor,
+    '--project-atmosphere': project.atmosphereColor,
+  } as CSSProperties
   const slideCount = project.slides.length
   const currentSlide = project.slides[activeSlide]
 
@@ -214,22 +217,10 @@ const ProjectCard = ({ project }: { project: Project }) => {
   }
 
   return (
-    <BorderGlow
-      className="rounded-[28px]"
-      edgeSensitivity={26}
-      glowColor={project.glowColor}
-      backgroundColor={BORDER_GLOW_BACKGROUND}
-      borderRadius={28}
-      glowRadius={34}
-      glowIntensity={1.35}
-      coneSpread={24}
-      colors={project.glowColors}
-      fillOpacity={0.4}
-    >
-      <article ref={cardRef} className="group overflow-hidden rounded-[28px] border border-[color:var(--site-border)] bg-[rgba(5,5,5,0.045)] text-[color:var(--site-text)] backdrop-blur-[4px] [backdrop-filter:blur(4px)_saturate(130%)] [-webkit-backdrop-filter:blur(4px)_saturate(130%)] dark:border-white/10">
+      <article ref={cardRef} className="project-card-atmosphere premium-glass-surface group overflow-hidden rounded-[28px]" style={projectCardStyle}>
         <div className="grid border-b border-[color:var(--site-border)] lg:grid-cols-[1.2fr_1fr] dark:border-white/10">
           <div className="relative min-h-[260px] overflow-hidden p-0 sm:min-h-[320px] lg:min-h-[520px] lg:p-8">
-            <div className="relative z-10 mx-auto max-w-[760px] overflow-hidden rounded-t-[28px] border-b border-[color:var(--site-border)] bg-[rgba(5,5,5,0.045)] backdrop-blur-[4px] [backdrop-filter:blur(4px)_saturate(130%)] [-webkit-backdrop-filter:blur(4px)_saturate(130%)] dark:border-white/10 lg:mt-2 lg:rounded-2xl lg:border">
+            <div className="relative z-10 mx-auto max-w-[760px] overflow-hidden rounded-t-[28px] border-b border-[color:var(--site-border)] bg-[rgba(0,0,0,0.15)] backdrop-blur-[4px] [backdrop-filter:blur(4px)_saturate(130%)] [-webkit-backdrop-filter:blur(4px)_saturate(130%)] dark:border-white/10 lg:mt-2 lg:rounded-2xl lg:border">
               <div className="group/image relative aspect-[16/10] lg:aspect-[4/3]">
                 <AnimatePresence mode="wait" initial={false}>
                   <motion.div
@@ -286,7 +277,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
 
             <div className="relative z-20 mt-5 hidden gap-3 overflow-x-auto pb-1 lg:flex">
               {project.slides.map((slide, thumb) => (
-                <button type="button" onClick={() => goToSlide(thumb)} key={`${project.id}-${thumb}`} className={`relative h-16 w-28 shrink-0 overflow-hidden rounded-lg border bg-[rgba(5,5,5,0.045)] backdrop-blur-[4px] [backdrop-filter:blur(4px)_saturate(130%)] [-webkit-backdrop-filter:blur(4px)_saturate(130%)] ${thumb === activeSlide ? 'border-accent ring-1 ring-accent/60' : 'border-[color:var(--site-border)] dark:border-white/10'}`} style={accentLabelStyle} aria-label={`Show preview ${thumb + 1}`} aria-pressed={thumb === activeSlide}>
+                <button type="button" onClick={() => goToSlide(thumb)} key={`${project.id}-${thumb}`} className={`relative h-16 w-28 shrink-0 overflow-hidden rounded-lg border bg-[rgba(0,0,0,0.15)] backdrop-blur-[4px] [backdrop-filter:blur(4px)_saturate(130%)] [-webkit-backdrop-filter:blur(4px)_saturate(130%)] ${thumb === activeSlide ? 'border-accent ring-1 ring-accent/60' : 'border-[color:var(--site-border)] dark:border-white/10'}`} style={accentLabelStyle} aria-label={`Show preview ${thumb + 1}`} aria-pressed={thumb === activeSlide}>
                   {thumb === activeSlide && <span className="absolute inset-0 z-10 bg-accent/10" />}
                   {slide.type === 'video' ? (
                     <video
@@ -433,7 +424,6 @@ const ProjectCard = ({ project }: { project: Project }) => {
           </div>
         </div>
       </article>
-    </BorderGlow>
   )
 }
 

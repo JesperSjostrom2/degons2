@@ -154,7 +154,7 @@ export default function TechStackSection() {
         <motion.div
           ref={gridRef}
           onPointerLeave={hideHoverFill}
-          className="warm-card-surface relative mx-auto flex max-w-7xl flex-wrap overflow-hidden rounded-[22px] md:grid md:grid-cols-3 md:rounded-[28px] lg:grid-cols-6"
+          className="premium-glass-surface relative mx-auto flex max-w-7xl flex-wrap overflow-hidden rounded-[22px] md:grid md:grid-cols-3 md:rounded-[28px] lg:grid-cols-6"
           initial={{ opacity: 0, y: 52, scale: 0.985 }}
           whileInView={{ opacity: 1, y: 0, scale: 1 }}
           viewport={{ once: true, amount: 0.22 }}

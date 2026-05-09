@@ -892,6 +892,8 @@ const MagicBento: React.FC<BentoProps> = ({
       label: "End-to-end delivery",
       customContent: (
         <div className="group/engine service-engine-card relative -m-8 flex h-[calc(100%+4rem)] flex-col overflow-hidden">
+          <div className="engine-card-bg absolute inset-0" />
+          <div className="engine-card-grid absolute inset-0" />
           {endToEndSvg ? (
             <div
               className="end-to-end-svg pointer-events-none absolute inset-0 z-10 h-full w-full"
@@ -908,8 +910,6 @@ const MagicBento: React.FC<BentoProps> = ({
             </h2>
             <p className="bento-card-caption">From structure and visuals to development, motion, responsiveness, and launch polish, every part is shaped to feel connected.</p>
           </div>
-
-          <div className="pointer-events-none absolute inset-0 z-20 rounded-[inherit] shadow-[inset_0_0_60px_rgba(218,197,167,0.03)]" />
         </div>
       ),
     },
@@ -1087,6 +1087,24 @@ const MagicBento: React.FC<BentoProps> = ({
           .service-engine-card {
             --engine-ease: cubic-bezier(0.22, 1, 0.36, 1);
             --services-ease: cubic-bezier(0.22, 1, 0.36, 1);
+          }
+
+          .engine-card-bg {
+            background:
+              radial-gradient(circle at 22% 12%, rgba(245, 239, 228, 0.08), transparent 40%),
+              radial-gradient(circle at 78% 82%, rgba(245, 239, 228, 0.04), transparent 46%),
+              linear-gradient(180deg, rgba(14, 14, 13, 0.72), rgba(6, 6, 6, 0.92));
+            opacity: 0.46;
+          }
+
+          .engine-card-grid {
+            background-image:
+              linear-gradient(rgba(245, 239, 228, 0.024) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(245, 239, 228, 0.024) 1px, transparent 1px);
+            background-size: 30px 30px;
+            opacity: 0.14;
+            mask-image: radial-gradient(circle at 58% 42%, black, transparent 78%);
+            -webkit-mask-image: radial-gradient(circle at 58% 42%, black, transparent 78%);
           }
 
           .end-to-end-svg {
@@ -2975,15 +2993,8 @@ const MagicBento: React.FC<BentoProps> = ({
             z-index: 1;
           }
 
-          .bento-card-surface {
-            background: rgba(5, 5, 5, 0.045) !important;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            box-shadow: none;
-            backdrop-filter: blur(4px) saturate(130%);
-            -webkit-backdrop-filter: blur(4px) saturate(130%);
-          }
 
-          .bento-card-surface::after {
+          .premium-glass-surface::after {
             content: '';
             position: absolute;
             inset: 0;
@@ -3067,25 +3078,29 @@ const MagicBento: React.FC<BentoProps> = ({
             transform: translateY(-0.35rem);
           }
 
-          .card:hover .bento-card-surface::after {
+          .card:hover .premium-glass-surface::after {
             opacity: 1;
           }
 
-          .bento-card-surface .contact-card-bg,
-          .bento-card-surface .deliverables-card-bg,
-          .bento-card-surface .selling-site-bg,
-          .bento-card-surface .attention-card-bg {
+          .card-responsive .card:nth-child(1) .premium-glass-surface::before {
+            display: none;
+          }
+
+          .premium-glass-surface .contact-card-bg,
+          .premium-glass-surface .deliverables-card-bg,
+          .premium-glass-surface .selling-site-bg,
+          .premium-glass-surface .attention-card-bg {
             opacity: 0 !important;
           }
 
-          .bento-card-surface .contact-card-grid,
-          .bento-card-surface .deliverables-card-grid,
-          .bento-card-surface .selling-site-ambient {
+          .premium-glass-surface .contact-card-grid,
+          .premium-glass-surface .deliverables-card-grid,
+          .premium-glass-surface .selling-site-ambient {
             opacity: 0.12 !important;
           }
 
-          .bento-card-surface [class*="bg-[radial-gradient"],
-          .bento-card-surface [class*="bg-[linear-gradient"] {
+          .premium-glass-surface [class*="bg-[radial-gradient"],
+          .premium-glass-surface [class*="bg-[linear-gradient"] {
             opacity: 0.16 !important;
           }
 
@@ -3211,9 +3226,9 @@ const MagicBento: React.FC<BentoProps> = ({
           }
 
           @media (max-width: 767px) {
-            .bento-card-surface .bento-mobile-frost,
-            .bento-card-surface .selling-mobile-frost,
-            .bento-card-surface .attention-mobile-frost {
+            .premium-glass-surface .bento-mobile-frost,
+            .premium-glass-surface .selling-mobile-frost,
+            .premium-glass-surface .attention-mobile-frost {
               display: block;
               opacity: 1 !important;
               background: rgba(8, 8, 8, 0.1);
@@ -3223,26 +3238,7 @@ const MagicBento: React.FC<BentoProps> = ({
 
           }
           
-          .card::before {
-            content: '';
-            position: absolute;
-            inset: 2px;
-            border-radius: 18px;
-            background: transparent;
-            border: 1px solid rgba(245, 239, 228, 0.09);
-            pointer-events: none;
-            z-index: 1;
-          }
 
-          .card::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.12);
-            pointer-events: none;
-            z-index: 2;
-          }
 
           @keyframes confettiFall {
             0% {
@@ -3438,7 +3434,7 @@ const MagicBento: React.FC<BentoProps> = ({
         <div className="card-responsive grid gap-2">
           {cardData.map((card, index) => {
             const baseClassName = `card group/bento relative ${index === 2 ? 'min-h-[170px]' : 'min-h-[180px]'} w-full max-w-full rounded-[20px]`;
-            const cardInnerClassName = `bento-card-surface relative flex h-full flex-col justify-between overflow-hidden rounded-[20px] font-light transition-all duration-300 ease-in-out ${index === 2 || index === 3 ? 'p-0' : 'p-8'}`;
+            const cardInnerClassName = `premium-glass-surface relative flex h-full flex-col justify-between overflow-hidden rounded-[20px] font-light transition-all duration-300 ease-in-out ${index === 2 || index === 3 ? 'p-0' : 'p-8'}`;
 
             const cardStyle = {
               '--bento-accent': card.color,
