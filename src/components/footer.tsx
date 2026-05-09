@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Code2, Github, Linkedin, Mail } from 'lucide-react'
+import { Github, Linkedin, Mail } from 'lucide-react'
 
 import { Footer as AnimatedFooter } from '@/components/ui/modem-animated-footer'
 
@@ -76,7 +76,6 @@ export default function Footer() {
       brandName="Jesper Sjöström"
       socialLinks={socialLinks}
       navLinks={navLinks}
-      brandIcon={<Code2 className="h-5 w-5 transition-transform duration-300 ease-out group-hover/footer-code:scale-110" />}
       statusSlot={statusSlot}
     />
   )
