@@ -2,9 +2,8 @@
 
 import React, { useRef, useEffect, useState, useCallback } from "react";
 import { gsap } from "gsap";
-import { Copy, Check, User, Search, FileText, Smile, Send, Globe as GlobeIcon, Braces, Gift, ScanLine } from "lucide-react";
+import { User, Search, FileText, Send, Braces, Gift, ScanLine } from "lucide-react";
 import { Globe } from "@/components/ui/cobe-globe";
-import TextType from "@/components/ui/TextType";
 
 export interface BentoCardProps {
   color?: string;
@@ -523,6 +522,8 @@ const GlobalSpotlight: React.FC<{
 }) => {
     const spotlightRef = useRef<HTMLDivElement | null>(null);
     const isInsideSection = useRef(false);
+    const frameRef = useRef<number | null>(null);
+    const latestMouseRef = useRef<MouseEvent | null>(null);
 
     useEffect(() => {
       if (disableAnimations || !gridRef?.current || !enabled) return;
@@ -551,7 +552,7 @@ const GlobalSpotlight: React.FC<{
       document.body.appendChild(spotlight);
       spotlightRef.current = spotlight;
 
-      const handleMouseMove = (e: MouseEvent) => {
+      const updateSpotlight = (e: MouseEvent) => {
         if (!spotlightRef.current || !gridRef.current) return;
 
         const section = gridRef.current.closest(".bento-section");
@@ -630,6 +631,21 @@ const GlobalSpotlight: React.FC<{
         });
       };
 
+      const handleMouseMove = (e: MouseEvent) => {
+        latestMouseRef.current = e;
+
+        if (frameRef.current !== null) {
+          return;
+        }
+
+        frameRef.current = window.requestAnimationFrame(() => {
+          frameRef.current = null;
+          if (latestMouseRef.current) {
+            updateSpotlight(latestMouseRef.current);
+          }
+        });
+      };
+
       const handleMouseLeave = () => {
         isInsideSection.current = false;
         gridRef.current?.querySelectorAll(".card").forEach((card) => {
@@ -648,6 +664,9 @@ const GlobalSpotlight: React.FC<{
       document.addEventListener("mouseleave", handleMouseLeave);
 
       return () => {
+        if (frameRef.current !== null) {
+          window.cancelAnimationFrame(frameRef.current);
+        }
         document.removeEventListener("mousemove", handleMouseMove);
         document.removeEventListener("mouseleave", handleMouseLeave);
         spotlightRef.current?.parentNode?.removeChild(spotlightRef.current);
@@ -686,6 +705,11 @@ const useMobileDetection = () => {
   return isMobile;
 };
 
+const sanitizeBentoSvg = (svg: string) =>
+  svg
+    .replace(/<foreignObject[\s\S]*?<\/foreignObject>/gi, "")
+    .replace(/\sdata-figma-bg-blur-radius="[^"]*"/gi, "");
+
 const MagicBento: React.FC<BentoProps> = ({
   textAutoHide = true,
   enableStars = false,
@@ -700,14 +724,13 @@ const MagicBento: React.FC<BentoProps> = ({
   enableMagnetism = false,
 }) => {
   const gridRef = useRef<HTMLDivElement>(null);
-  const copyFeedbackTimeoutRef = useRef<number | null>(null);
   const chatTypingTimeoutsRef = useRef<number[]>([]);
   const chatClientTextRef = useRef<HTMLParagraphElement>(null);
   const chatJesperTextRef = useRef<HTMLParagraphElement>(null);
+  const fastDeliveryCardRef = useRef<HTMLDivElement>(null);
   const firstImpressionRef = useRef<HTMLDivElement>(null);
   const isMobile = useMobileDetection();
   const shouldDisableAnimations = disableAnimations || isMobile;
-  const [isContactCopied, setIsContactCopied] = useState(false);
   const [endToEndSvg, setEndToEndSvg] = useState<string>("");
   const [fastDeliverySvg, setFastDeliverySvg] = useState<string>("");
   const [firstImpressionSvg, setFirstImpressionSvg] = useState<string>("");
@@ -724,6 +747,20 @@ const MagicBento: React.FC<BentoProps> = ({
         animation.endElement();
       });
   }, []);
+
+  const setFirstImpressionAnimationState = useCallback((isActive: boolean) => {
+    const svg = firstImpressionRef.current?.querySelector("svg") as SVGSVGElement | null;
+    if (!svg) {
+      return;
+    }
+
+    if (isActive && !disableAnimations) {
+      svg.unpauseAnimations?.();
+      return;
+    }
+
+    svg.pauseAnimations?.();
+  }, [disableAnimations]);
 
   const clearChatTypingTimeouts = useCallback(() => {
     chatTypingTimeoutsRef.current.forEach((timeout) => window.clearTimeout(timeout));
@@ -778,14 +815,49 @@ const MagicBento: React.FC<BentoProps> = ({
     typeChatMessage(chatJesperTextRef.current, CHAT_JESPER_MESSAGE, clientEnd + 420);
   }, [clearChatTypingTimeouts, typeChatMessage]);
 
+  const setFastDeliveryAnimationState = useCallback((isActive: boolean) => {
+    const svg = fastDeliveryCardRef.current?.querySelector("svg") as SVGSVGElement | null;
+    if (!svg) {
+      return;
+    }
+
+    if (isActive && !disableAnimations) {
+      svg.unpauseAnimations?.();
+      return;
+    }
+
+    svg.pauseAnimations?.();
+  }, [disableAnimations]);
+
   useEffect(() => {
     return () => {
-      if (copyFeedbackTimeoutRef.current !== null) {
-        window.clearTimeout(copyFeedbackTimeoutRef.current);
-      }
       clearChatTypingTimeouts();
     };
   }, [clearChatTypingTimeouts]);
+
+  useEffect(() => {
+    if (!fastDeliverySvg) {
+      return;
+    }
+
+    const frame = window.requestAnimationFrame(() => {
+      setFastDeliveryAnimationState(false);
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [fastDeliverySvg, setFastDeliveryAnimationState]);
+
+  useEffect(() => {
+    if (!firstImpressionSvg) {
+      return;
+    }
+
+    const frame = window.requestAnimationFrame(() => {
+      setFirstImpressionAnimationState(false);
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [firstImpressionSvg, setFirstImpressionAnimationState]);
 
   useEffect(() => {
     let isMounted = true;
@@ -794,7 +866,7 @@ const MagicBento: React.FC<BentoProps> = ({
       .then((response) => response.text())
       .then((svg) => {
         if (isMounted) {
-          setEndToEndSvg(svg);
+          setEndToEndSvg(sanitizeBentoSvg(svg));
         }
       })
       .catch((error) => {
@@ -813,7 +885,7 @@ const MagicBento: React.FC<BentoProps> = ({
       .then((response) => response.text())
       .then((svg) => {
         if (isMounted) {
-          setFastDeliverySvg(svg);
+          setFastDeliverySvg(sanitizeBentoSvg(svg));
         }
       })
       .catch((error) => {
@@ -832,7 +904,7 @@ const MagicBento: React.FC<BentoProps> = ({
       .then((response) => response.text())
       .then((svg) => {
         if (isMounted) {
-          setFirstImpressionSvg(svg);
+          setFirstImpressionSvg(sanitizeBentoSvg(svg));
         }
       })
       .catch((error) => {
@@ -972,7 +1044,12 @@ const MagicBento: React.FC<BentoProps> = ({
       description: "Quick iteration, clear decisions, and focused execution keep the project moving without sacrificing polish.",
       label: "Fast Delivery",
       customContent: (
-        <div className="group/conversion relative flex h-full flex-col overflow-hidden">
+        <div
+          ref={fastDeliveryCardRef}
+          className="group/conversion relative flex h-full flex-col overflow-hidden"
+          onMouseEnter={() => setFastDeliveryAnimationState(true)}
+          onMouseLeave={() => setFastDeliveryAnimationState(false)}
+        >
           <div className="conversion-card-bg absolute inset-0" />
 
           <div className="contact-card-content conversion-flow-copy bento-mobile-readable relative z-30 max-w-[17.5rem] p-6 sm:p-8">
@@ -1006,8 +1083,14 @@ const MagicBento: React.FC<BentoProps> = ({
         <div
           ref={firstImpressionRef}
           className="group/selling relative -m-8 flex h-[calc(100%+4rem)] flex-col overflow-hidden"
-          onMouseEnter={() => setFirstImpressionLineAnimations(true)}
-          onMouseLeave={() => setFirstImpressionLineAnimations(false)}
+          onMouseEnter={() => {
+            setFirstImpressionAnimationState(true);
+            setFirstImpressionLineAnimations(true);
+          }}
+          onMouseLeave={() => {
+            setFirstImpressionLineAnimations(false);
+            setFirstImpressionAnimationState(false);
+          }}
         >
           <div className="selling-site-bg absolute inset-0" />
           <div className="selling-site-ambient absolute inset-0" />
@@ -2140,110 +2223,6 @@ const MagicBento: React.FC<BentoProps> = ({
             letter-spacing: 0.03em;
           }
 
-          @keyframes board-float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-4px); }
-          }
-
-          .services-board {
-            transition: transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
-            animation: board-float 6s ease-in-out infinite;
-          }
-
-          .group\/deliverables:hover .services-board {
-            transform: translate3d(0, -6px, 0);
-            animation-play-state: paused;
-          }
-
-          @keyframes service-pulse {
-            0%, 100% {
-              border-color: rgba(245, 239, 228, 0.1);
-              background-color: rgba(255, 255, 255, 0.035);
-            }
-            10%, 20% {
-              border-color: rgba(218, 197, 167, 0.4);
-              background-color: rgba(218, 197, 167, 0.08);
-              box-shadow: inset 0 0 12px rgba(218, 197, 167, 0.1);
-            }
-          }
-
-          @keyframes service-pulse-featured {
-            0%, 100% {
-              border-color: rgba(218, 197, 167, 0.24);
-              background: linear-gradient(145deg, rgba(218, 197, 167, 0.16), rgba(255, 255, 255, 0.035));
-            }
-            10%, 20% {
-              border-color: rgba(218, 197, 167, 0.6);
-              background: linear-gradient(145deg, rgba(218, 197, 167, 0.25), rgba(255, 255, 255, 0.08));
-              box-shadow: inset 0 0 16px rgba(218, 197, 167, 0.15);
-            }
-          }
-
-          .service-tile {
-            position: relative;
-            flex: 1 1 calc(50% - 0.25rem);
-            min-height: 3rem;
-            overflow: hidden;
-            border-radius: 0.85rem;
-            border: 1px solid rgba(245, 239, 228, 0.1);
-            background: rgba(255, 255, 255, 0.035);
-            padding: 0.56rem 0.65rem;
-            transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1), border-color 300ms ease, background-color 300ms ease;
-            animation: service-pulse 10s infinite;
-          }
-
-          .service-tile.featured {
-            flex-basis: 100%;
-            min-height: 3rem;
-            background: linear-gradient(145deg, rgba(218, 197, 167, 0.16), rgba(255, 255, 255, 0.035));
-            border-color: rgba(218, 197, 167, 0.24);
-            animation: service-pulse-featured 10s infinite;
-          }
-
-          .service-tile:nth-child(1) { animation-delay: 0s; }
-          .service-tile:nth-child(2) { animation-delay: 2s; }
-          .service-tile:nth-child(3) { animation-delay: 4s; }
-          .service-tile:nth-child(4) { animation-delay: 6s; }
-          .service-tile:nth-child(5) { animation-delay: 8s; }
-
-          .service-index {
-            display: block;
-            margin-bottom: 0.28rem;
-            font-size: 0.58rem;
-            font-weight: 700;
-            letter-spacing: 0.16em;
-            color: rgba(218, 197, 167, 0.68);
-          }
-
-          .service-name {
-            display: block;
-            font-size: 0.88rem;
-            font-weight: 700;
-            line-height: 1.1;
-            color: rgba(245, 239, 228, 0.92);
-          }
-
-          .group\/deliverables:hover .service-tile {
-            animation-play-state: paused;
-            border-color: rgba(218, 197, 167, 0.22);
-            background-color: rgba(255, 255, 255, 0.055);
-          }
-
-          .group\/deliverables:hover .service-tile.featured {
-            border-color: rgba(218, 197, 167, 0.35);
-            background: linear-gradient(145deg, rgba(218, 197, 167, 0.2), rgba(255, 255, 255, 0.05));
-          }
-
-          .group\/deliverables:hover .service-tile:nth-child(2),
-          .group\/deliverables:hover .service-tile:nth-child(4) {
-            transform: translateX(0.35rem);
-          }
-
-          .group\/deliverables:hover .service-tile:nth-child(3),
-          .group\/deliverables:hover .service-tile:nth-child(5) {
-            transform: translateX(-0.35rem);
-          }
-
           .selling-site-ambient {
             background: linear-gradient(125deg, transparent 18%, rgba(245, 239, 228, 0.048) 46%, transparent 78%);
           }
@@ -2354,11 +2333,11 @@ const MagicBento: React.FC<BentoProps> = ({
           .selling-browser-shell {
             transform: translate3d(0, 0, 0);
             transition: transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
-            will-change: transform;
           }
 
           .card:hover .selling-browser-shell {
             transform: translate3d(0, -48px, 0);
+            will-change: transform;
           }
 
           .selling-browser-sheen {
@@ -2991,6 +2970,15 @@ const MagicBento: React.FC<BentoProps> = ({
 
           .card-responsive .card {
             z-index: 1;
+            contain: layout paint style;
+          }
+
+          .premium-glass-surface,
+          .end-to-end-svg,
+          .conversion-flow-svg,
+          .first-impression-svg,
+          .remote-card-globe-shell {
+            contain: layout paint style;
           }
 
 
