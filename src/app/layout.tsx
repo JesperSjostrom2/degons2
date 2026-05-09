@@ -91,6 +91,7 @@ export default function RootLayout({
       <body
         className={`${outfit.variable} ${newsreader.variable} ${sourceSans3.variable} font-sans antialiased`}
       >
+        <div className="cinematic-grain-overlay" />
         {children}
       </body>
     </html>

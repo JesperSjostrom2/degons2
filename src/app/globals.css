@@ -181,26 +181,45 @@
     z-index: -1;
   }
   
-  .noise {
-    position: relative;
+  :root {
+    --grain-opacity: 0.024; /* Further reduced for a 'felt, not seen' quality */
+    --hero-grain-intensity: 0.052;
   }
-  
-  .noise::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    opacity: 0.03;
-    background-image: 
-      radial-gradient(circle at 1px 1px, rgba(255,255,255,0.15) 1px, transparent 0);
-    background-size: 20px 20px;
+
+  .cinematic-grain-overlay {
+    position: fixed;
+    inset: -100%;
+    width: 300%;
+    height: 300%;
+    z-index: 1;
     pointer-events: none;
+    opacity: var(--grain-opacity);
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    animation: cinematic-grain-drift 14s linear infinite; /* Smooth continuous drift */
+    will-change: transform;
+    mix-blend-mode: soft-light;
+  }
+
+  .hero-grain-density {
+    --grain-opacity: var(--hero-grain-intensity);
+  }
+
+  @keyframes cinematic-grain-drift {
+    0%, 100% { transform: translate3d(0, 0, 0); }
+    25% { transform: translate3d(-2%, -1%, 0); }
+    50% { transform: translate3d(-1%, -2%, 0); }
+    75% { transform: translate3d(-2%, -2%, 0); }
   }
   
   .text-gradient {
     background: linear-gradient(135deg, #f5efe4, #dac5a7);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+  .text-highlight-shimmer {
+    background: linear-gradient(to bottom, #dac5a7 10%, #8b7355 45%, #6a5640 90%);
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
@@ -330,6 +349,39 @@
 .dark .planet-horizon::before {
   background:
     radial-gradient(ellipse at 50% 100%, rgba(255, 255, 255, 0.78) 0%, rgba(255, 255, 255, 0.34) 38%, rgba(218, 197, 167, 0.2) 62%, transparent 84%);
+}
+
+.hero-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, transparent 20%, rgba(0, 0, 0, 0.22) 100%);
+  mask-image: linear-gradient(to bottom, black 0%, black 85%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 85%, transparent 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.hero-atmosphere-foreground {
+  background:
+    radial-gradient(52rem 26rem at 76% 24%, rgba(240, 234, 223, 0.08), rgba(240, 234, 223, 0) 78%),
+    radial-gradient(58rem 36rem at 54% 68%, rgba(8, 12, 18, 0.24), rgba(8, 12, 18, 0) 84%),
+    linear-gradient(180deg, rgba(3, 4, 8, 0) 0%, rgba(3, 4, 8, 0.2) 70%, rgba(3, 4, 8, 0.34) 100%);
+  opacity: 0.72;
+  mask-image: linear-gradient(to bottom, black 0%, black 80%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 80%, transparent 100%);
+  animation: hero-atmosphere-breathe 24s ease-in-out infinite;
+}
+
+.hero-atmosphere-dust {
+  background-image:
+    radial-gradient(circle at 22% 26%, rgba(245, 239, 228, 0.22) 0.7px, transparent 1.3px),
+    radial-gradient(circle at 64% 34%, rgba(245, 239, 228, 0.18) 0.7px, transparent 1.3px),
+    radial-gradient(circle at 82% 20%, rgba(245, 239, 228, 0.16) 0.7px, transparent 1.3px),
+    radial-gradient(circle at 72% 72%, rgba(245, 239, 228, 0.12) 0.7px, transparent 1.2px);
+  opacity: 0.1;
+  mask-image: linear-gradient(to bottom, black 0%, black 80%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 80%, transparent 100%);
+  animation: hero-dust-drift 34s linear infinite;
 }
 
   .warm-section-bg {
@@ -484,17 +536,19 @@
     width: 2.45rem;
     height: 2.45rem;
     border-radius: 9999px;
-    border: 1px solid color-mix(in srgb, var(--accent) 24%, transparent);
+    border: 1px solid rgba(218, 197, 167, 0.18);
     background:
-      radial-gradient(circle at 32% 24%, rgba(255, 255, 255, 0.42), transparent 18%),
-      radial-gradient(circle at 72% 78%, color-mix(in srgb, var(--accent) 24%, transparent), transparent 36%),
+      radial-gradient(circle at 32% 24%, rgba(255, 255, 255, 0.52), transparent 22%),
+      radial-gradient(circle at 72% 78%, color-mix(in srgb, var(--accent) 32%, transparent), transparent 42%),
       linear-gradient(135deg, #c2a77b 0%, #8b7355 46%, #3a332b 100%);
     box-shadow:
-      inset -0.45rem -0.45rem 0.9rem rgba(0, 0, 0, 0.26),
-      inset 0.2rem 0.2rem 0.55rem rgba(255, 255, 255, 0.12),
-      0 0 24px color-mix(in srgb, var(--accent) 16%, transparent);
+      inset -0.45rem -0.45rem 0.9rem rgba(0, 0, 0, 0.36),
+      inset 0.2rem 0.2rem 0.55rem rgba(255, 255, 255, 0.18),
+      0 0 22px rgba(234, 225, 211, 0.13),
+      0 0 56px rgba(160, 139, 108, 0.08);
     pointer-events: none;
     transform: rotate(-13deg);
+    will-change: transform;
   }
 
   .space-micro-planet::after {
@@ -502,7 +556,9 @@
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    background: linear-gradient(110deg, transparent 0 48%, rgba(255, 255, 255, 0.12) 49%, transparent 58%);
+    background:
+      radial-gradient(70% 68% at 34% 28%, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0) 70%),
+      linear-gradient(110deg, transparent 0 48%, rgba(255, 255, 255, 0.08) 49%, transparent 58%);
     pointer-events: none;
   }
 
@@ -518,6 +574,36 @@
     box-shadow:
       0.72rem 0.36rem 0 -0.08rem rgba(245, 239, 228, 0.12),
       0.38rem 0.92rem 0 -0.1rem rgba(20, 20, 19, 0.16);
+  }
+
+  @keyframes hero-atmosphere-breathe {
+    0%, 100% {
+      opacity: 0.66;
+      transform: translate3d(0, 0, 0);
+    }
+    50% {
+      opacity: 0.78;
+      transform: translate3d(0, -5px, 0);
+    }
+  }
+
+  @keyframes hero-dust-drift {
+    0%, 100% {
+      transform: translate3d(0, 0, 0);
+    }
+    50% {
+      transform: translate3d(-6px, -4px, 0);
+    }
+  }
+
+  .planet-glow-haze {
+    position: absolute;
+    inset: -25%;
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 50%, rgba(218, 197, 167, 0.14) 0%, transparent 70%);
+    filter: blur(28px);
+    pointer-events: none;
+    z-index: -1;
   }
 
   @keyframes space-background-meteor-pass {
@@ -1289,7 +1375,9 @@
     .floating-star,
     .floating-star-inner,
     .floating-star-sparkle-x,
-    .floating-star-sparkle-y {
+    .floating-star-sparkle-y,
+    .hero-atmosphere-foreground,
+    .hero-atmosphere-dust {
       animation: none;
     }
 

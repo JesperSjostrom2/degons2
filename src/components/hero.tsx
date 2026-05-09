@@ -40,28 +40,33 @@ export default function Hero() {
   }
 
   return (
-    <section id="home" className="relative min-h-screen noise">
+    <section id="home" className="hero-grain-density relative min-h-screen">
+      {/* Background & Atmosphere Layers */}
       <div className="absolute inset-0 z-0 h-full w-full" style={{ minHeight: '100vh' }}>
         {showLightRays ? (
           <LightRays
             raysOrigin="top-center"
-            raysColor="#dac5a7"
-            raysSpeed={0.75}
-            lightSpread={0.6}
-            rayLength={2.35}
+            raysColor="#ffffff"
+            raysSpeed={0.62}
+            lightSpread={0.56}
+            rayLength={2.1}
             pulsating={false}
-            fadeDistance={1.2}
-            saturation={0.85}
+            fadeDistance={1.34}
+            saturation={0.68}
             followMouse={false}
             mouseInfluence={0}
             noiseAmount={0}
             distortion={0}
-            className="h-full w-full opacity-25 saturate-150 dark:opacity-55 dark:saturate-100"
+            className="h-full w-full opacity-10 saturate-125 dark:opacity-26 dark:saturate-95"
           />
         ) : (
           <div className="h-full w-full bg-[radial-gradient(circle_at_50%_0%,rgba(218,197,167,0.18),transparent_42%),radial-gradient(circle_at_80%_22%,rgba(168,140,98,0.10),transparent_32%)]" />
         )}
       </div>
+
+      <div className="hero-vignette" />
+      <div className="hero-atmosphere-foreground pointer-events-none absolute inset-0 z-[1]" />
+      <div className="hero-atmosphere-dust pointer-events-none absolute inset-0 z-[1]" />
 
       <div className="container relative z-10 mx-auto flex min-h-screen items-center px-6 pb-12 pt-24 md:pb-16 md:pt-32">
         <div className="relative mx-auto flex w-full max-w-7xl -translate-y-6 flex-col items-center text-center md:-translate-y-8">
@@ -71,10 +76,17 @@ export default function Hero() {
             transition={{ duration: 0.9, delay: 0.2, ease: 'easeOut' }}
             className="relative w-full max-w-6xl"
           >
-            <motion.span className="space-micro-planet left-[13%] top-[3%] hidden md:block" style={{ y: microPlanetY }} />
+            {/* Planet with Haze wrapper */}
+            <motion.div 
+              className="absolute left-[13%] top-[3%] hidden md:block"
+              style={{ y: microPlanetY }}
+            >
+              <div className="planet-glow-haze" />
+              <div className="space-micro-planet" />
+            </motion.div>
 
             <h1 className="mx-auto max-w-[1080px] text-balance text-[clamp(2.45rem,5.6vw,5.1rem)] font-semibold leading-[1.02] tracking-[-0.055em] text-[color:var(--site-text)] drop-shadow-[0_18px_60px_rgba(0,0,0,0.18)] dark:drop-shadow-[0_18px_60px_rgba(0,0,0,0.38)]">
-              <span>Hi, I&apos;m</span> <span className="text-accent">Jesper.</span>
+              <span>Hi, I&apos;m</span> <span className="text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.12)]">Jesper.</span>
               <br />
               <span>I build</span>{' '}
               <span className="mx-1.5 inline-flex h-[0.3em] w-[0.64em] translate-y-[-0.04em] rotate-[-2deg] rounded-[46%_54%_50%_50%/58%_42%_58%_42%] border border-[#dac5a7]/16 bg-gradient-to-br from-[#c2a77b] to-[#8b7355] shadow-[0_0_16px_rgba(218,197,167,0.10)]" />{' '}
@@ -83,7 +95,7 @@ export default function Hero() {
                 <motion.svg
                   aria-hidden="true"
                   viewBox="0 0 300 34"
-                  className="pointer-events-none absolute -bottom-[0.17em] left-1/2 h-[0.18em] w-[110%] -translate-x-1/2 overflow-visible text-[#8fa58a]"
+                  className="pointer-events-none absolute -bottom-[0.17em] left-1/2 h-[0.18em] w-[110%] -translate-x-1/2 overflow-visible text-[#dcd7cc]"
                   preserveAspectRatio="none"
                   initial={{ clipPath: 'inset(0 100% 0 0)' }}
                   animate={{ clipPath: 'inset(0 0% 0 0)' }}
@@ -92,18 +104,18 @@ export default function Hero() {
                   <path
                     d="M4 24 C42 4, 151 7, 296 13 C221 14, 108 18, 19 29 C9 30, 2 29, 4 24 Z"
                     fill="currentColor"
-                    opacity="0.95"
+                    opacity="0.72"
                   />
                   <path
                     d="M55 7 C118 5, 199 6, 287 12 C204 10, 123 10, 55 12 Z"
                     fill="var(--site-bg-deep)"
-                    opacity="0.22"
+                    opacity="0.3"
                   />
                 </motion.svg>
               </span>
               <br />
               <span>people quickly</span>{' '}
-              <span style={{ color: '#8b7355' }}>trust.</span>
+              <span className="text-highlight-shimmer">trust.</span>
             </h1>
           </motion.div>
 
