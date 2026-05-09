@@ -85,7 +85,6 @@ export default function ProfileCard({
         {/* Decorative layers */}
         <div className="absolute inset-0 z-0 rounded-[40px] shadow-[0_4px_20px_-2px_rgba(0,0,0,0.2)] pointer-events-none" />
 
-        {/* Gradient background reacts to theme */}
         <div
           className={cn(
             "absolute inset-0 transition-opacity duration-500 z-0 rounded-[40px]",

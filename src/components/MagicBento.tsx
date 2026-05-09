@@ -46,7 +46,8 @@ const BENTO_ACCENTS = {
   lavender: "#a79ac7",
 };
 
-type ChatPhase = "idle" | "shrinking" | "typing";
+const CHAT_CLIENT_MESSAGE = "Can we simplify this section a bit?";
+const CHAT_JESPER_MESSAGE = "Yes. I’ll clean it up and share a preview.";
 
 const WORKFLOW_ITEMS = [
   { key: "structure", title: "Structure", icon: Braces, color: "#dac5a7", position: "left-top" },
@@ -700,24 +701,91 @@ const MagicBento: React.FC<BentoProps> = ({
 }) => {
   const gridRef = useRef<HTMLDivElement>(null);
   const copyFeedbackTimeoutRef = useRef<number | null>(null);
-  const chatFadeTimeoutRef = useRef<number | null>(null);
+  const chatTypingTimeoutsRef = useRef<number[]>([]);
+  const chatClientTextRef = useRef<HTMLParagraphElement>(null);
+  const chatJesperTextRef = useRef<HTMLParagraphElement>(null);
+  const firstImpressionRef = useRef<HTMLDivElement>(null);
   const isMobile = useMobileDetection();
   const shouldDisableAnimations = disableAnimations || isMobile;
   const [isContactCopied, setIsContactCopied] = useState(false);
-  const [chatTypingRun, setChatTypingRun] = useState(0);
-  const [chatPhase, setChatPhase] = useState<ChatPhase>("idle");
   const [endToEndSvg, setEndToEndSvg] = useState<string>("");
+  const [fastDeliverySvg, setFastDeliverySvg] = useState<string>("");
+  const [firstImpressionSvg, setFirstImpressionSvg] = useState<string>("");
+
+  const setFirstImpressionLineAnimations = useCallback((active: boolean) => {
+    firstImpressionRef.current
+      ?.querySelectorAll<SVGAnimationElement>(".main-line-hover-animation")
+      .forEach((animation) => {
+        if (active) {
+          animation.beginElement();
+          return;
+        }
+
+        animation.endElement();
+      });
+  }, []);
+
+  const clearChatTypingTimeouts = useCallback(() => {
+    chatTypingTimeoutsRef.current.forEach((timeout) => window.clearTimeout(timeout));
+    chatTypingTimeoutsRef.current = [];
+  }, []);
+
+  const typeChatMessage = useCallback((element: HTMLParagraphElement | null, message: string, startDelay: number) => {
+    if (!element) {
+      return startDelay;
+    }
+
+    let elapsed = startDelay;
+    Array.from(message).forEach((character, index) => {
+      chatTypingTimeoutsRef.current.push(window.setTimeout(() => {
+        element.textContent = message.slice(0, index + 1);
+      }, elapsed));
+
+      if (character === " ") {
+        elapsed += 28;
+      } else if ([".", "?", "!"].includes(character)) {
+        elapsed += 145;
+      } else if (character === ",") {
+        elapsed += 95;
+      } else {
+        elapsed += 30 + (index % 4) * 8;
+      }
+    });
+
+    return elapsed;
+  }, []);
+
+  const resetChatText = useCallback(() => {
+    clearChatTypingTimeouts();
+    if (chatClientTextRef.current) {
+      chatClientTextRef.current.textContent = CHAT_CLIENT_MESSAGE;
+    }
+    if (chatJesperTextRef.current) {
+      chatJesperTextRef.current.textContent = CHAT_JESPER_MESSAGE;
+    }
+  }, [clearChatTypingTimeouts]);
+
+  const startChatTyping = useCallback(() => {
+    clearChatTypingTimeouts();
+    if (chatClientTextRef.current) {
+      chatClientTextRef.current.textContent = "";
+    }
+    if (chatJesperTextRef.current) {
+      chatJesperTextRef.current.textContent = "";
+    }
+
+    const clientEnd = typeChatMessage(chatClientTextRef.current, CHAT_CLIENT_MESSAGE, 260);
+    typeChatMessage(chatJesperTextRef.current, CHAT_JESPER_MESSAGE, clientEnd + 420);
+  }, [clearChatTypingTimeouts, typeChatMessage]);
 
   useEffect(() => {
     return () => {
       if (copyFeedbackTimeoutRef.current !== null) {
         window.clearTimeout(copyFeedbackTimeoutRef.current);
       }
-      if (chatFadeTimeoutRef.current !== null) {
-        window.clearTimeout(chatFadeTimeoutRef.current);
-      }
+      clearChatTypingTimeouts();
     };
-  }, []);
+  }, [clearChatTypingTimeouts]);
 
   useEffect(() => {
     let isMounted = true;
@@ -738,20 +806,59 @@ const MagicBento: React.FC<BentoProps> = ({
     };
   }, []);
 
+  useEffect(() => {
+    let isMounted = true;
+
+    fetch("/assets/bento-cards/visitor-flow/time.svg")
+      .then((response) => response.text())
+      .then((svg) => {
+        if (isMounted) {
+          setFastDeliverySvg(svg);
+        }
+      })
+      .catch((error) => {
+        console.error("Failed to load fast delivery SVG", error);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    fetch("/assets/bento-cards/first-impression/Starrating.svg")
+      .then((response) => response.text())
+      .then((svg) => {
+        if (isMounted) {
+          setFirstImpressionSvg(svg);
+        }
+      })
+      .catch((error) => {
+        console.error("Failed to load first impression SVG", error);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   const getRemoteWorkCard = () => ({
     color: BENTO_ACCENTS.blue,
-    title: "🌍 Remote friendly",
-    description: "Based in Finland, working with people wherever the project makes sense.",
+    title: "Remote collaboration without friction",
+    description: "Async-friendly updates, flexible coordination, and clear progress keep the workflow smooth across locations and time zones.",
     label: "Availability",
     customContent: (
       <div className="remote-card relative flex h-full flex-col overflow-hidden">
+        <div className="bento-dot-grid absolute inset-0" style={{ WebkitMaskImage: "radial-gradient(circle at 50% 100%, black 0 30%, transparent 65%)", maskImage: "radial-gradient(circle at 50% 100%, black 0 30%, transparent 65%)" }} />
         <div className="remote-card-copy relative z-20 flex flex-col p-6 pb-3">
           <p className="bento-card-kicker">Availability</p>
           <h2 className="bento-card-heading text-white">
-            Based in Finland,<br />
-            <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.blue }}>open globally.</span>
+            Remote-first,<br />
+            <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.blue }}>wherever you are.</span>
           </h2>
-          <p className="bento-card-caption">Remote-friendly website work without location friction.</p>
+          <p className="bento-card-caption">Async-friendly updates and flexible coordination keep progress clear across locations.</p>
 
         </div>
 
@@ -779,9 +886,9 @@ const MagicBento: React.FC<BentoProps> = ({
   // Create cardData array with the remote work card that has access to state
   const cardData = [
     {
-      color: BENTO_ACCENTS.champagne,
-      title: "One workflow from idea to launch",
-      description: "Structure, frontend, deployment, SEO, and post-launch refinement handled as one connected delivery.",
+      color: BENTO_ACCENTS.lavender,
+      title: "One connected website workflow",
+      description: "Structure, visuals, development, motion, responsiveness, polish, and launch readiness handled as one cohesive process.",
       label: "End-to-end delivery",
       customContent: (
         <div className="group/engine service-engine-card relative -m-8 flex h-[calc(100%+4rem)] flex-col overflow-hidden">
@@ -793,13 +900,13 @@ const MagicBento: React.FC<BentoProps> = ({
             />
           ) : null}
 
-          <div className="bento-mobile-readable relative z-30 max-w-[15.5rem] p-6 sm:p-8">
+          <div className="bento-feature-copy bento-mobile-readable relative z-30 max-w-[16.5rem] p-6 sm:p-8">
             <p className="bento-card-kicker">End-to-end delivery</p>
             <h2 className="bento-card-heading text-white">
               One workflow,<br />
-              <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.champagne }}>finished cleanly.</span>
+              <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.lavender }}>handled together.</span>
             </h2>
-            <p className="bento-card-caption">Structure, build, launch, and polish handled together.</p>
+            <p className="bento-card-caption">From structure and visuals to development, motion, responsiveness, and launch polish, every part is shaped to feel connected.</p>
           </div>
 
           <div className="pointer-events-none absolute inset-0 z-20 rounded-[inherit] shadow-[inset_0_0_60px_rgba(218,197,167,0.03)]" />
@@ -808,45 +915,41 @@ const MagicBento: React.FC<BentoProps> = ({
     },
     {
       color: BENTO_ACCENTS.olive,
-      title: "No chasing, no confusion.",
-      description: "Short updates, quick replies, and clear next steps while the site comes together.",
+      title: "Clear updates, smooth progress.",
+      description: "Quick replies, simple check-ins, and clear next steps keep the project moving without needless back-and-forth.",
       label: "Clear Communication",
       customContent: (
-        <div className="group/attention attention-chat-card relative -m-8 flex h-[calc(100%+4rem)] flex-col overflow-hidden">
+        <div
+          className="group/attention attention-chat-card relative -m-8 flex h-[calc(100%+4rem)] flex-col overflow-hidden"
+          onMouseEnter={startChatTyping}
+          onMouseLeave={resetChatText}
+        >
+          <div className="bento-dot-grid absolute inset-0" />
 
-          <div className="bento-mobile-readable relative z-20 px-6 pb-2 pt-6">
+          <div className="bento-mobile-readable relative z-20 px-6 pb-0 pt-5">
             <p className="bento-card-kicker">Clear communication</p>
             <h2 className="bento-card-heading text-[#f5efe4]">
-              Communication is<br />
-              <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.olive }}>the key.</span>
+              Clear updates,<br />
+              <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.olive }}>smooth progress.</span>
             </h2>
-            <p className="bento-card-caption">Short updates, quick replies, clear next steps.</p>
+            <p className="bento-card-caption hidden sm:block mt-1">Quick replies and clear next steps keep the work moving.</p>
           </div>
 
-          <div className="chat-showcase-messages relative z-30 mt-1 flex flex-col gap-1.5 px-6 pb-16">
+          <div className="chat-showcase-messages relative z-30 mt-5 flex flex-1 flex-col gap-1.5 px-6 pb-0">
             <div className="chat-line chat-line-in">
               <div className="chat-avatar">
                 <span>C</span>
               </div>
               <div className="chat-bubble chat-bubble-in">
                 <div className="chat-meta">Client · now</div>
-                <p className="chat-typed chat-typed-in">Login issues this morning?</p>
+                <p ref={chatClientTextRef} className="chat-typed chat-typed-in">{CHAT_CLIENT_MESSAGE}</p>
               </div>
-            </div>
-
-            <div className="chat-writing" aria-hidden="true">
-              <span className="chat-writing-label">Jesper is typing</span>
-              <span className="chat-writing-dots">
-                <span />
-                <span />
-                <span />
-              </span>
             </div>
 
             <div className="chat-line chat-line-out chat-line-outgoing">
               <div className="chat-bubble chat-bubble-out">
                 <div className="chat-meta">Jesper · now</div>
-                <p className="chat-typed chat-typed-out">Fixed. You can log in now.</p>
+                <p ref={chatJesperTextRef} className="chat-typed chat-typed-out">{CHAT_JESPER_MESSAGE}</p>
               </div>
               <div className="chat-avatar chat-avatar-self">
                 <span>J</span>
@@ -855,7 +958,7 @@ const MagicBento: React.FC<BentoProps> = ({
 
           </div>
 
-          <div className="chat-input-bar absolute inset-x-6 bottom-4 z-40 flex items-center gap-3 rounded-[0.85rem] border border-[color:var(--site-border)]/40 bg-[color:var(--site-bg)]/60 px-3.5 py-2 shadow-inner backdrop-blur-md dark:border-white/10 dark:bg-white/[0.02]">
+          <div className="chat-input-bar relative z-40 mx-6 mb-3 mt-1.5 flex items-center gap-3 rounded-[0.85rem] border border-[color:var(--site-border)]/40 bg-[color:var(--site-bg)]/60 px-3.5 py-2 shadow-inner backdrop-blur-md dark:border-white/10 dark:bg-white/[0.02]">
             <span className="text-[1.05rem] font-light leading-none text-[color:var(--site-muted)] dark:text-white/50">+</span>
             <span className="chat-input-text flex-1 text-[12px] text-[color:var(--site-muted)] dark:text-white/40">Type a message</span>
             <Send className="h-3 w-3 text-[color:var(--site-muted)] dark:text-white/40" />
@@ -864,9 +967,9 @@ const MagicBento: React.FC<BentoProps> = ({
       ),
     },
     {
-      color: BENTO_ACCENTS.lavender,
-      title: "Fast delivery",
-      description: "Focused builds that move quickly without losing structure, polish, or clarity.",
+      color: BENTO_ACCENTS.champagne,
+      title: "Fast progress, clean execution",
+      description: "Quick iteration, clear decisions, and focused execution keep the project moving without sacrificing polish.",
       label: "Fast Delivery",
       customContent: (
         <div className="group/conversion relative flex h-full flex-col overflow-hidden">
@@ -876,18 +979,19 @@ const MagicBento: React.FC<BentoProps> = ({
             <p className="bento-card-kicker">Fast delivery</p>
             <h2 className="bento-card-heading text-[#f5efe4]">
               Move fast,<br />
-              <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.lavender }}>launch clean.</span>
+              <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.champagne }}>launch clean.</span>
             </h2>
-            <p className="bento-card-caption">Focused execution from first idea to a polished live site.</p>
+            <p className="bento-card-caption">Quick iterations and clear decisions keep progress moving without the chaos.</p>
           </div>
 
           <div className="conversion-phone-wrap pointer-events-none absolute inset-0 z-20 flex items-center justify-center overflow-visible">
-            <img
-              className="conversion-phone-svg conversion-flow-svg"
-              src="/assets/bento-cards/visitor-flow/time.svg"
-              alt=""
-              aria-hidden="true"
-            />
+            {fastDeliverySvg ? (
+              <div
+                className="conversion-phone-svg conversion-flow-svg"
+                aria-hidden="true"
+                dangerouslySetInnerHTML={{ __html: fastDeliverySvg }}
+              />
+            ) : null}
           </div>
         </div>
       ),
@@ -895,11 +999,16 @@ const MagicBento: React.FC<BentoProps> = ({
     getRemoteWorkCard(),
     {
       color: BENTO_ACCENTS.champagne,
-      title: "✨ First impressions that feel polished",
-      description: "Landing pages, portfolios, and business sites with clear structure, smooth detail, and visual hierarchy.",
+      title: "A polished first impression",
+      description: "Clear structure, refined details, and an intuitive flow that makes the business feel credible from the first few seconds.",
       label: "Services",
       customContent: (
-        <div className="group/selling relative -m-8 flex h-[calc(100%+4rem)] flex-col overflow-hidden">
+        <div
+          ref={firstImpressionRef}
+          className="group/selling relative -m-8 flex h-[calc(100%+4rem)] flex-col overflow-hidden"
+          onMouseEnter={() => setFirstImpressionLineAnimations(true)}
+          onMouseLeave={() => setFirstImpressionLineAnimations(false)}
+        >
           <div className="selling-site-bg absolute inset-0" />
           <div className="selling-site-ambient absolute inset-0" />
           <div className="selling-site-grid absolute inset-0" />
@@ -911,73 +1020,23 @@ const MagicBento: React.FC<BentoProps> = ({
           </div>
           <div className="selling-mobile-frost absolute inset-0" />
 
-          <div className="bento-mobile-readable relative z-20 max-w-[18rem] p-6 sm:p-8">
+          <div className="bento-feature-copy bento-mobile-readable relative z-20 max-w-[19rem] p-6 sm:p-8">
             <p className="bento-card-kicker">First impression</p>
             <h2 className="bento-card-heading text-white">
               A site that<br />
-              <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.champagne }}>feels polished.</span>
+              <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.champagne }}>feels effortless.</span>
             </h2>
-            <p className="bento-card-caption">Strong first read, smooth details, confident structure.</p>
+            <p className="bento-card-caption">A calm, refined experience with clear structure, smooth details, and an intuitive path that makes the next step feel obvious.</p>
           </div>
 
-          <div className="selling-browser-shell pointer-events-none absolute bottom-[-36%] right-[-3%] z-10 w-[70%] max-w-[34rem] sm:right-[2%] sm:w-[64%]">
-            <div className="selling-browser ml-auto w-full">
-              <div className="selling-browser-sheen" />
-              <div className="selling-browser-top">
-                <div className="selling-dots">
-                  <span />
-                  <span />
-                  <span />
-                </div>
-                <div className="selling-url" />
-                <div className="selling-nav-pills">
-                  <span />
-                  <span />
-                  <span />
-                </div>
-              </div>
-
-              <div className="selling-browser-body">
-                <div className="selling-hero-copy">
-                  <div className="selling-page-kicker" />
-                  <div className="selling-hero-line selling-line-lg" />
-                  <div className="selling-hero-line selling-line-md" />
-                  <div className="selling-copy-lines">
-                    <span />
-                    <span />
-                    <span />
-                  </div>
-                  <div className="selling-cta" />
-                </div>
-                <div className="selling-hero-visual">
-                  <div className="selling-preview-window">
-                    <span className="selling-preview-badge" />
-                    <span className="selling-preview-heading" />
-                    <span className="selling-preview-copy" />
-                  </div>
-                  <div className="selling-preview-strip">
-                    <span />
-                    <span />
-                    <span />
-                  </div>
-                </div>
-
-                <div className="selling-cards-row">
-                  <div className="selling-card">
-                    <span className="selling-stat-bar" />
-                    <span className="selling-stat-bar short" />
-                  </div>
-                  <div className="selling-card">
-                    <span className="selling-stat-bar" />
-                    <span className="selling-stat-bar short" />
-                  </div>
-                  <div className="selling-card">
-                    <span className="selling-stat-bar" />
-                    <span className="selling-stat-bar short" />
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div className="first-impression-svg-wrap absolute inset-0 z-10 flex items-center justify-center">
+            {firstImpressionSvg ? (
+              <div
+                className="first-impression-svg"
+                aria-hidden="true"
+                dangerouslySetInnerHTML={{ __html: firstImpressionSvg }}
+              />
+            ) : null}
           </div>
         </div>
       ),
@@ -1923,12 +1982,13 @@ const MagicBento: React.FC<BentoProps> = ({
 
           .chat-showcase-messages {
             overflow: visible;
+            min-height: 0;
           }
 
           .chat-line {
             display: flex;
             align-items: flex-end;
-            gap: 0.4rem;
+            gap: 0.45rem;
             width: 100%;
           }
 
@@ -1944,6 +2004,7 @@ const MagicBento: React.FC<BentoProps> = ({
           .chat-line-outgoing {
             opacity: 1;
             transform: translateY(0);
+            margin-bottom: 0;
           }
 
           .chat-avatar {
@@ -1970,12 +2031,14 @@ const MagicBento: React.FC<BentoProps> = ({
 
           .chat-bubble {
             display: flex;
-            max-width: calc(100% - 1.55rem);
+            width: min(calc(100% - 1.55rem), 13.6rem);
             flex-direction: column;
-            gap: 0.26rem;
-            border-radius: 0.92rem;
+            gap: 0.34rem;
+            border-radius: 0.72rem;
             border: 1px solid rgba(255, 255, 255, 0.14);
-            padding: 0.5rem 0.62rem;
+            padding: 0.62rem 0.72rem;
+            min-height: 4.45rem;
+            max-height: 4.45rem;
             box-shadow: inset 0 1px 0 rgba(245, 239, 228, 0.1);
             position: relative;
           }
@@ -2008,66 +2071,23 @@ const MagicBento: React.FC<BentoProps> = ({
 
           .chat-typed {
             display: block;
-            font-size: 0.74rem;
-            line-height: 1.34;
+            font-size: 0.71rem;
+            line-height: 1.3;
             min-height: 1.42em;
             color: #f5efe4;
-          }
-
-          .chat-typed-in {
-            max-width: 23ch;
+            overflow: hidden;
+            white-space: normal;
+            width: 100%;
+            max-width: 100%;
           }
 
           .chat-typed-out {
-            display: inline-block;
-            max-width: 26ch;
-          }
-
-          .chat-writing {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.38rem;
-            margin-left: 1.85rem;
-            padding: 0.1rem 0.42rem;
-            border-radius: 999px;
-            border: 1px solid rgba(245, 239, 228, 0.14);
-            background: rgba(245, 239, 228, 0.04);
-            color: #b0aea5;
-            font-size: 0.54rem;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-            width: fit-content;
-            opacity: 0;
-            transform: translateY(4px);
-          }
-
-          .chat-writing-dots {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.15rem;
-          }
-
-          .chat-writing-dots span {
-            width: 0.24rem;
-            height: 0.24rem;
-            border-radius: 999px;
-            background: rgba(143, 165, 138, 0.9);
-            opacity: 0.28;
-            animation: chat-dot-bounce 0.9s ease-in-out infinite;
-            animation-play-state: paused;
+            display: block;
           }
 
           .chat-line-outgoing {
             opacity: 1;
             transform: translateY(0);
-          }
-
-          .chat-writing-dots span:nth-child(2) {
-            animation-delay: 0.12s;
-          }
-
-          .chat-writing-dots span:nth-child(3) {
-            animation-delay: 0.24s;
           }
 
           .card:hover .attention-chat-card .chat-line-in,
@@ -2084,72 +2104,14 @@ const MagicBento: React.FC<BentoProps> = ({
             animation: chat-reply-enter 4.2s linear forwards;
           }
 
-          .card:hover .attention-chat-card .chat-typed,
-          .card:active .attention-chat-card .chat-typed {
-            white-space: nowrap;
-            overflow: hidden;
-            width: auto;
-            max-width: 0;
-            border-right: 1px solid transparent;
-          }
-
-          .card:hover .attention-chat-card .chat-typed-in,
-          .card:active .attention-chat-card .chat-typed-in {
-            animation: chat-type-in 4.2s steps(24, end) forwards;
-          }
-
-          .card:hover .attention-chat-card .chat-typed-out,
-          .card:active .attention-chat-card .chat-typed-out {
-            animation: chat-type-out 4.2s steps(24, end) forwards;
-          }
-
-          .card:hover .attention-chat-card .chat-writing,
-          .card:active .attention-chat-card .chat-writing {
-            animation: chat-typing-presence 4.2s linear forwards;
-          }
-
-          .card:hover .attention-chat-card .chat-writing-dots span,
-          .card:active .attention-chat-card .chat-writing-dots span {
-            animation-play-state: running;
-          }
-
           @keyframes chat-message-enter {
             0%, 4% { opacity: 0; transform: translateY(6px); }
             8%, 100% { opacity: 1; transform: translateY(0); }
           }
 
-          @keyframes chat-type-in {
-            0%, 8% { max-width: 0; border-right-color: rgba(245, 239, 228, 0); }
-            14%, 38% { border-right-color: rgba(245, 239, 228, 0.85); }
-            44%, 100% { max-width: 23ch; border-right-color: rgba(245, 239, 228, 0); }
-          }
-
-          @keyframes chat-typing-presence {
-            0%, 44% { opacity: 0; transform: translateY(2px); }
-            48%, 72% { opacity: 1; transform: translateY(0); }
-            80%, 100% { opacity: 0; transform: translateY(2px); }
-          }
-
           @keyframes chat-reply-enter {
             0%, 62% { opacity: 0; transform: translateY(6px); }
             68%, 100% { opacity: 1; transform: translateY(0); }
-          }
-
-          @keyframes chat-type-out {
-            0%, 68% { max-width: 0; border-right-color: rgba(143, 165, 138, 0); }
-            74%, 96% { border-right-color: rgba(143, 165, 138, 0.9); }
-            100% { max-width: 26ch; border-right-color: rgba(143, 165, 138, 0); }
-          }
-
-          @keyframes chat-dot-bounce {
-            0%, 80%, 100% {
-              transform: translateY(0);
-              opacity: 0.28;
-            }
-            40% {
-              transform: translateY(-2px);
-              opacity: 1;
-            }
           }
 
           .chat-input-bar {
@@ -2266,6 +2228,16 @@ const MagicBento: React.FC<BentoProps> = ({
 
           .selling-site-ambient {
             background: linear-gradient(125deg, transparent 18%, rgba(245, 239, 228, 0.048) 46%, transparent 78%);
+          }
+
+          .bento-dot-grid {
+            z-index: 0;
+            background-image: radial-gradient(circle, rgba(245, 239, 228, 0.14) 1px, transparent 1px);
+            background-size: 18px 18px;
+            opacity: 0.16;
+            -webkit-mask-image: radial-gradient(circle at 50% 50%, black 0 50%, transparent 80%);
+            mask-image: radial-gradient(circle at 50% 50%, black 0 50%, transparent 80%);
+            pointer-events: none;
           }
 
           .selling-site-grid {
@@ -2737,7 +2709,6 @@ const MagicBento: React.FC<BentoProps> = ({
 
           .conversion-card-bg {
             background:
-              radial-gradient(circle at 78% 72%, rgba(167, 154, 199, 0.08), transparent 38%),
               linear-gradient(180deg, rgba(255, 255, 255, 0.025), transparent 48%);
           }
 
@@ -2772,14 +2743,35 @@ const MagicBento: React.FC<BentoProps> = ({
             filter: none;
           }
 
+          .conversion-phone-svg svg {
+            display: block;
+            width: 100%;
+            height: auto;
+            overflow: visible;
+          }
+
+          .first-impression-svg {
+            width: min(94%, 30rem);
+            transform: translateY(1.1rem);
+            pointer-events: auto;
+          }
+
+          .first-impression-svg svg {
+            display: block;
+            width: 100%;
+            height: auto;
+            overflow: visible;
+            pointer-events: auto;
+          }
+
           .conversion-flow-svg {
             width: min(88%, 18rem);
-            transform: translateY(1.35rem);
+            transform: translateY(2.6rem);
             transition: transform 800ms cubic-bezier(0.22, 1, 0.36, 1), filter 800ms cubic-bezier(0.22, 1, 0.36, 1);
           }
 
           .card:hover .group\/conversion .conversion-flow-svg {
-            transform: translateY(0.95rem) scale(1.025);
+            transform: translateY(2.2rem) scale(1.025);
             filter: none;
           }
 
@@ -2991,15 +2983,6 @@ const MagicBento: React.FC<BentoProps> = ({
             -webkit-backdrop-filter: blur(4px) saturate(130%);
           }
 
-          :root:not(.dark) .bento-card-surface {
-            background: rgba(250, 249, 245, 0.22) !important;
-            border: 1px solid rgba(0, 0, 0, 0.06);
-            color: var(--site-text) !important;
-            box-shadow: none !important;
-            backdrop-filter: blur(16px) saturate(115%);
-            -webkit-backdrop-filter: blur(16px) saturate(115%);
-          }
-
           .bento-card-surface::after {
             content: '';
             position: absolute;
@@ -3029,12 +3012,21 @@ const MagicBento: React.FC<BentoProps> = ({
             letter-spacing: -0.02em;
           }
 
+          .bento-feature-copy .bento-card-heading {
+            margin-bottom: 0.62rem;
+            font-size: clamp(1.28rem, 1rem + 0.7vw, 1.52rem);
+          }
+
           .bento-card-caption {
             max-width: 14.75rem;
             font-size: 0.75rem;
             font-weight: 450;
             line-height: 1.38;
             color: rgba(255, 255, 255, 0.54);
+          }
+
+          .bento-feature-copy .bento-card-caption {
+            max-width: 16.75rem;
           }
 
           .remote-card-copy,
@@ -3101,61 +3093,6 @@ const MagicBento: React.FC<BentoProps> = ({
             opacity: 0.16 !important;
           }
 
-          :root:not(.dark) .bento-card-surface > [style] {
-            background: transparent !important;
-            background-image: none !important;
-          }
-
-          :root:not(.dark) .bento-card-surface .text-white,
-          :root:not(.dark) .bento-card-surface .text-\[\#f5efe4\],
-          :root:not(.dark) .bento-card-surface [class*="text-white/"] {
-            color: var(--site-text) !important;
-          }
-
-          :root:not(.dark) .bento-card-surface h2,
-          :root:not(.dark) .bento-card-surface h3,
-          :root:not(.dark) .bento-card-surface p,
-          :root:not(.dark) .bento-card-surface button,
-          :root:not(.dark) .bento-card-surface .card__header,
-          :root:not(.dark) .bento-card-surface .card__content,
-          :root:not(.dark) .bento-card-surface .card__description {
-            color: var(--site-text) !important;
-          }
-
-          :root:not(.dark) .bento-card-surface h2 span[style],
-          :root:not(.dark) .bento-card-surface h3 span[style] {
-            color: inherit;
-          }
-
-          :root:not(.dark) .bento-card-surface .contact-card-overlay {
-            background: rgba(250, 249, 245, 0.14);
-          }
-
-          :root:not(.dark) .bento-card-surface .btn-neutral-dark {
-            border-color: rgba(36, 31, 24, 0.2) !important;
-            color: var(--site-text) !important;
-          }
-
-          :root:not(.dark) .bento-card-surface .contact-card-bg,
-          :root:not(.dark) .bento-card-surface .deliverables-card-bg,
-          :root:not(.dark) .bento-card-surface .selling-site-bg,
-          :root:not(.dark) .bento-card-surface .contact-card-grid,
-          :root:not(.dark) .bento-card-surface .deliverables-card-grid,
-          :root:not(.dark) .bento-card-surface .selling-site-ambient,
-          :root:not(.dark) .bento-card-surface .attention-mobile-frost {
-            opacity: 0 !important;
-          }
-
-          :root:not(.dark) .bento-card-surface [class*="bg-gradient"],
-          :root:not(.dark) .bento-card-surface [class*="bg-\[radial-gradient"],
-          :root:not(.dark) .bento-card-surface [class*="bg-\[linear-gradient"] {
-            opacity: 0 !important;
-          }
-
-          :root:not(.dark) .card::before {
-            border-color: var(--site-border);
-          }
-          
           @media (min-width: 600px) and (max-width: 1023px) {
             .card-responsive {
               grid-template-columns: repeat(6, 1fr);
@@ -3242,8 +3179,8 @@ const MagicBento: React.FC<BentoProps> = ({
             }
 
             .card-responsive .card:nth-child(2) .chat-showcase-messages {
-              margin-top: 0;
-              padding-bottom: 4rem;
+              margin-top: 1.35rem;
+              padding-bottom: 0;
             }
 
             .card-responsive .card:nth-child(3) .conversion-phone-wrap {
@@ -3288,12 +3225,6 @@ const MagicBento: React.FC<BentoProps> = ({
               -webkit-backdrop-filter: blur(2px);
             }
 
-            :root:not(.dark) .bento-card-surface .bento-mobile-frost,
-            :root:not(.dark) .bento-card-surface .selling-mobile-frost,
-            :root:not(.dark) .bento-card-surface .attention-mobile-frost {
-              opacity: 1 !important;
-              background: rgba(250, 249, 245, 0.18);
-            }
           }
           
           .card::before {
@@ -3316,11 +3247,6 @@ const MagicBento: React.FC<BentoProps> = ({
             pointer-events: none;
             z-index: 2;
           }
-
-          :root:not(.dark) .card::after {
-            border-top: 1px solid rgba(0, 0, 0, 0.05);
-          }
-
 
           @keyframes confettiFall {
             0% {
@@ -3482,6 +3408,15 @@ const MagicBento: React.FC<BentoProps> = ({
             .card-responsive .card:nth-child(4) .remote-card-globe {
               opacity: 0.82;
               transform: translateY(6%) scale(0.8);
+            }
+
+            .card-responsive .card:nth-child(2) .bento-mobile-readable {
+              padding-top: 1rem;
+            }
+
+            .card-responsive .card:nth-child(2) .chat-showcase-messages {
+              margin-top: 0.85rem;
+              padding-bottom: 0;
             }
           }
 

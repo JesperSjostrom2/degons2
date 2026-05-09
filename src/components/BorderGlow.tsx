@@ -150,7 +150,6 @@ export default function BorderGlow({
   const [edgeProximity, setEdgeProximity] = useState(0)
   const [sweepActive, setSweepActive] = useState(false)
   const [isInteractive, setIsInteractive] = useState(false)
-  const [isDarkMode, setIsDarkMode] = useState(true)
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(pointer: fine) and (min-width: 768px)')
@@ -160,16 +159,6 @@ export default function BorderGlow({
     mediaQuery.addEventListener('change', updateInteractivity)
 
     return () => mediaQuery.removeEventListener('change', updateInteractivity)
-  }, [])
-
-  useEffect(() => {
-    const updateTheme = () => setIsDarkMode(document.documentElement.classList.contains('dark'))
-    const observer = new MutationObserver(updateTheme)
-
-    updateTheme()
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
-
-    return () => observer.disconnect()
   }, [])
 
   const getCenterOfElement = useCallback((element: HTMLElement) => {
@@ -289,9 +278,9 @@ export default function BorderGlow({
     ? Math.max(0, (edgeProximity * 100 - edgeSensitivity) / (100 - edgeSensitivity))
     : 0
 
-  const effectiveColors = isDarkMode ? colors : ['#8b7355', '#a88c62', '#dac5a7']
-  const effectiveGlowColor = isDarkMode ? glowColor : '36 25 44'
-  const effectiveBackgroundColor = isDarkMode ? backgroundColor : 'var(--site-card-glow-bg)'
+  const effectiveColors = colors
+  const effectiveGlowColor = glowColor
+  const effectiveBackgroundColor = backgroundColor
   const meshGradients = buildMeshGradients(effectiveColors)
   const borderBackground = meshGradients.map((gradient) => `${gradient} border-box`)
   const fillBackground = meshGradients.map((gradient) => `${gradient} padding-box`)

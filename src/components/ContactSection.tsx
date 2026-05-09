@@ -274,7 +274,7 @@ export default function ContactSection() {
                         className="w-full appearance-none rounded-xl border border-[color:var(--site-border)] bg-[color:var(--site-surface)] py-3 pl-4 pr-12 text-[color:var(--site-text)] outline-none transition-colors duration-300 focus:border-accent/60 focus:bg-[color:var(--site-surface-strong)] dark:rounded-2xl dark:border-white/10 dark:bg-black/30 dark:text-white dark:focus:bg-black/40"
                       >
                         {projectTypes.map((type) => (
-                          <option key={type} value={type} className="bg-[#faf9f5] text-[#141413] dark:bg-[#050505] dark:text-white">
+                          <option key={type} value={type} className="bg-[#050505] text-white">
                             {type}
                           </option>
                         ))}

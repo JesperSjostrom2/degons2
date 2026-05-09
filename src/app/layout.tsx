@@ -86,20 +86,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const themeScript = `
-    try {
-      const theme = localStorage.getItem('theme') || 'dark';
-      document.documentElement.classList.toggle('dark', theme !== 'light');
-    } catch (_) {
-      document.documentElement.classList.add('dark');
-    }
-  `;
-
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
-      </head>
+    <html lang="en" className="dark">
       <body
         className={`${outfit.variable} ${newsreader.variable} ${sourceSans3.variable} font-sans antialiased`}
       >

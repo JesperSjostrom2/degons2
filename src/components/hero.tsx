@@ -11,8 +11,8 @@ export default function Hero() {
   const [showLightRays, setShowLightRays] = useState(false)
   const [copied, setCopied] = useState(false)
   const { scrollYProgress } = useScroll()
-  const planetY = useTransform(scrollYProgress, [0, 0.32], [0, 240])
-  const microPlanetY = useTransform(scrollYProgress, [0, 0.32], [0, -140])
+  const planetY = useTransform(scrollYProgress, [0, 0.32], [0, 135])
+  const microPlanetY = useTransform(scrollYProgress, [0, 0.32], [0, -72])
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(min-width: 768px)')

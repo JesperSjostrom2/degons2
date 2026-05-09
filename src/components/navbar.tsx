@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 import { MenuCloseIcon } from '@/components/ui/animated-state-icons'
 import ProfileCard from '@/components/ui/profile-card'
 import Link from 'next/link'
-import { FileText, Moon, Sun } from 'lucide-react'
+import { FileText } from 'lucide-react'
 
 const navItems = [
   { name: 'Home', href: '#home', id: 'home' },
@@ -19,37 +19,6 @@ const navItems = [
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('home')
-  const [theme, setTheme] = useState<'dark' | 'light'>('dark')
-
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('theme') === 'light' ? 'light' : 'dark'
-
-    setTheme(savedTheme)
-    document.documentElement.classList.toggle('dark', savedTheme === 'dark')
-  }, [])
-
-  const toggleTheme = () => {
-    setTheme((currentTheme) => {
-      const nextTheme = currentTheme === 'dark' ? 'light' : 'dark'
-
-      document.documentElement.classList.toggle('dark', nextTheme === 'dark')
-      localStorage.setItem('theme', nextTheme)
-
-      return nextTheme
-    })
-  }
-
-  const renderThemeToggle = () => (
-    <button
-      type="button"
-      onClick={toggleTheme}
-      className="theme-toggle inline-flex h-9 w-9 items-center justify-center rounded-full border transition-colors duration-300"
-      aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-      aria-pressed={theme === 'light'}
-    >
-      {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-    </button>
-  )
 
   useEffect(() => {
     const observerOptions = {
@@ -155,8 +124,6 @@ export default function Navbar() {
             <span className="relative z-10">{item.name}</span>
           </a>
         ))}
-        <div className="ml-1 h-5 w-px bg-[color:var(--site-border)]" />
-        {renderThemeToggle()}
       </div>
 
       {/* Mobile Header */}
@@ -188,9 +155,6 @@ export default function Navbar() {
         >
           <MenuCloseIcon size={24} isAnimating={isMobileMenuOpen} />
         </button>
-        <div className="absolute right-[4.75rem] top-4 z-[70]">
-          {renderThemeToggle()}
-        </div>
       </div>
 
       {/* Mobile Fullscreen Kinetic Menu */}
