@@ -3071,10 +3071,6 @@ const MagicBento: React.FC<BentoProps> = ({
             opacity: 1;
           }
 
-          .card-responsive .card:nth-child(1):hover .bento-card-surface::after {
-            opacity: 0.45;
-          }
-
           .bento-card-surface .contact-card-bg,
           .bento-card-surface .deliverables-card-bg,
           .bento-card-surface .selling-site-bg,
