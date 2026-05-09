@@ -14,10 +14,6 @@ import Footer from '@/components/footer'
 import ProgressScrollbar from '@/components/ProgressScrollbar'
 import ScrollReveal from '@/components/scroll-reveal'
 
-const aboutInfoCardClass = 'premium-glass-surface z-10 rounded-xl p-4 text-center transition-all duration-300 group-hover:-translate-x-1 group-hover:-translate-y-1 group-hover:rounded-[4px] group-hover:border-accent/35 group-hover:shadow-[4px_4px_0px_rgba(168,140,98,0.72)] group-active:translate-x-0 group-active:translate-y-0 group-active:rounded-xl group-active:shadow-none'
-const aboutInfoDepthClass = 'pointer-events-none absolute inset-0 z-0 rounded-xl border border-accent/30 bg-accent/10 opacity-0 shadow-[0_0_0_1px_rgba(218,197,167,0.08),inset_0_1px_0_rgba(245,239,228,0.12)] transition-all duration-300 group-hover:translate-x-1.5 group-hover:translate-y-1.5 group-hover:opacity-100 group-hover:rounded-[4px]'
-const aboutInfoCardStyle = { boxShadow: '0 1px 0 0 rgba(255, 255, 255, 0.1)' }
-
 export default function Home() {
   return (
     <main className="isolate relative min-h-screen bg-[color:var(--site-bg)] transition-colors duration-300">
@@ -51,7 +47,14 @@ export default function Home() {
       <ExperienceSection />
       
       {/* About Section */}
-      <section id="about" className="relative flex min-h-screen items-center overflow-hidden py-20 md:py-24">
+      <section id="about" className="about-scene relative flex min-h-screen items-center overflow-hidden py-20 md:py-24">
+        <div className="about-scene-ambient pointer-events-none absolute inset-0" />
+        <div className="about-scene-depth pointer-events-none absolute inset-0" />
+        <div className="about-scene-haze pointer-events-none absolute inset-0" />
+        <div className="about-scene-bloom pointer-events-none absolute inset-0" />
+        <div className="about-scene-vignette pointer-events-none absolute inset-0" />
+        <div className="about-scene-dust pointer-events-none absolute inset-0" />
+        <div className="about-scene-grain pointer-events-none absolute inset-0 opacity-35" />
         <div className="container relative z-10 mx-auto px-6">
           <div className="flex justify-center items-center">
             <div className="grid lg:grid-cols-5 gap-12 lg:gap-20 items-center max-w-6xl w-full">
@@ -89,47 +92,27 @@ export default function Home() {
                 </div>
               </div>
               
-              {/* Right Profile Section */}
               <div className="lg:col-span-2 flex justify-center items-center">
-                <div className="relative w-full max-w-sm">
-                  {/* Profile Picture with outline behind */}
-                  <div className="relative mb-16 flex justify-start group">
-                    {/* Animated outline box behind picture - sticking out right */}
-                    <div className="absolute left-4 top-4 z-0 h-64 w-64 rounded-3xl border-2 border-accent/60 transition-transform duration-300 ease-out group-hover:translate-x-2 group-hover:translate-y-2 sm:left-5 sm:top-5 sm:h-72 sm:w-72 animate-pulse"></div>
-                    
-                    {/* Main Profile Picture */}
-                    <div data-about-profile className="relative z-10 h-64 w-64 overflow-hidden rounded-3xl bg-gradient-to-br from-[#a88c62] via-accent to-[#8b7355] transition-transform duration-300 ease-out group-hover:-translate-x-2 group-hover:-translate-y-2 sm:h-72 sm:w-72">
-                      <div className="flex h-full w-full items-center justify-center" style={{background: 'linear-gradient(to bottom right, #a88c62, #dac5a7 58%, #8b7355)'}}>
-                        <span className="about-profile-initial text-8xl font-bold text-white transition-all duration-500">JS</span>
-                        <span className="about-profile-memoji absolute inset-0 bg-[url('/assets/memoji.png')] bg-contain bg-center bg-no-repeat opacity-0 transition-all duration-700" />
-                      </div>
+                <div className="about-identity-panel relative w-full max-w-[26rem]">
+                  <div className="about-light-orb about-light-orb-left" />
+                  <div className="about-light-orb about-light-orb-right" />
+
+                  <div className="about-cinematic-frame relative overflow-hidden rounded-[1.7rem] border border-[color:var(--site-border)]/40 bg-[rgba(7,7,7,0.26)] p-3.5 md:p-4 backdrop-blur-[4px] [backdrop-filter:blur(4px)_saturate(120%)] [-webkit-backdrop-filter:blur(4px)_saturate(120%)]">
+                    <div className="about-frame-glow pointer-events-none absolute inset-0" />
+                    <div className="about-floating-particles pointer-events-none absolute inset-0" />
+
+                    <div data-about-profile className="about-portrait-stage relative h-[25.5rem] overflow-hidden rounded-[1.3rem] border border-[color:var(--site-border)]/45 bg-[linear-gradient(170deg,rgba(158,132,94,0.1)_0%,rgba(10,10,10,0.84)_50%,rgba(5,5,5,0.98)_100%)]">
+                      <div className="about-portrait-image absolute inset-0 bg-[url('/assets/portrait.jpg')] bg-cover bg-center bg-no-repeat" />
+                      <div className="about-vignette absolute inset-0" />
+                      <div className="about-portrait-fade absolute inset-0" />
+                      <div className="about-portrait-light absolute -left-12 top-10 h-40 w-40 rounded-full" />
+                      <div className="about-portrait-light about-portrait-light-alt absolute -bottom-12 right-2 h-44 w-44 rounded-full" />
                     </div>
-                  </div>
-                  
-                  {/* Information Grid */}
-                  <div className="grid grid-cols-2 gap-4 mb-4">
-                    <div className="about-info-3d group relative cursor-pointer">
-                      <div className={aboutInfoDepthClass} />
-                      <div className={aboutInfoCardClass} style={aboutInfoCardStyle}>
-                        <div className="text-2xl font-bold text-[color:var(--site-text)]">26</div>
-                        <div className="text-xs text-muted-foreground font-medium">AGE</div>
-                      </div>
-                    </div>
-                    <div className="about-info-3d group relative cursor-pointer">
-                      <div className={aboutInfoDepthClass} />
-                      <div className={aboutInfoCardClass} style={aboutInfoCardStyle}>
-                        <div className="text-2xl font-bold text-[color:var(--site-text)]">4+</div>
-                        <div className="text-xs text-muted-foreground font-medium">YEARS EXP</div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {/* Location */}
-                  <div className="about-info-3d group relative cursor-pointer">
-                    <div className={aboutInfoDepthClass} />
-                    <div className={`${aboutInfoCardClass} p-5`} style={aboutInfoCardStyle}>
-                      <div className="text-xl font-bold text-[color:var(--site-text)]">Helsinki</div>
-                      <div className="text-xs text-muted-foreground font-medium mt-1">LOCATION</div>
+
+                    <div className="about-editorial-note mt-3 px-1.5 pb-0.5">
+                      <p className="font-accent text-[0.9rem] leading-relaxed text-[color:var(--site-muted)]/95">
+                        Drawn to pacing, motion, and clarity.
+                      </p>
                     </div>
                   </div>
                 </div>
