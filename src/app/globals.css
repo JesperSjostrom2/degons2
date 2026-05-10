@@ -211,18 +211,58 @@
     75% { transform: translate3d(-2%, -2%, 0); }
   }
   
-  .text-gradient {
-    background: linear-gradient(135deg, #f5efe4, #dac5a7);
+  .text-gradient-ivory {
+    background: linear-gradient(180deg, #f0ede6 0%, #ffffff 50%, #dcd7cc 100%);
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
+    -webkit-text-fill-color: transparent;
   }
 
-  .text-highlight-shimmer {
-    background: linear-gradient(to bottom, #dac5a7 10%, #8b7355 45%, #6a5640 90%);
+  .text-gradient-jesper {
+    background: linear-gradient(180deg, #9a8461 0%, #dac5a7 50%, #7d6a4a 100%);
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 14px rgba(218, 197, 167, 0.15));
+  }
+
+  .text-gradient-trust {
+    background: linear-gradient(180deg, #ffffff 0%, #dac5a7 50%, #b89c72 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 16px rgba(218, 197, 167, 0.22));
+  }
+
+  .hero-orbital-sphere {
+    display: inline-flex;
+    width: 0.42em;
+    height: 0.42em;
+    border-radius: 50%;
+    background: 
+      radial-gradient(circle at 35% 25%, rgba(255, 255, 255, 0.25) 0%, transparent 60%),
+      radial-gradient(circle at 45% 40%, #fefcf8 0%, #f7ead8 15%, #dac5a7 40%, #8b7355 70%, #4a3e2e 100%);
+    box-shadow: 
+      inset -4px -6px 12px rgba(0, 0, 0, 0.5),
+      inset 2px 3px 6px rgba(255, 255, 255, 0.35),
+      0 0 20px rgba(218, 197, 167, 0.12);
+    vertical-align: middle;
+    transform: translateY(-0.06em);
+  }
+
+  .text-gradient-muted {
+    background: linear-gradient(180deg, #dcd7cc 0%, #b0aea5 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero-headline-bloom {
+    text-shadow: 0 0 45px rgba(255, 255, 255, 0.04), 0 0 20px rgba(255, 255, 255, 0.02);
   }
 
   .site-section {
@@ -534,8 +574,8 @@
 
   .space-micro-planet {
     position: absolute;
-    width: 2.45rem;
-    height: 2.45rem;
+    width: 2.15rem;
+    height: 2.15rem;
     border-radius: 9999px;
     border: 1px solid rgba(218, 197, 167, 0.18);
     background:
@@ -566,15 +606,48 @@
   .space-micro-planet::before {
     content: '';
     position: absolute;
-    left: 0.62rem;
-    top: 0.82rem;
-    width: 0.34rem;
-    height: 0.34rem;
+    left: 24%;
+    top: 32%;
+    width: 14%;
+    height: 14%;
     border-radius: 9999px;
     background: rgba(245, 239, 228, 0.2);
     box-shadow:
-      0.72rem 0.36rem 0 -0.08rem rgba(245, 239, 228, 0.12),
-      0.38rem 0.92rem 0 -0.1rem rgba(20, 20, 19, 0.16);
+      0.22em 0.12em 0 -0.02em rgba(245, 239, 228, 0.12),
+      0.12em 0.28em 0 -0.04em rgba(20, 20, 19, 0.16);
+  }
+
+  .space-micro-planet-inline {
+    display: inline-flex;
+    position: relative;
+    width: 0.52em;
+    height: 0.28em;
+    /* Asymmetrical silhouette for organic sophistication */
+    border-radius: 42% 58% 52% 48% / 65% 35% 65% 35%;
+    border: 1px solid rgba(218, 197, 167, 0.07);
+    background:
+      /* Top-weighted rim light (from above rays) */
+      radial-gradient(ellipse at 50% -5%, rgba(255, 255, 255, 0.12) 0%, transparent 65%),
+      /* Eclipse effect: Darker core with warm ivory/bronze wrapping */
+      radial-gradient(ellipse at 45% 42%, rgba(74, 62, 46, 0.35) 0%, rgba(168, 140, 98, 0.12) 40%, rgba(218, 197, 167, 0.32) 100%),
+      /* Deep base layer */
+      linear-gradient(165deg, #dac5a7 0%, #a88c62 45%, #4a3e2e 100%);
+    box-shadow:
+      /* Atmospheric diffusion, not neon glow */
+      0 0 12px rgba(218, 197, 167, 0.04),
+      inset 0 1px 2px rgba(255, 255, 255, 0.1);
+    vertical-align: middle;
+    /* Lowered for better baseline flow */
+    transform: translateY(-0.03em) rotate(-1.1deg);
+    margin: 0 0.08em;
+    opacity: 0.88;
+    /* Subtle edge haze */
+    filter: blur(0.42px);
+  }
+
+  .space-micro-planet-inline::after,
+  .space-micro-planet-inline::before {
+    display: none;
   }
 
   @keyframes hero-atmosphere-breathe {
