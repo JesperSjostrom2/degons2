@@ -109,11 +109,7 @@ export default function Home() {
                       <div className="about-portrait-light about-portrait-light-alt absolute -bottom-12 right-2 h-44 w-44 rounded-full" />
                     </div>
 
-                    <div className="about-editorial-note mt-3 px-1.5 pb-0.5">
-                      <p className="font-accent text-[0.9rem] leading-relaxed text-[color:var(--site-muted)]/95">
-                        Drawn to pacing, motion, and clarity.
-                      </p>
-                    </div>
+
                   </div>
                 </div>
               </div>
