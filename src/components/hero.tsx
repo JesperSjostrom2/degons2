@@ -13,13 +13,13 @@ export default function Hero() {
   const { scrollYProgress } = useScroll()
   const planetY = useTransform(scrollYProgress, [0, 0.32], [0, 135])
   const microPlanetY = useTransform(scrollYProgress, [0, 0.32], [0, -72])
-  
+
   // Mouse parallax for the orbital sphere
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
-  
+
   const shouldReduceMotion = useReducedMotion()
-  
+
   const sphereX = useSpring(useTransform(mouseX, [-1000, 1000], [-0.8, 0.8]), { stiffness: 25, damping: 25 })
   const sphereY = useSpring(useTransform(mouseY, [-1000, 1000], [-0.8, 0.8]), { stiffness: 25, damping: 25 })
 
@@ -28,7 +28,7 @@ export default function Hero() {
       mouseX.set(e.clientX - window.innerWidth / 2)
       mouseY.set(e.clientY - window.innerHeight / 2)
     }
-    
+
     window.addEventListener('mousemove', handleMouseMove)
     return () => window.removeEventListener('mousemove', handleMouseMove)
   }, [mouseX, mouseY])
@@ -95,28 +95,20 @@ export default function Hero() {
             transition={{ duration: 0.9, delay: 0.2, ease: 'easeOut' }}
             className="relative w-full max-w-6xl"
           >
-            {/* Planet with Haze wrapper */}
-            <motion.div 
-              className="absolute left-[13%] top-[3%] hidden md:block"
-              style={{ y: microPlanetY }}
-            >
-              <div className="planet-glow-haze" />
-              <div className="space-micro-planet" />
-            </motion.div>
 
             <h1 className="mx-auto max-w-[1080px] text-balance text-[clamp(2.45rem,5.6vw,5.1rem)] font-semibold leading-[1.02] tracking-[-0.055em] drop-shadow-[0_18px_60px_rgba(0,0,0,0.18)] dark:drop-shadow-[0_18px_60px_rgba(0,0,0,0.38)] hero-headline-bloom">
               <span className="text-gradient-ivory">Hi, I&apos;m</span> <span className="text-gradient-jesper">Jesper.</span>
               <br />
               <span className="text-gradient-ivory">I build</span>{' '}
-              <motion.span 
+              <motion.span
                 className="space-micro-planet-inline mx-2 md:mx-3"
-                animate={!shouldReduceMotion ? { 
+                animate={!shouldReduceMotion ? {
                   y: [-0.6, 0.6, -0.6],
+                  rotate: [0, 360],
                 } : {}}
-                transition={{ 
-                  duration: 15, 
-                  repeat: Infinity, 
-                  ease: "easeInOut" 
+                transition={{
+                  y: { duration: 15, repeat: Infinity, ease: "easeInOut" },
+                  rotate: { duration: 140, repeat: Infinity, ease: "linear" }
                 }}
                 style={{
                   x: (!shouldReduceMotion && showLightRays) ? sphereX : 0,
@@ -125,30 +117,40 @@ export default function Hero() {
               />{' '}
               <span className="relative inline-block text-gradient-ivory">
                 websites
-                <motion.svg
-                  aria-hidden="true"
-                  viewBox="0 0 300 34"
-                  className="pointer-events-none absolute -bottom-[0.17em] left-1/2 h-[0.18em] w-[110%] -translate-x-1/2 overflow-visible text-[#dac5a7]"
-                  preserveAspectRatio="none"
-                  initial={{ clipPath: 'inset(0 100% 0 0)' }}
-                  animate={{ clipPath: 'inset(0 0% 0 0)' }}
-                  transition={{ duration: 1.35, delay: 1.6, ease: [0.65, 0, 0.35, 1] }}
-                >
-                  <path
-                    d="M4 24 C42 4, 151 7, 296 13 C221 14, 108 18, 19 29 C9 30, 2 29, 4 24 Z"
-                    fill="currentColor"
-                    opacity="0.45"
-                  />
-                  <path
-                    d="M55 7 C118 5, 199 6, 287 12 C204 10, 123 10, 55 12 Z"
-                    fill="var(--site-bg-deep)"
-                    opacity="0.2"
-                  />
-                </motion.svg>
               </span>
               <br />
               <span className="text-gradient-ivory">people quickly</span>{' '}
-              <span className="text-gradient-trust">trust.</span>
+              <span className="relative inline-block text-gradient-trust">
+                trust.
+                <motion.svg
+                  width="100%"
+                  height="12"
+                  viewBox="0 0 160 12"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="absolute -bottom-[0.15em] left-0 z-0"
+                  initial={{ pathLength: 0, opacity: 0 }}
+                  animate={{ pathLength: 1, opacity: 0.85 }}
+                  transition={{ delay: 1.8, duration: 2.5, ease: "easeOut" }}
+                  style={{ filter: 'blur(0.8px) drop-shadow(0 0 10px rgba(218, 197, 167, 0.18))' }}
+                >
+                  <path
+                    d="M10 8C40 4 120 4 150 8"
+                    stroke="url(#underline-gradient-trust)"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                  />
+                  <defs>
+                    <linearGradient id="underline-gradient-trust" x1="0" y1="0" x2="160" y2="0" gradientUnits="userSpaceOnUse">
+                      <stop offset="0" stopColor="#dac5a7" stopOpacity="0" />
+                      <stop offset="0.15" stopColor="#dac5a7" stopOpacity="0.45" />
+                      <stop offset="0.5" stopColor="#f5efe4" stopOpacity="0.9" />
+                      <stop offset="0.85" stopColor="#dac5a7" stopOpacity="0.45" />
+                      <stop offset="1" stopColor="#dac5a7" stopOpacity="0" />
+                    </linearGradient>
+                  </defs>
+                </motion.svg>
+              </span>
             </h1>
           </motion.div>
 
@@ -162,20 +164,14 @@ export default function Hero() {
               A frontend developer in Helsinki building landing pages, portfolios, and polished websites for people who need a stronger presence online.
             </p>
             <div className="flex w-full flex-col items-center gap-3 sm:w-auto sm:flex-row sm:gap-4">
-              <a href="#contact" className="inline-flex">
-                <GlareHover
-                  width="auto"
-                  height="auto"
-                  background="#dac5a7"
-                  borderRadius="20px"
-                  borderColor="#dac5a7"
-                  className="relative cursor-pointer text-black transition-all duration-300 hover:!bg-none hover:!bg-transparent hover:!border-accent hover:text-[color:var(--site-text)] dark:hover:text-white"
-                >
-                  <span className="flex h-[42px] cursor-pointer items-center gap-3 rounded-[20px] px-7 text-base font-medium">
-                    Start a Project
-                    <ArrowRight className="h-4 w-4" />
-                  </span>
-                </GlareHover>
+              <a href="#contact" className="group/cta inline-flex relative">
+                {/* Extremely subtle ambient glow */}
+                <div className="absolute inset-0 rounded-full bg-[#dac5a7]/5 opacity-20 blur-xl transition-all duration-500 group-hover/cta:opacity-40" />
+
+                <div className="relative flex h-[46px] items-center gap-3 rounded-full border border-[#dac5a7]/20 bg-[#141413]/40 backdrop-blur-md px-8 text-base font-medium text-[#f5efe4] shadow-[inset_0_1px_1px_rgba(255,255,255,0.08),0_4px_20px_rgba(0,0,0,0.3)] transition-all duration-300 group-hover/cta:bg-[#141413]/60 group-hover/cta:border-[#dac5a7]/40 hover:scale-[1.02] active:scale-[0.98]">
+                  <span className="tracking-tight">Start a Project</span>
+                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover/cta:translate-x-1" />
+                </div>
               </a>
               <button
                 type="button"
