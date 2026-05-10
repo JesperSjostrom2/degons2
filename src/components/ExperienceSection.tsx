@@ -23,7 +23,7 @@ interface Project {
   bulletPoints: string[]
   skills: string[]
   year: string
-  slides: ProjectSlide[]
+  image: ProjectSlide
   accentColor: string
   accentSoftColor: string
   accentBorderColor: string
@@ -50,12 +50,7 @@ const projectsData: Project[] = [
     ],
     skills: ['Next.js', 'Tailwind CSS', 'Framer Motion', 'UI/UX', 'Web Design'],
     year: '2026',
-    slides: [
-      { type: 'image', src: '/assets/projects/andcreativeproduct.png', objectPosition: 'top' },
-      { type: 'video', src: '/assets/projects/creativehero.optimized.mp4' },
-      { type: 'video', src: '/assets/projects/creativevisuals.optimized.mp4' },
-      { type: 'image', src: '/assets/projects/andcreative.png', objectPosition: '52% 70%' },
-    ],
+    image: { type: 'image', src: '/assets/projects/andcreativeproduct.png', objectPosition: 'top' },
     accentColor: '#f3f3f3',
     accentSoftColor: 'rgba(243, 243, 243, 0.14)',
     accentBorderColor: 'rgba(243, 243, 243, 0.42)',
@@ -80,12 +75,7 @@ const projectsData: Project[] = [
     ],
     skills: ['Web Design', 'Logo Design', 'Brand Identity', 'UI/UX', 'HTML/CSS', 'JavaScript'],
     year: '2024',
-    slides: [
-      { type: 'image', src: '/assets/projects/kermaproduct.png', objectPosition: 'top' },
-      { type: 'image', src: '/assets/projects/kerma.png', objectPosition: 'center' },
-      { type: 'image', src: '/assets/projects/kermaproduct.png', objectPosition: '45% 35%' },
-      { type: 'image', src: '/assets/projects/kermaproduct.png', objectPosition: '52% 70%' },
-    ],
+    image: { type: 'image', src: '/assets/projects/kermaproduct.png', objectPosition: 'top' },
     accentColor: '#d4af37',
     accentSoftColor: 'rgba(212, 175, 55, 0.14)',
     accentBorderColor: 'rgba(212, 175, 55, 0.42)',
@@ -110,12 +100,7 @@ const projectsData: Project[] = [
     ],
     skills: ['Next.js', 'Tailwind CSS', 'Framer Motion', 'TypeScript', 'GSAP', 'Three.js'],
     year: '2023',
-    slides: [
-      { type: 'image', src: '/assets/projects/portfolioproduct.png', objectPosition: 'top' },
-      { type: 'image', src: '/assets/projects/ogportfolio.png', objectPosition: 'center' },
-      { type: 'image', src: '/assets/projects/portfolioproduct.png', objectPosition: '45% 35%' },
-      { type: 'image', src: '/assets/projects/portfolioproduct.png', objectPosition: '52% 70%' },
-    ],
+    image: { type: 'image', src: '/assets/projects/portfolioproduct.png', objectPosition: 'top' },
     accentColor: '#ff0066',
     accentSoftColor: 'rgba(255, 0, 102, 0.14)',
     accentBorderColor: 'rgba(255, 0, 102, 0.42)',
@@ -146,8 +131,6 @@ const fallbackSkillIcons: Record<string, LucideIcon> = {
 
 const ProjectCard = ({ project }: { project: Project }) => {
   const cardRef = useRef<HTMLElement>(null)
-  const [activeSlide, setActiveSlide] = useState(0)
-  const [direction, setDirection] = useState<1 | -1>(1)
   const [detailsOpen, setDetailsOpen] = useState(false)
   const [isInView, setIsInView] = useState(false)
   const [canAutoplayMedia, setCanAutoplayMedia] = useState(false)
@@ -156,8 +139,6 @@ const ProjectCard = ({ project }: { project: Project }) => {
     '--project-accent': project.accentColor,
     '--project-atmosphere': project.atmosphereColor,
   } as CSSProperties
-  const slideCount = project.slides.length
-  const currentSlide = project.slides[activeSlide]
 
   useEffect(() => {
     if (!cardRef.current) return
@@ -198,111 +179,39 @@ const ProjectCard = ({ project }: { project: Project }) => {
 
       video.pause()
     })
-  }, [activeSlide, canAutoplayMedia, isInView])
-
-  const nextSlide = () => {
-    setDirection(1)
-    setActiveSlide((prev) => (prev + 1) % slideCount)
-  }
-
-  const prevSlide = () => {
-    setDirection(-1)
-    setActiveSlide((prev) => (prev - 1 + slideCount) % slideCount)
-  }
-
-  const goToSlide = (target: number) => {
-    if (target === activeSlide) return
-    setDirection(target > activeSlide ? 1 : -1)
-    setActiveSlide(target)
-  }
+  }, [canAutoplayMedia, isInView])
 
   return (
       <article ref={cardRef} className="project-card-atmosphere premium-glass-surface group overflow-hidden rounded-[28px]" style={projectCardStyle}>
         <div className="grid border-b border-[color:var(--site-border)] lg:grid-cols-[1.2fr_1fr] dark:border-white/10">
-          <div className="relative min-h-[260px] overflow-hidden p-0 sm:min-h-[320px] lg:min-h-[520px] lg:p-8">
+          <div className="relative min-h-[220px] overflow-hidden p-0 sm:min-h-[280px] lg:min-h-[440px] lg:p-8">
             <div className="relative z-10 mx-auto max-w-[760px] overflow-hidden rounded-t-[28px] border-b border-[color:var(--site-border)] bg-[rgba(0,0,0,0.15)] backdrop-blur-[4px] [backdrop-filter:blur(4px)_saturate(130%)] [-webkit-backdrop-filter:blur(4px)_saturate(130%)] dark:border-white/10 lg:mt-2 lg:rounded-2xl lg:border">
               <div className="group/image relative aspect-[16/10] lg:aspect-[4/3]">
-                <AnimatePresence mode="wait" initial={false}>
-                  <motion.div
-                    key={`${project.id}-${activeSlide}`}
-                    initial={{ x: direction > 0 ? 32 : -32, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    exit={{ x: direction > 0 ? -32 : 32, opacity: 0 }}
-                    transition={{ duration: 0.36, ease: [0.22, 1, 0.36, 1] }}
-                    className="absolute inset-0 transition-transform duration-500 ease-out group-hover/image:scale-[1.02]"
-                  >
-                    {currentSlide.type === 'video' ? (
-                      <video
-                        data-autoplay-preview
-                        src={currentSlide.src}
-                        className="h-full w-full object-cover opacity-90"
-                        autoPlay={canAutoplayMedia && isInView}
-                        muted
-                        loop
-                        playsInline
-                        preload={isInView ? 'metadata' : 'none'}
-                        aria-label={`${project.title} preview ${activeSlide + 1}`}
-                      />
-                    ) : (
-                      <Image
-                        src={currentSlide.src}
-                        alt={`${project.title} preview ${activeSlide + 1}`}
-                        fill
-                        sizes="(max-width: 1024px) 100vw, 50vw"
-                        className="object-cover opacity-90"
-                        style={{ objectPosition: currentSlide.objectPosition ?? 'center' }}
-                      />
-                    )}
-                  </motion.div>
-                </AnimatePresence>
-
-                <button
-                  type="button"
-                  onClick={prevSlide}
-                  className="absolute left-3 top-1/2 z-20 hidden h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-[color:var(--site-border)]/80 bg-[color:var(--site-hover)]/85 text-[color:var(--site-muted)] transition-all duration-200 hover:text-[color:var(--site-text)] dark:border-white/15 dark:bg-black/35 dark:text-white/75 lg:inline-flex"
-                  aria-label="Previous project image"
-                >
-                  <ArrowLeft className="h-3.5 w-3.5" />
-                </button>
-                <button
-                  type="button"
-                  onClick={nextSlide}
-                  className="absolute right-3 top-1/2 z-20 hidden h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border border-[color:var(--site-border)]/80 bg-[color:var(--site-hover)]/85 text-[color:var(--site-muted)] transition-all duration-200 hover:text-[color:var(--site-text)] dark:border-white/15 dark:bg-black/35 dark:text-white/75 lg:inline-flex"
-                  aria-label="Next project image"
-                >
-                  <ArrowRight className="h-3.5 w-3.5" />
-                </button>
-              </div>
-            </div>
-
-            <div className="relative z-20 mt-5 hidden gap-3 overflow-x-auto pb-1 lg:flex">
-              {project.slides.map((slide, thumb) => (
-                <button type="button" onClick={() => goToSlide(thumb)} key={`${project.id}-${thumb}`} className={`relative h-16 w-28 shrink-0 overflow-hidden rounded-lg border bg-[rgba(0,0,0,0.15)] backdrop-blur-[4px] [backdrop-filter:blur(4px)_saturate(130%)] [-webkit-backdrop-filter:blur(4px)_saturate(130%)] ${thumb === activeSlide ? 'border-accent ring-1 ring-accent/60' : 'border-[color:var(--site-border)] dark:border-white/10'}`} style={accentLabelStyle} aria-label={`Show preview ${thumb + 1}`} aria-pressed={thumb === activeSlide}>
-                  {thumb === activeSlide && <span className="absolute inset-0 z-10 bg-accent/10" />}
-                  {slide.type === 'video' ? (
+                <div className="absolute inset-0 transition-transform duration-500 ease-out group-hover/image:scale-[1.02]">
+                  {project.image.type === 'video' ? (
                     <video
                       data-autoplay-preview
-                      src={slide.src}
-                      className="h-full w-full object-cover opacity-72"
+                      src={project.image.src}
+                      className="h-full w-full object-cover opacity-90"
                       autoPlay={canAutoplayMedia && isInView}
                       muted
                       loop
                       playsInline
                       preload={isInView ? 'metadata' : 'none'}
-                      aria-label={`${project.title} preview ${thumb + 1}`}
+                      aria-label={`${project.title} preview`}
                     />
                   ) : (
                     <Image
-                      src={slide.src}
-                      alt={`${project.title} preview ${thumb + 1}`}
+                      src={project.image.src}
+                      alt={`${project.title} preview`}
                       fill
-                      sizes="112px"
-                      className="object-cover opacity-72"
-                      style={{ objectPosition: slide.objectPosition ?? 'center' }}
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                      className="object-cover opacity-90"
+                      style={{ objectPosition: project.image.objectPosition ?? 'center' }}
                     />
                   )}
-                </button>
-              ))}
+                </div>
+              </div>
             </div>
           </div>
 

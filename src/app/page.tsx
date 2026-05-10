@@ -71,7 +71,6 @@ export default function Home() {
                       Always learning,<br />
                       always <span className="relative inline-block">
                         <GradientText className="font-accent" colors={["#8b7355", "#dac5a7", "#8b7355"]}>moving</GradientText>
-                        <span className="absolute -right-16 top-1/2 hidden -translate-y-1/2 text-2xl opacity-0 transition-all duration-300 group-hover:opacity-100 md:block md:text-3xl lg:text-4xl animate-waving">👋</span>
                       </span>
                     </h2>
                   </ScrollReveal>
