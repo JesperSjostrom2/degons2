@@ -19,6 +19,20 @@ const navItems = [
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('home')
+  const [isHeroHeaderVisible, setIsHeroHeaderVisible] = useState(true)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const hero = document.getElementById('home')
+      if (hero) {
+        const heroHeight = hero.offsetHeight
+        setIsHeroHeaderVisible(window.scrollY < heroHeight * 0.75)
+      }
+    }
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    handleScroll()
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   useEffect(() => {
     const observerOptions = {
@@ -72,13 +86,20 @@ export default function Navbar() {
 
   return (
     <>
-      <Link href="#home" className="hidden lg:block fixed top-9 left-10 z-50 transition-all duration-700">
+      <Link 
+        href="#home" 
+        className={`hidden lg:block fixed top-9 left-10 z-50 transition-all duration-500 ease-out ${
+          isHeroHeaderVisible 
+            ? 'opacity-100 translate-y-0 blur-0 pointer-events-auto' 
+            : 'opacity-0 -translate-y-2 blur-sm pointer-events-none'
+        }`}
+      >
         <Image 
           src="/assets/logotransparent.png" 
           alt="Logo" 
           width={240} 
           height={80} 
-          className="h-11 w-auto object-contain transition-all duration-700 opacity-75 contrast-[0.9] grayscale-[0.25]"
+          className="h-11 w-auto object-contain transition-all duration-700"
           style={{ filter: 'drop-shadow(0 0 12px rgba(218, 197, 167, 0.08)) blur(0.2px)' }}
           priority
         />
@@ -136,7 +157,11 @@ export default function Navbar() {
             alt="Logo" 
             width={180} 
             height={60} 
-            className="h-10 w-auto object-contain"
+            className={`h-10 w-auto object-contain transition-all duration-500 ease-out ${
+              isHeroHeaderVisible 
+                ? 'opacity-100 translate-y-0 blur-0' 
+                : 'opacity-0 -translate-y-2 blur-sm'
+            }`}
             priority
           />
         </Link>
