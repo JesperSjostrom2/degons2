@@ -121,8 +121,8 @@ export default function Navbar() {
             onClick={() => handleNavClick(item.id)}
             className={`relative font-normal tracking-tight transition-all duration-500 whitespace-nowrap cursor-pointer ${
               activeSection === item.id 
-                ? 'text-[#f5efe4]' 
-                : 'text-[#dac5a7]/70 hover:text-[#f5efe4]'
+                ? 'text-[color:var(--site-text)]' 
+                : 'text-[color:var(--site-muted)]/70 hover:text-[color:var(--site-text)]'
             }`}
             style={{ 
               fontSize: '0.85rem',
@@ -131,14 +131,14 @@ export default function Navbar() {
           >
             {activeSection === item.id && (
               <motion.div
-                className="absolute left-1/2 -translate-x-1/2 rounded-full bg-[#f5efe4]"
+                className="absolute left-1/2 -translate-x-1/2 rounded-full bg-accent"
                 layoutId="activeGlow"
                 style={{
                   bottom: '-0.38rem',
                   width: '1.8rem',
                   height: '0.125rem',
                   opacity: 0.8,
-                  boxShadow: '0 0 10px rgba(245, 239, 228, 0.15)'
+                  boxShadow: '0 0 10px rgba(218, 197, 167, 0.15)'
                 }}
                 transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
               />
