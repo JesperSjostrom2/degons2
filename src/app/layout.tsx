@@ -30,6 +30,9 @@ export const metadata: Metadata = {
     template: "%s | Jesper Sjöström",
   },
   description: "I'm Jesper Sjöström, a proactive full-stack developer from Finland specializing in dynamic, high-performance web experiences using React, Next.js, and Node.js. Available for global remote work.",
+  icons: {
+    icon: "/assets/minilogobg.png",
+  },
   keywords: [
     "Jesper Sjöström",
     "Jesper Sjostrom",
@@ -52,7 +55,7 @@ export const metadata: Metadata = {
     siteName: "Jesper Sjöström Portfolio",
     images: [
       {
-        url: "/og-image.jpg",
+        url: "/assets/og-image.png",
         width: 1200,
         height: 630,
         alt: "Jesper Sjöström - Full-Stack Developer",
@@ -64,6 +67,7 @@ export const metadata: Metadata = {
     title: "Jesper Sjöström | Full-Stack Developer",
     description: "Proactive full-stack developer from Finland specializing in dynamic, high-performance web experiences using React, Next.js, and Node.js.",
     creator: "@jespersjostrom",
+    images: ["/assets/og-image.png"],
   },
   alternates: {
     canonical: "https://jepps.dev",
