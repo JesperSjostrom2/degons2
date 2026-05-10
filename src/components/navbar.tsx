@@ -3,8 +3,8 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { MenuCloseIcon } from '@/components/ui/animated-state-icons'
-import ProfileCard from '@/components/ui/profile-card'
 import Link from 'next/link'
+import Image from 'next/image'
 import { FileText } from 'lucide-react'
 
 const navItems = [
@@ -72,16 +72,16 @@ export default function Navbar() {
 
   return (
     <>
-      <div className="hidden lg:block fixed top-6 left-6 z-50">
-        <ProfileCard
-          imageSrc="/assets/testlogo.png"
-          name="Jesper Sjöström"
-          role="Front End Developer"
-          socials={{
-            github: "https://github.com/jespersjostrom2"
-          }}
+      <Link href="#home" className="hidden lg:block fixed top-6 left-7 z-50">
+        <Image 
+          src="/assets/logotransparent.png" 
+          alt="Logo" 
+          width={240} 
+          height={80} 
+          className="h-14 w-auto object-contain transition-all duration-300 hover:opacity-80 active:scale-95"
+          priority
         />
-      </div>
+      </Link>
       <motion.nav
         className={`fixed z-50 box-border max-w-[100dvw] overflow-x-clip transition-colors duration-300 w-full top-0 left-0 right-0 ${
         isMobileMenuOpen ? 'bg-transparent border-transparent' : 'bg-[color:var(--nav-mobile-bg)] backdrop-blur-xl border-b border-[color:var(--site-border)]'
@@ -128,24 +128,16 @@ export default function Navbar() {
 
       {/* Mobile Header */}
       <div className="lg:hidden relative z-50 h-[72px] w-full max-w-[100dvw] overflow-visible px-4 py-3">
-        <div className="absolute left-4 top-3 max-w-[calc(100dvw-5.5rem)] overflow-visible">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-          >
-            <ProfileCard
-              imageSrc="/assets/testlogo.png"
-              name="Jesper Sjöström"
-              role="Front End Developer"
-              expandedWidth={190}
-              className="justify-start"
-              socials={{
-                github: "https://github.com/jespersjostrom2"
-              }}
-            />
-          </motion.div>
-        </div>
+        <Link href="#home" className="absolute left-5 top-1/2 -translate-y-1/2 flex items-center h-full">
+          <Image 
+            src="/assets/logotransparent.png" 
+            alt="Logo" 
+            width={180} 
+            height={60} 
+            className="h-10 w-auto object-contain"
+            priority
+          />
+        </Link>
 
         <button
           type="button"
