@@ -72,13 +72,14 @@ export default function Navbar() {
 
   return (
     <>
-      <Link href="#home" className="hidden lg:block fixed top-6 left-7 z-50">
+      <Link href="#home" className="hidden lg:block fixed top-9 left-10 z-50 transition-all duration-700">
         <Image 
           src="/assets/logotransparent.png" 
           alt="Logo" 
           width={240} 
           height={80} 
-          className="h-14 w-auto object-contain transition-all duration-300 hover:opacity-80 active:scale-95"
+          className="h-11 w-auto object-contain transition-all duration-700 opacity-75 contrast-[0.9] grayscale-[0.25]"
+          style={{ filter: 'drop-shadow(0 0 12px rgba(218, 197, 167, 0.08)) blur(0.2px)' }}
           priority
         />
       </Link>
@@ -91,31 +92,32 @@ export default function Navbar() {
       transition={{ duration: 0.8, ease: "easeOut" }}
     >
       {/* Desktop Menu */}
-      <div className="hidden lg:flex glass-nav relative items-center justify-center" style={{ padding: '0.35rem 0.85rem', gap: '0.55rem' }}>
+      <div className="hidden lg:flex glass-nav relative items-center justify-center" style={{ padding: '0.35rem 1.15rem', gap: '0.7rem' }}>
         {navItems.map((item) => (
           <a
             key={item.name}
             href={item.href}
             onClick={() => handleNavClick(item.id)}
-            className={`relative font-normal transition-colors duration-300 whitespace-nowrap cursor-pointer ${
+            className={`relative font-normal tracking-tight transition-all duration-500 whitespace-nowrap cursor-pointer ${
               activeSection === item.id 
-                ? 'text-[color:var(--site-text)]' 
-                : 'text-[color:var(--site-muted)] hover:text-[color:var(--site-text)]'
+                ? 'text-[#f5efe4]' 
+                : 'text-[#dac5a7]/70 hover:text-[#f5efe4]'
             }`}
             style={{ 
-              fontSize: '0.875rem',
-              padding: '0.35rem 0.7rem'
+              fontSize: '0.85rem',
+              padding: '0.35rem 0.75rem'
             }}
           >
             {activeSection === item.id && (
               <motion.div
-                className="absolute left-1/2 -translate-x-1/2 rounded-full bg-accent"
+                className="absolute left-1/2 -translate-x-1/2 rounded-full bg-[#f5efe4]"
                 layoutId="activeGlow"
                 style={{
-                  bottom: '-0.375rem',
-                  width: '2rem',
+                  bottom: '-0.38rem',
+                  width: '1.8rem',
                   height: '0.125rem',
-                  boxShadow: '0 0 0 1px rgba(218, 197, 167, 0.35), 0 0 16px rgba(218, 197, 167, 0.22)'
+                  opacity: 0.8,
+                  boxShadow: '0 0 10px rgba(245, 239, 228, 0.15)'
                 }}
                 transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
               />
