@@ -86,8 +86,8 @@ const projectsData: Project[] = [
   },
   {
     id: 3,
-    title: 'Portfolio Website',
-    displayTitle: 'PORTFOLIO SYSTEM',
+    title: 'Old Portfolio',
+    displayTitle: 'OLD PORTFOLIO',
     category: 'Development',
     summary: 'My own portfolio, built to test how far I can push motion and presentation without losing usability.',
     description:

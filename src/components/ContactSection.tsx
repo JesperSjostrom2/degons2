@@ -41,7 +41,7 @@ const socialLinks: SocialLink[] = [
   {
     name: 'Email',
     handle: 'contact@jespersjostrom.se',
-    href: '#contact',
+    href: 'mailto:contact@jespersjostrom.se',
     icon: Mail,
   },
 ]

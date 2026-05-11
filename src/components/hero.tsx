@@ -176,7 +176,7 @@ export default function Hero() {
               <button
                 type="button"
                 onClick={handleCopyEmail}
-                className="group mx-auto inline-flex items-center justify-center gap-2 text-center text-sm font-medium text-[color:var(--site-text)]/90 transition-colors duration-200 hover:text-accent sm:mx-0 sm:justify-start sm:text-left"
+                className="group mx-auto inline-flex items-center justify-center gap-2 text-center text-sm font-medium text-[color:var(--site-text)]/90 transition-colors duration-200 hover:text-accent sm:mx-0 sm:justify-start sm:text-left w-[260px]"
                 title="Copy email address"
               >
                 {copied ? (
