@@ -86,9 +86,11 @@ export default function Navbar() {
 
   return (
     <>
-      <Link 
-        href="#home" 
-        className={`hidden lg:block fixed top-9 left-10 z-50 transition-all duration-500 ease-out ${
+      <button
+        type="button"
+        onClick={() => handleNavClick('home')}
+        data-scroll-to="home"
+        className={`hidden lg:block fixed top-9 left-10 z-50 transition-all duration-500 ease-out cursor-pointer ${
           isHeroHeaderVisible 
             ? 'opacity-100 translate-y-0 blur-0 pointer-events-auto' 
             : 'opacity-0 -translate-y-2 blur-sm pointer-events-none'
@@ -103,7 +105,7 @@ export default function Navbar() {
           style={{ filter: 'drop-shadow(0 0 12px rgba(218, 197, 167, 0.08)) blur(0.2px)' }}
           priority
         />
-      </Link>
+      </button>
       <motion.nav
         className={`fixed z-50 box-border max-w-[100dvw] overflow-x-clip transition-colors duration-300 w-full top-0 left-0 right-0 ${
         isMobileMenuOpen ? 'bg-transparent border-transparent' : 'bg-[color:var(--nav-mobile-bg)] backdrop-blur-xl border-b border-[color:var(--site-border)]'
@@ -115,11 +117,12 @@ export default function Navbar() {
       {/* Desktop Menu */}
       <div className="hidden lg:flex glass-nav relative items-center justify-center" style={{ padding: '0.35rem 1.15rem', gap: '0.7rem' }}>
         {navItems.map((item) => (
-          <a
+          <button
             key={item.name}
-            href={item.href}
+            type="button"
             onClick={() => handleNavClick(item.id)}
-            className={`relative font-normal tracking-tight transition-all duration-500 whitespace-nowrap cursor-pointer ${
+            data-scroll-to={item.id}
+            className={`relative font-normal tracking-tight transition-all duration-500 whitespace-nowrap cursor-pointer border-none bg-transparent ${
               activeSection === item.id 
                 ? 'text-[color:var(--site-text)]' 
                 : 'text-[color:var(--site-muted)]/70 hover:text-[color:var(--site-text)]'
@@ -145,13 +148,18 @@ export default function Navbar() {
             )}
             
             <span className="relative z-10">{item.name}</span>
-          </a>
+          </button>
         ))}
       </div>
 
       {/* Mobile Header */}
       <div className="lg:hidden relative z-50 h-[72px] w-full max-w-[100dvw] overflow-visible px-4 py-3">
-        <Link href="#home" className="absolute left-5 top-1/2 -translate-y-1/2 flex items-center h-full">
+        <button
+          type="button"
+          onClick={() => handleNavClick('home')}
+          data-scroll-to="home"
+          className="absolute left-5 top-1/2 -translate-y-1/2 flex items-center h-full border-none bg-transparent cursor-pointer"
+        >
           <Image 
             src="/assets/logotransparent.png" 
             alt="Logo" 
@@ -164,7 +172,7 @@ export default function Navbar() {
             }`}
             priority
           />
-        </Link>
+        </button>
 
         <button
           type="button"
@@ -218,7 +226,12 @@ export default function Navbar() {
                     delay: isMobileMenuOpen ? 0.35 + index * 0.05 : 0 
                   }}
                 >
-                  <Link href={item.href} onClick={() => handleNavClick(item.id)}>
+                  <button 
+                    type="button" 
+                    onClick={() => handleNavClick(item.id)} 
+                    data-scroll-to={item.id}
+                    className="border-none bg-transparent p-0 text-left cursor-pointer"
+                  >
                     <motion.div
                       className={`cursor-pointer font-sans text-4xl font-semibold tracking-tight sm:text-5xl ${
                         activeSection === item.id 
@@ -230,7 +243,7 @@ export default function Navbar() {
                     >
                       {item.name}
                     </motion.div>
-                  </Link>
+                  </button>
                 </motion.div>
               </div>
             ))}

@@ -17,7 +17,7 @@ export default function SmoothScroll() {
       }
 
       if (lenis) {
-        lenis.scrollTo(element as HTMLElement, { offset: -100 })
+        lenis.scrollTo(element as HTMLElement, { offset: -60 })
         return
       }
 
@@ -31,15 +31,20 @@ export default function SmoothScroll() {
         return
       }
 
-      const link = target.closest<HTMLAnchorElement>('a[href^="#"]')
+      const trigger = target.closest<HTMLElement>('a[href^="#"], [data-scroll-to]')
 
-      if (!link || link.target || link.hash.length <= 1) {
+      if (!trigger) {
+        return
+      }
+
+      const hash = trigger.getAttribute('data-scroll-to') || (trigger as HTMLAnchorElement).hash
+      
+      if (!hash || hash.length <= 1) {
         return
       }
 
       event.preventDefault()
-      scrollToHash(link.hash)
-      window.history.pushState(null, '', link.hash)
+      scrollToHash(hash.startsWith('#') ? hash : `#${hash}`)
     }
 
     document.addEventListener('click', handleAnchorClick)
