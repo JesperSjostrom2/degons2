@@ -1,8 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { motion, useScroll, useTransform, useMotionValue, useSpring, useReducedMotion } from 'framer-motion'
-import { ArrowRight, Copy } from 'lucide-react'
+import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useSpring, useReducedMotion } from 'framer-motion'
+import { ArrowRight, Copy, Check } from 'lucide-react'
 
 import GlareHover from '@/components/GlareHover'
 import LightRays from '@/components/LightRays'
@@ -52,7 +52,7 @@ export default function Hero() {
 
       setTimeout(() => {
         setCopied(false)
-      }, 1600)
+      }, 3000)
     } catch (error) {
       console.error('Failed to copy email', error)
     }
@@ -119,13 +119,13 @@ export default function Hero() {
                 websites
               </span>
               <br />
-              <span className="text-gradient-ivory">people quickly</span>{' '}
+              <span className="text-gradient-ivory">you actually</span>{' '}
               <span className="relative inline-block text-gradient-trust">
-                trust.
+                deserve.
                 <motion.svg
                   width="100%"
                   height="12"
-                  viewBox="0 0 160 12"
+                  viewBox="0 0 200 12"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                   className="absolute -bottom-[0.15em] left-0 z-0"
@@ -135,13 +135,13 @@ export default function Hero() {
                   style={{ filter: 'blur(0.8px) drop-shadow(0 0 10px rgba(218, 197, 167, 0.18))' }}
                 >
                   <path
-                    d="M10 8C40 4 120 4 150 8"
+                    d="M10 9C50 5 150 5 190 9"
                     stroke="url(#underline-gradient-trust)"
                     strokeWidth="2"
                     strokeLinecap="round"
                   />
                   <defs>
-                    <linearGradient id="underline-gradient-trust" x1="0" y1="0" x2="160" y2="0" gradientUnits="userSpaceOnUse">
+                    <linearGradient id="underline-gradient-trust" x1="0" y1="0" x2="200" y2="0" gradientUnits="userSpaceOnUse">
                       <stop offset="0" stopColor="#dac5a7" stopOpacity="0" />
                       <stop offset="0.15" stopColor="#dac5a7" stopOpacity="0.45" />
                       <stop offset="0.5" stopColor="#f5efe4" stopOpacity="0.9" />
@@ -163,7 +163,7 @@ export default function Hero() {
             <p className="max-w-2xl text-balance text-base leading-7 md:text-lg text-gradient-muted">
               A frontend developer in Helsinki building landing pages, portfolios, and polished websites for people who need a stronger presence online.
             </p>
-            <div className="flex w-full flex-col items-center gap-3 sm:w-auto sm:flex-row sm:gap-4">
+            <div className="flex w-full flex-col items-center gap-5 sm:w-auto sm:flex-row sm:gap-0">
               <a href="#contact" className="group/cta inline-flex relative">
                 {/* Extremely subtle ambient glow */}
                 <div className="absolute inset-0 rounded-full bg-[#dac5a7]/5 opacity-20 blur-xl transition-all duration-500 group-hover/cta:opacity-40" />
@@ -176,25 +176,46 @@ export default function Hero() {
               <button
                 type="button"
                 onClick={handleCopyEmail}
-                className="group mx-auto inline-flex items-center justify-center gap-2 text-center text-sm font-medium text-[color:var(--site-text)]/90 transition-colors duration-200 hover:text-accent sm:mx-0 sm:justify-start sm:text-left w-[260px]"
+                className="group mx-auto inline-flex items-center justify-start gap-3 pl-6 text-sm font-medium text-[color:var(--site-text)]/90 transition-colors duration-200 hover:text-accent sm:mx-0 w-[260px]"
                 title="Copy email address"
               >
-                {copied ? (
-                  <svg aria-hidden="true" viewBox="0 0 16 16" className="h-4 w-4 shrink-0">
-                    <path
-                      d="M3.5 8.5 6.5 11.5 12.5 5.5"
-                      fill="none"
-                      stroke="#4ade80"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="hero-copy-check-path"
-                    />
-                  </svg>
-                ) : (
-                  <Copy className="h-4 w-4 shrink-0" />
-                )}
-                <span className="whitespace-nowrap">{copied ? 'Copied to clipboard' : 'contact@jespersjostrom.se'}</span>
+                <AnimatePresence mode="wait" initial={false}>
+                  {copied ? (
+                    <motion.div
+                      key="copied"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.2, ease: "linear" }}
+                      className="flex items-center gap-2"
+                    >
+                      <svg aria-hidden="true" viewBox="0 0 16 16" className="h-4 w-4 shrink-0">
+                        <path
+                          d="M3.5 8.5 6.5 11.5 12.5 5.5"
+                          fill="none"
+                          stroke="#4ade80"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="hero-copy-check-path"
+                        />
+                      </svg>
+                      <span className="whitespace-nowrap">Copied to clipboard</span>
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="email"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.2, ease: "linear" }}
+                      className="flex items-center gap-2"
+                    >
+                      <Copy className="h-4 w-4 shrink-0" />
+                      <span className="whitespace-nowrap">contact@jespersjostrom.se</span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </button>
             </div>
           </motion.div>
