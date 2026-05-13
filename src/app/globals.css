@@ -1678,7 +1678,7 @@
   .hero-copy-check-path {
     stroke-dasharray: 24;
     stroke-dashoffset: 24;
-    animation: hero-copy-check-draw 340ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    animation: hero-copy-check-draw 850ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
   }
 
   @keyframes floating-star-sparkle {

@@ -63,7 +63,7 @@ export function Globe({
   const phiOffsetRef = useRef(0)
   const thetaOffsetRef = useRef(0)
   const isPausedRef = useRef(false)
-  const isVisibleRef = useRef(false)
+  const startAnimatingRef = useRef<() => void>(() => {})
   const markerData = useMemo(
     () => markers.map((m) => ({ location: m.location, size: markerSize, id: m.id })),
     [markers, markerSize],
@@ -71,15 +71,6 @@ export function Globe({
   const arcData = useMemo(
     () => arcs.map((a) => ({ from: a.from, to: a.to, id: a.id })),
     [arcs],
-  )
-
-  const handlePointerDown = useCallback(
-    (e: React.PointerEvent) => {
-      pointerInteracting.current = { x: e.clientX, y: e.clientY }
-      if (canvasRef.current) canvasRef.current.style.cursor = "grabbing"
-      isPausedRef.current = true
-    },
-    []
   )
 
   const handlePointerMove = useCallback((e: PointerEvent) => {
@@ -116,11 +107,24 @@ export function Globe({
     pointerInteracting.current = null
     if (canvasRef.current) canvasRef.current.style.cursor = "pointer"
     isPausedRef.current = false
-  }, [])
+    window.removeEventListener("pointermove", handlePointerMove)
+    window.removeEventListener("pointerup", handlePointerUp)
+    startAnimatingRef.current()
+  }, [handlePointerMove])
+
+  const handlePointerDown = useCallback(
+    (e: React.PointerEvent) => {
+      pointerInteracting.current = { x: e.clientX, y: e.clientY }
+      if (canvasRef.current) canvasRef.current.style.cursor = "grabbing"
+      isPausedRef.current = true
+      window.addEventListener("pointermove", handlePointerMove, { passive: true })
+      window.addEventListener("pointerup", handlePointerUp, { passive: true })
+      startAnimatingRef.current()
+    },
+    [handlePointerMove, handlePointerUp]
+  )
 
   useEffect(() => {
-    window.addEventListener("pointermove", handlePointerMove, { passive: true })
-    window.addEventListener("pointerup", handlePointerUp, { passive: true })
     return () => {
       window.removeEventListener("pointermove", handlePointerMove)
       window.removeEventListener("pointerup", handlePointerUp)
@@ -133,7 +137,9 @@ export function Globe({
     let globe: ReturnType<typeof createGlobe> | null = null
     let animationId = 0
     let observer: IntersectionObserver | null = null
+    let resizeObserver: ResizeObserver | null = null
     let phi = 0
+    let isVisible = false
 
     function init() {
       const width = canvas.offsetWidth
@@ -164,12 +170,14 @@ export function Globe({
       })
 
       function animate() {
+        const hasVelocity =
+          Math.abs(velocity.current.phi) > 0.0001 ||
+          Math.abs(velocity.current.theta) > 0.0001
+        const hasThetaCorrection = thetaOffsetRef.current < -0.4 || thetaOffsetRef.current > 0.4
+
         if (!isPausedRef.current) {
           phi += speed
-          if (
-            Math.abs(velocity.current.phi) > 0.0001 ||
-            Math.abs(velocity.current.theta) > 0.0001
-          ) {
+          if (hasVelocity) {
             phiOffsetRef.current += velocity.current.phi
             thetaOffsetRef.current += velocity.current.theta
             velocity.current.phi *= 0.95
@@ -186,22 +194,27 @@ export function Globe({
         globe!.update({
           phi: phi + phiOffsetRef.current + dragOffset.current.phi,
           theta: theta + thetaOffsetRef.current + dragOffset.current.theta,
-          dark,
-          mapBrightness,
-          markerColor,
-          baseColor,
-          arcColor,
-          markerElevation,
-          markers: markerData,
-          arcs: arcData,
         })
-        animationId = requestAnimationFrame(animate)
+
+        const shouldContinue =
+          isVisible &&
+          !document.hidden &&
+          (speed !== 0 || pointerInteracting.current !== null || hasVelocity || hasThetaCorrection)
+
+        if (shouldContinue) {
+          animationId = requestAnimationFrame(animate)
+          return
+        }
+
+        animationId = 0
       }
 
       function startAnimating() {
-        if (animationId) return
+        if (animationId || !isVisible || document.hidden) return
         animationId = requestAnimationFrame(animate)
       }
+
+      startAnimatingRef.current = startAnimating
 
       function stopAnimating() {
         if (!animationId) return
@@ -211,8 +224,8 @@ export function Globe({
 
       observer = new IntersectionObserver(
         ([entry]) => {
-          isVisibleRef.current = entry.isIntersecting
-          if (entry.isIntersecting) {
+          isVisible = entry.isIntersecting
+          if (isVisible) {
             startAnimating()
           } else {
             stopAnimating()
@@ -222,24 +235,44 @@ export function Globe({
       )
       observer.observe(canvas)
 
+      const handleVisibilityChange = () => {
+        if (document.hidden) {
+          stopAnimating()
+          return
+        }
+
+        startAnimating()
+      }
+
+      document.addEventListener("visibilitychange", handleVisibilityChange)
+
       setTimeout(() => canvas && (canvas.style.opacity = "1"))
+
+      return () => {
+        document.removeEventListener("visibilitychange", handleVisibilityChange)
+        startAnimatingRef.current = () => {}
+      }
     }
 
+    let cleanupVisibilityChange: (() => void) | undefined
+
     if (canvas.offsetWidth > 0) {
-      init()
+      cleanupVisibilityChange = init()
     } else {
-      const ro = new ResizeObserver((entries) => {
+      resizeObserver = new ResizeObserver((entries) => {
         if (entries[0]?.contentRect.width > 0) {
-          ro.disconnect()
-          init()
+          resizeObserver?.disconnect()
+          cleanupVisibilityChange = init()
         }
       })
-      ro.observe(canvas)
+      resizeObserver.observe(canvas)
     }
 
     return () => {
       if (animationId) cancelAnimationFrame(animationId)
       observer?.disconnect()
+      resizeObserver?.disconnect()
+      cleanupVisibilityChange?.()
       if (globe) globe.destroy()
     }
   }, [markerData, arcData, markerColor, baseColor, arcColor, glowColor, dark, mapBrightness, markerElevation, arcWidth, arcHeight, speed, theta, diffuse, mapSamples])

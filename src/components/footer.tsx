@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Github, Linkedin, Mail } from 'lucide-react'
+import { AtSign, Github, Linkedin } from 'lucide-react'
 
 import { Footer as AnimatedFooter } from '@/components/ui/modem-animated-footer'
 
@@ -19,8 +19,8 @@ const socialLinks = [
     label: 'LinkedIn',
   },
   {
-    icon: <Mail className="h-5 w-5" />,
-    hoverIcon: <Mail className="h-5 w-5 fill-current" />,
+    icon: <AtSign className="h-5 w-5" />,
+    hoverIcon: <AtSign className="h-5 w-5 fill-current" />,
     href: '#contact',
     label: 'Email',
   },

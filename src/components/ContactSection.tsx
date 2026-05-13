@@ -2,8 +2,9 @@
 
 import { useCallback, useEffect, useRef, useState, type CSSProperties, type FormEvent } from 'react'
 import { motion } from 'framer-motion'
-import { ChevronDown, Github, Linkedin, Loader2, Mail, type LucideIcon } from 'lucide-react'
+import { AtSign, ChevronDown, Github, Linkedin, Loader2, type LucideIcon } from 'lucide-react'
 import { SendIcon } from '@/components/ui/animated-state-icons'
+import type { IconType } from 'react-icons'
 
 import GlareHover from '@/components/GlareHover'
 
@@ -13,7 +14,7 @@ interface SocialLink {
   name: string
   handle: string
   href: string
-  icon: LucideIcon
+  icon: LucideIcon | IconType
 }
 
 interface HoverBounds {
@@ -42,7 +43,7 @@ const socialLinks: SocialLink[] = [
     name: 'Email',
     handle: 'contact@jespersjostrom.se',
     href: 'mailto:contact@jespersjostrom.se',
-    icon: Mail,
+    icon: AtSign,
   },
 ]
 

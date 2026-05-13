@@ -1,6 +1,6 @@
 'use client'
 
-import { Github, Linkedin, Mail } from 'lucide-react'
+import { AtSign, Github, Linkedin } from 'lucide-react'
 
 export default function SocialLinks() {
   const socialLinkClass = 'premium-glass-surface group inline-flex h-11 w-11 items-center justify-center rounded-full text-[color:var(--site-muted)] transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/70 hover:text-accent dark:hover:border-accent/70 dark:hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/45 dark:text-white/72'
@@ -31,8 +31,8 @@ export default function SocialLinks() {
         href="#contact"
         className={socialLinkClass}
       >
-        <Mail className={outlineIconClass} />
-        <Mail className={fillIconClass} />
+        <AtSign className={outlineIconClass} />
+        <AtSign className={fillIconClass} />
       </a>
     </div>
   )

@@ -71,6 +71,12 @@ const REMOTE_GLOBE_ARCS = [
   { id: "ct-tokyo", from: [-33.9249, 18.4241] as [number, number], to: [35.6762, 139.6503] as [number, number] },
   { id: "tokyo-syd", from: [35.6762, 139.6503] as [number, number], to: [-33.8688, 151.2093] as [number, number] },
 ];
+
+const REMOTE_GLOBE_BASE_COLOR = [0.1, 0.1, 0.1] as [number, number, number];
+const REMOTE_GLOBE_GLOW_COLOR = [1, 1, 1] as [number, number, number];
+const REMOTE_GLOBE_MARKER_COLOR = [0.5, 0.64, 0.78] as [number, number, number];
+const REMOTE_GLOBE_ARC_COLOR = [0.42, 0.55, 0.68] as [number, number, number];
+
 const ExecutionWorkflowMap = () => {
   return (
     <div className="execution-map pointer-events-none relative h-full min-h-[14rem] w-full" aria-hidden="true">
@@ -475,15 +481,23 @@ const ParticleCard: React.FC<{
 
       element.addEventListener("mouseenter", handleMouseEnter);
       element.addEventListener("mouseleave", handleMouseLeave);
-      element.addEventListener("mousemove", handleMouseMove);
-      element.addEventListener("click", handleClick);
+      if (enableTilt || enableMagnetism) {
+        element.addEventListener("mousemove", handleMouseMove);
+      }
+      if (clickEffect) {
+        element.addEventListener("click", handleClick);
+      }
 
       return () => {
         isHoveredRef.current = false;
         element.removeEventListener("mouseenter", handleMouseEnter);
         element.removeEventListener("mouseleave", handleMouseLeave);
-        element.removeEventListener("mousemove", handleMouseMove);
-        element.removeEventListener("click", handleClick);
+        if (enableTilt || enableMagnetism) {
+          element.removeEventListener("mousemove", handleMouseMove);
+        }
+        if (clickEffect) {
+          element.removeEventListener("click", handleClick);
+        }
         clearAllParticles();
       };
     }, [
@@ -521,7 +535,6 @@ const GlobalSpotlight: React.FC<{
   glowColor = DEFAULT_GLOW_COLOR,
 }) => {
     const spotlightRef = useRef<HTMLDivElement | null>(null);
-    const isInsideSection = useRef(false);
     const frameRef = useRef<number | null>(null);
     const latestMouseRef = useRef<MouseEvent | null>(null);
 
@@ -551,21 +564,18 @@ const GlobalSpotlight: React.FC<{
     `;
       document.body.appendChild(spotlight);
       spotlightRef.current = spotlight;
+      const grid = gridRef.current;
+      const cards = Array.from(grid.querySelectorAll<HTMLElement>(".card"));
 
       const updateSpotlight = (e: MouseEvent) => {
-        if (!spotlightRef.current || !gridRef.current) return;
+        if (!spotlightRef.current) return;
 
-        const section = gridRef.current.closest(".bento-section");
-        const rect = section?.getBoundingClientRect();
+        const rect = grid.getBoundingClientRect();
         const mouseInside =
-          rect &&
           e.clientX >= rect.left &&
           e.clientX <= rect.right &&
           e.clientY >= rect.top &&
           e.clientY <= rect.bottom;
-
-        isInsideSection.current = mouseInside || false;
-        const cards = gridRef.current.querySelectorAll(".card");
 
         if (!mouseInside) {
           gsap.to(spotlightRef.current, {
@@ -574,7 +584,7 @@ const GlobalSpotlight: React.FC<{
             ease: "power2.out",
           });
           cards.forEach((card) => {
-            (card as HTMLElement).style.setProperty("--glow-intensity", "0");
+            card.style.setProperty("--glow-intensity", "0");
           });
           return;
         }
@@ -584,8 +594,7 @@ const GlobalSpotlight: React.FC<{
         let minDistance = Infinity;
 
         cards.forEach((card) => {
-          const cardElement = card as HTMLElement;
-          const cardRect = cardElement.getBoundingClientRect();
+          const cardRect = card.getBoundingClientRect();
           const centerX = cardRect.left + cardRect.width / 2;
           const centerY = cardRect.top + cardRect.height / 2;
           const distance =
@@ -604,7 +613,7 @@ const GlobalSpotlight: React.FC<{
           }
 
           updateCardGlowProperties(
-            cardElement,
+            card,
             e.clientX,
             e.clientY,
             glowIntensity,
@@ -647,9 +656,8 @@ const GlobalSpotlight: React.FC<{
       };
 
       const handleMouseLeave = () => {
-        isInsideSection.current = false;
-        gridRef.current?.querySelectorAll(".card").forEach((card) => {
-          (card as HTMLElement).style.setProperty("--glow-intensity", "0");
+        cards.forEach((card) => {
+          card.style.setProperty("--glow-intensity", "0");
         });
         if (spotlightRef.current) {
           gsap.to(spotlightRef.current, {
@@ -660,15 +668,15 @@ const GlobalSpotlight: React.FC<{
         }
       };
 
-      document.addEventListener("mousemove", handleMouseMove);
-      document.addEventListener("mouseleave", handleMouseLeave);
+      grid.addEventListener("mousemove", handleMouseMove);
+      grid.addEventListener("mouseleave", handleMouseLeave);
 
       return () => {
         if (frameRef.current !== null) {
           window.cancelAnimationFrame(frameRef.current);
         }
-        document.removeEventListener("mousemove", handleMouseMove);
-        document.removeEventListener("mouseleave", handleMouseLeave);
+        grid.removeEventListener("mousemove", handleMouseMove);
+        grid.removeEventListener("mouseleave", handleMouseLeave);
         spotlightRef.current?.parentNode?.removeChild(spotlightRef.current);
       };
     }, [gridRef, disableAnimations, enabled, spotlightRadius, glowColor]);
@@ -708,7 +716,19 @@ const useMobileDetection = () => {
 const sanitizeBentoSvg = (svg: string) =>
   svg
     .replace(/<foreignObject[\s\S]*?<\/foreignObject>/gi, "")
-    .replace(/\sdata-figma-bg-blur-radius="[^"]*"/gi, "");
+    .replace(/<clipPath\s+id="bgblur_[^"]*"[\s\S]*?<\/clipPath>/gi, "")
+    .replace(/\sdata-figma-bg-blur-radius="[^"]*"/gi, "")
+    .replace(/\n\s*\n/g, "\n");
+
+const BENTO_SVG_PATHS = {
+  endToEnd: "/assets/bento-cards/end-to-end-delivery/path.svg",
+  fastDelivery: "/assets/bento-cards/visitor-flow/time.svg",
+  firstImpression: "/assets/bento-cards/first-impression/Starrating.svg",
+};
+
+type BentoSvgAssets = Record<keyof typeof BENTO_SVG_PATHS, string>;
+
+let bentoSvgAssetCache: BentoSvgAssets | null = null;
 
 const MagicBento: React.FC<BentoProps> = ({
   textAutoHide = true,
@@ -731,9 +751,16 @@ const MagicBento: React.FC<BentoProps> = ({
   const firstImpressionRef = useRef<HTMLDivElement>(null);
   const isMobile = useMobileDetection();
   const shouldDisableAnimations = disableAnimations || isMobile;
-  const [endToEndSvg, setEndToEndSvg] = useState<string>("");
-  const [fastDeliverySvg, setFastDeliverySvg] = useState<string>("");
-  const [firstImpressionSvg, setFirstImpressionSvg] = useState<string>("");
+  const [svgAssets, setSvgAssets] = useState<BentoSvgAssets>(() => bentoSvgAssetCache ?? {
+    endToEnd: "",
+    fastDelivery: "",
+    firstImpression: "",
+  });
+
+  const pauseInjectedSvgAnimations = useCallback((element: HTMLDivElement | null) => {
+    const svg = element?.querySelector("svg") as SVGSVGElement | null;
+    svg?.pauseAnimations?.();
+  }, []);
 
   const setFirstImpressionLineAnimations = useCallback((active: boolean) => {
     firstImpressionRef.current
@@ -754,13 +781,13 @@ const MagicBento: React.FC<BentoProps> = ({
       return;
     }
 
-    if (isActive && !disableAnimations) {
+    if (isActive && !shouldDisableAnimations) {
       svg.unpauseAnimations?.();
       return;
     }
 
     svg.pauseAnimations?.();
-  }, [disableAnimations]);
+  }, [shouldDisableAnimations]);
 
   const clearChatTypingTimeouts = useCallback(() => {
     chatTypingTimeoutsRef.current.forEach((timeout) => window.clearTimeout(timeout));
@@ -821,13 +848,13 @@ const MagicBento: React.FC<BentoProps> = ({
       return;
     }
 
-    if (isActive && !disableAnimations) {
+    if (isActive && !shouldDisableAnimations) {
       svg.unpauseAnimations?.();
       return;
     }
 
     svg.pauseAnimations?.();
-  }, [disableAnimations]);
+  }, [shouldDisableAnimations]);
 
   useEffect(() => {
     return () => {
@@ -836,84 +863,34 @@ const MagicBento: React.FC<BentoProps> = ({
   }, [clearChatTypingTimeouts]);
 
   useEffect(() => {
-    if (!fastDeliverySvg) {
+    if (bentoSvgAssetCache) {
       return;
     }
 
-    const frame = window.requestAnimationFrame(() => {
-      setFastDeliveryAnimationState(false);
-    });
+    const controller = new AbortController();
 
-    return () => window.cancelAnimationFrame(frame);
-  }, [fastDeliverySvg, setFastDeliveryAnimationState]);
+    Promise.all(
+      Object.entries(BENTO_SVG_PATHS).map(async ([key, path]) => {
+        const response = await fetch(path, { signal: controller.signal });
+        const svg = await response.text();
 
-  useEffect(() => {
-    if (!firstImpressionSvg) {
-      return;
-    }
-
-    const frame = window.requestAnimationFrame(() => {
-      setFirstImpressionAnimationState(false);
-    });
-
-    return () => window.cancelAnimationFrame(frame);
-  }, [firstImpressionSvg, setFirstImpressionAnimationState]);
-
-  useEffect(() => {
-    let isMounted = true;
-
-    fetch("/assets/bento-cards/end-to-end-delivery/path.svg")
-      .then((response) => response.text())
-      .then((svg) => {
-        if (isMounted) {
-          setEndToEndSvg(sanitizeBentoSvg(svg));
-        }
+        return [key, sanitizeBentoSvg(svg)] as const;
+      }),
+    )
+      .then((entries) => {
+        const assets = Object.fromEntries(entries) as BentoSvgAssets;
+        bentoSvgAssetCache = assets;
+        setSvgAssets(assets);
       })
       .catch((error) => {
-        console.error("Failed to load end-to-end SVG", error);
-      });
-
-    return () => {
-      isMounted = false;
-    };
-  }, []);
-
-  useEffect(() => {
-    let isMounted = true;
-
-    fetch("/assets/bento-cards/visitor-flow/time.svg")
-      .then((response) => response.text())
-      .then((svg) => {
-        if (isMounted) {
-          setFastDeliverySvg(sanitizeBentoSvg(svg));
+        if (error instanceof DOMException && error.name === "AbortError") {
+          return;
         }
-      })
-      .catch((error) => {
-        console.error("Failed to load fast delivery SVG", error);
+
+        console.error("Failed to load bento SVG assets", error);
       });
 
-    return () => {
-      isMounted = false;
-    };
-  }, []);
-
-  useEffect(() => {
-    let isMounted = true;
-
-    fetch("/assets/bento-cards/first-impression/Starrating.svg")
-      .then((response) => response.text())
-      .then((svg) => {
-        if (isMounted) {
-          setFirstImpressionSvg(sanitizeBentoSvg(svg));
-        }
-      })
-      .catch((error) => {
-        console.error("Failed to load first impression SVG", error);
-      });
-
-    return () => {
-      isMounted = false;
-    };
+    return () => controller.abort();
   }, []);
 
   const getRemoteWorkCard = () => ({
@@ -939,13 +916,13 @@ const MagicBento: React.FC<BentoProps> = ({
             <Globe
               className="remote-card-globe relative z-10 w-full max-w-[520px] scale-[0.95] overflow-hidden"
               dark={1}
-              baseColor={[0.1, 0.1, 0.1]}
-              glowColor={[1, 1, 1]}
-              markerColor={[0.5, 0.64, 0.78]}
-              arcColor={[0.42, 0.55, 0.68]}
+              baseColor={REMOTE_GLOBE_BASE_COLOR}
+              glowColor={REMOTE_GLOBE_GLOW_COLOR}
+              markerColor={REMOTE_GLOBE_MARKER_COLOR}
+              arcColor={REMOTE_GLOBE_ARC_COLOR}
               theta={0.1}
               mapSamples={isMobile ? 5000 : 12000}
-              speed={isMobile ? 0.0008 : 0.0016}
+              speed={shouldDisableAnimations ? 0 : isMobile ? 0.0008 : 0.0016}
               markers={REMOTE_GLOBE_MARKERS}
               arcs={REMOTE_GLOBE_ARCS}
             />
@@ -966,11 +943,11 @@ const MagicBento: React.FC<BentoProps> = ({
         <div className="group/engine service-engine-card relative -m-8 flex h-[calc(100%+4rem)] flex-col overflow-hidden">
           <div className="engine-card-bg absolute inset-0" />
           <div className="engine-card-grid absolute inset-0" />
-          {endToEndSvg ? (
+          {svgAssets.endToEnd ? (
             <div
               className="end-to-end-svg pointer-events-none absolute inset-0 z-10 h-full w-full"
               aria-hidden="true"
-              dangerouslySetInnerHTML={{ __html: endToEndSvg }}
+              dangerouslySetInnerHTML={{ __html: svgAssets.endToEnd }}
             />
           ) : null}
 
@@ -1047,7 +1024,13 @@ const MagicBento: React.FC<BentoProps> = ({
         <div
           ref={fastDeliveryCardRef}
           className="group/conversion relative flex h-full flex-col overflow-hidden"
-          onMouseEnter={() => setFastDeliveryAnimationState(true)}
+          onMouseEnter={() => {
+            if (shouldDisableAnimations) {
+              return;
+            }
+
+            setFastDeliveryAnimationState(true);
+          }}
           onMouseLeave={() => setFastDeliveryAnimationState(false)}
         >
           <div className="conversion-card-bg absolute inset-0" />
@@ -1062,11 +1045,12 @@ const MagicBento: React.FC<BentoProps> = ({
           </div>
 
           <div className="conversion-phone-wrap pointer-events-none absolute inset-0 z-20 flex items-center justify-center overflow-visible">
-            {fastDeliverySvg ? (
+            {svgAssets.fastDelivery ? (
               <div
+                ref={pauseInjectedSvgAnimations}
                 className="conversion-phone-svg conversion-flow-svg"
                 aria-hidden="true"
-                dangerouslySetInnerHTML={{ __html: fastDeliverySvg }}
+                dangerouslySetInnerHTML={{ __html: svgAssets.fastDelivery }}
               />
             ) : null}
           </div>
@@ -1084,6 +1068,10 @@ const MagicBento: React.FC<BentoProps> = ({
           ref={firstImpressionRef}
           className="group/selling relative -m-8 flex h-[calc(100%+4rem)] flex-col overflow-hidden"
           onMouseEnter={() => {
+            if (shouldDisableAnimations) {
+              return;
+            }
+
             setFirstImpressionAnimationState(true);
             setFirstImpressionLineAnimations(true);
           }}
@@ -1113,11 +1101,12 @@ const MagicBento: React.FC<BentoProps> = ({
           </div>
 
           <div className="first-impression-svg-wrap absolute inset-0 z-10 flex items-center justify-center">
-            {firstImpressionSvg ? (
+            {svgAssets.firstImpression ? (
               <div
+                ref={pauseInjectedSvgAnimations}
                 className="first-impression-svg"
                 aria-hidden="true"
-                dangerouslySetInnerHTML={{ __html: firstImpressionSvg }}
+                dangerouslySetInnerHTML={{ __html: svgAssets.firstImpression }}
               />
             ) : null}
           </div>
@@ -3421,6 +3410,7 @@ const MagicBento: React.FC<BentoProps> = ({
       <BentoCardGrid gridRef={gridRef}>
         <div className="card-responsive grid gap-2">
           {cardData.map((card, index) => {
+            const enableCardTransform = !shouldDisableAnimations && (enableTilt || enableMagnetism);
             const baseClassName = `card group/bento relative ${index === 2 ? 'min-h-[170px]' : 'min-h-[180px]'} w-full max-w-full rounded-[20px]`;
             const cardInnerClassName = `premium-glass-surface relative flex h-full flex-col justify-between overflow-hidden rounded-[20px] font-light transition-all duration-300 ease-in-out ${index === 2 || index === 3 ? 'p-0' : 'p-8'}`;
 
@@ -3468,9 +3458,7 @@ const MagicBento: React.FC<BentoProps> = ({
               <div
                 className={`${cardInnerClassName} bg-transparent`}
                 style={cardStyle}
-                onMouseMove={(event) => {
-                  if (shouldDisableAnimations || (!enableTilt && !enableMagnetism)) return;
-
+                onMouseMove={enableCardTransform ? (event) => {
                   const el = event.currentTarget;
                   const rect = el.getBoundingClientRect();
                   const x = event.clientX - rect.left;
@@ -3498,10 +3486,8 @@ const MagicBento: React.FC<BentoProps> = ({
                       overwrite: "auto",
                     });
                   }
-                }}
-                onMouseLeave={(event) => {
-                  if (shouldDisableAnimations || (!enableTilt && !enableMagnetism)) return;
-
+                } : undefined}
+                onMouseLeave={enableCardTransform ? (event) => {
                   const el = event.currentTarget;
 
                   gsap.to(el, {
@@ -3512,7 +3498,7 @@ const MagicBento: React.FC<BentoProps> = ({
                     duration: 0.3,
                     ease: "power2.out",
                   });
-                }}
+                } : undefined}
                 onClick={(event) => {
                   if (!clickEffect || shouldDisableAnimations) return;
 
