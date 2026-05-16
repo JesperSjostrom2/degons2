@@ -4,6 +4,7 @@ import React, { useRef, useEffect, useState, useCallback } from "react";
 import { gsap } from "gsap";
 import { User, Search, FileText, Send, Braces, Gift, ScanLine } from "lucide-react";
 import { Globe } from "@/components/ui/cobe-globe";
+import Image from "next/image";
 
 export interface BentoCardProps {
   color?: string;
@@ -698,7 +699,7 @@ const BentoCardGrid: React.FC<{
 );
 
 const useMobileDetection = () => {
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(true);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT}px)`);
@@ -713,22 +714,34 @@ const useMobileDetection = () => {
   return isMobile;
 };
 
-const sanitizeBentoSvg = (svg: string) =>
-  svg
-    .replace(/<foreignObject[\s\S]*?<\/foreignObject>/gi, "")
-    .replace(/<clipPath\s+id="bgblur_[^"]*"[\s\S]*?<\/clipPath>/gi, "")
-    .replace(/\sdata-figma-bg-blur-radius="[^"]*"/gi, "")
-    .replace(/\n\s*\n/g, "\n");
-
 const BENTO_SVG_PATHS = {
   endToEnd: "/assets/bento-cards/end-to-end-delivery/path.svg",
   fastDelivery: "/assets/bento-cards/visitor-flow/time.svg",
   firstImpression: "/assets/bento-cards/first-impression/Starrating.svg",
 };
 
-type BentoSvgAssets = Record<keyof typeof BENTO_SVG_PATHS, string>;
-
-let bentoSvgAssetCache: BentoSvgAssets | null = null;
+const BentoAssetImage = ({
+  asset,
+  className,
+  width,
+  height,
+}: {
+  asset: keyof typeof BENTO_SVG_PATHS;
+  className: string;
+  width: number;
+  height: number;
+}) => (
+  <Image
+    className={className}
+    src={BENTO_SVG_PATHS[asset]}
+    alt=""
+    aria-hidden="true"
+    width={width}
+    height={height}
+    loading="eager"
+    unoptimized
+  />
+);
 
 const MagicBento: React.FC<BentoProps> = ({
   textAutoHide = true,
@@ -747,47 +760,10 @@ const MagicBento: React.FC<BentoProps> = ({
   const chatTypingTimeoutsRef = useRef<number[]>([]);
   const chatClientTextRef = useRef<HTMLParagraphElement>(null);
   const chatJesperTextRef = useRef<HTMLParagraphElement>(null);
-  const fastDeliveryCardRef = useRef<HTMLDivElement>(null);
-  const firstImpressionRef = useRef<HTMLDivElement>(null);
   const isMobile = useMobileDetection();
-  const shouldDisableAnimations = disableAnimations || isMobile;
-  const [svgAssets, setSvgAssets] = useState<BentoSvgAssets>(() => bentoSvgAssetCache ?? {
-    endToEnd: "",
-    fastDelivery: "",
-    firstImpression: "",
-  });
-
-  const pauseInjectedSvgAnimations = useCallback((element: HTMLDivElement | null) => {
-    const svg = element?.querySelector("svg") as SVGSVGElement | null;
-    svg?.pauseAnimations?.();
-  }, []);
-
-  const setFirstImpressionLineAnimations = useCallback((active: boolean) => {
-    firstImpressionRef.current
-      ?.querySelectorAll<SVGAnimationElement>(".main-line-hover-animation")
-      .forEach((animation) => {
-        if (active) {
-          animation.beginElement();
-          return;
-        }
-
-        animation.endElement();
-      });
-  }, []);
-
-  const setFirstImpressionAnimationState = useCallback((isActive: boolean) => {
-    const svg = firstImpressionRef.current?.querySelector("svg") as SVGSVGElement | null;
-    if (!svg) {
-      return;
-    }
-
-    if (isActive && !shouldDisableAnimations) {
-      svg.unpauseAnimations?.();
-      return;
-    }
-
-    svg.pauseAnimations?.();
-  }, [shouldDisableAnimations]);
+  const [hasMounted, setHasMounted] = useState(false);
+  const shouldUseMobileBento = !hasMounted || isMobile;
+  const shouldDisableAnimations = disableAnimations || shouldUseMobileBento;
 
   const clearChatTypingTimeouts = useCallback(() => {
     chatTypingTimeoutsRef.current.forEach((timeout) => window.clearTimeout(timeout));
@@ -842,56 +818,15 @@ const MagicBento: React.FC<BentoProps> = ({
     typeChatMessage(chatJesperTextRef.current, CHAT_JESPER_MESSAGE, clientEnd + 420);
   }, [clearChatTypingTimeouts, typeChatMessage]);
 
-  const setFastDeliveryAnimationState = useCallback((isActive: boolean) => {
-    const svg = fastDeliveryCardRef.current?.querySelector("svg") as SVGSVGElement | null;
-    if (!svg) {
-      return;
-    }
-
-    if (isActive && !shouldDisableAnimations) {
-      svg.unpauseAnimations?.();
-      return;
-    }
-
-    svg.pauseAnimations?.();
-  }, [shouldDisableAnimations]);
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
 
   useEffect(() => {
     return () => {
       clearChatTypingTimeouts();
     };
   }, [clearChatTypingTimeouts]);
-
-  useEffect(() => {
-    if (bentoSvgAssetCache) {
-      return;
-    }
-
-    const controller = new AbortController();
-
-    Promise.all(
-      Object.entries(BENTO_SVG_PATHS).map(async ([key, path]) => {
-        const response = await fetch(path, { signal: controller.signal });
-        const svg = await response.text();
-
-        return [key, sanitizeBentoSvg(svg)] as const;
-      }),
-    )
-      .then((entries) => {
-        const assets = Object.fromEntries(entries) as BentoSvgAssets;
-        bentoSvgAssetCache = assets;
-        setSvgAssets(assets);
-      })
-      .catch((error) => {
-        if (error instanceof DOMException && error.name === "AbortError") {
-          return;
-        }
-
-        console.error("Failed to load bento SVG assets", error);
-      });
-
-    return () => controller.abort();
-  }, []);
 
   const getRemoteWorkCard = () => ({
     color: BENTO_ACCENTS.blue,
@@ -921,8 +856,10 @@ const MagicBento: React.FC<BentoProps> = ({
               markerColor={REMOTE_GLOBE_MARKER_COLOR}
               arcColor={REMOTE_GLOBE_ARC_COLOR}
               theta={0.1}
-              mapSamples={isMobile ? 5000 : 12000}
-              speed={shouldDisableAnimations ? 0 : isMobile ? 0.0008 : 0.0016}
+              mapSamples={shouldUseMobileBento ? 1800 : 12000}
+              speed={shouldDisableAnimations ? 0 : 0.0016}
+              interactive={!shouldUseMobileBento}
+              showLabels={!shouldUseMobileBento}
               markers={REMOTE_GLOBE_MARKERS}
               arcs={REMOTE_GLOBE_ARCS}
             />
@@ -932,7 +869,6 @@ const MagicBento: React.FC<BentoProps> = ({
     ),
   });
 
-  // Create cardData array with the remote work card that has access to state
   const cardData = [
     {
       color: BENTO_ACCENTS.lavender,
@@ -943,13 +879,12 @@ const MagicBento: React.FC<BentoProps> = ({
         <div className="group/engine service-engine-card relative -m-8 flex h-[calc(100%+4rem)] flex-col overflow-hidden">
           <div className="engine-card-bg absolute inset-0" />
           <div className="engine-card-grid absolute inset-0" />
-          {svgAssets.endToEnd ? (
-            <div
-              className="end-to-end-svg pointer-events-none absolute inset-0 z-10 h-full w-full"
-              aria-hidden="true"
-              dangerouslySetInnerHTML={{ __html: svgAssets.endToEnd }}
-            />
-          ) : null}
+          <BentoAssetImage
+            asset="endToEnd"
+            className="end-to-end-svg pointer-events-none absolute inset-0 z-10 h-full w-full"
+            width={520}
+            height={260}
+          />
 
           <div className="bento-feature-copy bento-mobile-readable relative z-30 max-w-[16.5rem] p-6 sm:p-8">
             <p className="bento-card-kicker">End-to-end delivery</p>
@@ -1022,16 +957,7 @@ const MagicBento: React.FC<BentoProps> = ({
       label: "Fast Delivery",
       customContent: (
         <div
-          ref={fastDeliveryCardRef}
           className="group/conversion relative flex h-full flex-col overflow-hidden"
-          onMouseEnter={() => {
-            if (shouldDisableAnimations) {
-              return;
-            }
-
-            setFastDeliveryAnimationState(true);
-          }}
-          onMouseLeave={() => setFastDeliveryAnimationState(false)}
         >
           <div className="conversion-card-bg absolute inset-0" />
 
@@ -1045,14 +971,12 @@ const MagicBento: React.FC<BentoProps> = ({
           </div>
 
           <div className="conversion-phone-wrap pointer-events-none absolute inset-0 z-20 flex items-center justify-center overflow-visible">
-            {svgAssets.fastDelivery ? (
-              <div
-                ref={pauseInjectedSvgAnimations}
-                className="conversion-phone-svg conversion-flow-svg"
-                aria-hidden="true"
-                dangerouslySetInnerHTML={{ __html: svgAssets.fastDelivery }}
-              />
-            ) : null}
+            <BentoAssetImage
+              asset="fastDelivery"
+              className="conversion-phone-svg conversion-flow-svg"
+              width={360}
+              height={360}
+            />
           </div>
         </div>
       ),
@@ -1065,20 +989,7 @@ const MagicBento: React.FC<BentoProps> = ({
       label: "Services",
       customContent: (
         <div
-          ref={firstImpressionRef}
           className="group/selling relative -m-8 flex h-[calc(100%+4rem)] flex-col overflow-hidden"
-          onMouseEnter={() => {
-            if (shouldDisableAnimations) {
-              return;
-            }
-
-            setFirstImpressionAnimationState(true);
-            setFirstImpressionLineAnimations(true);
-          }}
-          onMouseLeave={() => {
-            setFirstImpressionLineAnimations(false);
-            setFirstImpressionAnimationState(false);
-          }}
         >
           <div className="selling-site-bg absolute inset-0" />
           <div className="selling-site-ambient absolute inset-0" />
@@ -1101,14 +1012,12 @@ const MagicBento: React.FC<BentoProps> = ({
           </div>
 
           <div className="first-impression-svg-wrap absolute inset-0 z-10 flex items-center justify-center">
-            {svgAssets.firstImpression ? (
-              <div
-                ref={pauseInjectedSvgAnimations}
-                className="first-impression-svg"
-                aria-hidden="true"
-                dangerouslySetInnerHTML={{ __html: svgAssets.firstImpression }}
-              />
-            ) : null}
+            <BentoAssetImage
+              asset="firstImpression"
+              className="first-impression-svg"
+              width={520}
+              height={360}
+            />
           </div>
         </div>
       ),
@@ -2296,18 +2205,6 @@ const MagicBento: React.FC<BentoProps> = ({
             pointer-events: none;
           }
 
-          @media (max-width: 750px) {
-            .selling-mobile-frost,
-            .bento-mobile-frost,
-            .attention-mobile-frost {
-              display: block;
-              opacity: 1 !important;
-              background: rgba(8, 8, 8, 0.1);
-              backdrop-filter: blur(2px);
-              -webkit-backdrop-filter: blur(2px);
-            }
-          }
-
           .selling-browser {
             position: relative;
             border-radius: 18px;
@@ -3203,14 +3100,80 @@ const MagicBento: React.FC<BentoProps> = ({
           }
 
           @media (max-width: 767px) {
+            .card-responsive .card,
+            .card-responsive .premium-glass-surface {
+              transform: translate3d(0, 0, 0) !important;
+              transition: none !important;
+            }
+
+            .card:hover .bento-mobile-readable,
+            .card:hover .remote-card-copy,
+            .card:hover .contact-card-content,
+            .card:hover .card__header,
+            .card:hover .card__content,
+            .card:hover .group\/selling .selling-browser-shell,
+            .card:hover .group\/conversion .conversion-flow-svg,
+            .card:hover .group\/selling .selling-hero-visual,
+            .card:hover .group\/selling .selling-preview-window,
+            .card:hover .group\/selling .selling-preview-strip span,
+            .card:hover .group\/selling .selling-cta,
+            .card:hover .service-engine-card .execution-graphic,
+            .card:hover .service-engine-card .execution-svg-hub,
+            .card:hover .service-engine-card .execution-hub,
+            .card:hover .service-engine-card .execution-node,
+            .card:hover .service-engine-card .execution-svg-nodes circle {
+              transform: none !important;
+            }
+
+            .card:hover .group\/selling .selling-soundwaves span,
+            .card:hover .service-engine-card .execution-flow-path,
+            .card:hover .service-engine-card .workflow-flow-path,
+            .card:hover .service-engine-card .workflow-center-dot {
+              animation: none !important;
+            }
+
+            .selling-stat-bar {
+              animation: none !important;
+              transform: scaleX(0.86);
+            }
+
+            .remote-card-globe,
+            .remote-card-globe canvas {
+              pointer-events: none !important;
+              touch-action: auto !important;
+              cursor: default !important;
+            }
+
+            .remote-card-globe canvas {
+              opacity: 1 !important;
+              transition: none !important;
+            }
+
+            .card-responsive .card:nth-child(4) .remote-card-globe-shell {
+              min-height: 10.5rem;
+              height: 58%;
+            }
+
+            .card-responsive .card:nth-child(4) .remote-card-globe-position {
+              bottom: -34%;
+              height: 118%;
+            }
+
+            .card-responsive .card:nth-child(4) .remote-card-globe {
+              opacity: 0.92;
+              transform: translateY(0) scale(0.78);
+            }
+
+            .premium-glass-surface {
+              backdrop-filter: none !important;
+              -webkit-backdrop-filter: none !important;
+              background: linear-gradient(180deg, rgba(14, 14, 13, 0.86), rgba(2, 2, 2, 0.94));
+            }
+
             .premium-glass-surface .bento-mobile-frost,
             .premium-glass-surface .selling-mobile-frost,
             .premium-glass-surface .attention-mobile-frost {
-              display: block;
-              opacity: 1 !important;
-              background: rgba(8, 8, 8, 0.1);
-              backdrop-filter: blur(2px);
-              -webkit-backdrop-filter: blur(2px);
+              display: none !important;
             }
 
           }
@@ -3362,21 +3325,6 @@ const MagicBento: React.FC<BentoProps> = ({
               margin-bottom: 0;
               font-size: 0.8rem;
               line-height: 1.3;
-            }
-
-            .card-responsive .card:nth-child(4) .remote-card-globe-shell {
-              min-height: 9.5rem;
-              height: 52%;
-            }
-
-            .card-responsive .card:nth-child(4) .remote-card-globe-position {
-              bottom: -64%;
-              height: 132%;
-            }
-
-            .card-responsive .card:nth-child(4) .remote-card-globe {
-              opacity: 0.82;
-              transform: translateY(6%) scale(0.8);
             }
 
             .card-responsive .card:nth-child(2) .bento-mobile-readable {

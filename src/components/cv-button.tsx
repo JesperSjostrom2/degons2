@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
 import { FileText } from 'lucide-react'
 import Link from 'next/link'
 
@@ -9,16 +8,44 @@ export default function CVButton() {
   const [isHeroHeaderVisible, setIsHeroHeaderVisible] = useState(true)
 
   useEffect(() => {
+    const desktopQuery = window.matchMedia('(min-width: 1024px)')
+    let isListening = false
+
     const handleScroll = () => {
       const hero = document.getElementById('home')
       if (hero) {
         const heroHeight = hero.offsetHeight
-        setIsHeroHeaderVisible(window.scrollY < heroHeight * 0.75)
+        const nextIsVisible = window.scrollY < heroHeight * 0.75
+        setIsHeroHeaderVisible((isVisible) => isVisible === nextIsVisible ? isVisible : nextIsVisible)
       }
     }
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    handleScroll()
-    return () => window.removeEventListener('scroll', handleScroll)
+
+    const updateAvailability = () => {
+      if (desktopQuery.matches) {
+        if (!isListening) {
+          window.addEventListener('scroll', handleScroll, { passive: true })
+          isListening = true
+        }
+
+        handleScroll()
+        return
+      }
+
+      if (isListening) {
+        window.removeEventListener('scroll', handleScroll)
+        isListening = false
+      }
+
+      setIsHeroHeaderVisible(true)
+    }
+
+    updateAvailability()
+    desktopQuery.addEventListener('change', updateAvailability)
+
+    return () => {
+      desktopQuery.removeEventListener('change', updateAvailability)
+      window.removeEventListener('scroll', handleScroll)
+    }
   }, [])
 
   return (

@@ -34,6 +34,8 @@ interface GlobeProps {
   theta?: number
   diffuse?: number
   mapSamples?: number
+  interactive?: boolean
+  showLabels?: boolean
 }
 
 export function Globe({
@@ -54,6 +56,8 @@ export function Globe({
   theta = 0.2,
   diffuse = 1.5,
   mapSamples = 16000,
+  interactive = true,
+  showLabels = true,
 }: GlobeProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const pointerInteracting = useRef<{ x: number; y: number } | null>(null)
@@ -114,6 +118,8 @@ export function Globe({
 
   const handlePointerDown = useCallback(
     (e: React.PointerEvent) => {
+      if (!interactive) return
+
       pointerInteracting.current = { x: e.clientX, y: e.clientY }
       if (canvasRef.current) canvasRef.current.style.cursor = "grabbing"
       isPausedRef.current = true
@@ -121,7 +127,7 @@ export function Globe({
       window.addEventListener("pointerup", handlePointerUp, { passive: true })
       startAnimatingRef.current()
     },
-    [handlePointerMove, handlePointerUp]
+    [handlePointerMove, handlePointerUp, interactive]
   )
 
   useEffect(() => {
@@ -168,6 +174,8 @@ export function Globe({
         arcHeight,
         opacity: 0.7,
       })
+      globe.update({ phi, theta })
+      canvas.style.opacity = "1"
 
       function animate() {
         const hasVelocity =
@@ -246,8 +254,6 @@ export function Globe({
 
       document.addEventListener("visibilitychange", handleVisibilityChange)
 
-      setTimeout(() => canvas && (canvas.style.opacity = "1"))
-
       return () => {
         document.removeEventListener("visibilitychange", handleVisibilityChange)
         startAnimatingRef.current = () => {}
@@ -285,14 +291,14 @@ export function Globe({
         style={{
           width: "100%",
           height: "100%",
-          cursor: "pointer",
+          cursor: interactive ? "pointer" : "default",
           opacity: 0,
           transition: "opacity 1.2s ease",
           borderRadius: "50%",
-          touchAction: "none",
+          touchAction: interactive ? "none" : "auto",
         }}
       />
-      {markers.map((m) => (
+      {showLabels && markers.map((m) => (
         <div
           key={m.id}
           style={{
@@ -330,7 +336,7 @@ export function Globe({
           />
         </div>
       ))}
-      {arcs
+      {showLabels && arcs
         .filter((a) => a.label)
         .map((a) => (
           <div

@@ -139,10 +139,10 @@ export default function TechStackSection() {
       <div className="container mx-auto px-6">
         <motion.div
           className="section-header"
-          initial={{ opacity: 0, y: 34, filter: 'blur(8px)' }}
-          whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-          viewport={{ once: true, amount: 0.45 }}
-          transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.08, margin: '0px 0px -18% 0px' }}
+          transition={{ duration: 0.68, ease: [0.22, 1, 0.36, 1] }}
         >
           <p className="section-label">Tech Stack</p>
           <h2 className="section-title">Modern web tools</h2>
@@ -157,8 +157,8 @@ export default function TechStackSection() {
           className="premium-glass-surface relative mx-auto flex max-w-7xl flex-wrap overflow-hidden rounded-[22px] md:grid md:grid-cols-3 md:rounded-[28px] lg:grid-cols-6"
           initial={{ opacity: 0, y: 52, scale: 0.985 }}
           whileInView={{ opacity: 1, y: 0, scale: 1 }}
-          viewport={{ once: true, amount: 0.22 }}
-          transition={{ duration: 1, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+          viewport={{ once: true, amount: 0.08, margin: '0px 0px -12% 0px' }}
+          transition={{ duration: 0.75, delay: 0.04, ease: [0.22, 1, 0.36, 1] }}
         >
           <div
             className="pointer-events-none absolute left-0 top-0 z-0 bg-[#a88c62] transition-[transform,width,height,border-radius,opacity] duration-300 ease-out"

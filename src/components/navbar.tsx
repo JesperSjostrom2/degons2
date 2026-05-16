@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { MenuCloseIcon } from '@/components/ui/animated-state-icons'
 import Link from 'next/link'
@@ -21,20 +21,41 @@ export default function Navbar() {
   const [activeSection, setActiveSection] = useState('home')
   const [isHeroHeaderVisible, setIsHeroHeaderVisible] = useState(true)
   const [isPageScrolled, setIsPageScrolled] = useState(false)
+  const scrollFrameRef = useRef(0)
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsPageScrolled(window.scrollY > 8)
+    const updateScrollState = () => {
+      const scrollY = window.scrollY
+
+      setIsPageScrolled((isScrolled) => {
+        const nextIsScrolled = scrollY > 8
+        return isScrolled === nextIsScrolled ? isScrolled : nextIsScrolled
+      })
 
       const hero = document.getElementById('home')
       if (hero) {
         const heroHeight = hero.offsetHeight
-        setIsHeroHeaderVisible(window.scrollY < heroHeight * 0.75)
+        const nextIsVisible = scrollY < heroHeight * 0.75
+        setIsHeroHeaderVisible((isVisible) => isVisible === nextIsVisible ? isVisible : nextIsVisible)
       }
     }
+
+    const handleScroll = () => {
+      if (scrollFrameRef.current) return
+
+      scrollFrameRef.current = window.requestAnimationFrame(() => {
+        scrollFrameRef.current = 0
+        updateScrollState()
+      })
+    }
+
     window.addEventListener('scroll', handleScroll, { passive: true })
-    handleScroll()
-    return () => window.removeEventListener('scroll', handleScroll)
+    updateScrollState()
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      window.cancelAnimationFrame(scrollFrameRef.current)
+    }
   }, [])
 
   useEffect(() => {

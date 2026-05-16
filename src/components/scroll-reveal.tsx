@@ -14,10 +14,10 @@ export default function ScrollReveal({ children, className = '', delay = 0, blur
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0, y: blur ? 32 : 28, filter: blur ? 'blur(10px)' : 'blur(0px)' }}
-      whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-      viewport={{ once: true, amount: 0.35 }}
-      transition={{ duration: blur ? 0.95 : 0.85, delay, ease: [0.22, 1, 0.36, 1] }}
+      initial={{ opacity: 0, y: blur ? 24 : 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.08, margin: '0px 0px -18% 0px' }}
+      transition={{ duration: blur ? 0.7 : 0.62, delay, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}
     </motion.div>

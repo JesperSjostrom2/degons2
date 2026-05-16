@@ -154,10 +154,10 @@ export default function ContactSection() {
       <div className="container mx-auto px-6">
         <motion.div
           className="section-header"
-          initial={{ opacity: 0, y: 34, filter: 'blur(8px)' }}
-          whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-          viewport={{ once: true, amount: 0.45 }}
-          transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.08, margin: '0px 0px -18% 0px' }}
+          transition={{ duration: 0.68, ease: [0.22, 1, 0.36, 1] }}
         >
           <p className="section-label">Contact</p>
           <h2 className="section-title">Let&apos;s talk about your site</h2>
@@ -170,8 +170,8 @@ export default function ContactSection() {
           className="mx-auto max-w-6xl"
           initial={{ opacity: 0, y: 52, scale: 0.985 }}
           whileInView={{ opacity: 1, y: 0, scale: 1 }}
-          viewport={{ once: true, amount: 0.22 }}
-          transition={{ duration: 1, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+          viewport={{ once: true, amount: 0.08, margin: '0px 0px -12% 0px' }}
+          transition={{ duration: 0.75, delay: 0.04, ease: [0.22, 1, 0.36, 1] }}
         >
             <div className="surface-hover-glow premium-glass-surface relative grid overflow-hidden rounded-[28px] backdrop-blur-sm lg:grid-cols-[0.9fr_1.35fr]">
               <aside className="flex flex-col justify-between border-b border-[color:var(--site-border)] p-6 md:p-8 lg:border-b-0 lg:border-r dark:border-white/10">

@@ -1731,6 +1731,78 @@
     }
   }
 
+  @media (max-width: 767px) {
+    .cinematic-grain-overlay {
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      animation: none;
+      opacity: calc(var(--grain-opacity) * 0.75);
+    }
+
+    .space-background-meteor {
+      display: none;
+    }
+
+    .floating-star,
+    .floating-star-inner,
+    .floating-star-sparkle-x,
+    .floating-star-sparkle-y,
+    .hero-atmosphere-foreground,
+    .hero-atmosphere-dust,
+    .about-light-orb-left,
+    .about-light-orb-right,
+    .about-scene-ambient,
+    .about-scene-bloom,
+    .about-scene-dust,
+    .about-cinematic-frame,
+    .about-floating-particles,
+    .about-portrait-image,
+    .about-portrait-light,
+    .about-portrait-light-alt,
+    .about-identity-panel::before,
+    .animate-gradient {
+      animation: none !important;
+    }
+
+    .floating-star {
+      opacity: var(--star-brightness);
+      will-change: auto;
+    }
+
+    .floating-star-inner {
+      opacity: 0.82;
+    }
+
+    .premium-glass-surface,
+    .glass,
+    .glass-nav {
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+
+    .project-card-atmosphere::before,
+    .project-card-atmosphere::after {
+      filter: none;
+    }
+
+    .about-scene-ambient,
+    .about-scene-haze,
+    .about-scene-bloom,
+    .about-identity-panel::before,
+    .about-light-orb {
+      filter: blur(14px);
+    }
+
+    .about-cinematic-frame,
+    .about-portrait-stage,
+    .about-editorial-note,
+    .about-portrait-image,
+    .about-light-orb {
+      transition: none;
+    }
+  }
+
   html.mobile-menu-open .floating-star,
   html.mobile-menu-open .floating-star-inner,
   html.mobile-menu-open .floating-star-sparkle-x,

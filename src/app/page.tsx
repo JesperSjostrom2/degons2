@@ -22,7 +22,7 @@ export default function Home() {
       <ProgressScrollbar />
       <div className="fixed inset-0 z-0 bg-[linear-gradient(180deg,var(--site-bg-deep)_0%,var(--site-bg)_48%,var(--site-bg)_100%)]" />
       <div className="space-background-meteor pointer-events-none fixed z-0" />
-      <FloatingStars className="pointer-events-none fixed inset-0 z-0 overflow-hidden opacity-80 invert-0" count={44} mobileCount={18} />
+      <FloatingStars className="pointer-events-none fixed inset-0 z-0 overflow-hidden opacity-80 invert-0" count={44} mobileCount={10} />
       <div className="relative z-10">
         <Navbar />
         <CVButton />
