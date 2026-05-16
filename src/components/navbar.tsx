@@ -20,9 +20,12 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('home')
   const [isHeroHeaderVisible, setIsHeroHeaderVisible] = useState(true)
+  const [isPageScrolled, setIsPageScrolled] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
+      setIsPageScrolled(window.scrollY > 8)
+
       const hero = document.getElementById('home')
       if (hero) {
         const heroHeight = hero.offsetHeight
@@ -107,13 +110,17 @@ export default function Navbar() {
         />
       </button>
       <motion.nav
-        className={`fixed z-50 box-border max-w-[100dvw] overflow-x-clip transition-colors duration-300 w-full top-0 left-0 right-0 ${
-        isMobileMenuOpen ? 'bg-transparent border-transparent' : 'bg-[color:var(--nav-mobile-bg)] backdrop-blur-xl border-b border-[color:var(--site-border)]'
-      } lg:bg-transparent lg:backdrop-blur-none lg:border-none lg:w-auto lg:max-w-[95vw] lg:right-auto lg:left-1/2 lg:-translate-x-1/2 lg:top-8`}
+        className="fixed z-50 box-border max-w-[100dvw] overflow-x-clip border-transparent bg-transparent w-full top-0 left-0 right-0 lg:bg-transparent lg:backdrop-blur-none lg:border-none lg:w-auto lg:max-w-[95vw] lg:right-auto lg:left-1/2 lg:-translate-x-1/2 lg:top-8"
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
     >
+      <div
+        className={`pointer-events-none absolute inset-0 z-0 border-b border-[color:var(--site-border)] bg-[color:var(--nav-mobile-bg)] backdrop-blur-xl transition-opacity duration-500 ease-out lg:hidden ${
+          isMobileMenuOpen || !isPageScrolled ? 'opacity-0' : 'opacity-100'
+        }`}
+      />
+
       {/* Desktop Menu */}
       <div className="hidden lg:flex glass-nav relative items-center justify-center" style={{ padding: '0.35rem 1.15rem', gap: '0.7rem' }}>
         {navItems.map((item) => (
