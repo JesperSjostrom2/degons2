@@ -536,6 +536,7 @@ const GlobalSpotlight: React.FC<{
 }) => {
     const spotlightRef = useRef<HTMLDivElement | null>(null);
     const frameRef = useRef<number | null>(null);
+    const lastSpotlightUpdateRef = useRef(0);
     const latestMouseRef = useRef<MouseEvent | null>(null);
 
     useEffect(() => {
@@ -649,6 +650,12 @@ const GlobalSpotlight: React.FC<{
 
         frameRef.current = window.requestAnimationFrame(() => {
           frameRef.current = null;
+          const now = performance.now();
+          if (now - lastSpotlightUpdateRef.current < 28) {
+            return;
+          }
+
+          lastSpotlightUpdateRef.current = now;
           if (latestMouseRef.current) {
             updateSpotlight(latestMouseRef.current);
           }
@@ -3381,6 +3388,11 @@ const MagicBento: React.FC<BentoProps> = ({
               min-height: 210px;
             }
 
+            .card-responsive .bento-mobile-readable {
+              max-width: 11rem;
+              padding: 0.95rem 0.95rem 0;
+            }
+
             .card-responsive .card:nth-child(5) {
               order: 1;
               min-height: 220px;
@@ -3389,6 +3401,10 @@ const MagicBento: React.FC<BentoProps> = ({
             .card-responsive .card:nth-child(1) {
               order: 2;
               min-height: 225px;
+            }
+
+            .card-responsive .card:nth-child(1) .end-to-end-svg {
+              transform: translate3d(8%, 8%, 0) scale(0.9);
             }
 
             .card-responsive .card:nth-child(2) {
@@ -3404,6 +3420,12 @@ const MagicBento: React.FC<BentoProps> = ({
             .card-responsive .card:nth-child(3) {
               order: 5;
               min-height: 205px;
+            }
+
+            .card-responsive .card:nth-child(3) .conversion-flow-svg,
+            .card-responsive .card:nth-child(3) .conversion-phone-svg {
+              width: min(78%, 15.5rem);
+              transform: translate3d(12%, 2.2rem, 0);
             }
 
             .card-responsive .card:nth-child(3) .contact-card-content {
@@ -3470,6 +3492,11 @@ const MagicBento: React.FC<BentoProps> = ({
             .card-responsive .card:nth-child(2) .chat-showcase-messages {
               margin-top: 0.85rem;
               padding-bottom: 0;
+            }
+
+            .card-responsive .card:nth-child(5) .first-impression-svg {
+              width: min(86%, 24rem);
+              transform: translate3d(13%, 1.95rem, 0);
             }
           }
 

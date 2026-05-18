@@ -35,7 +35,7 @@ const socialLinks: SocialLink[] = [
   },
   {
     name: 'LinkedIn',
-    handle: 'jespersjostrom',
+    handle: 'jesper-sjostrom',
     href: 'https://www.linkedin.com/in/jesper-sj%C3%B6str%C3%B6m-521995232/',
     icon: Linkedin,
   },

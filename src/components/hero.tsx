@@ -53,6 +53,7 @@ export default function Hero() {
     const desktopQuery = window.matchMedia('(min-width: 768px)')
     let frameId = 0
     let isListening = false
+    let isPlanetSettled = false
 
     const updatePlanetPosition = () => {
       const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight
@@ -62,6 +63,18 @@ export default function Hero() {
 
     const schedulePlanetPosition = () => {
       if (!desktopQuery.matches || shouldReduceMotion) return
+      const isPastHero = window.scrollY > window.innerHeight * 1.6
+
+      if (isPastHero) {
+        if (!isPlanetSettled) {
+          planetY.set(135)
+          isPlanetSettled = true
+        }
+
+        return
+      }
+
+      isPlanetSettled = false
       if (frameId) return
 
       frameId = window.requestAnimationFrame(() => {

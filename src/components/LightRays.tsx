@@ -50,6 +50,7 @@ interface LightRaysUniforms {
 }
 
 const DEFAULT_COLOR = "#ffffff";
+const MAX_RENDER_DPR = 1.25;
 
 const hexToRgb = (hex: string): [number, number, number] => {
   const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -151,7 +152,7 @@ const LightRays: React.FC<LightRaysProps> = ({
       if (!containerRef.current) return;
 
       const renderer = new Renderer({
-        dpr: Math.min(window.devicePixelRatio, 2),
+        dpr: Math.min(window.devicePixelRatio, MAX_RENDER_DPR),
         alpha: true,
       });
       rendererRef.current = renderer;
@@ -300,7 +301,7 @@ void main() {
       const updatePlacement = () => {
         if (!containerRef.current || !renderer) return;
 
-        renderer.dpr = Math.min(window.devicePixelRatio, 2);
+        renderer.dpr = Math.min(window.devicePixelRatio, MAX_RENDER_DPR);
 
         const { clientWidth: wCSS, clientHeight: hCSS } = containerRef.current;
         renderer.setSize(wCSS, hCSS);
@@ -318,6 +319,11 @@ void main() {
 
       const loop = (t: number) => {
         if (!rendererRef.current || !uniformsRef.current || !meshRef.current) {
+          return;
+        }
+
+        if (document.visibilityState !== "visible") {
+          animationIdRef.current = null;
           return;
         }
 
@@ -348,9 +354,28 @@ void main() {
         }
       };
 
+      const startLoop = () => {
+        if (animationIdRef.current || document.visibilityState !== "visible") return;
+
+        animationIdRef.current = requestAnimationFrame(loop);
+      };
+
+      const handleVisibilityChange = () => {
+        if (document.visibilityState === "visible") {
+          startLoop();
+          return;
+        }
+
+        if (animationIdRef.current) {
+          cancelAnimationFrame(animationIdRef.current);
+          animationIdRef.current = null;
+        }
+      };
+
       window.addEventListener("resize", updatePlacement);
+      document.addEventListener("visibilitychange", handleVisibilityChange);
       updatePlacement();
-      animationIdRef.current = requestAnimationFrame(loop);
+      startLoop();
 
       cleanupFunctionRef.current = () => {
         if (animationIdRef.current) {
@@ -359,6 +384,7 @@ void main() {
         }
 
         window.removeEventListener("resize", updatePlacement);
+        document.removeEventListener("visibilitychange", handleVisibilityChange);
 
         if (renderer) {
           try {

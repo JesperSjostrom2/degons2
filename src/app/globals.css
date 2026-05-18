@@ -417,6 +417,7 @@
     -webkit-mask-image: linear-gradient(to bottom, black 0%, black 85%, transparent 100%);
     pointer-events: none;
     z-index: 2;
+    contain: paint;
   }
 
   .hero-atmosphere-foreground {
@@ -1086,6 +1087,9 @@
 
   .about-scene {
     background: transparent;
+    contain: layout paint style;
+    content-visibility: auto;
+    contain-intrinsic-size: 920px;
   }
 
   .about-scene-ambient {
@@ -1803,12 +1807,73 @@
     }
   }
 
+  @supports (-webkit-hyphens: none) {
+    .hero-atmosphere-foreground,
+    .hero-atmosphere-dust,
+    .about-scene-ambient,
+    .about-scene-bloom,
+    .about-scene-dust,
+    .about-floating-particles,
+    .about-portrait-image,
+    .about-portrait-light,
+    .about-portrait-light-alt,
+    .about-cinematic-frame,
+    .about-identity-panel::before {
+      animation: none;
+    }
+
+    .about-scene-ambient,
+    .about-scene-haze,
+    .about-scene-bloom,
+    .about-light-orb,
+    .about-identity-panel::before {
+      filter: blur(16px);
+    }
+  }
+
   html.mobile-menu-open .floating-star,
   html.mobile-menu-open .floating-star-inner,
   html.mobile-menu-open .floating-star-sparkle-x,
   html.mobile-menu-open .floating-star-sparkle-y,
   html.mobile-menu-open .animate-waving {
     animation-play-state: paused;
+  }
+
+  html.mobile-zoomed .space-background-meteor,
+  html.mobile-zoomed .floating-star,
+  html.mobile-zoomed .floating-star-inner,
+  html.mobile-zoomed .floating-star-sparkle-x,
+  html.mobile-zoomed .floating-star-sparkle-y,
+  html.mobile-zoomed .hero-atmosphere-foreground,
+  html.mobile-zoomed .hero-atmosphere-dust,
+  html.mobile-zoomed .about-light-orb-left,
+  html.mobile-zoomed .about-light-orb-right,
+  html.mobile-zoomed .about-scene-ambient,
+  html.mobile-zoomed .about-scene-bloom,
+  html.mobile-zoomed .about-scene-dust,
+  html.mobile-zoomed .about-floating-particles,
+  html.mobile-zoomed .about-portrait-image,
+  html.mobile-zoomed .about-portrait-light,
+  html.mobile-zoomed .about-portrait-light-alt,
+  html.mobile-zoomed .about-identity-panel::before,
+  html.mobile-zoomed .animate-gradient {
+    animation: none !important;
+  }
+
+  html.mobile-zoomed .space-background-meteor,
+  html.mobile-zoomed .floating-star,
+  html.mobile-zoomed .hero-atmosphere-dust,
+  html.mobile-zoomed .about-scene-dust,
+  html.mobile-zoomed .about-floating-particles {
+    display: none !important;
+  }
+
+  html.mobile-zoomed .premium-glass-surface,
+  html.mobile-zoomed .glass,
+  html.mobile-zoomed .glass-nav,
+  html.mobile-zoomed .about-cinematic-frame {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
   }
 
   .group\/view:hover .project-arrow-out {

@@ -51,29 +51,28 @@ export function SuccessIcon({ size = 40, color = "currentColor", className, dura
   );
 }
 
-/* ─── 2. MENU → CLOSE ─── hamburger morphs to X */
+/* ─── 2. MENU → CLOSE ─── elegant staggered two-line morph to X */
 export function MenuCloseIcon({ size = 40, color = "currentColor", className, duration = 2000, isAnimating }: StateIconProps) {
   const auto = useAutoToggle(duration);
   const open = isAnimating !== undefined ? isAnimating : auto;
   return (
     <svg viewBox="0 0 40 40" fill="none" className={cn("", className)} style={{ width: size, height: size }}>
-      <motion.line x1="10" x2="30" stroke={color} strokeWidth={2.5} strokeLinecap="round"
+      <motion.line 
+        stroke={color} strokeWidth={2} strokeLinecap="round"
+        initial={false}
         animate={open
-          ? { y1: 20, y2: 20, rotate: 45 }
-          : { y1: 12, y2: 12, rotate: 0 }}
-        transition={{ duration: 0.35, ease: [0.32, 0.72, 0, 1] }}
+          ? { x1: 10, x2: 30, y1: 20, y2: 20, rotate: 45 }
+          : { x1: 10, x2: 30, y1: 16, y2: 16, rotate: 0 }}
+        transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
         style={{ transformOrigin: "20px 20px" }}
       />
-      <motion.line x1="10" y1="20" x2="30" y2="20" stroke={color} strokeWidth={2.5} strokeLinecap="round"
-        animate={open ? { opacity: 0, scaleX: 0 } : { opacity: 1, scaleX: 1 }}
-        transition={{ duration: 0.2 }}
-        style={{ transformOrigin: "20px 20px" }}
-      />
-      <motion.line x1="10" x2="30" stroke={color} strokeWidth={2.5} strokeLinecap="round"
+      <motion.line 
+        stroke={color} strokeWidth={2} strokeLinecap="round"
+        initial={false}
         animate={open
-          ? { y1: 20, y2: 20, rotate: -45 }
-          : { y1: 28, y2: 28, rotate: 0 }}
-        transition={{ duration: 0.35, ease: [0.32, 0.72, 0, 1] }}
+          ? { x1: 10, x2: 30, y1: 20, y2: 20, rotate: -45 }
+          : { x1: 18, x2: 30, y1: 24, y2: 24, rotate: 0 }}
+        transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
         style={{ transformOrigin: "20px 20px" }}
       />
     </svg>

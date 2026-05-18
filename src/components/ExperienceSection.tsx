@@ -348,10 +348,7 @@ const ExperienceSection: React.FC = () => {
           transition={{ duration: 0.68, ease: [0.22, 1, 0.36, 1] }}
         >
           <p className="section-label">Selected Work</p>
-          <h2 className="section-title hidden md:block">My Past Projects</h2>
-          <p className="section-description hidden md:block">
-            A selection of websites and interface projects I&apos;ve designed and built.
-          </p>
+          <h2 className="section-title">My Past Projects</h2>
         </motion.div>
 
         <motion.div

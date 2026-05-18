@@ -205,34 +205,34 @@ export default function Navbar() {
         <button
           type="button"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="glass-nav before:hidden absolute right-4 top-3 z-[70] flex h-11 w-11 translate-x-0 items-center justify-center p-0 text-[color:var(--site-text)] transition-colors duration-300 hover:bg-[color:var(--site-hover)]"
+          className="absolute right-4 top-3 z-[70] flex h-11 w-11 items-center justify-center border-none bg-transparent p-0 text-[color:var(--site-text)] transition-all duration-300 active:scale-95 hover:opacity-80"
           aria-label="Toggle navigation menu"
         >
-          <MenuCloseIcon size={24} isAnimating={isMobileMenuOpen} />
+          <MenuCloseIcon size={28} isAnimating={isMobileMenuOpen} />
         </button>
       </div>
 
       {/* Mobile Fullscreen Kinetic Menu */}
       <div className={`fixed inset-0 h-[100dvh] w-auto max-w-[100dvw] overflow-hidden [contain:layout_paint_style] lg:hidden ${isMobileMenuOpen ? 'pointer-events-auto' : 'pointer-events-none'}`}>
         
-        {/* Kinetic Backdrop Sweeps */}
+        {/* Kinetic Backdrop Sweeps (Optimized) */}
         <motion.div
           className="absolute inset-0 z-30 bg-[#30302e] will-change-transform"
-          initial={{ x: "100%" }}
-          animate={{ x: isMobileMenuOpen ? "0%" : "100%" }}
-          transition={{ duration: 0.6, ease: [0.65, 0.05, 0, 1], delay: isMobileMenuOpen ? 0 : 0.2 }}
+          initial={{ x: "100%", display: "none" }}
+          animate={isMobileMenuOpen ? { x: "0%", display: "block" } : { x: "100%", transitionEnd: { display: "none" } }}
+          transition={{ duration: 0.5, ease: [0.65, 0.05, 0, 1], delay: isMobileMenuOpen ? 0 : 0.15 }}
         />
         <motion.div
           className="absolute inset-0 z-30 bg-[#a88c62] will-change-transform"
-          initial={{ x: "100%" }}
-          animate={{ x: isMobileMenuOpen ? "0%" : "100%" }}
-          transition={{ duration: 0.6, ease: [0.65, 0.05, 0, 1], delay: isMobileMenuOpen ? 0.08 : 0.1 }}
+          initial={{ x: "100%", display: "none" }}
+          animate={isMobileMenuOpen ? { x: "0%", display: "block" } : { x: "100%", transitionEnd: { display: "none" } }}
+          transition={{ duration: 0.5, ease: [0.65, 0.05, 0, 1], delay: isMobileMenuOpen ? 0.06 : 0.08 }}
         />
         <motion.div
           className="absolute inset-0 z-30 bg-[#141413] will-change-transform"
-          initial={{ x: "100%" }}
-          animate={{ x: isMobileMenuOpen ? "0%" : "100%" }}
-          transition={{ duration: 0.6, ease: [0.65, 0.05, 0, 1], delay: isMobileMenuOpen ? 0.16 : 0 }}
+          initial={{ x: "100%", display: "none" }}
+          animate={isMobileMenuOpen ? { x: "0%", display: "block" } : { x: "100%", transitionEnd: { display: "none" } }}
+          transition={{ duration: 0.5, ease: [0.65, 0.05, 0, 1], delay: isMobileMenuOpen ? 0.12 : 0 }}
         />
 
         {/* Menu Content */}
@@ -242,16 +242,16 @@ export default function Navbar() {
               <div key={item.name} className="overflow-hidden py-1">
                 <motion.div
                   className="will-change-transform"
-                  initial={{ y: "140%", rotate: 10, opacity: 0 }}
+                  initial={{ y: "140%", rotate: 8, opacity: 0 }}
                   animate={{ 
                     y: isMobileMenuOpen ? "0%" : "140%", 
-                    rotate: isMobileMenuOpen ? 0 : 10,
+                    rotate: isMobileMenuOpen ? 0 : 8,
                     opacity: isMobileMenuOpen ? 1 : 0
                   }}
                   transition={{ 
-                    duration: 0.6, 
+                    duration: 0.5, 
                     ease: [0.65, 0.05, 0, 1], 
-                    delay: isMobileMenuOpen ? 0.35 + index * 0.05 : 0 
+                    delay: isMobileMenuOpen ? 0.3 + index * 0.04 : 0 
                   }}
                 >
                   <button 
@@ -285,9 +285,9 @@ export default function Navbar() {
                   opacity: isMobileMenuOpen ? 1 : 0
                 }}
                 transition={{ 
-                  duration: 0.6, 
+                  duration: 0.5, 
                   ease: [0.65, 0.05, 0, 1], 
-                  delay: isMobileMenuOpen ? 0.35 + navItems.length * 0.05 : 0 
+                  delay: isMobileMenuOpen ? 0.3 + navItems.length * 0.04 : 0 
                 }}
               >
                 <Link href="/cv" onClick={() => setIsMobileMenuOpen(false)}>

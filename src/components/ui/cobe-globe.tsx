@@ -142,10 +142,12 @@ export function Globe({
     const canvas = canvasRef.current
     let globe: ReturnType<typeof createGlobe> | null = null
     let animationId = 0
+    let initObserver: IntersectionObserver | null = null
     let observer: IntersectionObserver | null = null
     let resizeObserver: ResizeObserver | null = null
     let phi = 0
     let isVisible = false
+    let shouldInitialize = false
 
     function init() {
       const width = canvas.offsetWidth
@@ -262,20 +264,35 @@ export function Globe({
 
     let cleanupVisibilityChange: (() => void) | undefined
 
-    if (canvas.offsetWidth > 0) {
+    const maybeInitialize = () => {
+      if (!shouldInitialize || cleanupVisibilityChange || canvas.offsetWidth <= 0) return
+
+      resizeObserver?.disconnect()
+      resizeObserver = null
       cleanupVisibilityChange = init()
-    } else {
-      resizeObserver = new ResizeObserver((entries) => {
-        if (entries[0]?.contentRect.width > 0) {
-          resizeObserver?.disconnect()
-          cleanupVisibilityChange = init()
-        }
-      })
-      resizeObserver.observe(canvas)
     }
+
+    initObserver = new IntersectionObserver(
+      ([entry]) => {
+        shouldInitialize = entry.isIntersecting
+        if (shouldInitialize) {
+          initObserver?.disconnect()
+          initObserver = null
+          maybeInitialize()
+        }
+      },
+      { rootMargin: "360px 0px", threshold: 0 },
+    )
+    initObserver.observe(canvas)
+
+    resizeObserver = new ResizeObserver(() => {
+      maybeInitialize()
+    })
+    resizeObserver.observe(canvas)
 
     return () => {
       if (animationId) cancelAnimationFrame(animationId)
+      initObserver?.disconnect()
       observer?.disconnect()
       resizeObserver?.disconnect()
       cleanupVisibilityChange?.()

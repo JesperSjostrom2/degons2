@@ -10,14 +10,24 @@ export default function CVButton() {
   useEffect(() => {
     const desktopQuery = window.matchMedia('(min-width: 1024px)')
     let isListening = false
+    let frameId = 0
 
-    const handleScroll = () => {
+    const updateVisibility = () => {
       const hero = document.getElementById('home')
       if (hero) {
         const heroHeight = hero.offsetHeight
         const nextIsVisible = window.scrollY < heroHeight * 0.75
         setIsHeroHeaderVisible((isVisible) => isVisible === nextIsVisible ? isVisible : nextIsVisible)
       }
+    }
+
+    const handleScroll = () => {
+      if (frameId) return
+
+      frameId = window.requestAnimationFrame(() => {
+        frameId = 0
+        updateVisibility()
+      })
     }
 
     const updateAvailability = () => {
@@ -27,7 +37,7 @@ export default function CVButton() {
           isListening = true
         }
 
-        handleScroll()
+        updateVisibility()
         return
       }
 
@@ -35,6 +45,9 @@ export default function CVButton() {
         window.removeEventListener('scroll', handleScroll)
         isListening = false
       }
+
+      window.cancelAnimationFrame(frameId)
+      frameId = 0
 
       setIsHeroHeaderVisible(true)
     }
@@ -45,6 +58,7 @@ export default function CVButton() {
     return () => {
       desktopQuery.removeEventListener('change', updateAvailability)
       window.removeEventListener('scroll', handleScroll)
+      window.cancelAnimationFrame(frameId)
     }
   }, [])
 
