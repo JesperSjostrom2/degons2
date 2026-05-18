@@ -7,7 +7,8 @@ export default function SmoothScroll() {
   useEffect(() => {
     const useNativeScroll = window.matchMedia('(pointer: coarse), (max-width: 767px)').matches
     const supportsVisualViewport = typeof window.visualViewport !== 'undefined'
-    let lenis: Lenis | null = null
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let lenis: any = null
     let rafId = 0
 
     const updateZoomState = () => {

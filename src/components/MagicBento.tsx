@@ -77,7 +77,7 @@ const REMOTE_GLOBE_GLOW_COLOR = [1, 1, 1] as [number, number, number];
 const REMOTE_GLOBE_MARKER_COLOR = [0.5, 0.64, 0.78] as [number, number, number];
 const REMOTE_GLOBE_ARC_COLOR = [0.42, 0.55, 0.68] as [number, number, number];
 
-const ExecutionWorkflowMap = () => {
+export const ExecutionWorkflowMap = () => {
   return (
     <div className="execution-map pointer-events-none relative h-full min-h-[14rem] w-full" aria-hidden="true">
       <svg className="execution-graphic" viewBox="0 0 520 260" preserveAspectRatio="none">
@@ -3678,3 +3678,4 @@ const MagicBento: React.FC<BentoProps> = ({
 };
 
 export default MagicBento;
+

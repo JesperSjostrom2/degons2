@@ -30,7 +30,6 @@ interface FooterProps {
 
 export const Footer = ({
   brandName = "YourBrand",
-  brandDescription = "Your description here",
   socialLinks = [],
   navLinks = [],
   creatorName,

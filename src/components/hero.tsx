@@ -2,9 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence, useTransform, useMotionValue, useSpring, useReducedMotion } from 'framer-motion'
-import { ArrowRight, Copy, Check } from 'lucide-react'
+import { ArrowRight, Copy } from 'lucide-react'
 
-import GlareHover from '@/components/GlareHover'
 import LightRays from '@/components/LightRays'
 
 export default function Hero() {
