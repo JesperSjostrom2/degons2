@@ -1137,11 +1137,7 @@ const MagicBento: React.FC<BentoProps> = ({
           <div className="selling-site-ambient absolute inset-0" />
           <div className="selling-site-grid absolute inset-0" />
           <div className="selling-site-panels absolute inset-0" />
-          <div className="selling-soundwaves absolute inset-0" aria-hidden="true">
-            <span />
-            <span />
-            <span />
-          </div>
+          
           <div className="selling-mobile-frost absolute inset-0" />
 
           <div className="bento-feature-copy bento-mobile-readable relative z-20 max-w-[19rem] p-6 sm:p-8">
@@ -3678,4 +3674,5 @@ const MagicBento: React.FC<BentoProps> = ({
 };
 
 export default MagicBento;
+
 
