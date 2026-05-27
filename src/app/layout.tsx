@@ -24,7 +24,7 @@ const sourceSans3 = Source_Sans_3({
 
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://jepps.dev"),
+  metadataBase: new URL("https://jespersjostrom.com"),
   title: {
     default: "Jesper Sjöström | Full-Stack Developer",
     template: "%s | Jesper Sjöström",
@@ -42,14 +42,14 @@ export const metadata: Metadata = {
     "Next.js Developer",
     "Web Design",
     "Finland Web Developer",
-    "jepps.dev"
+    "jespersjostrom.com"
   ],
-  authors: [{ name: "Jesper Sjöström", url: "https://jepps.dev" }],
+  authors: [{ name: "Jesper Sjöström", url: "https://jespersjostrom.com" }],
   creator: "Jesper Sjöström",
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://jepps.dev",
+    url: "https://jespersjostrom.com",
     title: "Jesper Sjöström | Full-Stack Developer",
     description: "Proactive full-stack developer from Finland specializing in dynamic, high-performance web experiences using React, Next.js, and Node.js.",
     siteName: "Jesper Sjöström Portfolio",
@@ -70,7 +70,7 @@ export const metadata: Metadata = {
     images: ["/assets/og-image.png"],
   },
   alternates: {
-    canonical: "https://jepps.dev",
+    canonical: "https://jespersjostrom.com",
   },
   robots: {
     index: true,
