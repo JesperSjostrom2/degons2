@@ -80,7 +80,7 @@ export default function Hero() {
               <br />
               <span className="text-gradient-ivory">I build</span>{' '}
               <motion.span
-                className="space-micro-planet-inline mx-2 md:mx-3"
+                className="mx-2 inline-flex align-middle md:mx-3"
                 animate={!shouldReduceMotion ? {
                   y: [-0.6, 0.6, -0.6],
                   rotate: [0, 360],
@@ -89,7 +89,47 @@ export default function Hero() {
                   y: { duration: 15, repeat: Infinity, ease: "easeInOut" },
                   rotate: { duration: 140, repeat: Infinity, ease: "linear" }
                 }}
-              />{' '}
+                style={{ originX: '50%', originY: '50%' }}
+              >
+                <svg
+                  className="h-[0.58em] w-[0.58em] overflow-visible"
+                  viewBox="0 0 96 96"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <defs>
+                    <radialGradient id="heroPlanetSurface" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(34 25) rotate(52) scale(76)">
+                      <stop offset="0" stopColor="#fff9ed" />
+                      <stop offset="0.18" stopColor="#e7d4b3" />
+                      <stop offset="0.48" stopColor="#a88c62" />
+                      <stop offset="0.78" stopColor="#4a3b2c" />
+                      <stop offset="1" stopColor="#15120f" />
+                    </radialGradient>
+                    <linearGradient id="heroPlanetRing" x1="6" y1="58" x2="92" y2="40" gradientUnits="userSpaceOnUse">
+                      <stop offset="0" stopColor="#dac5a7" stopOpacity="0" />
+                      <stop offset="0.22" stopColor="#f5efe4" stopOpacity="0.62" />
+                      <stop offset="0.5" stopColor="#fffaf0" stopOpacity="0.92" />
+                      <stop offset="0.78" stopColor="#dac5a7" stopOpacity="0.48" />
+                      <stop offset="1" stopColor="#dac5a7" stopOpacity="0" />
+                    </linearGradient>
+                    <clipPath id="heroPlanetClip">
+                      <circle cx="48" cy="48" r="28" />
+                    </clipPath>
+                  </defs>
+
+                  <ellipse cx="48" cy="50" rx="45" ry="12" stroke="url(#heroPlanetRing)" strokeWidth="4" transform="rotate(-13 48 50)" />
+                  <circle cx="48" cy="48" r="28" fill="url(#heroPlanetSurface)" />
+                  <g clipPath="url(#heroPlanetClip)" opacity="0.42">
+                    <path d="M22 45C35 38 54 38 74 45" stroke="#f7ead8" strokeWidth="3" strokeLinecap="round" opacity="0.22" />
+                    <path d="M18 56C34 49 55 49 78 56" stroke="#241b14" strokeWidth="4" strokeLinecap="round" opacity="0.22" />
+                    <path d="M30 35C41 31 53 31 66 36" stroke="#fff8ed" strokeWidth="2" strokeLinecap="round" opacity="0.18" />
+                  </g>
+                  <circle cx="39" cy="35" r="8" fill="#fff8ed" opacity="0.22" />
+                  <circle cx="48" cy="48" r="28" stroke="#f5efe4" strokeOpacity="0.14" strokeWidth="1.5" />
+                </svg>
+              </motion.span>{' '}
               <span className="relative inline-block text-gradient-ivory">
                 websites
               </span>

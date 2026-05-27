@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { User, Search, FileText, Send, Braces, Gift, ScanLine } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
 import { Globe } from "@/components/ui/cobe-globe";
 
 const MOBILE_BREAKPOINT = 768;
@@ -354,6 +355,7 @@ const MagicBento: React.FC = () => {
   const gridRef = useRef<HTMLDivElement>(null);
   const scrollPauseTimeoutRef = useRef<number>(0);
   const isMobile = useMobileDetection();
+  const shouldReduceMotion = useReducedMotion();
   const [hasMounted, setHasMounted] = useState(false);
   const [animatedBentoAsset, setAnimatedBentoAsset] = useState<BentoSvgAsset | null>(null);
   const shouldUseMobileBento = !hasMounted || isMobile;
@@ -2671,7 +2673,6 @@ const MagicBento: React.FC = () => {
           }
 
           @media (max-width: 767px) {
-            .card-responsive .card,
             .card-responsive .premium-glass-surface {
               transform: translate3d(0, 0, 0) !important;
               transition: none !important;
@@ -2970,16 +2971,24 @@ const MagicBento: React.FC = () => {
             );
 
             return (
-              <div
+              <motion.div
                 key={card.label}
-                className={baseClassName}
+                className={`${baseClassName} will-change-transform`}
+                initial={shouldReduceMotion ? false : { opacity: 0, y: 24, scale: 0.985 }}
+                whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true, amount: 0.18, margin: '0px 0px -14% 0px' }}
+                transition={{
+                  duration: 0.66,
+                  delay: shouldReduceMotion ? 0 : Math.min(index * 0.045, 0.18),
+                  ease: [0.22, 1, 0.36, 1],
+                }}
                 onMouseEnter={card.svgAsset ? () => startBentoSvgAnimation(card.svgAsset!) : undefined}
                 onMouseLeave={card.svgAsset ? () => stopBentoSvgAnimation(card.svgAsset!) : undefined}
               >
                 <div className={`${cardInnerClassName} bg-transparent`} style={cardStyle}>
                   {content}
                 </div>
-              </div>
+              </motion.div>
             );
           })}
         </div>

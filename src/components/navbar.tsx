@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
-import { MenuCloseIcon } from '@/components/ui/animated-state-icons'
 import Link from 'next/link'
 import Image from 'next/image'
 import { FileText } from 'lucide-react'
@@ -22,6 +21,7 @@ export default function Navbar() {
   const [isHeroHeaderVisible, setIsHeroHeaderVisible] = useState(true)
   const [isPageScrolled, setIsPageScrolled] = useState(false)
   const scrollFrameRef = useRef(0)
+  const isMobileBrandVisible = isHeroHeaderVisible || !isPageScrolled || isMobileMenuOpen
 
   useEffect(() => {
     const updateScrollState = () => {
@@ -150,7 +150,7 @@ export default function Navbar() {
       </button>
       <motion.nav
         className="fixed z-50 box-border max-w-[100dvw] overflow-x-clip border-transparent bg-transparent w-full top-0 left-0 right-0 lg:bg-transparent lg:backdrop-blur-none lg:border-none lg:w-auto lg:max-w-[95vw] lg:right-auto lg:left-1/2 lg:-translate-x-1/2 lg:top-8"
-      initial={{ y: -100, opacity: 0 }}
+      initial={false}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
     >
@@ -212,7 +212,7 @@ export default function Navbar() {
             width={180} 
             height={60} 
             className={`h-10 w-auto object-contain transition-all duration-500 ease-out ${
-              isHeroHeaderVisible 
+              isMobileBrandVisible 
                 ? 'opacity-100 translate-y-0 blur-0' 
                 : 'opacity-0 -translate-y-2 blur-sm'
             }`}
@@ -225,32 +225,31 @@ export default function Navbar() {
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           className="absolute right-4 top-3 z-[70] flex h-11 w-11 items-center justify-center border-none bg-transparent p-0 text-[color:var(--site-text)] transition-all duration-300 active:scale-95 hover:opacity-80"
           aria-label="Toggle navigation menu"
+          aria-expanded={isMobileMenuOpen}
         >
-          <MenuCloseIcon size={28} isAnimating={isMobileMenuOpen} />
+          <span className="relative h-5 w-6" aria-hidden="true">
+            <span
+              className={`absolute left-0 top-[0.35rem] h-px w-6 rounded-full bg-current transition-transform duration-300 ease-out ${
+                isMobileMenuOpen ? 'translate-y-[0.28rem] rotate-45' : ''
+              }`}
+            />
+            <span
+              className={`absolute right-0 top-[0.95rem] h-px rounded-full bg-current transition-all duration-300 ease-out ${
+                isMobileMenuOpen ? 'w-6 -translate-y-[0.32rem] -rotate-45' : 'w-4'
+              }`}
+            />
+          </span>
         </button>
       </div>
 
-      {/* Mobile Fullscreen Kinetic Menu */}
+      {/* Mobile Fullscreen Menu */}
       <div className={`fixed inset-0 h-[100dvh] w-auto max-w-[100dvw] overflow-hidden [contain:layout_paint_style] lg:hidden ${isMobileMenuOpen ? 'pointer-events-auto' : 'pointer-events-none'}`}>
-        
-        {/* Kinetic Backdrop Sweeps (Optimized) */}
         <motion.div
-          className="absolute inset-0 z-30 bg-[#30302e] will-change-transform"
-          initial={{ x: "100%", display: "none" }}
-          animate={isMobileMenuOpen ? { x: "0%", display: "block" } : { x: "100%", transitionEnd: { display: "none" } }}
-          transition={{ duration: 0.5, ease: [0.65, 0.05, 0, 1], delay: isMobileMenuOpen ? 0 : 0.15 }}
-        />
-        <motion.div
-          className="absolute inset-0 z-30 bg-[#a88c62] will-change-transform"
-          initial={{ x: "100%", display: "none" }}
-          animate={isMobileMenuOpen ? { x: "0%", display: "block" } : { x: "100%", transitionEnd: { display: "none" } }}
-          transition={{ duration: 0.5, ease: [0.65, 0.05, 0, 1], delay: isMobileMenuOpen ? 0.06 : 0.08 }}
-        />
-        <motion.div
-          className="absolute inset-0 z-30 bg-[#141413] will-change-transform"
-          initial={{ x: "100%", display: "none" }}
-          animate={isMobileMenuOpen ? { x: "0%", display: "block" } : { x: "100%", transitionEnd: { display: "none" } }}
-          transition={{ duration: 0.5, ease: [0.65, 0.05, 0, 1], delay: isMobileMenuOpen ? 0.12 : 0 }}
+          className="absolute right-0 top-0 z-30 h-[160vmax] w-[160vmax] rounded-full bg-[#141413] will-change-transform"
+          initial={false}
+          style={{ x: '50%', y: '-50%' }}
+          animate={{ scale: isMobileMenuOpen ? 1 : 0 }}
+          transition={{ duration: isMobileMenuOpen ? 0.58 : 0.38, ease: [0.22, 1, 0.36, 1] }}
         />
 
         {/* Menu Content */}
@@ -260,16 +259,15 @@ export default function Navbar() {
               <div key={item.name} className="overflow-hidden py-1">
                 <motion.div
                   className="will-change-transform"
-                  initial={{ y: "140%", rotate: 8, opacity: 0 }}
+                  initial={false}
                   animate={{ 
-                    y: isMobileMenuOpen ? "0%" : "140%", 
-                    rotate: isMobileMenuOpen ? 0 : 8,
+                    y: isMobileMenuOpen ? "0%" : "42%", 
                     opacity: isMobileMenuOpen ? 1 : 0
                   }}
                   transition={{ 
-                    duration: 0.5, 
-                    ease: [0.65, 0.05, 0, 1], 
-                    delay: isMobileMenuOpen ? 0.3 + index * 0.04 : 0 
+                    duration: 0.42, 
+                    ease: [0.22, 1, 0.36, 1], 
+                    delay: isMobileMenuOpen ? 0.16 + index * 0.035 : 0 
                   }}
                 >
                   <button 
@@ -278,17 +276,15 @@ export default function Navbar() {
                     data-scroll-to={item.id}
                     className="border-none bg-transparent p-0 text-left cursor-pointer"
                   >
-                    <motion.div
+                    <div
                       className={`cursor-pointer font-sans text-4xl font-semibold tracking-tight sm:text-5xl ${
                         activeSection === item.id 
                           ? 'text-accent' 
                           : 'text-[#f5efe4]/80 hover:text-[#f5efe4]'
                       }`}
-                      whileHover={{ x: 10 }}
-                      transition={{ type: "spring", stiffness: 300, damping: 20 }}
                     >
                       {item.name}
-                    </motion.div>
+                    </div>
                   </button>
                 </motion.div>
               </div>
@@ -297,15 +293,15 @@ export default function Navbar() {
             <div className={`overflow-hidden pt-8 mt-8 border-t transition-colors duration-300 ${isMobileMenuOpen ? 'border-white/10' : 'border-transparent'}`}>
               <motion.div
                 className="will-change-transform"
-                initial={{ y: "100%", opacity: 0 }}
+                initial={false}
                 animate={{ 
-                  y: isMobileMenuOpen ? "0%" : "100%",
+                  y: isMobileMenuOpen ? "0%" : "35%",
                   opacity: isMobileMenuOpen ? 1 : 0
                 }}
                 transition={{ 
-                  duration: 0.5, 
-                  ease: [0.65, 0.05, 0, 1], 
-                  delay: isMobileMenuOpen ? 0.3 + navItems.length * 0.04 : 0 
+                  duration: 0.42, 
+                  ease: [0.22, 1, 0.36, 1], 
+                  delay: isMobileMenuOpen ? 0.16 + navItems.length * 0.035 : 0 
                 }}
               >
                 <Link href="/cv" onClick={() => setIsMobileMenuOpen(false)}>
