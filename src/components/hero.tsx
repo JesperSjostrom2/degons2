@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowRight, Copy } from 'lucide-react'
 
 import LightRays from '@/components/LightRays'
@@ -9,8 +9,6 @@ import LightRays from '@/components/LightRays'
 export default function Hero() {
   const [showLightRays, setShowLightRays] = useState(false)
   const [copied, setCopied] = useState(false)
-
-  const shouldReduceMotion = useReducedMotion()
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(min-width: 768px)')
@@ -79,57 +77,7 @@ export default function Hero() {
               <span className="text-gradient-ivory">Hi, I&apos;m</span> <span className="text-gradient-jesper">Jesper.</span>
               <br />
               <span className="text-gradient-ivory">I build</span>{' '}
-              <motion.span
-                className="mx-2 inline-flex align-middle md:mx-3"
-                animate={!shouldReduceMotion ? {
-                  y: [-0.6, 0.6, -0.6],
-                  rotate: [0, 360],
-                } : {}}
-                transition={{
-                  y: { duration: 15, repeat: Infinity, ease: "easeInOut" },
-                  rotate: { duration: 140, repeat: Infinity, ease: "linear" }
-                }}
-                style={{ originX: '50%', originY: '50%' }}
-              >
-                <svg
-                  className="h-[0.58em] w-[0.58em] overflow-visible"
-                  viewBox="0 0 96 96"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  aria-hidden="true"
-                  focusable="false"
-                >
-                  <defs>
-                    <radialGradient id="heroPlanetSurface" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(34 25) rotate(52) scale(76)">
-                      <stop offset="0" stopColor="#fff9ed" />
-                      <stop offset="0.18" stopColor="#e7d4b3" />
-                      <stop offset="0.48" stopColor="#a88c62" />
-                      <stop offset="0.78" stopColor="#4a3b2c" />
-                      <stop offset="1" stopColor="#15120f" />
-                    </radialGradient>
-                    <linearGradient id="heroPlanetRing" x1="6" y1="58" x2="92" y2="40" gradientUnits="userSpaceOnUse">
-                      <stop offset="0" stopColor="#dac5a7" stopOpacity="0" />
-                      <stop offset="0.22" stopColor="#f5efe4" stopOpacity="0.62" />
-                      <stop offset="0.5" stopColor="#fffaf0" stopOpacity="0.92" />
-                      <stop offset="0.78" stopColor="#dac5a7" stopOpacity="0.48" />
-                      <stop offset="1" stopColor="#dac5a7" stopOpacity="0" />
-                    </linearGradient>
-                    <clipPath id="heroPlanetClip">
-                      <circle cx="48" cy="48" r="28" />
-                    </clipPath>
-                  </defs>
-
-                  <ellipse cx="48" cy="50" rx="45" ry="12" stroke="url(#heroPlanetRing)" strokeWidth="4" transform="rotate(-13 48 50)" />
-                  <circle cx="48" cy="48" r="28" fill="url(#heroPlanetSurface)" />
-                  <g clipPath="url(#heroPlanetClip)" opacity="0.42">
-                    <path d="M22 45C35 38 54 38 74 45" stroke="#f7ead8" strokeWidth="3" strokeLinecap="round" opacity="0.22" />
-                    <path d="M18 56C34 49 55 49 78 56" stroke="#241b14" strokeWidth="4" strokeLinecap="round" opacity="0.22" />
-                    <path d="M30 35C41 31 53 31 66 36" stroke="#fff8ed" strokeWidth="2" strokeLinecap="round" opacity="0.18" />
-                  </g>
-                  <circle cx="39" cy="35" r="8" fill="#fff8ed" opacity="0.22" />
-                  <circle cx="48" cy="48" r="28" stroke="#f5efe4" strokeOpacity="0.14" strokeWidth="1.5" />
-                </svg>
-              </motion.span>{' '}
+              <span className="space-micro-planet-inline" />{' '}
               <span className="relative inline-block text-gradient-ivory">
                 websites
               </span>
@@ -178,7 +126,7 @@ export default function Hero() {
             <p className="max-w-2xl text-balance text-base leading-7 md:text-lg text-gradient-muted">
               A frontend developer in Helsinki building landing pages, portfolios, and polished websites for people who need a stronger presence online.
             </p>
-            <div className="flex w-full flex-col items-center gap-5 sm:w-auto sm:flex-row sm:gap-0">
+            <div className="mt-4 flex w-full flex-col items-center gap-5 sm:mt-0 sm:w-auto sm:flex-row sm:gap-0">
               <a href="#contact" className="group/cta inline-flex relative">
                 {/* Extremely subtle ambient glow */}
                 <div className="absolute inset-0 rounded-full bg-[#dac5a7]/5 opacity-20 blur-xl transition-all duration-500 group-hover/cta:opacity-40" />
@@ -191,7 +139,7 @@ export default function Hero() {
               <button
                 type="button"
                 onClick={handleCopyEmail}
-                className="group mx-auto inline-flex items-center justify-start gap-3 pl-6 text-sm font-medium text-[color:var(--site-text)]/90 transition-colors duration-200 hover:text-accent sm:mx-0 w-[260px]"
+                className="group mx-auto mt-1 inline-flex items-center justify-start gap-3 pl-6 text-sm font-medium text-[color:var(--site-text)]/90 transition-colors duration-200 hover:text-accent sm:mx-0 sm:mt-0 w-[260px]"
                 title="Copy email address"
               >
                 <AnimatePresence mode="wait" initial={false}>
@@ -238,11 +186,11 @@ export default function Hero() {
       </div>
 
       <motion.div
-        className="planet-horizon pointer-events-none absolute bottom-[-13rem] left-1/2 z-10 h-[20rem] w-[96vw] max-w-[1320px] md:bottom-[-22rem] md:h-[28rem] md:w-[118vw]"
-        initial={{ clipPath: 'inset(0 100% 0 0)' }}
-        animate={{ clipPath: 'inset(0 0% 0 0)' }}
-        transition={{ duration: 1.65, delay: 0.85, ease: [0.22, 1, 0.36, 1] }}
-        style={{ x: '-50%' }}
+        className="planet-horizon pointer-events-none absolute bottom-[-7rem] left-1/2 z-10 h-[12rem] w-[124vw] max-w-[1320px] md:bottom-[-22rem] md:h-[28rem] md:w-[118vw]"
+        initial={{ opacity: 0, scale: 0.84 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 1.35, delay: 0.85, ease: [0.22, 1, 0.36, 1] }}
+        style={{ x: '-50%', transformOrigin: '50% 60%' }}
       />
     </section>
   )

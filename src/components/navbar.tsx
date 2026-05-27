@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import Link from 'next/link'
 import Image from 'next/image'
 import { FileText } from 'lucide-react'
@@ -132,7 +132,7 @@ export default function Navbar() {
         type="button"
         onClick={() => handleNavClick('home')}
         data-scroll-to="home"
-        className={`hidden lg:block fixed top-9 left-10 z-50 transition-all duration-500 ease-out cursor-pointer ${
+        className={`hidden lg:block fixed top-6 left-10 z-50 transition-all duration-500 ease-out cursor-pointer ${
           isHeroHeaderVisible 
             ? 'opacity-100 translate-y-0 blur-0 pointer-events-auto' 
             : 'opacity-0 -translate-y-2 blur-sm pointer-events-none'
@@ -149,7 +149,7 @@ export default function Navbar() {
         />
       </button>
       <motion.nav
-        className="fixed z-50 box-border max-w-[100dvw] overflow-x-clip border-transparent bg-transparent w-full top-0 left-0 right-0 lg:bg-transparent lg:backdrop-blur-none lg:border-none lg:w-auto lg:max-w-[95vw] lg:right-auto lg:left-1/2 lg:-translate-x-1/2 lg:top-8"
+        className="fixed z-50 box-border max-w-[100dvw] overflow-x-clip border-transparent bg-transparent w-full top-0 left-0 right-0 lg:bg-transparent lg:backdrop-blur-none lg:border-none lg:w-auto lg:max-w-[95vw] lg:right-auto lg:left-1/2 lg:-translate-x-1/2 lg:top-6"
       initial={false}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
@@ -227,97 +227,111 @@ export default function Navbar() {
           aria-label="Toggle navigation menu"
           aria-expanded={isMobileMenuOpen}
         >
-          <span className="relative h-5 w-6" aria-hidden="true">
-            <span
-              className={`absolute left-0 top-[0.35rem] h-px w-6 rounded-full bg-current transition-transform duration-300 ease-out ${
-                isMobileMenuOpen ? 'translate-y-[0.28rem] rotate-45' : ''
-              }`}
+          <span className="relative block h-4 w-5" aria-hidden="true">
+            <motion.span
+              className="absolute left-0 top-0 h-[1.5px] w-5 origin-center rounded-full bg-current"
+              animate={{
+                top: isMobileMenuOpen ? '7px' : '2px',
+                rotate: isMobileMenuOpen ? 42 : 0,
+                width: isMobileMenuOpen ? '20px' : '16px',
+              }}
+              transition={{ duration: 0.34, ease: [0.22, 0.9, 0.2, 1] }}
             />
-            <span
-              className={`absolute right-0 top-[0.95rem] h-px rounded-full bg-current transition-all duration-300 ease-out ${
-                isMobileMenuOpen ? 'w-6 -translate-y-[0.32rem] -rotate-45' : 'w-4'
-              }`}
+            <motion.span
+              className="absolute right-0 top-[10px] h-[1.5px] w-4 origin-center rounded-full bg-current"
+              animate={{
+                top: isMobileMenuOpen ? '7px' : '10px',
+                rotate: isMobileMenuOpen ? -42 : 0,
+                width: isMobileMenuOpen ? '20px' : '12px',
+              }}
+              transition={{ duration: 0.34, ease: [0.22, 0.9, 0.2, 1] }}
             />
           </span>
         </button>
       </div>
 
       {/* Mobile Fullscreen Menu */}
-      <div className={`fixed inset-0 h-[100dvh] w-auto max-w-[100dvw] overflow-hidden [contain:layout_paint_style] lg:hidden ${isMobileMenuOpen ? 'pointer-events-auto' : 'pointer-events-none'}`}>
-        <motion.div
-          className="absolute right-0 top-0 z-30 h-[160vmax] w-[160vmax] rounded-full bg-[#141413] will-change-transform"
-          initial={false}
-          style={{ x: '50%', y: '-50%' }}
-          animate={{ scale: isMobileMenuOpen ? 1 : 0 }}
-          transition={{ duration: isMobileMenuOpen ? 0.58 : 0.38, ease: [0.22, 1, 0.36, 1] }}
-        />
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            className="fixed inset-0 h-[100dvh] w-auto max-w-[100dvw] overflow-hidden [contain:layout_paint_style] lg:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.28, ease: 'easeOut' }}
+          >
+            <motion.div
+              className="absolute inset-0 z-30 bg-[#141413] will-change-[clip-path]"
+              initial={{ clipPath: 'circle(0% at 100% 0%)' }}
+              animate={{ clipPath: 'circle(150% at 100% 0%)' }}
+              exit={{ clipPath: 'circle(0% at 100% 0%)' }}
+              transition={{ duration: 0.6, ease: [0.2, 0.9, 0.25, 1] }}
+            />
 
-        {/* Menu Content */}
-        <div className="absolute inset-0 z-40 flex flex-col justify-center px-8 sm:px-12 pt-20">
-          <div className="space-y-4">
-            {navItems.map((item, index) => (
-              <div key={item.name} className="overflow-hidden py-1">
-                <motion.div
-                  className="will-change-transform"
-                  initial={false}
-                  animate={{ 
-                    y: isMobileMenuOpen ? "0%" : "42%", 
-                    opacity: isMobileMenuOpen ? 1 : 0
-                  }}
-                  transition={{ 
-                    duration: 0.42, 
-                    ease: [0.22, 1, 0.36, 1], 
-                    delay: isMobileMenuOpen ? 0.16 + index * 0.035 : 0 
-                  }}
-                >
-                  <button 
-                    type="button" 
-                    onClick={() => handleNavClick(item.id)} 
-                    data-scroll-to={item.id}
-                    className="border-none bg-transparent p-0 text-left cursor-pointer"
-                  >
-                    <div
-                      className={`cursor-pointer font-sans text-4xl font-semibold tracking-tight sm:text-5xl ${
-                        activeSection === item.id 
-                          ? 'text-accent' 
-                          : 'text-[#f5efe4]/80 hover:text-[#f5efe4]'
-                      }`}
+            {/* Menu Content */}
+            <div className="absolute inset-0 z-40 flex flex-col justify-center px-8 sm:px-12 pt-20">
+              <div className="space-y-4">
+                {navItems.map((item, index) => (
+                  <div key={item.name} className="overflow-hidden py-1">
+                    <motion.div
+                      className="will-change-transform"
+                      initial={{ opacity: 0, x: -24 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -12 }}
+                      transition={{
+                        duration: 0.38,
+                        ease: 'easeOut',
+                        delay: 0.12 + index * 0.06,
+                      }}
                     >
-                      {item.name}
-                    </div>
-                  </button>
-                </motion.div>
-              </div>
-            ))}
-            
-            <div className={`overflow-hidden pt-8 mt-8 border-t transition-colors duration-300 ${isMobileMenuOpen ? 'border-white/10' : 'border-transparent'}`}>
-              <motion.div
-                className="will-change-transform"
-                initial={false}
-                animate={{ 
-                  y: isMobileMenuOpen ? "0%" : "35%",
-                  opacity: isMobileMenuOpen ? 1 : 0
-                }}
-                transition={{ 
-                  duration: 0.42, 
-                  ease: [0.22, 1, 0.36, 1], 
-                  delay: isMobileMenuOpen ? 0.16 + navItems.length * 0.035 : 0 
-                }}
-              >
-                <Link href="/cv" onClick={() => setIsMobileMenuOpen(false)}>
+                      <button
+                        type="button"
+                        onClick={() => handleNavClick(item.id)}
+                        data-scroll-to={item.id}
+                        className="border-none bg-transparent p-0 text-left cursor-pointer"
+                      >
+                        <div
+                          className={`cursor-pointer font-sans text-4xl font-semibold tracking-tight sm:text-5xl ${
+                            activeSection === item.id
+                              ? 'text-accent'
+                              : 'text-[#f5efe4]/80 hover:text-[#f5efe4]'
+                          }`}
+                        >
+                          {item.name}
+                        </div>
+                      </button>
+                    </motion.div>
+                  </div>
+                ))}
+
+                <div className="overflow-hidden pt-8 mt-8 border-t border-white/10">
                   <motion.div
-                    className="flex w-full cursor-pointer items-center justify-center gap-3 rounded-xl border border-accent/25 bg-accent/10 px-6 py-4 text-xl font-medium text-accent transition-all duration-300 hover:bg-accent/20 sm:w-auto"
-                    whileTap={{ scale: 0.98 }}
+                    className="will-change-transform"
+                    initial={{ opacity: 0, x: -24 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -12 }}
+                    transition={{
+                      duration: 0.38,
+                      ease: 'easeOut',
+                      delay: 0.12 + navItems.length * 0.06,
+                    }}
                   >
-                    <FileText className="w-6 h-6" />
-                    Resume
+                    <Link href="/cv" onClick={() => setIsMobileMenuOpen(false)}>
+                      <motion.div
+                        className="flex w-full cursor-pointer items-center justify-center gap-3 rounded-xl border border-accent/25 bg-accent/10 px-6 py-4 text-xl font-medium text-accent transition-all duration-300 hover:bg-accent/20 sm:w-auto"
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        <FileText className="w-6 h-6" />
+                        Resume
+                      </motion.div>
+                    </Link>
                   </motion.div>
-                </Link>
-              </motion.div>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.nav>
     </>
   )

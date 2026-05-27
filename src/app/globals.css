@@ -652,7 +652,7 @@
       0 0 15px rgba(234, 225, 211, 0.1);
     vertical-align: middle;
     transform: translateY(-0.06em) rotate(-13deg);
-    margin: 0 0.18em;
+    margin: 0 0.1em;
     opacity: 0.94;
     filter: blur(0.35px);
   }
@@ -680,6 +680,17 @@
     box-shadow:
       0.22em 0.12em 0 -0.02em rgba(245, 239, 228, 0.08),
       0.12em 0.28em 0 -0.04em rgba(20, 20, 19, 0.12);
+  }
+
+  @media (max-width: 767px) {
+    .space-micro-planet-inline {
+      margin: 0 0.08em;
+      filter: none;
+      box-shadow:
+        inset -0.08em -0.08em 0.18em rgba(0, 0, 0, 0.34),
+        inset 0.04em 0.04em 0.1em rgba(255, 255, 255, 0.22),
+        0 0 10px rgba(234, 225, 211, 0.1);
+    }
   }
 
   @keyframes hero-atmosphere-breathe {
