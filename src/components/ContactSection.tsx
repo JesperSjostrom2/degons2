@@ -2,11 +2,9 @@
 
 import { useCallback, useEffect, useRef, useState, type CSSProperties, type FormEvent } from 'react'
 import { motion } from 'framer-motion'
-import { AtSign, ChevronDown, Github, Linkedin, Loader2, type LucideIcon } from 'lucide-react'
-import { SendIcon } from '@/components/ui/animated-state-icons'
+import { ArrowRight, ChevronDown, Github, Linkedin, Loader2, type LucideIcon } from 'lucide-react'
+import { FiMail } from 'react-icons/fi'
 import type { IconType } from 'react-icons'
-
-import GlareHover from '@/components/GlareHover'
 
 const projectTypes = ['Landing page', 'Business website', 'Portfolio', 'Redesign / UI polish', 'Frontend build', 'Other']
 
@@ -43,7 +41,7 @@ const socialLinks: SocialLink[] = [
     name: 'Email',
     handle: 'contact@jespersjostrom.se',
     href: 'mailto:contact@jespersjostrom.se',
-    icon: AtSign,
+    icon: FiMail,
   },
 ]
 
@@ -299,37 +297,36 @@ export default function ContactSection() {
                         : 'I read every message myself and reply with an honest next step.'}
                   </p>
                   <div className="relative shrink-0">
-                    <GlareHover
-                      width="auto"
-                      height="auto"
-                      background="#dac5a7"
-                      borderRadius="20px"
-                      borderColor="#dac5a7"
-                      className="relative cursor-pointer text-black transition-all duration-300 hover:!bg-none hover:!bg-transparent hover:!border-accent hover:text-[color:var(--site-text)] dark:hover:text-white"
+                    <button
+                      type="submit"
+                      disabled={status === 'sending' || status === 'sent'}
+                      className="group/contact-cta relative flex h-[48px] min-w-max cursor-pointer items-center overflow-hidden rounded-full border border-[#dac5a7]/20 bg-[#141413]/40 pl-7 pr-1.5 text-base font-medium text-[#f5efe4] shadow-[inset_0_1px_1px_rgba(255,255,255,0.08),0_4px_20px_rgba(0,0,0,0.3)] backdrop-blur-md transition-all duration-300 hover:scale-[1.02] hover:border-[#f5efe4]/70 disabled:pointer-events-none disabled:opacity-70"
                     >
-                      <button
-                        type="submit"
-                        disabled={status === 'sending' || status === 'sent'}
-                        className="group relative z-10 flex h-[42px] min-w-max cursor-pointer items-center gap-3 whitespace-nowrap rounded-[20px] px-7 text-base font-medium disabled:pointer-events-none disabled:opacity-70"
-                      >
-                        {status === 'sending' ? (
-                          <>
-                            Sending...
+                      {status === 'sending' ? (
+                        <>
+                          <span className="relative z-10 mr-5 whitespace-nowrap">Sending...</span>
+                          <span className="relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#f5efe4] text-[#141413]">
                             <Loader2 className="h-4 w-4 animate-spin" />
-                          </>
-                        ) : status === 'sent' ? (
-                          <>
-                            Sent!
-                            <SendIcon size={16} isAnimating className="h-4 w-4" />
-                          </>
-                        ) : (
-                          <>
-                            Send inquiry
-                            <SendIcon size={16} className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                          </>
-                        )}
-                      </button>
-                    </GlareHover>
+                          </span>
+                        </>
+                      ) : status === 'sent' ? (
+                        <>
+                          <span className="relative z-10 mr-5 whitespace-nowrap">Sent!</span>
+                          <span className="relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#f5efe4] text-[#141413]">
+                            <ArrowRight className="h-4 w-4" />
+                          </span>
+                        </>
+                      ) : (
+                        <>
+                          <span className="absolute right-1.5 top-1/2 h-9 w-9 -translate-y-1/2 rounded-full bg-[#f5efe4] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover/contact-cta:right-0 group-hover/contact-cta:h-full group-hover/contact-cta:w-full" />
+                          <span className="relative z-10 mr-5 whitespace-nowrap transition-colors duration-300 group-hover/contact-cta:text-[#141413]">Send inquiry</span>
+                          <span className="relative z-10 flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full text-[#141413]">
+                            <ArrowRight className="absolute h-4 w-4 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover/contact-cta:translate-x-5 group-hover/contact-cta:opacity-0" />
+                            <ArrowRight className="absolute h-4 w-4 -translate-x-5 opacity-0 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover/contact-cta:translate-x-0 group-hover/contact-cta:opacity-100" />
+                          </span>
+                        </>
+                      )}
+                    </button>
                   </div>
                 </div>
               </form>

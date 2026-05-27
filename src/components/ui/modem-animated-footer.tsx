@@ -48,21 +48,38 @@ export const Footer = ({
             {socialLinks.length > 0 && (
               <div className="flex gap-2">
                 {socialLinks.map((link) => (
-                  <Link
-                    key={link.label}
-                    href={link.href}
-                    className="premium-glass-surface group inline-flex h-11 w-11 items-center justify-center rounded-full text-[color:var(--site-muted)] transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/70 hover:text-accent dark:hover:border-accent/70 dark:hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/45 dark:text-white/72"
-                    target={link.href.startsWith("http") ? "_blank" : undefined}
-                    rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                  >
-                    <span className="block h-5 w-5 transition-all duration-200 group-hover:scale-75 group-hover:opacity-0">{link.icon}</span>
-                    {link.hoverIcon && (
-                      <span className="absolute block h-5 w-5 scale-75 opacity-0 transition-all duration-200 group-hover:scale-100 group-hover:opacity-100">
-                        {link.hoverIcon}
-                      </span>
-                    )}
-                    <span className="sr-only">{link.label}</span>
-                  </Link>
+                  link.href.startsWith("#") ? (
+                    <button
+                      key={link.label}
+                      type="button"
+                      data-scroll-to={link.href}
+                      className="premium-glass-surface group inline-flex h-11 w-11 items-center justify-center rounded-full text-[color:var(--site-muted)] transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/70 hover:text-accent dark:hover:border-accent/70 dark:hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/45 dark:text-white/72"
+                    >
+                      <span className="block h-5 w-5 transition-all duration-200 group-hover:scale-75 group-hover:opacity-0">{link.icon}</span>
+                      {link.hoverIcon && (
+                        <span className="absolute block h-5 w-5 scale-75 opacity-0 transition-all duration-200 group-hover:scale-100 group-hover:opacity-100">
+                          {link.hoverIcon}
+                        </span>
+                      )}
+                      <span className="sr-only">{link.label}</span>
+                    </button>
+                  ) : (
+                    <Link
+                      key={link.label}
+                      href={link.href}
+                      className="premium-glass-surface group inline-flex h-11 w-11 items-center justify-center rounded-full text-[color:var(--site-muted)] transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/70 hover:text-accent dark:hover:border-accent/70 dark:hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/45 dark:text-white/72"
+                      target={link.href.startsWith("http") ? "_blank" : undefined}
+                      rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                    >
+                      <span className="block h-5 w-5 transition-all duration-200 group-hover:scale-75 group-hover:opacity-0">{link.icon}</span>
+                      {link.hoverIcon && (
+                        <span className="absolute block h-5 w-5 scale-75 opacity-0 transition-all duration-200 group-hover:scale-100 group-hover:opacity-100">
+                          {link.hoverIcon}
+                        </span>
+                      )}
+                      <span className="sr-only">{link.label}</span>
+                    </Link>
+                  )
                 ))}
               </div>
             )}
@@ -70,9 +87,20 @@ export const Footer = ({
             {navLinks.length > 0 && (
               <nav className="mt-7 flex flex-wrap justify-center gap-x-6 gap-y-3 text-sm font-semibold text-muted-foreground">
                 {navLinks.map((link) => (
-                  <Link key={link.label} className="transition-colors duration-300 hover:text-accent" href={link.href}>
-                    {link.label}
-                  </Link>
+                  link.href.startsWith("#") ? (
+                    <button
+                      key={link.label}
+                      type="button"
+                      data-scroll-to={link.href}
+                      className="transition-colors duration-300 hover:text-accent"
+                    >
+                      {link.label}
+                    </button>
+                  ) : (
+                    <Link key={link.label} className="transition-colors duration-300 hover:text-accent" href={link.href}>
+                      {link.label}
+                    </Link>
+                  )
                 ))}
               </nav>
             )}

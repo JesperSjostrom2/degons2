@@ -2,9 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import Link from 'next/link'
 import Image from 'next/image'
-import { FileText } from 'lucide-react'
 
 const navItems = [
   { name: 'Home', href: '#home', id: 'home' },
@@ -148,6 +146,20 @@ export default function Navbar() {
           priority
         />
       </button>
+      <div
+        className={`fixed top-6 right-10 z-50 hidden lg:block transition-all duration-500 ease-out ${
+          isHeroHeaderVisible
+            ? 'opacity-100 translate-y-0 blur-0 pointer-events-auto'
+            : 'opacity-0 -translate-y-2 blur-sm pointer-events-none'
+        }`}
+      >
+        <div
+          className="inline-flex items-center text-[0.68rem] font-medium uppercase tracking-[0.18em] text-[#f5efe4]/62"
+          aria-label="Availability status"
+        >
+          [ available for projects ]
+        </div>
+      </div>
       <motion.nav
         className="fixed z-50 box-border max-w-[100dvw] overflow-x-clip border-transparent bg-transparent w-full top-0 left-0 right-0 lg:bg-transparent lg:backdrop-blur-none lg:border-none lg:w-auto lg:max-w-[95vw] lg:right-auto lg:left-1/2 lg:-translate-x-1/2 lg:top-6"
       initial={false}
@@ -316,15 +328,12 @@ export default function Navbar() {
                       delay: 0.12 + navItems.length * 0.06,
                     }}
                   >
-                    <Link href="/cv" onClick={() => setIsMobileMenuOpen(false)}>
-                      <motion.div
-                        className="flex w-full cursor-pointer items-center justify-center gap-3 rounded-xl border border-accent/25 bg-accent/10 px-6 py-4 text-xl font-medium text-accent transition-all duration-300 hover:bg-accent/20 sm:w-auto"
-                        whileTap={{ scale: 0.98 }}
-                      >
-                        <FileText className="w-6 h-6" />
-                        Resume
-                      </motion.div>
-                    </Link>
+                    <div
+                      className="w-full px-1 py-2 text-center text-[0.7rem] font-medium uppercase tracking-[0.2em] text-[#f5efe4]/60 sm:w-auto"
+                      aria-label="Availability status"
+                    >
+                      [ available for projects ]
+                    </div>
                   </motion.div>
                 </div>
               </div>

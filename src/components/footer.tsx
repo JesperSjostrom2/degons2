@@ -1,26 +1,27 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { AtSign, Github, Linkedin } from 'lucide-react'
+import { FaEnvelope, FaGithub, FaLinkedin } from 'react-icons/fa6'
+import { FiGithub, FiLinkedin, FiMail } from 'react-icons/fi'
 
 import { Footer as AnimatedFooter } from '@/components/ui/modem-animated-footer'
 
 const socialLinks = [
   {
-    icon: <Github className="h-5 w-5" />,
-    hoverIcon: <Github className="h-5 w-5 fill-current" />,
+    icon: <FiGithub className="h-5 w-5" />,
+    hoverIcon: <FaGithub className="h-5 w-5" />,
     href: 'https://github.com/jespersjostrom2',
     label: 'GitHub',
   },
   {
-    icon: <Linkedin className="h-5 w-5" />,
-    hoverIcon: <Linkedin className="h-5 w-5 fill-current" />,
+    icon: <FiLinkedin className="h-5 w-5" />,
+    hoverIcon: <FaLinkedin className="h-5 w-5" />,
     href: 'https://www.linkedin.com/in/jesper-sj%C3%B6str%C3%B6m-521995232/',
     label: 'LinkedIn',
   },
   {
-    icon: <AtSign className="h-5 w-5" />,
-    hoverIcon: <AtSign className="h-5 w-5 fill-current" />,
+    icon: <FiMail className="h-5 w-5" />,
+    hoverIcon: <FaEnvelope className="h-5 w-5" />,
     href: '#contact',
     label: 'Email',
   },
@@ -55,19 +56,15 @@ export default function Footer() {
   }, [])
 
   const statusSlot = (
-    <div className="glass-nav relative w-max max-w-[calc(100vw-1rem)] px-3 py-2 sm:px-5">
-      <div className="flex items-center gap-2 whitespace-nowrap sm:gap-4">
-        <div className="flex min-w-max shrink-0 items-center gap-3 whitespace-nowrap">
-          <div className="h-3 w-3 shrink-0 rounded-full bg-green-400 shadow-lg shadow-green-400/50 animate-pulse" />
-          <span className="whitespace-nowrap text-sm font-medium text-[color:var(--site-text)] dark:text-white/90">Available for work</span>
-        </div>
-        <div className="h-4 w-px shrink-0 bg-[color:var(--site-border)] dark:bg-white/20" />
-        <div className="flex min-w-max shrink-0 items-center gap-1.5 sm:gap-2">
-          <span className="text-sm font-medium text-[color:var(--site-text)] dark:text-white/90">Local time</span>
-          <span className="font-mono text-sm font-medium text-[color:var(--site-text)] dark:text-white/90">{currentTime}</span>
-          <span className="text-xs text-[color:var(--site-muted)] dark:text-white/60">EEST</span>
-        </div>
-      </div>
+    <div className="mx-auto flex w-full max-w-[calc(100vw-1rem)] flex-wrap items-center justify-center gap-x-4 gap-y-1 text-[0.72rem] font-medium uppercase tracking-[0.14em] text-[#f5efe4]/78 sm:text-[0.74rem]">
+      <span className="inline-flex items-center gap-2 whitespace-nowrap">
+        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.65)]" />
+        [ available for projects ]
+      </span>
+      <span className="whitespace-nowrap text-[#f5efe4]/55">|</span>
+      <span className="whitespace-nowrap text-[#f5efe4]/80">
+        [ local time <span className="font-semibold text-[#f5efe4]">{currentTime}</span> <span className="text-[#f5efe4]/74">EEST</span> ]
+      </span>
     </div>
   )
 

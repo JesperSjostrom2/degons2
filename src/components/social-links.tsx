@@ -1,6 +1,7 @@
 'use client'
 
-import { AtSign, Github, Linkedin } from 'lucide-react'
+import { FaEnvelope, FaGithub, FaLinkedin } from 'react-icons/fa6'
+import { FiGithub, FiLinkedin, FiMail } from 'react-icons/fi'
 
 export default function SocialLinks() {
   const socialLinkClass = 'premium-glass-surface group inline-flex h-11 w-11 items-center justify-center rounded-full text-[color:var(--site-muted)] transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/70 hover:text-accent dark:hover:border-accent/70 dark:hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/45 dark:text-white/72'
@@ -15,8 +16,8 @@ export default function SocialLinks() {
         rel="noopener noreferrer"
         className={socialLinkClass}
       >
-        <Github className={outlineIconClass} />
-        <Github className={fillIconClass} />
+        <FiGithub className={outlineIconClass} />
+        <FaGithub className={fillIconClass} />
       </a>
       <a
         href="https://www.linkedin.com/in/jesper-sj%C3%B6str%C3%B6m-521995232/"
@@ -24,15 +25,15 @@ export default function SocialLinks() {
         rel="noopener noreferrer"
         className={socialLinkClass}
       >
-        <Linkedin className={outlineIconClass} />
-        <Linkedin className={fillIconClass} />
+        <FiLinkedin className={outlineIconClass} />
+        <FaLinkedin className={fillIconClass} />
       </a>
       <a
         href="#contact"
         className={socialLinkClass}
       >
-        <AtSign className={outlineIconClass} />
-        <AtSign className={fillIconClass} />
+        <FiMail className={outlineIconClass} />
+        <FaEnvelope className={fillIconClass} />
       </a>
     </div>
   )

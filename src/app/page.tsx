@@ -1,6 +1,5 @@
 import Navbar from '@/components/navbar'
 import Hero from '@/components/hero'
-import CVButton from '@/components/cv-button'
 import SocialLinks from '@/components/social-links'
 import GradientText from '@/components/GradientText'
 import CustomCursor from '@/components/custom-cursor'
@@ -25,7 +24,6 @@ export default function Home() {
       <FloatingStars className="pointer-events-none fixed inset-0 z-0 overflow-hidden opacity-80 invert-0" count={44} mobileCount={10} />
       <div className="relative z-10">
         <Navbar />
-        <CVButton />
         <Hero />
 
       {/* Magic Bento Grid Section */}
