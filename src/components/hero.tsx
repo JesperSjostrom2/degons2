@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { motion, AnimatePresence, useTransform, useMotionValue, useSpring, useReducedMotion } from 'framer-motion'
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import { ArrowRight, Copy } from 'lucide-react'
 
 import LightRays from '@/components/LightRays'
@@ -9,112 +9,8 @@ import LightRays from '@/components/LightRays'
 export default function Hero() {
   const [showLightRays, setShowLightRays] = useState(false)
   const [copied, setCopied] = useState(false)
-  const planetY = useMotionValue(0)
-
-  // Mouse parallax for the orbital sphere
-  const mouseX = useMotionValue(0)
-  const mouseY = useMotionValue(0)
 
   const shouldReduceMotion = useReducedMotion()
-
-  const sphereX = useSpring(useTransform(mouseX, [-1000, 1000], [-0.8, 0.8]), { stiffness: 25, damping: 25 })
-  const sphereY = useSpring(useTransform(mouseY, [-1000, 1000], [-0.8, 0.8]), { stiffness: 25, damping: 25 })
-
-  useEffect(() => {
-    const mouseQuery = window.matchMedia('(hover: hover) and (pointer: fine) and (min-width: 768px)')
-
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseX.set(e.clientX - window.innerWidth / 2)
-      mouseY.set(e.clientY - window.innerHeight / 2)
-    }
-
-    const updateMouseTracking = () => {
-      if (mouseQuery.matches) {
-        window.addEventListener('mousemove', handleMouseMove)
-        return
-      }
-
-      window.removeEventListener('mousemove', handleMouseMove)
-      mouseX.set(0)
-      mouseY.set(0)
-    }
-
-    updateMouseTracking()
-    mouseQuery.addEventListener('change', updateMouseTracking)
-
-    return () => {
-      mouseQuery.removeEventListener('change', updateMouseTracking)
-      window.removeEventListener('mousemove', handleMouseMove)
-    }
-  }, [mouseX, mouseY])
-
-  useEffect(() => {
-    const desktopQuery = window.matchMedia('(min-width: 768px)')
-    let frameId = 0
-    let isListening = false
-    let isPlanetSettled = false
-
-    const updatePlanetPosition = () => {
-      const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight
-      const progress = scrollableHeight > 0 ? window.scrollY / scrollableHeight : 0
-      planetY.set(Math.min(progress / 0.32, 1) * 135)
-    }
-
-    const schedulePlanetPosition = () => {
-      if (!desktopQuery.matches || shouldReduceMotion) return
-      const isPastHero = window.scrollY > window.innerHeight * 1.6
-
-      if (isPastHero) {
-        if (!isPlanetSettled) {
-          planetY.set(135)
-          isPlanetSettled = true
-        }
-
-        return
-      }
-
-      isPlanetSettled = false
-      if (frameId) return
-
-      frameId = window.requestAnimationFrame(() => {
-        frameId = 0
-        updatePlanetPosition()
-      })
-    }
-
-    const updateAvailability = () => {
-      if (desktopQuery.matches && !shouldReduceMotion) {
-        if (!isListening) {
-          window.addEventListener('scroll', schedulePlanetPosition, { passive: true })
-          window.addEventListener('resize', schedulePlanetPosition)
-          isListening = true
-        }
-
-        schedulePlanetPosition()
-        return
-      }
-
-      if (isListening) {
-        window.removeEventListener('scroll', schedulePlanetPosition)
-        window.removeEventListener('resize', schedulePlanetPosition)
-        isListening = false
-      }
-
-      window.cancelAnimationFrame(frameId)
-      frameId = 0
-      planetY.set(0)
-    }
-
-    updateAvailability()
-    desktopQuery.addEventListener('change', updateAvailability)
-
-    return () => {
-      desktopQuery.removeEventListener('change', updateAvailability)
-      window.removeEventListener('scroll', schedulePlanetPosition)
-      window.removeEventListener('resize', schedulePlanetPosition)
-      window.cancelAnimationFrame(frameId)
-    }
-  }, [planetY, shouldReduceMotion])
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(min-width: 768px)')
@@ -192,10 +88,6 @@ export default function Hero() {
                 transition={{
                   y: { duration: 15, repeat: Infinity, ease: "easeInOut" },
                   rotate: { duration: 140, repeat: Infinity, ease: "linear" }
-                }}
-                style={{
-                  x: (!shouldReduceMotion && showLightRays) ? sphereX : 0,
-                  y: (!shouldReduceMotion && showLightRays) ? sphereY : 0,
                 }}
               />{' '}
               <span className="relative inline-block text-gradient-ivory">
@@ -310,7 +202,7 @@ export default function Hero() {
         initial={{ clipPath: 'inset(0 100% 0 0)' }}
         animate={{ clipPath: 'inset(0 0% 0 0)' }}
         transition={{ duration: 1.65, delay: 0.85, ease: [0.22, 1, 0.36, 1] }}
-        style={{ x: '-50%', y: planetY }}
+        style={{ x: '-50%' }}
       />
     </section>
   )

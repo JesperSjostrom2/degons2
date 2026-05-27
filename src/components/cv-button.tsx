@@ -9,45 +9,33 @@ export default function CVButton() {
 
   useEffect(() => {
     const desktopQuery = window.matchMedia('(min-width: 1024px)')
-    let isListening = false
-    let frameId = 0
-
-    const updateVisibility = () => {
-      const hero = document.getElementById('home')
-      if (hero) {
-        const heroHeight = hero.offsetHeight
-        const nextIsVisible = window.scrollY < heroHeight * 0.75
-        setIsHeroHeaderVisible((isVisible) => isVisible === nextIsVisible ? isVisible : nextIsVisible)
-      }
-    }
-
-    const handleScroll = () => {
-      if (frameId) return
-
-      frameId = window.requestAnimationFrame(() => {
-        frameId = 0
-        updateVisibility()
-      })
-    }
+    let observer: IntersectionObserver | null = null
 
     const updateAvailability = () => {
+      observer?.disconnect()
+      observer = null
+
       if (desktopQuery.matches) {
-        if (!isListening) {
-          window.addEventListener('scroll', handleScroll, { passive: true })
-          isListening = true
+        const hero = document.getElementById('home')
+
+        if (!hero) {
+          return
         }
 
-        updateVisibility()
+        observer = new IntersectionObserver(
+          ([entry]) => {
+            setIsHeroHeaderVisible((isVisible) => isVisible === entry.isIntersecting ? isVisible : entry.isIntersecting)
+          },
+          {
+            root: null,
+            rootMargin: '0px 0px -75% 0px',
+            threshold: 0,
+          }
+        )
+
+        observer.observe(hero)
         return
       }
-
-      if (isListening) {
-        window.removeEventListener('scroll', handleScroll)
-        isListening = false
-      }
-
-      window.cancelAnimationFrame(frameId)
-      frameId = 0
 
       setIsHeroHeaderVisible(true)
     }
@@ -57,8 +45,7 @@ export default function CVButton() {
 
     return () => {
       desktopQuery.removeEventListener('change', updateAvailability)
-      window.removeEventListener('scroll', handleScroll)
-      window.cancelAnimationFrame(frameId)
+      observer?.disconnect()
     }
   }, [])
 

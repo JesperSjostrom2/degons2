@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { motion, useMotionValue } from 'framer-motion'
+import { shouldUseEnhancedMotion } from '@/lib/client-performance'
 
 export default function CustomCursor() {
   const [isDisabled, setIsDisabled] = useState(true)
@@ -19,14 +20,26 @@ export default function CustomCursor() {
   useEffect(() => {
     const pointerQuery = window.matchMedia('(hover: hover) and (pointer: fine)')
     const mobileViewportQuery = window.matchMedia('(max-width: 1024px)')
+    let isMounted = true
+    let availabilityRequestId = 0
 
-    const updateCursorAvailability = () => {
+    const updateCursorAvailability = async () => {
+      const requestId = availabilityRequestId + 1
+      availabilityRequestId = requestId
       const hasTouchInput = navigator.maxTouchPoints > 0
-      const shouldDisable = hasTouchInput || !pointerQuery.matches || mobileViewportQuery.matches
+      const canUseEnhancedMotion =
+        !hasTouchInput &&
+        pointerQuery.matches &&
+        !mobileViewportQuery.matches &&
+        await shouldUseEnhancedMotion()
 
-      setIsDisabled(shouldDisable)
+      if (!isMounted || requestId !== availabilityRequestId) {
+        return
+      }
 
-      if (shouldDisable) {
+      setIsDisabled(!canUseEnhancedMotion)
+
+      if (!canUseEnhancedMotion) {
         document.documentElement.classList.remove('custom-cursor-active')
       }
     }
@@ -37,6 +50,7 @@ export default function CustomCursor() {
     window.addEventListener('resize', updateCursorAvailability)
 
     return () => {
+      isMounted = false
       pointerQuery.removeEventListener('change', updateCursorAvailability)
       mobileViewportQuery.removeEventListener('change', updateCursorAvailability)
       window.removeEventListener('resize', updateCursorAvailability)

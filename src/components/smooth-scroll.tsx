@@ -2,14 +2,17 @@
 
 import { useEffect } from 'react'
 import Lenis from 'lenis'
+import { shouldUseEnhancedMotion } from '@/lib/client-performance'
 
 export default function SmoothScroll() {
   useEffect(() => {
-    const useNativeScroll = window.matchMedia('(pointer: coarse), (max-width: 767px)').matches
+    const useNativeScrollByDefault = window.matchMedia('(pointer: coarse), (max-width: 767px)').matches
     const supportsVisualViewport = typeof window.visualViewport !== 'undefined'
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let lenis: any = null
     let rafId = 0
+    let isActive = true
+    let cleanupLenisVisibility: (() => void) | null = null
 
     const updateZoomState = () => {
       if (!supportsVisualViewport) {
@@ -27,7 +30,7 @@ export default function SmoothScroll() {
         return
       }
 
-      if (lenis) {
+      if (isActive && lenis) {
         lenis.scrollTo(element as HTMLElement, { offset: -60 })
         return
       }
@@ -60,12 +63,18 @@ export default function SmoothScroll() {
 
     document.addEventListener('click', handleAnchorClick)
 
-    if (supportsVisualViewport && useNativeScroll) {
+    if (supportsVisualViewport && useNativeScrollByDefault) {
       updateZoomState()
       window.visualViewport?.addEventListener('resize', updateZoomState)
     }
 
-    if (!useNativeScroll) {
+    const initializeLenis = async () => {
+      const canUseEnhancedMotion = !useNativeScrollByDefault && await shouldUseEnhancedMotion()
+
+      if (!isActive || !canUseEnhancedMotion) {
+        return
+      }
+
       lenis = new Lenis({
         duration: 0.9,
         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -105,20 +114,23 @@ export default function SmoothScroll() {
       document.addEventListener('visibilitychange', handleVisibilityChange)
       startRaf()
 
-      return () => {
-        document.removeEventListener('click', handleAnchorClick)
+      cleanupLenisVisibility = () => {
         document.removeEventListener('visibilitychange', handleVisibilityChange)
-        window.visualViewport?.removeEventListener('resize', updateZoomState)
-        document.documentElement.classList.remove('mobile-zoomed')
         cancelAnimationFrame(rafId)
+        rafId = 0
         lenis?.destroy()
+        lenis = null
       }
     }
 
+    initializeLenis()
+
     return () => {
+      isActive = false
       document.removeEventListener('click', handleAnchorClick)
       window.visualViewport?.removeEventListener('resize', updateZoomState)
       document.documentElement.classList.remove('mobile-zoomed')
+      cleanupLenisVisibility?.()
       cancelAnimationFrame(rafId)
       lenis?.destroy()
     }

@@ -31,13 +31,6 @@ export default function Navbar() {
         const nextIsScrolled = scrollY > 8
         return isScrolled === nextIsScrolled ? isScrolled : nextIsScrolled
       })
-
-      const hero = document.getElementById('home')
-      if (hero) {
-        const heroHeight = hero.offsetHeight
-        const nextIsVisible = scrollY < heroHeight * 0.75
-        setIsHeroHeaderVisible((isVisible) => isVisible === nextIsVisible ? isVisible : nextIsVisible)
-      }
     }
 
     const handleScroll = () => {
@@ -55,6 +48,31 @@ export default function Navbar() {
     return () => {
       window.removeEventListener('scroll', handleScroll)
       window.cancelAnimationFrame(scrollFrameRef.current)
+    }
+  }, [])
+
+  useEffect(() => {
+    const hero = document.getElementById('home')
+
+    if (!hero) {
+      return
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsHeroHeaderVisible((isVisible) => isVisible === entry.isIntersecting ? isVisible : entry.isIntersecting)
+      },
+      {
+        root: null,
+        rootMargin: '0px 0px -75% 0px',
+        threshold: 0,
+      }
+    )
+
+    observer.observe(hero)
+
+    return () => {
+      observer.disconnect()
     }
   }, [])
 

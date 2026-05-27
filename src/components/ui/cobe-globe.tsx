@@ -36,6 +36,7 @@ interface GlobeProps {
   mapSamples?: number
   interactive?: boolean
   showLabels?: boolean
+  pauseOnScroll?: boolean
 }
 
 export function Globe({
@@ -58,6 +59,7 @@ export function Globe({
   mapSamples = 16000,
   interactive = true,
   showLabels = true,
+  pauseOnScroll = false,
 }: GlobeProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const pointerInteracting = useRef<{ x: number; y: number } | null>(null)
@@ -67,7 +69,9 @@ export function Globe({
   const phiOffsetRef = useRef(0)
   const thetaOffsetRef = useRef(0)
   const isPausedRef = useRef(false)
+  const isScrollPausedRef = useRef(false)
   const startAnimatingRef = useRef<() => void>(() => {})
+  const stopAnimatingRef = useRef<() => void>(() => {})
   const markerData = useMemo(
     () => markers.map((m) => ({ location: m.location, size: markerSize, id: m.id })),
     [markers, markerSize],
@@ -180,6 +184,11 @@ export function Globe({
       canvas.style.opacity = "1"
 
       function animate() {
+        if (isScrollPausedRef.current) {
+          animationId = 0
+          return
+        }
+
         const hasVelocity =
           Math.abs(velocity.current.phi) > 0.0001 ||
           Math.abs(velocity.current.theta) > 0.0001
@@ -209,6 +218,7 @@ export function Globe({
         const shouldContinue =
           isVisible &&
           !document.hidden &&
+          !isScrollPausedRef.current &&
           (speed !== 0 || pointerInteracting.current !== null || hasVelocity || hasThetaCorrection)
 
         if (shouldContinue) {
@@ -232,6 +242,8 @@ export function Globe({
         animationId = 0
       }
 
+      stopAnimatingRef.current = stopAnimating
+
       observer = new IntersectionObserver(
         ([entry]) => {
           isVisible = entry.isIntersecting
@@ -254,11 +266,32 @@ export function Globe({
         startAnimating()
       }
 
+      let scrollPauseTimeout = 0
+      const handleScroll = () => {
+        if (!pauseOnScroll || !isVisible || pointerInteracting.current !== null) {
+          return
+        }
+
+        isScrollPausedRef.current = true
+        stopAnimating()
+        window.clearTimeout(scrollPauseTimeout)
+        scrollPauseTimeout = window.setTimeout(() => {
+          isScrollPausedRef.current = false
+          startAnimating()
+        }, 140)
+      }
+
       document.addEventListener("visibilitychange", handleVisibilityChange)
+      if (pauseOnScroll) {
+        window.addEventListener("scroll", handleScroll, { passive: true })
+      }
 
       return () => {
         document.removeEventListener("visibilitychange", handleVisibilityChange)
+        window.removeEventListener("scroll", handleScroll)
+        window.clearTimeout(scrollPauseTimeout)
         startAnimatingRef.current = () => {}
+        stopAnimatingRef.current = () => {}
       }
     }
 
@@ -298,7 +331,7 @@ export function Globe({
       cleanupVisibilityChange?.()
       if (globe) globe.destroy()
     }
-  }, [markerData, arcData, markerColor, baseColor, arcColor, glowColor, dark, mapBrightness, markerElevation, arcWidth, arcHeight, speed, theta, diffuse, mapSamples])
+  }, [markerData, arcData, markerColor, baseColor, arcColor, glowColor, dark, mapBrightness, markerElevation, arcWidth, arcHeight, speed, theta, diffuse, mapSamples, pauseOnScroll])
 
   return (
     <div className={`relative aspect-square select-none ${className}`}>
