@@ -269,8 +269,6 @@ const END_TO_END_SVG_HOVER_STYLES = `
   }
 `;
 
-const stripSvgAnimations = (markup: string) => markup.replace(/<animate(?:Transform)?\b[^>]*(?:\/>|>[\s\S]*?<\/animate(?:Transform)?>)/g, "");
-
 const BentoAssetImage = ({
   asset,
   className,
@@ -346,7 +344,7 @@ const BentoAssetImage = ({
       aria-hidden="true"
       data-width={width}
       data-height={height}
-      dangerouslySetInnerHTML={{ __html: isAnimating ? svgMarkup : stripSvgAnimations(svgMarkup) }}
+      dangerouslySetInnerHTML={{ __html: svgMarkup }}
     />
   );
 };
@@ -359,6 +357,7 @@ const MagicBento: React.FC = () => {
   const [hasMounted, setHasMounted] = useState(false);
   const [animatedBentoAsset, setAnimatedBentoAsset] = useState<BentoSvgAsset | null>(null);
   const shouldUseMobileBento = !hasMounted || isMobile;
+  const motionDisabled = shouldReduceMotion === true;
 
   const startBentoSvgAnimation = useCallback((asset: BentoSvgAsset) => {
     if (!shouldUseMobileBento) {
@@ -452,7 +451,6 @@ const MagicBento: React.FC = () => {
       customContent: (
         <div className="group/engine service-engine-card relative -m-8 flex h-[calc(100%+4rem)] flex-col overflow-hidden">
           <div className="engine-card-bg absolute inset-0" />
-          <div className="engine-card-grid absolute inset-0" />
           <BentoAssetImage
             asset="endToEnd"
             className="end-to-end-svg pointer-events-none absolute inset-0 z-10 h-full w-full"
@@ -529,8 +527,6 @@ const MagicBento: React.FC = () => {
       svgAsset: "fastDelivery",
       customContent: (
         <div className="group/conversion relative flex h-full flex-col overflow-hidden">
-          <div className="conversion-card-bg absolute inset-0" />
-
           <div className="contact-card-content conversion-flow-copy bento-mobile-readable relative z-30 max-w-[17.5rem] p-6 sm:p-8">
             <p className="bento-card-kicker">Fast delivery</p>
             <h2 className="bento-card-heading text-[#f5efe4]">
@@ -562,11 +558,6 @@ const MagicBento: React.FC = () => {
       customContent: (
         <div className="group/selling relative -m-8 flex h-[calc(100%+4rem)] flex-col overflow-hidden">
           <div className="selling-site-bg absolute inset-0" />
-          <div className="selling-site-ambient absolute inset-0" />
-          <div className="selling-site-grid absolute inset-0" />
-          <div className="selling-site-panels absolute inset-0" />
-          
-          <div className="selling-mobile-frost absolute inset-0" />
 
           <div className="bento-feature-copy bento-mobile-readable relative z-20 max-w-[19rem] p-6 sm:p-8">
             <p className="bento-card-kicker">First impression</p>
@@ -2973,13 +2964,13 @@ const MagicBento: React.FC = () => {
             return (
               <motion.div
                 key={card.label}
-                className={`${baseClassName} will-change-transform`}
-                initial={shouldReduceMotion ? false : { opacity: 0, y: 24, scale: 0.985 }}
-                whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: true, amount: 0.18, margin: '0px 0px -14% 0px' }}
+                className={`${baseClassName} transform-gpu will-change-[transform,opacity]`}
+                initial={motionDisabled ? false : { opacity: 0, y: shouldUseMobileBento ? 18 : 24, scale: shouldUseMobileBento ? 0.992 : 0.985 }}
+                whileInView={motionDisabled ? undefined : { opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true, amount: shouldUseMobileBento ? 0.08 : 0.18, margin: shouldUseMobileBento ? '0px 0px -8% 0px' : '0px 0px -14% 0px' }}
                 transition={{
-                  duration: 0.66,
-                  delay: shouldReduceMotion ? 0 : Math.min(index * 0.045, 0.18),
+                  duration: shouldUseMobileBento ? 0.48 : 0.66,
+                  delay: motionDisabled ? 0 : Math.min(index * (shouldUseMobileBento ? 0.055 : 0.045), shouldUseMobileBento ? 0.22 : 0.18),
                   ease: [0.22, 1, 0.36, 1],
                 }}
                 onMouseEnter={card.svgAsset ? () => startBentoSvgAnimation(card.svgAsset!) : undefined}
