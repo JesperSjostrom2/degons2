@@ -2656,6 +2656,11 @@ const MagicBento: React.FC = () => {
               transition: none !important;
             }
 
+            .conversion-phone-svg #lightning-icon {
+              fill: #f8f8f8 !important;
+              opacity: 1 !important;
+            }
+
             .card-responsive .card:nth-child(4) .remote-card-globe-shell {
               min-height: 10.5rem;
               height: 58%;
@@ -2787,8 +2792,8 @@ const MagicBento: React.FC = () => {
 
             .card-responsive .card:nth-child(3) .conversion-flow-svg,
             .card-responsive .card:nth-child(3) .conversion-phone-svg {
-              width: min(78%, 15.5rem);
-              transform: translate3d(12%, 2.2rem, 0);
+              width: min(84%, 16.5rem);
+              transform: translate3d(8%, 1.8rem, 0);
             }
 
             .card-responsive .card:nth-child(3) .contact-card-content {
