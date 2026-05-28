@@ -269,6 +269,19 @@ const END_TO_END_SVG_HOVER_STYLES = `
   }
 `;
 
+const sanitizeBentoSvgMarkup = (asset: BentoSvgAsset, markup: string) => {
+  let sanitizedMarkup = markup.replace(/<foreignObject\b[\s\S]*?<\/foreignObject>/g, "");
+
+  if (asset === "endToEnd") {
+    sanitizedMarkup = sanitizedMarkup
+      .replace(/<path opacity="0\.5" d="M358\.167[\s\S]*?\/>/g, "")
+      .replace(/<path opacity="0\.3" d="M312[\s\S]*?stroke-width="1\.5"\/>/g, "")
+      .replace(/<mask id="mask[01]_5238_199063"[\s\S]*?<\/mask>\s*<g mask="url\(#mask[01]_5238_199063\)">[\s\S]*?<\/g>/g, "");
+  }
+
+  return sanitizedMarkup;
+};
+
 const BentoAssetImage = ({
   asset,
   className,
@@ -311,7 +324,7 @@ const BentoAssetImage = ({
       .then((response) => response.text())
       .then((markup) => {
         if (isActive) {
-          setSvgMarkup(markup);
+          setSvgMarkup(sanitizeBentoSvgMarkup(asset, markup));
         }
       });
 
