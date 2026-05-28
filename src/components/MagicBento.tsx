@@ -2372,6 +2372,10 @@ const MagicBento: React.FC = () => {
             transition: opacity 300ms ease;
           }
 
+          .svg-only-card::before {
+            display: none !important;
+          }
+
           .bento-card-kicker {
             margin-bottom: 0.38rem;
             font-size: 0.68rem;
@@ -2858,7 +2862,7 @@ const MagicBento: React.FC = () => {
         <div className="card-responsive grid gap-2">
           {cardData.map((card, index) => {
             const baseClassName = `card group/bento relative ${index === 2 ? 'min-h-[170px]' : 'min-h-[180px]'} w-full max-w-full rounded-[20px]`;
-            const cardInnerClassName = `premium-glass-surface relative flex h-full flex-col justify-between overflow-hidden rounded-[20px] font-light transition-all duration-300 ease-in-out ${index === 2 || index === 3 ? 'p-0' : 'p-8'}`;
+            const cardInnerClassName = `premium-glass-surface ${card.svgAsset ? 'svg-only-card' : ''} relative flex h-full flex-col justify-between overflow-hidden rounded-[20px] font-light transition-all duration-300 ease-in-out ${index === 2 || index === 3 ? 'p-0' : 'p-8'}`;
 
             const cardStyle = {
               '--bento-accent': card.color,
