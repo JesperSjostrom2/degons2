@@ -282,6 +282,8 @@ const sanitizeBentoSvgMarkup = (asset: BentoSvgAsset, markup: string) => {
   return sanitizedMarkup;
 };
 
+const stripSvgAnimations = (markup: string) => markup.replace(/<animate(?:Transform)?\b[^>]*(?:\/>|>[\s\S]*?<\/animate(?:Transform)?>)/g, "");
+
 const BentoAssetImage = ({
   asset,
   className,
@@ -357,7 +359,7 @@ const BentoAssetImage = ({
       aria-hidden="true"
       data-width={width}
       data-height={height}
-      dangerouslySetInnerHTML={{ __html: svgMarkup }}
+      dangerouslySetInnerHTML={{ __html: isAnimating ? svgMarkup : stripSvgAnimations(svgMarkup) }}
     />
   );
 };
@@ -381,6 +383,12 @@ const MagicBento: React.FC = () => {
   const stopBentoSvgAnimation = useCallback((asset: BentoSvgAsset) => {
     setAnimatedBentoAsset((currentAsset) => currentAsset === asset ? null : currentAsset);
   }, []);
+
+  const toggleBentoSvgAnimation = useCallback((asset: BentoSvgAsset) => {
+    if (shouldUseMobileBento) {
+      setAnimatedBentoAsset((currentAsset) => currentAsset === asset ? null : asset);
+    }
+  }, [shouldUseMobileBento]);
 
   useEffect(() => {
     setHasMounted(true);
@@ -2923,6 +2931,7 @@ const MagicBento: React.FC = () => {
                 }}
                 onMouseEnter={card.svgAsset ? () => startBentoSvgAnimation(card.svgAsset!) : undefined}
                 onMouseLeave={card.svgAsset ? () => stopBentoSvgAnimation(card.svgAsset!) : undefined}
+                onClick={card.svgAsset ? () => toggleBentoSvgAnimation(card.svgAsset!) : undefined}
               >
                 <div className={`${cardInnerClassName} bg-transparent`} style={cardStyle}>
                   {content}
