@@ -138,7 +138,7 @@ export default function TechStackSection() {
     <section id="skills" className="site-section">
       <div className="container mx-auto px-6">
         <motion.div
-          className="section-header"
+          className="mobile-no-load-animation section-header"
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.08, margin: '0px 0px -18% 0px' }}
@@ -154,7 +154,7 @@ export default function TechStackSection() {
         <motion.div
           ref={gridRef}
           onPointerLeave={hideHoverFill}
-          className="premium-glass-surface relative mx-auto flex max-w-7xl flex-wrap overflow-hidden rounded-[22px] md:grid md:grid-cols-3 md:rounded-[28px] lg:grid-cols-6"
+          className="mobile-no-load-animation premium-glass-surface relative mx-auto flex max-w-7xl flex-wrap overflow-hidden rounded-[22px] md:grid md:grid-cols-3 md:rounded-[28px] lg:grid-cols-6"
           initial={{ opacity: 0, y: 52, scale: 0.985 }}
           whileInView={{ opacity: 1, y: 0, scale: 1 }}
           viewport={{ once: true, amount: 0.08, margin: '0px 0px -12% 0px' }}

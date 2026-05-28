@@ -15,7 +15,7 @@ export default function ScrollReveal({ children, className = '', delay = 0, blur
 
   return (
     <motion.div
-      className={`transform-gpu ${className}`}
+      className={`mobile-no-load-animation transform-gpu ${className}`}
       initial={shouldReduceMotion ? false : { opacity: 0, y: blur ? 18 : 16 }}
       whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.08, margin: '0px 0px -12% 0px' }}

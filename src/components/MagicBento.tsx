@@ -357,7 +357,7 @@ const MagicBento: React.FC = () => {
   const [hasMounted, setHasMounted] = useState(false);
   const [animatedBentoAsset, setAnimatedBentoAsset] = useState<BentoSvgAsset | null>(null);
   const shouldUseMobileBento = !hasMounted || isMobile;
-  const motionDisabled = shouldReduceMotion === true;
+  const motionDisabled = shouldReduceMotion === true || shouldUseMobileBento;
 
   const startBentoSvgAnimation = useCallback((asset: BentoSvgAsset) => {
     if (!shouldUseMobileBento) {
@@ -450,7 +450,6 @@ const MagicBento: React.FC = () => {
       svgAsset: "endToEnd",
       customContent: (
         <div className="group/engine service-engine-card relative -m-8 flex h-[calc(100%+4rem)] flex-col overflow-hidden">
-          <div className="engine-card-bg absolute inset-0" />
           <BentoAssetImage
             asset="endToEnd"
             className="end-to-end-svg pointer-events-none absolute inset-0 z-10 h-full w-full"
@@ -557,8 +556,6 @@ const MagicBento: React.FC = () => {
       svgAsset: "firstImpression",
       customContent: (
         <div className="group/selling relative -m-8 flex h-[calc(100%+4rem)] flex-col overflow-hidden">
-          <div className="selling-site-bg absolute inset-0" />
-
           <div className="bento-feature-copy bento-mobile-readable relative z-20 max-w-[19rem] p-6 sm:p-8">
             <p className="bento-card-kicker">First impression</p>
             <h2 className="bento-card-heading text-white">
@@ -598,14 +595,6 @@ const MagicBento: React.FC = () => {
             }
           }
 
-          .selling-site-bg {
-            background:
-              radial-gradient(circle at 18% 16%, rgba(245, 239, 228, 0.055), transparent 42%),
-              radial-gradient(circle at 72% 50%, rgba(218, 197, 167, 0.12), transparent 34%),
-              radial-gradient(circle at 86% 66%, rgba(127, 167, 200, 0.14), transparent 38%),
-              linear-gradient(180deg, rgba(17, 17, 16, 0.74), rgba(8, 8, 8, 0.92));
-          }
-
           .deliverables-card-bg {
             background:
               radial-gradient(circle at 18% 18%, rgba(218, 197, 167, 0.12), transparent 36%),
@@ -626,24 +615,6 @@ const MagicBento: React.FC = () => {
           .service-engine-card {
             --engine-ease: cubic-bezier(0.22, 1, 0.36, 1);
             --services-ease: cubic-bezier(0.22, 1, 0.36, 1);
-          }
-
-          .engine-card-bg {
-            background:
-              radial-gradient(circle at 22% 12%, rgba(245, 239, 228, 0.08), transparent 40%),
-              radial-gradient(circle at 78% 82%, rgba(245, 239, 228, 0.04), transparent 46%),
-              linear-gradient(180deg, rgba(14, 14, 13, 0.72), rgba(6, 6, 6, 0.92));
-            opacity: 0.46;
-          }
-
-          .engine-card-grid {
-            background-image:
-              linear-gradient(rgba(245, 239, 228, 0.024) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(245, 239, 228, 0.024) 1px, transparent 1px);
-            background-size: 30px 30px;
-            opacity: 0.14;
-            mask-image: radial-gradient(circle at 58% 42%, black, transparent 78%);
-            -webkit-mask-image: radial-gradient(circle at 58% 42%, black, transparent 78%);
           }
 
           .end-to-end-svg {
@@ -1679,10 +1650,6 @@ const MagicBento: React.FC = () => {
             letter-spacing: 0.03em;
           }
 
-          .selling-site-ambient {
-            background: linear-gradient(125deg, transparent 18%, rgba(245, 239, 228, 0.048) 46%, transparent 78%);
-          }
-
           .bento-dot-grid {
             z-index: 0;
             background-image: radial-gradient(circle, rgba(245, 239, 228, 0.14) 1px, transparent 1px);
@@ -1691,28 +1658,6 @@ const MagicBento: React.FC = () => {
             -webkit-mask-image: radial-gradient(circle at 50% 50%, black 0 50%, transparent 80%);
             mask-image: radial-gradient(circle at 50% 50%, black 0 50%, transparent 80%);
             pointer-events: none;
-          }
-
-          .selling-site-grid {
-            z-index: 0;
-            background-image: radial-gradient(circle, rgba(245, 239, 228, 0.14) 1px, transparent 1px);
-            background-size: 18px 18px;
-            opacity: 0.16;
-            -webkit-mask-image: radial-gradient(circle at 70% 50%, black 0 44%, transparent 76%);
-            mask-image: radial-gradient(circle at 70% 50%, black 0 44%, transparent 76%);
-            transition: opacity 760ms cubic-bezier(0.22, 1, 0.36, 1);
-          }
-
-          .selling-site-panels {
-            z-index: 0;
-            background:
-              linear-gradient(90deg, rgba(245, 239, 228, 0.055) 1px, transparent 1px),
-              linear-gradient(180deg, rgba(245, 239, 228, 0.04) 1px, transparent 1px);
-            background-size: 7.2rem 4.7rem;
-            opacity: 0.12;
-            -webkit-mask-image: radial-gradient(circle at 72% 54%, black 0 52%, transparent 78%);
-            mask-image: radial-gradient(circle at 72% 54%, black 0 52%, transparent 78%);
-            transition: opacity 760ms cubic-bezier(0.22, 1, 0.36, 1);
           }
 
           .selling-soundwaves {
@@ -1743,12 +1688,6 @@ const MagicBento: React.FC = () => {
           .selling-soundwaves span:nth-child(3) {
             width: 17rem;
             height: 17rem;
-          }
-
-          .selling-mobile-frost {
-            display: none;
-            z-index: 15;
-            pointer-events: none;
           }
 
           .bento-mobile-frost {
@@ -2041,11 +1980,6 @@ const MagicBento: React.FC = () => {
             transform: none;
           }
 
-          .card:hover .group\/selling .selling-site-grid,
-          .card:hover .group\/selling .selling-site-panels {
-            opacity: 0.26;
-          }
-
           .card:hover .group\/selling .selling-soundwaves span {
             animation: selling-wave-pulse 1.8s cubic-bezier(0.22, 1, 0.36, 1) infinite;
           }
@@ -2146,11 +2080,6 @@ const MagicBento: React.FC = () => {
               transform: translate(-50%, -50%) scale(0.96);
               opacity: 0.18;
             }
-          }
-
-          .conversion-card-bg {
-            background:
-              linear-gradient(180deg, rgba(255, 255, 255, 0.025), transparent 48%);
           }
 
           .conversion-card-dots {
@@ -2526,14 +2455,12 @@ const MagicBento: React.FC = () => {
 
           .premium-glass-surface .contact-card-bg,
           .premium-glass-surface .deliverables-card-bg,
-          .premium-glass-surface .selling-site-bg,
           .premium-glass-surface .attention-card-bg {
             opacity: 0 !important;
           }
 
           .premium-glass-surface .contact-card-grid,
-          .premium-glass-surface .deliverables-card-grid,
-          .premium-glass-surface .selling-site-ambient {
+          .premium-glass-surface .deliverables-card-grid {
             opacity: 0.12 !important;
           }
 
@@ -2734,7 +2661,6 @@ const MagicBento: React.FC = () => {
             }
 
             .premium-glass-surface .bento-mobile-frost,
-            .premium-glass-surface .selling-mobile-frost,
             .premium-glass-surface .attention-mobile-frost {
               display: none !important;
             }

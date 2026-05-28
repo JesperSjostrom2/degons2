@@ -341,7 +341,7 @@ const ExperienceSection: React.FC = () => {
     <section id="projects" className="site-section">
       <div className="container mx-auto px-6">
         <motion.div
-          className="section-header"
+          className="mobile-no-load-animation section-header"
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.08, margin: '0px 0px -18% 0px' }}
@@ -352,7 +352,7 @@ const ExperienceSection: React.FC = () => {
         </motion.div>
 
         <motion.div
-          className="mx-auto flex max-w-7xl flex-col gap-7"
+          className="mobile-no-load-animation mx-auto flex max-w-7xl flex-col gap-7"
           initial={{ opacity: 0, y: 52, scale: 0.985 }}
           whileInView={{ opacity: 1, y: 0, scale: 1 }}
           viewport={{ once: true, amount: 0.08, margin: '0px 0px -12% 0px' }}

@@ -70,7 +70,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 30, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.9, delay: 0.2, ease: 'easeOut' }}
-            className="relative w-full max-w-6xl"
+            className="mobile-no-load-animation relative w-full max-w-6xl"
           >
 
             <h1 className="mx-auto max-w-[1080px] text-balance text-[clamp(2.45rem,5.6vw,5.1rem)] font-semibold leading-[1.02] tracking-[-0.055em] drop-shadow-[0_18px_60px_rgba(0,0,0,0.18)] dark:drop-shadow-[0_18px_60px_rgba(0,0,0,0.38)] hero-headline-bloom">
@@ -121,7 +121,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.75, delay: 0.45 }}
-            className="relative z-20 mt-8 flex max-w-3xl flex-col items-center gap-6 md:mt-10"
+            className="mobile-no-load-animation relative z-20 mt-8 flex max-w-3xl flex-col items-center gap-6 md:mt-10"
           >
             <p className="max-w-2xl text-balance text-base leading-7 md:text-lg text-gradient-muted">
               A frontend developer in Helsinki building landing pages, portfolios, and polished websites for people who need a stronger presence online.
@@ -189,7 +189,7 @@ export default function Hero() {
       </div>
 
       <motion.div
-        className="planet-horizon pointer-events-none absolute bottom-[-7rem] left-1/2 z-10 h-[12rem] w-[124vw] max-w-[1320px] md:bottom-[-22rem] md:h-[28rem] md:w-[118vw]"
+        className="planet-horizon pointer-events-none absolute bottom-[-7rem] left-1/2 z-10 h-[12rem] w-[92vw] max-w-[1320px] md:bottom-[-22rem] md:h-[28rem] md:w-[96vw] lg:w-[118vw]"
         initial={{ opacity: 0, scale: 0.84 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1.35, delay: 0.85, ease: [0.22, 1, 0.36, 1] }}

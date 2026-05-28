@@ -151,7 +151,7 @@ export default function ContactSection() {
     <section id="contact" className="site-section min-h-screen">
       <div className="container mx-auto px-6">
         <motion.div
-          className="section-header"
+          className="mobile-no-load-animation section-header"
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.08, margin: '0px 0px -18% 0px' }}
@@ -165,7 +165,7 @@ export default function ContactSection() {
         </motion.div>
 
         <motion.div
-          className="mx-auto max-w-6xl"
+          className="mobile-no-load-animation mx-auto max-w-6xl"
           initial={{ opacity: 0, y: 52, scale: 0.985 }}
           whileInView={{ opacity: 1, y: 0, scale: 1 }}
           viewport={{ once: true, amount: 0.08, margin: '0px 0px -12% 0px' }}

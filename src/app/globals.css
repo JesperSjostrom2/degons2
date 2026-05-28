@@ -1747,6 +1747,12 @@
   }
 
   @media (max-width: 767px) {
+    .mobile-no-load-animation {
+      opacity: 1 !important;
+      transform: none !important;
+      will-change: auto !important;
+    }
+
     .cinematic-grain-overlay {
       inset: 0;
       width: 100%;
