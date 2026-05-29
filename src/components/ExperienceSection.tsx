@@ -75,7 +75,7 @@ const projectsData: Project[] = [
     ],
     skills: ['Web Design', 'Logo Design', 'Brand Identity', 'UI/UX', 'HTML/CSS', 'JavaScript'],
     year: '2024',
-    image: { type: 'image', src: '/assets/projects/kermaproduct.png', objectPosition: 'top' },
+    image: { type: 'image', src: '/assets/projects/kermaipad.png', objectPosition: 'top' },
     accentColor: '#d4af37',
     accentSoftColor: 'rgba(212, 175, 55, 0.14)',
     accentBorderColor: 'rgba(212, 175, 55, 0.42)',
