@@ -212,6 +212,13 @@ const BENTO_SVG_PATHS = {
 
 type BentoSvgAsset = keyof typeof BENTO_SVG_PATHS;
 
+type BentoSvgMarkup = {
+  animated: string;
+  static: string;
+};
+
+const bentoSvgMarkupCache = new Map<BentoSvgAsset, Promise<BentoSvgMarkup>>();
+
 type BentoCardData = {
   color: string;
   title: string;
@@ -279,10 +286,51 @@ const sanitizeBentoSvgMarkup = (asset: BentoSvgAsset, markup: string) => {
       .replace(/<mask id="mask[01]_5238_199063"[\s\S]*?<\/mask>\s*<g mask="url\(#mask[01]_5238_199063\)">[\s\S]*?<\/g>/g, "");
   }
 
+  if (asset === "fastDelivery") {
+    sanitizedMarkup = sanitizedMarkup.replace(/(<path id="lightning-icon"\b[^>]*)>[\s\S]*?<\/path>/, "$1/>");
+  }
+
   return sanitizedMarkup;
 };
 
 const stripSvgAnimations = (markup: string) => markup.replace(/<animate(?:Transform)?\b[^>]*(?:\/>|>[\s\S]*?<\/animate(?:Transform)?>)/g, "");
+
+const getBentoSvgMarkup = (asset: BentoSvgAsset) => {
+  const cachedMarkup = bentoSvgMarkupCache.get(asset);
+
+  if (cachedMarkup) {
+    return cachedMarkup;
+  }
+
+  const markupPromise = fetch(BENTO_SVG_PATHS[asset])
+    .then((response) => response.text())
+    .then((markup) => {
+      const animated = sanitizeBentoSvgMarkup(asset, markup);
+
+      return {
+        animated,
+        static: stripSvgAnimations(animated),
+      };
+    });
+
+  bentoSvgMarkupCache.set(asset, markupPromise);
+  return markupPromise;
+};
+
+const scheduleIdleWork = (callback: () => void) => {
+  const requestIdleCallback = window.requestIdleCallback?.bind(window);
+  const cancelIdleCallback = window.cancelIdleCallback?.bind(window);
+
+  if (requestIdleCallback && cancelIdleCallback) {
+    const idleId = requestIdleCallback(callback, { timeout: 900 });
+
+    return () => cancelIdleCallback(idleId);
+  }
+
+  const timeoutId = window.setTimeout(callback, 120);
+
+  return () => window.clearTimeout(timeoutId);
+};
 
 const BentoAssetImage = ({
   asset,
@@ -298,7 +346,7 @@ const BentoAssetImage = ({
   isAnimating?: boolean;
 }) => {
   const svgRef = useRef<HTMLDivElement>(null);
-  const [svgMarkup, setSvgMarkup] = useState("");
+  const [svgMarkup, setSvgMarkup] = useState<BentoSvgMarkup | null>(null);
 
   const syncAnimationState = useCallback((active: boolean) => {
     const svg = svgRef.current?.querySelector("svg") as ControllableSvgElement | null;
@@ -321,17 +369,18 @@ const BentoAssetImage = ({
 
   useEffect(() => {
     let isActive = true;
-
-    fetch(BENTO_SVG_PATHS[asset])
-      .then((response) => response.text())
-      .then((markup) => {
+    const cancelIdleWork = scheduleIdleWork(() => {
+      getBentoSvgMarkup(asset).then((markup) => {
         if (isActive) {
-          setSvgMarkup(sanitizeBentoSvgMarkup(asset, markup));
+          setSvgMarkup(markup);
         }
       });
+    });
+
 
     return () => {
       isActive = false;
+      cancelIdleWork();
     };
   }, [asset]);
 
@@ -359,7 +408,7 @@ const BentoAssetImage = ({
       aria-hidden="true"
       data-width={width}
       data-height={height}
-      dangerouslySetInnerHTML={{ __html: isAnimating ? svgMarkup : stripSvgAnimations(svgMarkup) }}
+      dangerouslySetInnerHTML={{ __html: svgMarkup ? (isAnimating ? svgMarkup.animated : svgMarkup.static) : "" }}
     />
   );
 };

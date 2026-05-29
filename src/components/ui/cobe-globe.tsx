@@ -3,6 +3,21 @@
 import { useEffect, useRef, useCallback, useMemo } from "react"
 import createGlobe from "cobe"
 
+const scheduleIdleWork = (callback: () => void) => {
+  const requestIdleCallback = window.requestIdleCallback?.bind(window)
+  const cancelIdleCallback = window.cancelIdleCallback?.bind(window)
+
+  if (requestIdleCallback && cancelIdleCallback) {
+    const idleId = requestIdleCallback(callback, { timeout: 900 })
+
+    return () => cancelIdleCallback(idleId)
+  }
+
+  const timeoutId = window.setTimeout(callback, 120)
+
+  return () => window.clearTimeout(timeoutId)
+}
+
 interface Marker {
   id: string
   location: [number, number]
@@ -149,6 +164,7 @@ export function Globe({
     let initObserver: IntersectionObserver | null = null
     let observer: IntersectionObserver | null = null
     let resizeObserver: ResizeObserver | null = null
+    let cancelIdleInit: (() => void) | null = null
     let phi = 0
     let isVisible = false
     let shouldInitialize = false
@@ -298,11 +314,17 @@ export function Globe({
     let cleanupVisibilityChange: (() => void) | undefined
 
     const maybeInitialize = () => {
-      if (!shouldInitialize || cleanupVisibilityChange || canvas.offsetWidth <= 0) return
+      if (!shouldInitialize || cleanupVisibilityChange || cancelIdleInit || canvas.offsetWidth <= 0) return
 
-      resizeObserver?.disconnect()
-      resizeObserver = null
-      cleanupVisibilityChange = init()
+      cancelIdleInit = scheduleIdleWork(() => {
+        cancelIdleInit = null
+
+        if (!shouldInitialize || cleanupVisibilityChange || canvas.offsetWidth <= 0) return
+
+        resizeObserver?.disconnect()
+        resizeObserver = null
+        cleanupVisibilityChange = init()
+      })
     }
 
     initObserver = new IntersectionObserver(
@@ -314,7 +336,7 @@ export function Globe({
           maybeInitialize()
         }
       },
-      { rootMargin: "360px 0px", threshold: 0 },
+      { rootMargin: "80px 0px", threshold: 0 },
     )
     initObserver.observe(canvas)
 
@@ -328,6 +350,7 @@ export function Globe({
       initObserver?.disconnect()
       observer?.disconnect()
       resizeObserver?.disconnect()
+      cancelIdleInit?.()
       cleanupVisibilityChange?.()
       if (globe) globe.destroy()
     }
