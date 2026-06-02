@@ -1,22 +1,9 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
-import { motion, useMotionValue } from 'framer-motion'
+import { useEffect } from 'react'
 import { shouldUseEnhancedMotion } from '@/lib/client-performance'
 
 export default function CustomCursor() {
-  const [isDisabled, setIsDisabled] = useState(true)
-  const [isVisible, setIsVisible] = useState(false)
-  const [isHovered, setIsHovered] = useState(false)
-  const [isClicking, setIsClicking] = useState(false)
-  const isVisibleRef = useRef(false)
-  const isHoveredRef = useRef(false)
-  const cursorFrameRef = useRef(0)
-  const cursorPositionRef = useRef({ x: 0, y: 0 })
-
-  const cursorX = useMotionValue(0)
-  const cursorY = useMotionValue(0)
-
   useEffect(() => {
     const pointerQuery = window.matchMedia('(hover: hover) and (pointer: fine)')
     const mobileViewportQuery = window.matchMedia('(max-width: 1024px)')
@@ -26,9 +13,7 @@ export default function CustomCursor() {
     const updateCursorAvailability = async () => {
       const requestId = availabilityRequestId + 1
       availabilityRequestId = requestId
-      const hasTouchInput = navigator.maxTouchPoints > 0
       const canUseEnhancedMotion =
-        !hasTouchInput &&
         pointerQuery.matches &&
         !mobileViewportQuery.matches &&
         await shouldUseEnhancedMotion()
@@ -37,11 +22,7 @@ export default function CustomCursor() {
         return
       }
 
-      setIsDisabled(!canUseEnhancedMotion)
-
-      if (!canUseEnhancedMotion) {
-        document.documentElement.classList.remove('custom-cursor-active')
-      }
+      document.documentElement.classList.toggle('custom-cursor-active', canUseEnhancedMotion)
     }
 
     updateCursorAvailability()
@@ -54,141 +35,9 @@ export default function CustomCursor() {
       pointerQuery.removeEventListener('change', updateCursorAvailability)
       mobileViewportQuery.removeEventListener('change', updateCursorAvailability)
       window.removeEventListener('resize', updateCursorAvailability)
+      document.documentElement.classList.remove('custom-cursor-active')
     }
   }, [])
 
-  useEffect(() => {
-    if (isDisabled) {
-      document.documentElement.classList.remove('custom-cursor-active')
-      return
-    }
-
-    document.documentElement.classList.add('custom-cursor-active')
-
-    const updateCursor = (e: MouseEvent) => {
-      cursorPositionRef.current = { x: e.clientX, y: e.clientY }
-      if (!cursorFrameRef.current) {
-        cursorFrameRef.current = requestAnimationFrame(() => {
-          cursorFrameRef.current = 0
-          cursorX.set(cursorPositionRef.current.x)
-          cursorY.set(cursorPositionRef.current.y)
-        })
-      }
-      if (!isVisibleRef.current) {
-        isVisibleRef.current = true
-        setIsVisible(true)
-      }
-    }
-
-    const handleMouseEnter = () => {
-      isVisibleRef.current = true
-      setIsVisible(true)
-    }
-    const handleMouseLeave = () => {
-      isVisibleRef.current = false
-      setIsVisible(false)
-    }
-
-    const handleMouseDown = () => setIsClicking(true)
-    const handleMouseUp = () => setIsClicking(false)
-
-    const handleMouseOver = (e: MouseEvent) => {
-      const target = e.target as HTMLElement
-      if (
-        target.tagName === 'BUTTON' ||
-        target.tagName === 'A' ||
-        target.classList.contains('cursor-pointer') ||
-        target.style.cursor === 'pointer' ||
-        target.closest('button') ||
-        target.closest('a') ||
-        target.closest('[role="button"]')
-      ) {
-        if (!isHoveredRef.current) {
-          isHoveredRef.current = true
-          setIsHovered(true)
-        }
-      } else {
-        if (isHoveredRef.current) {
-          isHoveredRef.current = false
-          setIsHovered(false)
-        }
-      }
-    }
-
-    document.addEventListener('mousemove', updateCursor)
-    document.addEventListener('mouseenter', handleMouseEnter)
-    document.addEventListener('mouseleave', handleMouseLeave)
-    document.addEventListener('mousedown', handleMouseDown)
-    document.addEventListener('mouseup', handleMouseUp)
-    document.addEventListener('mouseover', handleMouseOver)
-
-    return () => {
-      document.documentElement.classList.remove('custom-cursor-active')
-      document.removeEventListener('mousemove', updateCursor)
-      document.removeEventListener('mouseenter', handleMouseEnter)
-      document.removeEventListener('mouseleave', handleMouseLeave)
-      document.removeEventListener('mousedown', handleMouseDown)
-      document.removeEventListener('mouseup', handleMouseUp)
-      document.removeEventListener('mouseover', handleMouseOver)
-      cancelAnimationFrame(cursorFrameRef.current)
-      cursorFrameRef.current = 0
-    }
-  }, [cursorX, cursorY, isDisabled])
-
-  if (isDisabled) {
-    return null
-  }
-
-  return (
-    <div className="fixed inset-0 pointer-events-none z-[9999]">
-      <motion.div
-        className="fixed"
-        style={{
-          left: cursorX,
-          top: cursorY,
-        }}
-        animate={{
-          scale: isClicking ? 0.9 : isHovered ? 1.1 : 1,
-          opacity: isVisible ? 1 : 0,
-        }}
-        transition={{
-          scale: { duration: 0.2, ease: "easeOut" },
-          opacity: { duration: 0.2 }
-        }}
-      >
-        {isHovered ? (
-          <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            width="20" 
-            height="20" 
-            viewBox="0 0 24 24"
-            className="drop-shadow-lg"
-          >
-            <path 
-              fill="#FFF" 
-              stroke="#000" 
-              strokeWidth="1.25" 
-              strokeLinejoin="round" 
-              d="M10 11V8.99c0-.88.59-1.64 1.44-1.86h.05A1.99 1.99 0 0 1 14 9.05V12v-2c0-.88.6-1.65 1.46-1.87h.05A1.98 1.98 0 0 1 18 10.06V13v-1.94a2 2 0 0 1 1.51-1.94h0A2 2 0 0 1 22 11.06V14c0 .6-.08 1.27-.21 1.97a7.96 7.96 0 0 1-7.55 6.48 54.98 54.98 0 0 1-4.48 0 7.96 7.96 0 0 1-7.55-6.48C2.08 15.27 2 14.59 2 14v-1.49c0-1.11.9-2.01 2.01-2.01h0a2 2 0 0 1 2.01 2.03l-.01.97v-10c0-1.1.9-2 2-2h0a2 2 0 0 1 2 2V11Z"
-            />
-          </svg>
-        ) : (
-          <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            width="25" 
-            height="25" 
-            viewBox="0 0 24 24"
-            className="drop-shadow-lg"
-          >
-            <path 
-              fill="#FFF" 
-              stroke="#000" 
-              strokeWidth="1.25" 
-              d="M5.5 3.21V20.8c0 .45.54.67.85.35l4.86-4.86a.5.5 0 0 1 .35-.15h6.87a.5.5 0 0 0 .35-.85L6.35 2.85a.5.5 0 0 0-.85.35Z"
-            />
-          </svg>
-        )}
-      </motion.div>
-    </div>
-  )
+  return null
 }

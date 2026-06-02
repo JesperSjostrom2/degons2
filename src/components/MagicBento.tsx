@@ -1,11 +1,13 @@
 'use client'
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import { User, Search, FileText, Send, Braces, Gift, ScanLine } from "lucide-react";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
-import { Globe } from "@/components/ui/cobe-globe";
 import { useIsMobile } from "@/hooks/use-media-query";
 import { cinematicEase, cinematicPanel, cinematicViewport } from "@/lib/site-motion";
+
+const Globe = dynamic(() => import("@/components/ui/cobe-globe").then((module) => module.Globe), { ssr: false });
 
 const BENTO_ACCENTS = {
   brass: "#a88c62",

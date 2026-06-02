@@ -7,23 +7,50 @@ type NavigatorWithPerformanceHints = Navigator & {
   }
 }
 
-const PERFORMANCE_CACHE_KEY = 'site-enhanced-motion-ok'
+const PERFORMANCE_CACHE_KEY = 'site-enhanced-motion-ok-v2'
+const PAGE_SETTLE_DELAY_MS = 150
+let enhancedMotionPromise: Promise<boolean> | null = null
 
-const isLikelyLowPowerDevice = () => {
+const isClearlyLowPowerDevice = () => {
   const nav = navigator as NavigatorWithPerformanceHints
   const cores = nav.hardwareConcurrency ?? 8
   const memory = nav.deviceMemory ?? 8
-  const saveData = Boolean(nav.connection?.saveData)
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-  return reducedMotion || saveData || cores <= 4 || memory <= 4
+  if (nav.connection?.saveData) {
+    return true
+  }
+
+  return cores <= 2 || memory <= 2 || (cores <= 4 && memory <= 4)
 }
+
+const waitForPageToSettle = () =>
+  new Promise<void>((resolve) => {
+    const settle = () => {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          resolve()
+        })
+      })
+    }
+
+    if (document.readyState === 'complete') {
+      window.setTimeout(settle, PAGE_SETTLE_DELAY_MS)
+      return
+    }
+
+    const handleLoad = () => {
+      window.removeEventListener('load', handleLoad)
+      window.setTimeout(settle, PAGE_SETTLE_DELAY_MS)
+    }
+
+    window.addEventListener('load', handleLoad, { once: true })
+  })
 
 const measureFrameHealth = () =>
   new Promise<boolean>((resolve) => {
-    const sampleDuration = 700
-    const maxAverageFrameMs = 22
-    const maxSingleFrameMs = 80
+    const sampleDuration = 350
+    const maxAverageFrameMs = 28
+    const maxSingleFrameMs = 112
     const startedAt = performance.now()
     let previousFrame = startedAt
     let frameCount = 0
@@ -54,7 +81,7 @@ const measureFrameHealth = () =>
     requestAnimationFrame(tick)
   })
 
-export const shouldUseEnhancedMotion = async () => {
+const checkEnhancedMotion = async () => {
   if (typeof window === 'undefined') {
     return false
   }
@@ -65,13 +92,27 @@ export const shouldUseEnhancedMotion = async () => {
     return cached === 'true'
   }
 
-  if (isLikelyLowPowerDevice()) {
+  await waitForPageToSettle()
+
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+  if (reducedMotion || isClearlyLowPowerDevice()) {
     window.sessionStorage.setItem(PERFORMANCE_CACHE_KEY, 'false')
     return false
   }
 
   const hasHealthyFrames = await measureFrameHealth()
-  window.sessionStorage.setItem(PERFORMANCE_CACHE_KEY, String(hasHealthyFrames))
+  if (hasHealthyFrames) {
+    window.sessionStorage.setItem(PERFORMANCE_CACHE_KEY, 'true')
+  }
 
   return hasHealthyFrames
+}
+
+export const shouldUseEnhancedMotion = async () => {
+  if (!enhancedMotionPromise) {
+    enhancedMotionPromise = checkEnhancedMotion()
+  }
+
+  return enhancedMotionPromise
 }

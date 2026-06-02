@@ -5,6 +5,7 @@ import GradientText from '@/components/GradientText'
 import ScrollReveal from '@/components/scroll-reveal'
 import SocialLinks from '@/components/social-links'
 import { useIsMobile } from '@/hooks/use-media-query'
+import { cinematicItem } from '@/lib/site-motion'
 
 export default function AboutSection() {
   const shouldReduceMotion = useReducedMotion()
@@ -58,12 +59,21 @@ export default function AboutSection() {
                   </p>
                 </ScrollReveal>
 
-                <SocialLinks />
+                <motion.div
+                  className="mobile-no-load-animation"
+                  variants={cinematicItem(0.28)}
+                  initial={shouldReduceMotion ? false : 'hidden'}
+                  whileInView={shouldReduceMotion ? undefined : 'visible'}
+                  viewport={{ once: true, amount: 0.16, margin: '0px 0px -10% 0px' }}
+                  style={{ willChange: shouldReduceMotion ? 'auto' : 'transform, opacity, filter' }}
+                >
+                  <SocialLinks />
+                </motion.div>
               </div>
             </div>
 
             <motion.div
-              className="flex items-center justify-center lg:col-span-2"
+              className="mobile-no-load-animation flex items-center justify-center lg:col-span-2"
               initial={shouldDisablePortraitMotion ? false : { opacity: 0, y: 54, scale: 0.92, rotateX: 12, rotateZ: -2.6, filter: 'blur(18px)' }}
               whileInView={shouldDisablePortraitMotion ? undefined : { opacity: 1, y: 0, scale: 1, rotateX: 0, rotateZ: 0, filter: 'blur(0px)' }}
               viewport={{ once: true, amount: 0.2, margin: '0px 0px -10% 0px' }}

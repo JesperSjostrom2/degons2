@@ -3,6 +3,7 @@
 import { useEffect, useState, type ReactNode } from 'react'
 
 import SiteLoadReveal from '@/components/site-load-reveal'
+import { prewarmBelowFoldAssets } from '@/lib/site-preload'
 
 const LOAD_REVEAL_DURATION_MS = 1940
 const LOAD_REVEAL_EXIT_MS = 320
@@ -11,6 +12,8 @@ export default function SiteShell({ children }: { children: ReactNode }) {
   const [shouldMountContent, setShouldMountContent] = useState(false)
   const [showLoader, setShowLoader] = useState(true)
   const [isLoaderExiting, setIsLoaderExiting] = useState(false)
+
+  useEffect(() => prewarmBelowFoldAssets(), [])
 
   useEffect(() => {
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches

@@ -1,11 +1,21 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import dynamic from 'next/dynamic'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowRight, Copy } from 'lucide-react'
 
-import LightRays from '@/components/LightRays'
+import { shouldUseEnhancedMotion } from '@/lib/client-performance'
 import { cinematicEase } from '@/lib/site-motion'
+
+const heroAtmosphereFallback = (
+  <div className="h-full w-full bg-[radial-gradient(circle_at_50%_0%,rgba(218,197,167,0.18),transparent_42%),radial-gradient(circle_at_80%_22%,rgba(168,140,98,0.10),transparent_32%)]" />
+)
+
+const LightRays = dynamic(() => import('@/components/LightRays'), {
+  ssr: false,
+  loading: () => heroAtmosphereFallback,
+})
 
 export default function Hero() {
   const [showLightRays, setShowLightRays] = useState(false)
@@ -13,12 +23,26 @@ export default function Hero() {
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(min-width: 768px)')
-    const updateLightRays = () => setShowLightRays(mediaQuery.matches)
+    let isMounted = true
+    let motionRequestId = 0
+
+    const updateLightRays = async () => {
+      const requestId = motionRequestId + 1
+      motionRequestId = requestId
+      const canUseMotion = mediaQuery.matches && await shouldUseEnhancedMotion()
+
+      if (!isMounted || requestId !== motionRequestId) {
+        return
+      }
+
+      setShowLightRays(mediaQuery.matches && canUseMotion)
+    }
 
     updateLightRays()
     mediaQuery.addEventListener('change', updateLightRays)
 
     return () => {
+      isMounted = false
       mediaQuery.removeEventListener('change', updateLightRays)
     }
   }, [])
@@ -57,7 +81,7 @@ export default function Hero() {
             className="h-full w-full opacity-10 saturate-125 dark:opacity-26 dark:saturate-95"
           />
         ) : (
-          <div className="h-full w-full bg-[radial-gradient(circle_at_50%_0%,rgba(218,197,167,0.18),transparent_42%),radial-gradient(circle_at_80%_22%,rgba(168,140,98,0.10),transparent_32%)]" />
+          heroAtmosphereFallback
         )}
       </div>
 
