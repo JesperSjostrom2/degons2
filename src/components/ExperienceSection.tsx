@@ -1,9 +1,10 @@
 "use client"
 
-import { useEffect, useRef, useState, type CSSProperties } from 'react'
+import { useEffect, useRef, useState, type CSSProperties, type MouseEvent } from 'react'
+import { createPortal } from 'react-dom'
 import Image from 'next/image'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import { CalendarDays, ChevronDown, Code2, ExternalLink, Figma, Layers3, Palette, Sparkles, UserRound, type LucideIcon } from 'lucide-react'
+import { CalendarDays, ChevronDown, Code2, ExternalLink, Eye, Figma, Layers3, Palette, Sparkles, UserRound, type LucideIcon } from 'lucide-react'
 import { SiFramer, SiGreensock, SiHtml5, SiJavascript, SiNextdotjs, SiTailwindcss, SiThreedotjs, SiTypescript } from 'react-icons/si'
 import type { IconType } from 'react-icons'
 import { cinematicHeader, cinematicViewport } from '@/lib/site-motion'
@@ -132,14 +133,32 @@ const fallbackSkillIcons: Record<string, LucideIcon> = {
 
 const ProjectCard = ({ project }: { project: Project }) => {
   const cardRef = useRef<HTMLElement>(null)
+  const previewBadgeRef = useRef<HTMLSpanElement>(null)
   const [detailsOpen, setDetailsOpen] = useState(false)
   const [isInView, setIsInView] = useState(false)
   const [canAutoplayMedia, setCanAutoplayMedia] = useState(false)
+  const [isProjectPreviewActive, setIsProjectPreviewActive] = useState(false)
+  const [hasMounted, setHasMounted] = useState(false)
   const accentLabelStyle = { '--project-accent': project.accentColor } as CSSProperties
   const projectCardStyle = {
     '--project-accent': project.accentColor,
     '--project-atmosphere': project.atmosphereColor,
   } as CSSProperties
+
+  const handleProjectPreviewPointerMove = (event: MouseEvent<HTMLAnchorElement>) => {
+    const badge = previewBadgeRef.current
+
+    if (!badge) {
+      return
+    }
+
+    badge.style.setProperty('--project-preview-x', `${event.clientX}px`)
+    badge.style.setProperty('--project-preview-y', `${event.clientY}px`)
+  }
+
+  useEffect(() => {
+    setHasMounted(true)
+  }, [])
 
   useEffect(() => {
     if (!cardRef.current) return
@@ -182,13 +201,49 @@ const ProjectCard = ({ project }: { project: Project }) => {
     })
   }, [canAutoplayMedia, isInView])
 
+  const projectPreviewBadge = (
+    <span
+      ref={previewBadgeRef}
+      className={`project-preview-badge ${isProjectPreviewActive ? 'project-preview-badge--active' : ''}`}
+      aria-hidden="true"
+    >
+      <span className="project-preview-badge__glow" />
+      <svg className="project-preview-badge__ring" viewBox="0 0 100 100">
+        <defs>
+          <path id={`project-open-path-${project.id}`} d="M50 50 m -34 0 a 34 34 0 1 1 68 0 a 34 34 0 1 1 -68 0" />
+        </defs>
+        <text>
+          <textPath href={`#project-open-path-${project.id}`} startOffset="0%">
+            OPEN - VIEW - OPEN - VIEW - OPEN - VIEW - OPEN - VIEW -
+          </textPath>
+        </text>
+      </svg>
+      <span className="project-preview-badge__center">
+        <Eye className="h-5 w-5" strokeWidth={1.8} />
+      </span>
+    </span>
+  )
+
   return (
+    <>
       <article ref={cardRef} className="project-card-atmosphere premium-glass-surface group overflow-hidden rounded-[28px]" style={projectCardStyle}>
         <div className="grid border-b border-[color:var(--site-border)] lg:grid-cols-[1.2fr_1fr] dark:border-white/10">
           <div className="relative min-h-[220px] overflow-hidden p-0 sm:min-h-[280px] lg:min-h-[440px] lg:p-8">
             <div className="relative z-10 mx-auto max-w-[760px] overflow-hidden rounded-t-[28px] border-b border-[color:var(--site-border)] bg-[rgba(0,0,0,0.15)] backdrop-blur-[4px] [backdrop-filter:blur(4px)_saturate(130%)] [-webkit-backdrop-filter:blur(4px)_saturate(130%)] dark:border-white/10 lg:mt-2 lg:rounded-2xl lg:border">
-              <div className="group/image relative aspect-[16/10] lg:aspect-[4/3]">
-                <div className="absolute inset-0 transition-transform duration-500 ease-out group-hover/image:scale-[1.02]">
+              <a
+                href={`https://${project.liveSite}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Open ${project.title} live site`}
+                className="group/project-preview project-preview-link relative block aspect-[16/10] overflow-hidden lg:aspect-[4/3]"
+                onMouseEnter={(event) => {
+                  setIsProjectPreviewActive(true)
+                  handleProjectPreviewPointerMove(event)
+                }}
+                onMouseMove={handleProjectPreviewPointerMove}
+                onMouseLeave={() => setIsProjectPreviewActive(false)}
+              >
+                <div className="absolute inset-0 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/project-preview:scale-[1.035]">
                   {project.image.type === 'video' ? (
                     <video
                       data-autoplay-preview
@@ -212,7 +267,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
                     />
                   )}
                 </div>
-              </div>
+              </a>
             </div>
           </div>
 
@@ -334,6 +389,8 @@ const ProjectCard = ({ project }: { project: Project }) => {
           </div>
         </div>
       </article>
+      {hasMounted ? createPortal(projectPreviewBadge, document.body) : null}
+    </>
   )
 }
 
