@@ -3,15 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import Image from 'next/image'
-
-const navItems = [
-  { name: 'Home', href: '#home', id: 'home' },
-  { name: 'Why Me', href: '#why-me', id: 'why-me' },
-  { name: 'Projects', href: '#projects', id: 'projects' },
-  { name: 'About', href: '#about', id: 'about' },
-  { name: 'Skills', href: '#skills', id: 'skills' },
-  { name: 'Contact', href: '#contact', id: 'contact' },
-]
+import { siteNavItems } from '@/lib/site-config'
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -92,7 +84,7 @@ export default function Navbar() {
 
     const observer = new IntersectionObserver(observerCallback, observerOptions)
 
-    navItems.forEach((item) => {
+    siteNavItems.forEach((item) => {
       const element = document.querySelector(item.href)
       if (element) {
         observer.observe(element)
@@ -174,9 +166,9 @@ export default function Navbar() {
 
       {/* Desktop Menu */}
       <div className="hidden lg:flex glass-nav relative items-center justify-center" style={{ padding: '0.35rem 1.15rem', gap: '0.7rem' }}>
-        {navItems.map((item) => (
+        {siteNavItems.map((item) => (
           <button
-            key={item.name}
+            key={item.label}
             type="button"
             onClick={() => handleNavClick(item.id)}
             data-scroll-to={item.id}
@@ -205,7 +197,7 @@ export default function Navbar() {
               />
             )}
             
-            <span className="relative z-10">{item.name}</span>
+            <span className="relative z-10">{item.label}</span>
           </button>
         ))}
       </div>
@@ -283,8 +275,8 @@ export default function Navbar() {
             {/* Menu Content */}
             <div className="absolute inset-0 z-40 flex flex-col justify-center px-8 sm:px-12 pt-20">
               <div className="space-y-4">
-                {navItems.map((item, index) => (
-                  <div key={item.name} className="overflow-hidden py-1">
+                {siteNavItems.map((item, index) => (
+                  <div key={item.label} className="overflow-hidden py-1">
                     <motion.div
                       className="will-change-transform"
                       initial={{ opacity: 0, x: -24 }}
@@ -309,7 +301,7 @@ export default function Navbar() {
                               : 'text-[#f5efe4]/80 hover:text-[#f5efe4]'
                           }`}
                         >
-                          {item.name}
+                          {item.label}
                         </div>
                       </button>
                     </motion.div>
@@ -325,7 +317,7 @@ export default function Navbar() {
                     transition={{
                       duration: 0.38,
                       ease: 'easeOut',
-                      delay: 0.12 + navItems.length * 0.06,
+                      delay: 0.12 + siteNavItems.length * 0.06,
                     }}
                   >
                     <div

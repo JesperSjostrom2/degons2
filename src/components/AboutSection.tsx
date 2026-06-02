@@ -1,32 +1,14 @@
 "use client"
 
-import { useEffect, useState } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import GradientText from '@/components/GradientText'
 import ScrollReveal from '@/components/scroll-reveal'
 import SocialLinks from '@/components/social-links'
-
-const MOBILE_BREAKPOINT = 767
-
-const useMobileDetection = () => {
-  const [isMobile, setIsMobile] = useState(true)
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT}px)`)
-    const checkMobile = () => setIsMobile(mediaQuery.matches)
-
-    checkMobile()
-    mediaQuery.addEventListener('change', checkMobile)
-
-    return () => mediaQuery.removeEventListener('change', checkMobile)
-  }, [])
-
-  return isMobile
-}
+import { useIsMobile } from '@/hooks/use-media-query'
 
 export default function AboutSection() {
   const shouldReduceMotion = useReducedMotion()
-  const isMobile = useMobileDetection()
+  const isMobile = useIsMobile(767, false)
   const shouldDisablePortraitMotion = shouldReduceMotion === true || isMobile
 
   return (

@@ -2,39 +2,35 @@
 
 import { FaEnvelope, FaGithub, FaLinkedin } from 'react-icons/fa6'
 import { FiGithub, FiLinkedin, FiMail } from 'react-icons/fi'
+import { SocialIconLink } from '@/components/social-icon-link'
+import { siteSocialLinks } from '@/lib/site-config'
+
+const socialIcons = {
+  GitHub: {
+    icon: <FiGithub className="h-5 w-5" />,
+    hoverIcon: <FaGithub className="h-5 w-5" />,
+  },
+  LinkedIn: {
+    icon: <FiLinkedin className="h-5 w-5" />,
+    hoverIcon: <FaLinkedin className="h-5 w-5" />,
+  },
+  Email: {
+    icon: <FiMail className="h-5 w-5" />,
+    hoverIcon: <FaEnvelope className="h-5 w-5" />,
+  },
+}
+
+export const portfolioSocialLinks = siteSocialLinks.map((link) => ({
+  ...link,
+  ...socialIcons[link.label as keyof typeof socialIcons],
+}))
 
 export default function SocialLinks() {
-  const socialLinkClass = 'premium-glass-surface group inline-flex h-11 w-11 items-center justify-center rounded-full text-[color:var(--site-muted)] transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/70 hover:text-accent dark:hover:border-accent/70 dark:hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/45 dark:text-white/72'
-  const outlineIconClass = 'h-5 w-5 transition-all duration-200 group-hover:scale-75 group-hover:opacity-0'
-  const fillIconClass = 'absolute h-5 w-5 scale-75 fill-current opacity-0 transition-all duration-200 group-hover:scale-100 group-hover:opacity-100'
-
   return (
     <div className="mt-8 flex gap-2">
-      <a
-        href="https://github.com/jespersjostrom2"
-        target="_blank"
-        rel="noopener noreferrer"
-        className={socialLinkClass}
-      >
-        <FiGithub className={outlineIconClass} />
-        <FaGithub className={fillIconClass} />
-      </a>
-      <a
-        href="https://www.linkedin.com/in/jesper-sj%C3%B6str%C3%B6m-521995232/"
-        target="_blank"
-        rel="noopener noreferrer"
-        className={socialLinkClass}
-      >
-        <FiLinkedin className={outlineIconClass} />
-        <FaLinkedin className={fillIconClass} />
-      </a>
-      <a
-        href="#contact"
-        className={socialLinkClass}
-      >
-        <FiMail className={outlineIconClass} />
-        <FaEnvelope className={fillIconClass} />
-      </a>
+      {portfolioSocialLinks.map((link) => (
+        <SocialIconLink key={link.label} {...link} />
+      ))}
     </div>
   )
 }

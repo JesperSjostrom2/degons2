@@ -1,40 +1,10 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { FaEnvelope, FaGithub, FaLinkedin } from 'react-icons/fa6'
-import { FiGithub, FiLinkedin, FiMail } from 'react-icons/fi'
 
+import { portfolioSocialLinks } from '@/components/social-links'
 import { Footer as AnimatedFooter } from '@/components/ui/modem-animated-footer'
-
-const socialLinks = [
-  {
-    icon: <FiGithub className="h-5 w-5" />,
-    hoverIcon: <FaGithub className="h-5 w-5" />,
-    href: 'https://github.com/jespersjostrom2',
-    label: 'GitHub',
-  },
-  {
-    icon: <FiLinkedin className="h-5 w-5" />,
-    hoverIcon: <FaLinkedin className="h-5 w-5" />,
-    href: 'https://www.linkedin.com/in/jesper-sj%C3%B6str%C3%B6m-521995232/',
-    label: 'LinkedIn',
-  },
-  {
-    icon: <FiMail className="h-5 w-5" />,
-    hoverIcon: <FaEnvelope className="h-5 w-5" />,
-    href: '#contact',
-    label: 'Email',
-  },
-]
-
-const navLinks = [
-  { label: 'Home', href: '#home' },
-  { label: 'Why Me', href: '#why-me' },
-  { label: 'Projects', href: '#projects' },
-  { label: 'About', href: '#about' },
-  { label: 'Skills', href: '#skills' },
-  { label: 'Contact', href: '#contact' },
-]
+import { siteNavItems } from '@/lib/site-config'
 
 export default function Footer() {
   const [currentTime, setCurrentTime] = useState('')
@@ -71,8 +41,8 @@ export default function Footer() {
   return (
     <AnimatedFooter
       brandName="Jesper Sjöström"
-      socialLinks={socialLinks}
-      navLinks={navLinks}
+      socialLinks={portfolioSocialLinks}
+      navLinks={siteNavItems}
       statusSlot={statusSlot}
     />
   )

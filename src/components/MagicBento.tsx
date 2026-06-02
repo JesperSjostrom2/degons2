@@ -4,9 +4,9 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { User, Search, FileText, Send, Braces, Gift, ScanLine } from "lucide-react";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { Globe } from "@/components/ui/cobe-globe";
+import { useIsMobile } from "@/hooks/use-media-query";
 import { cinematicEase, cinematicPanel, cinematicViewport } from "@/lib/site-motion";
 
-const MOBILE_BREAKPOINT = 768;
 const BENTO_ACCENTS = {
   brass: "#a88c62",
   champagne: "#c2a77b",
@@ -213,22 +213,6 @@ const BentoCardGrid: React.FC<{
     {children}
   </div>
 );
-
-const useMobileDetection = () => {
-  const [isMobile, setIsMobile] = useState(true);
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT}px)`);
-    const checkMobile = () => setIsMobile(mediaQuery.matches);
-
-    checkMobile();
-    mediaQuery.addEventListener("change", checkMobile);
-
-    return () => mediaQuery.removeEventListener("change", checkMobile);
-  }, []);
-
-  return isMobile;
-};
 
 const BENTO_SVG_PATHS = {
   endToEnd: "/assets/bento-cards/end-to-end-delivery/path.svg",
@@ -442,7 +426,7 @@ const BentoAssetImage = ({
 const MagicBento: React.FC = () => {
   const gridRef = useRef<HTMLDivElement>(null);
   const scrollPauseTimeoutRef = useRef<number>(0);
-  const isMobile = useMobileDetection();
+  const isMobile = useIsMobile(768, true);
   const shouldReduceMotion = useReducedMotion();
   const [hasMounted, setHasMounted] = useState(false);
   const [animatedBentoAsset, setAnimatedBentoAsset] = useState<BentoSvgAsset | null>(null);
@@ -587,7 +571,7 @@ const MagicBento: React.FC = () => {
             <p className="bento-card-caption hidden sm:block mt-1">Quick replies and clear next steps keep the work moving.</p>
           </div>
 
-          <div className="chat-showcase-messages relative z-30 mt-5 flex flex-1 flex-col gap-1.5 px-6 pb-0">
+          <div className="chat-showcase-messages relative z-30 mt-5 flex flex-1 flex-col gap-1 px-6 pb-0">
             <div className="chat-line chat-line-in">
               <div className="chat-avatar">
                 <span>C</span>
@@ -1738,8 +1722,8 @@ const MagicBento: React.FC = () => {
           }
 
           @keyframes chat-reply-enter {
-            0%, 36% { opacity: 0; transform: translateY(6px); }
-            42%, 100% { opacity: 1; transform: translateY(0); }
+            0%, 22% { opacity: 0; transform: translateY(5px); }
+            28%, 100% { opacity: 1; transform: translateY(0); }
           }
 
           .chat-input-bar {
