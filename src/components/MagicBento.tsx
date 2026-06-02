@@ -2,8 +2,9 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { User, Search, FileText, Send, Braces, Gift, ScanLine } from "lucide-react";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { Globe } from "@/components/ui/cobe-globe";
+import { cinematicEase, cinematicPanel, cinematicViewport } from "@/lib/site-motion";
 
 const MOBILE_BREAKPOINT = 768;
 const BENTO_ACCENTS = {
@@ -48,6 +49,31 @@ const REMOTE_GLOBE_BASE_COLOR = [0.1, 0.1, 0.1] as [number, number, number];
 const REMOTE_GLOBE_GLOW_COLOR = [1, 1, 1] as [number, number, number];
 const REMOTE_GLOBE_MARKER_COLOR = [0.5, 0.64, 0.78] as [number, number, number];
 const REMOTE_GLOBE_ARC_COLOR = [0.42, 0.55, 0.68] as [number, number, number];
+
+const BENTO_CARD_VISUAL_ORDER = [1, 2, 4, 3, 0];
+
+const createBentoCardReveal = (index: number): Variants => {
+  const basePanel = cinematicPanel("up");
+  const visualOrder = BENTO_CARD_VISUAL_ORDER[index] ?? index;
+
+  return {
+    hidden: basePanel.hidden,
+    visible: {
+      opacity: 1,
+      x: 0,
+      y: 0,
+      rotateX: 0,
+      rotateZ: 0,
+      scale: 1,
+      filter: "blur(0px)",
+      transition: {
+        duration: 1.02,
+        delay: Math.min(visualOrder * 0.07, 0.28),
+        ease: cinematicEase,
+      },
+    },
+  };
+};
 
 export const ExecutionWorkflowMap = () => {
   return (
@@ -421,7 +447,7 @@ const MagicBento: React.FC = () => {
   const [hasMounted, setHasMounted] = useState(false);
   const [animatedBentoAsset, setAnimatedBentoAsset] = useState<BentoSvgAsset | null>(null);
   const shouldUseMobileBento = !hasMounted || isMobile;
-  const motionDisabled = shouldReduceMotion === true || shouldUseMobileBento;
+  const revealMotionDisabled = shouldReduceMotion === true;
 
   const startBentoSvgAnimation = useCallback((asset: BentoSvgAsset) => {
     if (!shouldUseMobileBento) {
@@ -497,9 +523,13 @@ const MagicBento: React.FC = () => {
               markerColor={REMOTE_GLOBE_MARKER_COLOR}
               arcColor={REMOTE_GLOBE_ARC_COLOR}
               theta={0.1}
-              mapSamples={shouldUseMobileBento ? 1800 : 12000}
+              mapSamples={shouldUseMobileBento ? 1200 : 5200}
+              maxDevicePixelRatio={1.25}
+              targetFps={30}
+              initRootMargin="1200px 0px"
+              eagerInit
               speed={shouldUseMobileBento ? 0 : 0.0016}
-              interactive={!shouldUseMobileBento}
+              interactive={false}
               showLabels={!shouldUseMobileBento}
               pauseOnScroll
               markers={REMOTE_GLOBE_MARKERS}
@@ -2496,11 +2526,7 @@ const MagicBento: React.FC = () => {
 
           .remote-card-globe,
           .remote-card-globe canvas {
-            cursor: pointer !important;
-          }
-
-          .remote-card-globe canvas:active {
-            cursor: grabbing !important;
+            cursor: default !important;
           }
 
           .card .bento-mobile-readable,
@@ -2969,15 +2995,12 @@ const MagicBento: React.FC = () => {
             return (
               <motion.div
                 key={card.label}
-                className={`${baseClassName} transform-gpu will-change-[transform,opacity]`}
-                initial={motionDisabled ? false : { opacity: 0, y: shouldUseMobileBento ? 18 : 24, scale: shouldUseMobileBento ? 0.992 : 0.985 }}
-                whileInView={motionDisabled ? undefined : { opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: true, amount: shouldUseMobileBento ? 0.08 : 0.18, margin: shouldUseMobileBento ? '0px 0px -8% 0px' : '0px 0px -14% 0px' }}
-                transition={{
-                  duration: shouldUseMobileBento ? 0.48 : 0.66,
-                  delay: motionDisabled ? 0 : Math.min(index * (shouldUseMobileBento ? 0.055 : 0.045), shouldUseMobileBento ? 0.22 : 0.18),
-                  ease: [0.22, 1, 0.36, 1],
-                }}
+                className={`mobile-no-load-animation cinematic-reveal-card ${baseClassName} transform-gpu will-change-[transform,opacity,filter]`}
+                variants={createBentoCardReveal(index)}
+                initial={revealMotionDisabled ? false : "hidden"}
+                whileInView={revealMotionDisabled ? undefined : "visible"}
+                viewport={cinematicViewport}
+                style={{ willChange: revealMotionDisabled ? "auto" : "transform, opacity, filter" }}
                 onMouseEnter={card.svgAsset ? () => startBentoSvgAnimation(card.svgAsset!) : undefined}
                 onMouseLeave={card.svgAsset ? () => stopBentoSvgAnimation(card.svgAsset!) : undefined}
                 onClick={card.svgAsset ? () => toggleBentoSvgAnimation(card.svgAsset!) : undefined}

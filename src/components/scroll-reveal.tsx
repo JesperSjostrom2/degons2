@@ -3,6 +3,8 @@
 import { motion, useReducedMotion } from 'framer-motion'
 import type { ReactNode } from 'react'
 
+import { cinematicEase } from '@/lib/site-motion'
+
 interface ScrollRevealProps {
   children: ReactNode
   className?: string
@@ -16,11 +18,11 @@ export default function ScrollReveal({ children, className = '', delay = 0, blur
   return (
     <motion.div
       className={`mobile-no-load-animation transform-gpu ${className}`}
-      initial={shouldReduceMotion ? false : { opacity: 0, y: blur ? 18 : 16 }}
-      whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.08, margin: '0px 0px -12% 0px' }}
-      transition={{ duration: blur ? 0.56 : 0.5, delay, ease: [0.22, 1, 0.36, 1] }}
-      style={{ willChange: shouldReduceMotion ? 'auto' : 'transform, opacity' }}
+      initial={shouldReduceMotion ? false : { opacity: 0, y: blur ? 24 : 18, scale: 0.992, filter: blur ? 'blur(14px)' : 'blur(8px)' }}
+      whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
+      viewport={{ once: true, amount: 0.12, margin: '0px 0px -16% 0px' }}
+      transition={{ duration: blur ? 0.86 : 0.72, delay, ease: cinematicEase }}
+      style={{ willChange: shouldReduceMotion ? 'auto' : 'transform, opacity, filter' }}
     >
       {children}
     </motion.div>

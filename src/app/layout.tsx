@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Newsreader } from "next/font/google";
 import { Outfit } from "next/font/google";
 import { Source_Sans_3 } from "next/font/google";
+import SiteShell from "@/components/site-shell";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -96,7 +97,7 @@ export default function RootLayout({
         className={`${outfit.variable} ${newsreader.variable} ${sourceSans3.variable} font-sans antialiased`}
       >
         <div className="cinematic-grain-overlay" />
-        {children}
+        <SiteShell>{children}</SiteShell>
       </body>
     </html>
   );

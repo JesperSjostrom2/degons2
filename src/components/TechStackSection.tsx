@@ -13,6 +13,7 @@ import {
   SiVercel,
 } from 'react-icons/si'
 import { type IconType } from 'react-icons'
+import { cinematicHeader, cinematicPanel, cinematicViewport } from '@/lib/site-motion'
 
 interface TechItem {
   name: string
@@ -138,11 +139,11 @@ export default function TechStackSection() {
     <section id="skills" className="site-section">
       <div className="container mx-auto px-6">
         <motion.div
-          className="mobile-no-load-animation section-header"
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.08, margin: '0px 0px -18% 0px' }}
-          transition={{ duration: 0.68, ease: [0.22, 1, 0.36, 1] }}
+          className="mobile-no-load-animation section-header cinematic-section-header"
+          variants={cinematicHeader}
+          initial="hidden"
+          whileInView="visible"
+          viewport={cinematicViewport}
         >
           <p className="section-label">Tech Stack</p>
           <h2 className="section-title">Modern web tools</h2>
@@ -154,11 +155,11 @@ export default function TechStackSection() {
         <motion.div
           ref={gridRef}
           onPointerLeave={hideHoverFill}
-          className="mobile-no-load-animation premium-glass-surface relative mx-auto flex max-w-7xl flex-wrap overflow-hidden rounded-[22px] md:grid md:grid-cols-3 md:rounded-[28px] lg:grid-cols-6"
-          initial={{ opacity: 0, y: 52, scale: 0.985 }}
-          whileInView={{ opacity: 1, y: 0, scale: 1 }}
-          viewport={{ once: true, amount: 0.08, margin: '0px 0px -12% 0px' }}
-          transition={{ duration: 0.75, delay: 0.04, ease: [0.22, 1, 0.36, 1] }}
+          className="mobile-no-load-animation cinematic-reveal-card premium-glass-surface relative mx-auto flex max-w-7xl flex-wrap overflow-hidden rounded-[22px] md:grid md:grid-cols-3 md:rounded-[28px] lg:grid-cols-6"
+          variants={cinematicPanel('deep')}
+          initial="hidden"
+          whileInView="visible"
+          viewport={cinematicViewport}
         >
           <div
             className="pointer-events-none absolute left-0 top-0 z-0 bg-[#a88c62] transition-[transform,width,height,border-radius,opacity] duration-300 ease-out"

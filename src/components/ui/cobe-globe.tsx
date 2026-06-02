@@ -49,6 +49,10 @@ interface GlobeProps {
   theta?: number
   diffuse?: number
   mapSamples?: number
+  maxDevicePixelRatio?: number
+  targetFps?: number
+  initRootMargin?: string
+  eagerInit?: boolean
   interactive?: boolean
   showLabels?: boolean
   pauseOnScroll?: boolean
@@ -72,6 +76,10 @@ export function Globe({
   theta = 0.2,
   diffuse = 1.5,
   mapSamples = 16000,
+  maxDevicePixelRatio = 2,
+  targetFps = 60,
+  initRootMargin = "80px 0px",
+  eagerInit = false,
   interactive = true,
   showLabels = true,
   pauseOnScroll = false,
@@ -168,13 +176,15 @@ export function Globe({
     let phi = 0
     let isVisible = false
     let shouldInitialize = false
+    let lastFrameTime = 0
+    const minFrameDuration = 1000 / Math.max(1, targetFps)
 
     function init() {
       const width = canvas.offsetWidth
       if (width === 0 || globe) return
 
       const isMobileViewport = window.matchMedia('(max-width: 767px)').matches
-      const dpr = isMobileViewport ? 1 : Math.min(window.devicePixelRatio || 1, 2)
+      const dpr = isMobileViewport ? 1 : Math.min(window.devicePixelRatio || 1, maxDevicePixelRatio)
       globe = createGlobe(canvas, {
         devicePixelRatio: dpr,
         width,
@@ -199,11 +209,19 @@ export function Globe({
       globe.update({ phi, theta })
       canvas.style.opacity = "1"
 
-      function animate() {
+      function animate(timestamp: number) {
         if (isScrollPausedRef.current) {
           animationId = 0
           return
         }
+
+        if (lastFrameTime && timestamp - lastFrameTime < minFrameDuration) {
+          animationId = requestAnimationFrame(animate)
+          return
+        }
+
+        const frameScale = lastFrameTime ? Math.min((timestamp - lastFrameTime) / (1000 / 60), 2) : 1
+        lastFrameTime = timestamp
 
         const hasVelocity =
           Math.abs(velocity.current.phi) > 0.0001 ||
@@ -211,10 +229,10 @@ export function Globe({
         const hasThetaCorrection = thetaOffsetRef.current < -0.4 || thetaOffsetRef.current > 0.4
 
         if (!isPausedRef.current) {
-          phi += speed
+          phi += speed * frameScale
           if (hasVelocity) {
-            phiOffsetRef.current += velocity.current.phi
-            thetaOffsetRef.current += velocity.current.theta
+            phiOffsetRef.current += velocity.current.phi * frameScale
+            thetaOffsetRef.current += velocity.current.theta * frameScale
             velocity.current.phi *= 0.95
             velocity.current.theta *= 0.95
           }
@@ -247,6 +265,7 @@ export function Globe({
 
       function startAnimating() {
         if (animationId || !isVisible || document.hidden) return
+        lastFrameTime = 0
         animationId = requestAnimationFrame(animate)
       }
 
@@ -316,6 +335,13 @@ export function Globe({
     const maybeInitialize = () => {
       if (!shouldInitialize || cleanupVisibilityChange || cancelIdleInit || canvas.offsetWidth <= 0) return
 
+      if (eagerInit) {
+        resizeObserver?.disconnect()
+        resizeObserver = null
+        cleanupVisibilityChange = init()
+        return
+      }
+
       cancelIdleInit = scheduleIdleWork(() => {
         cancelIdleInit = null
 
@@ -336,7 +362,7 @@ export function Globe({
           maybeInitialize()
         }
       },
-      { rootMargin: "80px 0px", threshold: 0 },
+        { rootMargin: initRootMargin, threshold: 0 },
     )
     initObserver.observe(canvas)
 
@@ -354,7 +380,7 @@ export function Globe({
       cleanupVisibilityChange?.()
       if (globe) globe.destroy()
     }
-  }, [markerData, arcData, markerColor, baseColor, arcColor, glowColor, dark, mapBrightness, markerElevation, arcWidth, arcHeight, speed, theta, diffuse, mapSamples, pauseOnScroll])
+  }, [markerData, arcData, markerColor, baseColor, arcColor, glowColor, dark, mapBrightness, markerElevation, arcWidth, arcHeight, speed, theta, diffuse, mapSamples, maxDevicePixelRatio, targetFps, initRootMargin, eagerInit, pauseOnScroll])
 
   return (
     <div className={`relative aspect-square select-none ${className}`}>

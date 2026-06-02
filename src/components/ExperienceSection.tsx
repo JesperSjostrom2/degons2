@@ -2,10 +2,11 @@
 
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import Image from 'next/image'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { CalendarDays, ChevronDown, Code2, ExternalLink, Figma, Layers3, Palette, Sparkles, UserRound, type LucideIcon } from 'lucide-react'
 import { SiFramer, SiGreensock, SiHtml5, SiJavascript, SiNextdotjs, SiTailwindcss, SiThreedotjs, SiTypescript } from 'react-icons/si'
 import type { IconType } from 'react-icons'
+import { cinematicHeader, cinematicViewport } from '@/lib/site-motion'
 
 interface ProjectSlide {
   type: 'image' | 'video'
@@ -337,31 +338,49 @@ const ProjectCard = ({ project }: { project: Project }) => {
 }
 
 const ExperienceSection: React.FC = () => {
+  const shouldReduceMotion = useReducedMotion()
+
   return (
     <section id="projects" className="site-section">
       <div className="container mx-auto px-6">
         <motion.div
-          className="mobile-no-load-animation section-header"
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.08, margin: '0px 0px -18% 0px' }}
-          transition={{ duration: 0.68, ease: [0.22, 1, 0.36, 1] }}
+          className="mobile-no-load-animation section-header cinematic-section-header"
+          variants={cinematicHeader}
+          initial="hidden"
+          whileInView="visible"
+          viewport={cinematicViewport}
         >
           <p className="section-label">Selected Work</p>
           <h2 className="section-title">My Past Projects</h2>
         </motion.div>
 
-        <motion.div
-          className="mobile-no-load-animation mx-auto flex max-w-7xl flex-col gap-7"
-          initial={{ opacity: 0, y: 52, scale: 0.985 }}
-          whileInView={{ opacity: 1, y: 0, scale: 1 }}
-          viewport={{ once: true, amount: 0.08, margin: '0px 0px -12% 0px' }}
-          transition={{ duration: 0.75, delay: 0.04, ease: [0.22, 1, 0.36, 1] }}
-        >
-          {projectsData.map((project) => (
-            <ProjectCard key={project.id} project={project} />
-          ))}
-        </motion.div>
+        <div className="mobile-no-load-animation mx-auto flex max-w-7xl flex-col gap-7">
+          {projectsData.map((project, index) => {
+            const depthPreset = [
+              { y: 52, scale: 0.985, blur: 10, duration: 0.92, delay: 0 },
+              { y: 72, scale: 0.965, blur: 14, duration: 1.02, delay: 0.1 },
+              { y: 88, scale: 0.95, blur: 18, duration: 1.14, delay: 0.2 },
+            ][index] ?? { y: 72, scale: 0.965, blur: 14, duration: 1.02, delay: 0.1 }
+
+            return (
+              <motion.div
+                key={project.id}
+                className="mobile-no-load-animation cinematic-reveal-card"
+                initial={shouldReduceMotion ? false : { opacity: 0, y: depthPreset.y, scale: depthPreset.scale, rotateX: 6, filter: `blur(${depthPreset.blur}px)` }}
+                whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0, scale: 1, rotateX: 0, filter: 'blur(0px)' }}
+                viewport={{ once: true, amount: 0.14, margin: '0px 0px -14% 0px' }}
+                transition={{
+                  duration: depthPreset.duration,
+                  delay: shouldReduceMotion ? 0 : depthPreset.delay,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+                style={{ willChange: shouldReduceMotion ? 'auto' : 'transform, opacity, filter' }}
+              >
+                <ProjectCard project={project} />
+              </motion.div>
+            )
+          })}
+        </div>
 
 
       </div>

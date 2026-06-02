@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import { ArrowRight, ChevronDown, Github, Linkedin, Loader2, type LucideIcon } from 'lucide-react'
 import { FiMail } from 'react-icons/fi'
 import type { IconType } from 'react-icons'
+import { cinematicHeader, cinematicPanel, cinematicViewport } from '@/lib/site-motion'
 
 const projectTypes = ['Landing page', 'Business website', 'Portfolio', 'Redesign / UI polish', 'Frontend build', 'Other']
 
@@ -151,11 +152,11 @@ export default function ContactSection() {
     <section id="contact" className="site-section min-h-screen">
       <div className="container mx-auto px-6">
         <motion.div
-          className="mobile-no-load-animation section-header"
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.08, margin: '0px 0px -18% 0px' }}
-          transition={{ duration: 0.68, ease: [0.22, 1, 0.36, 1] }}
+          className="mobile-no-load-animation section-header cinematic-section-header"
+          variants={cinematicHeader}
+          initial="hidden"
+          whileInView="visible"
+          viewport={cinematicViewport}
         >
           <p className="section-label">Contact</p>
           <h2 className="section-title">Let&apos;s talk about your site</h2>
@@ -165,11 +166,11 @@ export default function ContactSection() {
         </motion.div>
 
         <motion.div
-          className="mobile-no-load-animation mx-auto max-w-6xl"
-          initial={{ opacity: 0, y: 52, scale: 0.985 }}
-          whileInView={{ opacity: 1, y: 0, scale: 1 }}
-          viewport={{ once: true, amount: 0.08, margin: '0px 0px -12% 0px' }}
-          transition={{ duration: 0.75, delay: 0.04, ease: [0.22, 1, 0.36, 1] }}
+          className="mobile-no-load-animation cinematic-reveal-card mx-auto max-w-6xl"
+          variants={cinematicPanel('deep')}
+          initial="hidden"
+          whileInView="visible"
+          viewport={cinematicViewport}
         >
             <div className="surface-hover-glow premium-glass-surface relative grid overflow-hidden rounded-[28px] backdrop-blur-sm lg:grid-cols-[0.9fr_1.35fr]">
               <aside className="flex flex-col justify-between border-b border-[color:var(--site-border)] p-6 md:p-8 lg:border-b-0 lg:border-r dark:border-white/10">
