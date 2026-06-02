@@ -2,11 +2,12 @@
 
 import { useEffect, useRef, useState, type CSSProperties, type MouseEvent } from 'react'
 import { createPortal } from 'react-dom'
+import type { ComponentType, SVGProps } from 'react'
 import Image from 'next/image'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import { CalendarDays, ChevronDown, Code2, ExternalLink, Eye, Figma, Layers3, Palette, Sparkles, UserRound, type LucideIcon } from 'lucide-react'
-import { SiFramer, SiGreensock, SiHtml5, SiJavascript, SiNextdotjs, SiTailwindcss, SiThreedotjs, SiTypescript } from 'react-icons/si'
-import type { IconType } from 'react-icons'
+import { ArrowUpRight, BadgeCheck, ChevronDown, Clock3, Code2, Eye, Figma, Globe, MonitorSmartphone, Palette, Sparkles, type LucideIcon } from 'lucide-react'
+import { SiAdobeillustrator, SiCss3, SiFigma, SiFramer, SiHtml5, SiJavascript, SiMongodb, SiNextdotjs, SiReact, SiShadcnui, SiTailwindcss, SiThreedotjs, SiTypescript, SiVercel } from 'react-icons/si'
+import type { IconBaseProps } from 'react-icons'
 import { cinematicHeader, cinematicViewport } from '@/lib/site-motion'
 
 interface ProjectSlide {
@@ -50,7 +51,7 @@ const projectsData: Project[] = [
       'Media-heavy sections structured to stay usable',
       'Clear path from first impression to contact',
     ],
-    skills: ['Next.js', 'Tailwind CSS', 'Framer Motion', 'UI/UX', 'Web Design'],
+    skills: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'motion.dev', 'shadcn/ui', 'GSAP', 'Vercel', 'Figma'],
     year: '2026',
     image: { type: 'image', src: '/assets/projects/andcreativeproduct.png', objectPosition: 'top' },
     accentColor: '#f3f3f3',
@@ -75,7 +76,7 @@ const projectsData: Project[] = [
       'Brand and logo direction for a more finished identity',
       'Mobile-first structure for people checking details on the go',
     ],
-    skills: ['Web Design', 'Logo Design', 'Brand Identity', 'UI/UX', 'HTML/CSS', 'JavaScript'],
+    skills: ['React', 'Figma', 'Illustrator', 'Logo Design', 'HTML', 'CSS', 'JavaScript'],
     year: '2024',
     image: { type: 'image', src: '/assets/projects/kermaipad.png', objectPosition: 'top' },
     accentColor: '#d4af37',
@@ -100,7 +101,7 @@ const projectsData: Project[] = [
       'Motion and WebGL details balanced with performance work',
       'Clearer positioning for both portfolio and freelance inquiries',
     ],
-    skills: ['Next.js', 'Tailwind CSS', 'Framer Motion', 'TypeScript', 'GSAP', 'Three.js'],
+    skills: ['Next.js', 'React', 'Figma', 'HTML', 'CSS', 'JavaScript', 'MongoDB'],
     year: '2023',
     image: { type: 'image', src: '/assets/projects/portfolioproduct.png', objectPosition: 'top' },
     accentColor: '#ff0066',
@@ -113,22 +114,106 @@ const projectsData: Project[] = [
   },
 ]
 
-const brandSkillIcons: Record<string, IconType> = {
+type SkillIconComponent = ComponentType<IconBaseProps | SVGProps<SVGSVGElement>>
+
+const MotionDevIcon = (props: SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 26 9" fill="none" aria-hidden="true" {...props}>
+    <path d="M 9.587 0 L 4.57 9 L 0 9 L 3.917 1.972 C 4.524 0.883 6.039 0 7.301 0 Z M 20.794 2.25 C 20.794 1.007 21.817 0 23.079 0 C 24.341 0 25.364 1.007 25.364 2.25 C 25.364 3.493 24.341 4.5 23.079 4.5 C 21.817 4.5 20.794 3.493 20.794 2.25 Z M 10.443 0 L 15.013 0 L 9.997 9 L 5.427 9 Z M 15.841 0 L 20.411 0 L 16.494 7.028 C 15.887 8.117 14.372 9 13.11 9 L 10.825 9 Z" fill="currentColor" />
+  </svg>
+)
+
+const GsapIcon = (props: SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 30" fill="none" aria-hidden="true" {...props}>
+    <path d="M23.81 14.012v.013l-1.075 4.666c-.058.264-.322.457-.626.457H20.81a.218.218 0 0 0-.208.156c-1.198 4.064-2.82 6.857-4.962 8.534-1.822 1.428-4.068 2.094-7.069 2.094-2.696 0-4.514-.867-6.056-2.579-2.038-2.262-2.88-5.966-2.37-10.428C1.065 8.548 5.41.095 13.776.095c2.545-.022 4.543.763 5.933 2.33 1.47 1.658 2.216 4.154 2.22 7.422a.55.55 0 0 1-.549.536h-6.13a.42.42 0 0 1-.407-.41c-.05-2.26-.72-3.36-2.052-3.36-2.35 0-3.736 3.19-4.471 4.958-1.027 2.47-1.55 5.153-1.447 7.825.049 1.244.249 2.993 1.43 3.718 1.047.642 2.541.216 3.446-.495.904-.712 1.632-1.943 1.938-3.066.043-.156.046-.277.005-.331-.043-.056-.162-.069-.253-.069h-1.574a.572.572 0 0 1-.438-.202.42.42 0 0 1-.087-.362l1.076-4.674c.053-.239.27-.42.537-.452v-.012h10.33c.024 0 .049 0 .072.005.268.035.457.284.452.556h.002Z" fill="currentColor" />
+  </svg>
+)
+
+const brandSkillIcons: Record<string, SkillIconComponent> = {
   'Next.js': SiNextdotjs,
+  React: SiReact,
   'Tailwind CSS': SiTailwindcss,
   'Framer Motion': SiFramer,
-  'HTML/CSS': SiHtml5,
+  'motion.dev': MotionDevIcon,
+  'shadcn/ui': SiShadcnui,
+  HTML: SiHtml5,
+  CSS: SiCss3,
   JavaScript: SiJavascript,
   TypeScript: SiTypescript,
-  GSAP: SiGreensock,
+  GSAP: GsapIcon,
+  Vercel: SiVercel,
+  Figma: SiFigma,
+  Illustrator: SiAdobeillustrator,
+  MongoDB: SiMongodb,
   'Three.js': SiThreedotjs,
 }
 
 const fallbackSkillIcons: Record<string, LucideIcon> = {
   'UI/UX': Figma,
   'Web Design': Palette,
-  'Logo Design': Figma,
+  'Logo Design': Palette,
   'Brand Identity': Sparkles,
+}
+
+const PROJECT_SKILL_ICON_COLOR = '#dac5a7'
+
+const skillIconClassNames: Record<string, string> = {
+  'motion.dev': 'h-[0.6rem] w-[1rem]',
+  GSAP: 'h-[0.8rem] w-[0.65rem]',
+}
+
+const SkillChip = ({ skill }: { skill: string }) => {
+  const BrandIcon = brandSkillIcons[skill]
+  const FallbackIcon = fallbackSkillIcons[skill] || Code2
+  const iconClassName = skillIconClassNames[skill] ?? 'h-3.5 w-3.5'
+
+  return (
+    <span className="project-skill-chip inline-flex items-center gap-1.5 rounded-[0.7rem] px-3 py-1.5 text-xs text-[color:var(--site-text)] dark:text-white/72">
+      <span className="flex h-4 w-4 shrink-0 items-center justify-center">
+        {BrandIcon ? (
+          <BrandIcon className={`${iconClassName} shrink-0`} style={{ color: PROJECT_SKILL_ICON_COLOR }} />
+        ) : (
+          <FallbackIcon className={`${iconClassName} shrink-0`} style={{ color: PROJECT_SKILL_ICON_COLOR }} />
+        )}
+      </span>
+      {skill}
+    </span>
+  )
+}
+
+const projectDetailLabelStyle = { color: '#dac5a7' } as const
+
+interface ProjectMetaItemProps {
+  label: string
+  value: string
+  icon: LucideIcon
+  href?: string
+}
+
+const ProjectMetaItem = ({ label, value, icon: Icon, href }: ProjectMetaItemProps) => {
+  const content = (
+    <>
+      <span className="project-meta-card__icon-shell" aria-hidden="true">
+        <Icon className="project-meta-card__icon" strokeWidth={1.8} />
+      </span>
+      <span className="project-meta-card__copy">
+        <span className="project-meta-card__label">{label}</span>
+        <span className="project-meta-card__value">
+          {value}
+          {href ? <ArrowUpRight className="project-meta-card__arrow" strokeWidth={1.9} /> : null}
+        </span>
+      </span>
+    </>
+  )
+
+  if (href) {
+    return (
+      <a href={href} target="_blank" rel="noopener noreferrer" className="project-meta-card group/meta-card">
+        {content}
+      </a>
+    )
+  }
+
+  return <div className="project-meta-card">{content}</div>
 }
 
 const ProjectCard = ({ project }: { project: Project }) => {
@@ -228,14 +313,14 @@ const ProjectCard = ({ project }: { project: Project }) => {
     <>
       <article ref={cardRef} className="project-card-atmosphere premium-glass-surface group overflow-hidden rounded-[28px]" style={projectCardStyle}>
         <div className="grid border-b border-[color:var(--site-border)] lg:grid-cols-[1.2fr_1fr] dark:border-white/10">
-          <div className="relative min-h-[220px] overflow-hidden p-0 sm:min-h-[280px] lg:min-h-[440px] lg:p-8">
-            <div className="relative z-10 mx-auto max-w-[760px] overflow-hidden rounded-t-[28px] border-b border-[color:var(--site-border)] bg-[rgba(0,0,0,0.15)] backdrop-blur-[4px] [backdrop-filter:blur(4px)_saturate(130%)] [-webkit-backdrop-filter:blur(4px)_saturate(130%)] dark:border-white/10 lg:mt-2 lg:rounded-2xl lg:border">
+          <div className="relative min-h-[220px] overflow-hidden p-0 sm:min-h-[280px] lg:min-h-[420px] lg:self-stretch lg:p-7">
+            <div className="relative z-10 mx-auto max-w-[760px] overflow-hidden rounded-t-[28px] border-b border-[color:var(--site-border)] bg-[rgba(0,0,0,0.15)] backdrop-blur-[4px] [backdrop-filter:blur(4px)_saturate(130%)] [-webkit-backdrop-filter:blur(4px)_saturate(130%)] dark:border-white/10 lg:h-full lg:rounded-2xl lg:border">
               <a
                 href={`https://${project.liveSite}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`Open ${project.title} live site`}
-                className="group/project-preview project-preview-link relative block aspect-[16/10] overflow-hidden lg:aspect-[4/3]"
+                className="group/project-preview project-preview-link relative block aspect-[16/10] overflow-hidden lg:h-full lg:aspect-auto"
                 onMouseEnter={(event) => {
                   setIsProjectPreviewActive(true)
                   handleProjectPreviewPointerMove(event)
@@ -243,12 +328,12 @@ const ProjectCard = ({ project }: { project: Project }) => {
                 onMouseMove={handleProjectPreviewPointerMove}
                 onMouseLeave={() => setIsProjectPreviewActive(false)}
               >
-                <div className="absolute inset-0 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/project-preview:scale-[1.035]">
+                <div className="project-preview-media absolute inset-0">
                   {project.image.type === 'video' ? (
                     <video
                       data-autoplay-preview
                       src={project.image.src}
-                      className="h-full w-full object-cover opacity-90"
+                      className="h-full w-full object-cover"
                       autoPlay={canAutoplayMedia && isInView}
                       muted
                       loop
@@ -262,7 +347,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
                       alt={`${project.title} preview`}
                       fill
                       sizes="(max-width: 1024px) 100vw, 50vw"
-                      className="object-cover opacity-90"
+                      className="object-cover"
                       style={{ objectPosition: project.image.objectPosition ?? 'center' }}
                     />
                   )}
@@ -271,13 +356,13 @@ const ProjectCard = ({ project }: { project: Project }) => {
             </div>
           </div>
 
-          <div className="p-6 pt-7 sm:p-8 lg:p-10">
-            <div className="mb-6 hidden items-center justify-between gap-3 lg:flex">
+          <div className="p-6 pt-7 sm:p-8 lg:flex lg:h-full lg:flex-col lg:px-9 lg:pb-9 lg:pt-8">
+            <div className="mb-5 hidden items-center justify-between gap-3 lg:flex">
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--project-accent)]" style={accentLabelStyle}>{project.category}</p>
-              <span className="rounded-full border border-[color:var(--site-border)] bg-[color:var(--site-hover)] px-3 py-1 text-xs font-semibold text-[color:var(--site-muted)] dark:border-white/15 dark:bg-white/[0.04] dark:text-white/72">{project.year}</span>
+              <span className="project-skill-chip inline-flex items-center rounded-[0.7rem] px-3 py-1.5 text-xs font-semibold text-[color:var(--site-muted)] dark:text-white/72">{project.year}</span>
             </div>
             <h3 className="text-4xl font-bold uppercase leading-tight tracking-tight text-[color:var(--site-text)] dark:text-white">{project.displayTitle}</h3>
-            <p className="mt-5 border-b border-[color:var(--site-border)] pb-6 text-sm leading-7 text-[color:var(--site-muted)] dark:border-white/10 dark:text-white/72">{project.description}</p>
+            <p className="mt-4 pb-5 text-sm leading-7 text-[color:var(--site-muted)] dark:text-white/72">{project.description}</p>
 
             <button
               type="button"
@@ -289,45 +374,22 @@ const ProjectCard = ({ project }: { project: Project }) => {
               <ChevronDown className={`h-4 w-4 transition-transform duration-300 ${detailsOpen ? 'rotate-180' : ''}`} />
             </button>
 
-            <div className="hidden lg:block">
-              <div className="border-b border-[color:var(--site-border)] py-6 dark:border-white/10">
-                <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--project-accent)]" style={accentLabelStyle}>Project Info</p>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="flex items-center gap-3 text-[color:var(--site-text)]">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-full border border-[color:var(--site-border)] bg-[color:var(--site-hover)] dark:border-white/15 dark:bg-white/[0.04]"><UserRound className="h-4 w-4" /></div>
-                    <div><p className="text-[0.65rem] uppercase tracking-[0.18em] text-[color:var(--site-muted)]">Role</p><p className="text-sm dark:text-white/80">Designer & Developer</p></div>
-                  </div>
-                  <div className="flex items-center gap-3 text-[color:var(--site-text)]">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-full border border-[color:var(--site-border)] bg-[color:var(--site-hover)] dark:border-white/15 dark:bg-white/[0.04]"><CalendarDays className="h-4 w-4" /></div>
-                    <div><p className="text-[0.65rem] uppercase tracking-[0.18em] text-[color:var(--site-muted)]">Duration</p><p className="text-sm dark:text-white/80">3 Weeks</p></div>
-                  </div>
-                  <div className="flex items-center gap-3 text-[color:var(--site-text)]">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-full border border-[color:var(--site-border)] bg-[color:var(--site-hover)] dark:border-white/15 dark:bg-white/[0.04]"><Layers3 className="h-4 w-4" /></div>
-                    <div><p className="text-[0.65rem] uppercase tracking-[0.18em] text-[color:var(--site-muted)]">Type</p><p className="text-sm dark:text-white/80">Web Application</p></div>
-                  </div>
-                  <a href={`https://${project.liveSite}`} target="_blank" rel="noopener noreferrer" className="group/meta flex cursor-pointer items-center gap-3 text-left text-[color:var(--site-text)] transition-all duration-200 hover:text-accent">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-full border border-[color:var(--site-border)] bg-[color:var(--site-hover)] transition-all duration-200 group-hover/meta:-translate-y-0.5 group-hover/meta:translate-x-0.5 group-hover/meta:border-accent/70 group-hover/meta:text-accent dark:border-white/15 dark:bg-white/[0.04]"><ExternalLink className="h-4 w-4" /></div>
-                    <div><p className="text-[0.65rem] uppercase tracking-[0.18em] text-[color:var(--site-muted)]">Live Site</p><p className="text-sm transition-transform duration-200 group-hover/meta:translate-x-0.5 dark:text-white/80">{project.liveSite}</p></div>
-                  </a>
+            <div className="hidden lg:flex lg:flex-1 lg:flex-col">
+              <div className="py-5">
+                <p className="mb-3.5 text-xs font-semibold uppercase tracking-[0.2em]" style={projectDetailLabelStyle}>Project Info</p>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <ProjectMetaItem label="Role" value="Designer & Developer" icon={BadgeCheck} />
+                  <ProjectMetaItem label="Duration" value="3 Weeks" icon={Clock3} />
+                  <ProjectMetaItem label="Type" value="Web Application" icon={MonitorSmartphone} />
+                  <ProjectMetaItem label="Live Site" value={project.liveSite} icon={Globe} href={`https://${project.liveSite}`} />
                 </div>
               </div>
 
-              <div className="pt-6">
-                <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--project-accent)]" style={accentLabelStyle}>Technologies</p>
+              <div className="pt-5 lg:mt-auto">
+                <p className="mb-3.5 text-xs font-semibold uppercase tracking-[0.2em]" style={projectDetailLabelStyle}>Technologies</p>
                 <div className="flex flex-wrap gap-2">
                   {project.skills.map((skill) => (
-                    <span key={skill} className="inline-flex items-center gap-1.5 rounded-full border border-[color:var(--site-border)] bg-[color:var(--site-hover)] px-3 py-1.5 text-xs text-[color:var(--site-text)] dark:border-white/10 dark:bg-white/[0.06] dark:text-white/72">
-                      {(() => {
-                        const BrandIcon = brandSkillIcons[skill]
-                        const FallbackIcon = fallbackSkillIcons[skill] || Code2
-                        return BrandIcon ? (
-                          <BrandIcon className="h-3.5 w-3.5 text-[color:var(--project-accent)]" style={accentLabelStyle} />
-                        ) : (
-                          <FallbackIcon className="h-3.5 w-3.5 text-[color:var(--project-accent)]" style={accentLabelStyle} />
-                        )
-                      })()}
-                      {skill}
-                    </span>
+                    <SkillChip key={skill} skill={skill} />
                   ))}
                 </div>
               </div>
@@ -342,44 +404,21 @@ const ProjectCard = ({ project }: { project: Project }) => {
                   exit={{ height: 0, opacity: 0 }}
                   transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
                 >
-                  <div className="border-b border-[color:var(--site-border)] py-6 dark:border-white/10">
-                    <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--project-accent)]" style={accentLabelStyle}>Project Info</p>
+                  <div className="py-6">
+                    <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em]" style={projectDetailLabelStyle}>Project Info</p>
                     <div className="grid gap-4">
-                      <div className="flex items-center gap-3 text-[color:var(--site-text)]">
-                        <div className="flex h-9 w-9 items-center justify-center rounded-full border border-[color:var(--site-border)] bg-[color:var(--site-hover)] dark:border-white/15 dark:bg-white/[0.04]"><UserRound className="h-4 w-4" /></div>
-                        <div><p className="text-[0.65rem] uppercase tracking-[0.18em] text-[color:var(--site-muted)]">Role</p><p className="text-sm dark:text-white/80">Designer & Developer</p></div>
-                      </div>
-                      <div className="flex items-center gap-3 text-[color:var(--site-text)]">
-                        <div className="flex h-9 w-9 items-center justify-center rounded-full border border-[color:var(--site-border)] bg-[color:var(--site-hover)] dark:border-white/15 dark:bg-white/[0.04]"><CalendarDays className="h-4 w-4" /></div>
-                        <div><p className="text-[0.65rem] uppercase tracking-[0.18em] text-[color:var(--site-muted)]">Duration</p><p className="text-sm dark:text-white/80">3 Weeks</p></div>
-                      </div>
-                      <div className="flex items-center gap-3 text-[color:var(--site-text)]">
-                        <div className="flex h-9 w-9 items-center justify-center rounded-full border border-[color:var(--site-border)] bg-[color:var(--site-hover)] dark:border-white/15 dark:bg-white/[0.04]"><Layers3 className="h-4 w-4" /></div>
-                        <div><p className="text-[0.65rem] uppercase tracking-[0.18em] text-[color:var(--site-muted)]">Type</p><p className="text-sm dark:text-white/80">Web Application</p></div>
-                      </div>
-                      <a href={`https://${project.liveSite}`} target="_blank" rel="noopener noreferrer" className="group/meta flex cursor-pointer items-center gap-3 text-left text-[color:var(--site-text)] transition-all duration-200 hover:text-accent">
-                        <div className="flex h-9 w-9 items-center justify-center rounded-full border border-[color:var(--site-border)] bg-[color:var(--site-hover)] transition-all duration-200 group-hover/meta:-translate-y-0.5 group-hover/meta:translate-x-0.5 group-hover/meta:border-accent/70 group-hover/meta:text-accent dark:border-white/15 dark:bg-white/[0.04]"><ExternalLink className="h-4 w-4" /></div>
-                        <div><p className="text-[0.65rem] uppercase tracking-[0.18em] text-[color:var(--site-muted)]">Live Site</p><p className="text-sm transition-transform duration-200 group-hover/meta:translate-x-0.5 dark:text-white/80">{project.liveSite}</p></div>
-                      </a>
+                      <ProjectMetaItem label="Role" value="Designer & Developer" icon={BadgeCheck} />
+                      <ProjectMetaItem label="Duration" value="3 Weeks" icon={Clock3} />
+                      <ProjectMetaItem label="Type" value="Web Application" icon={MonitorSmartphone} />
+                      <ProjectMetaItem label="Live Site" value={project.liveSite} icon={Globe} href={`https://${project.liveSite}`} />
                     </div>
                   </div>
 
                   <div className="pt-6">
-                    <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--project-accent)]" style={accentLabelStyle}>Technologies</p>
+                    <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em]" style={projectDetailLabelStyle}>Technologies</p>
                     <div className="flex flex-wrap gap-2">
                       {project.skills.map((skill) => (
-                        <span key={skill} className="inline-flex items-center gap-1.5 rounded-full border border-[color:var(--site-border)] bg-[color:var(--site-hover)] px-3 py-1.5 text-xs text-[color:var(--site-text)] dark:border-white/10 dark:bg-white/[0.06] dark:text-white/72">
-                          {(() => {
-                            const BrandIcon = brandSkillIcons[skill]
-                            const FallbackIcon = fallbackSkillIcons[skill] || Code2
-                            return BrandIcon ? (
-                              <BrandIcon className="h-3.5 w-3.5 text-[color:var(--project-accent)]" style={accentLabelStyle} />
-                            ) : (
-                              <FallbackIcon className="h-3.5 w-3.5 text-[color:var(--project-accent)]" style={accentLabelStyle} />
-                            )
-                          })()}
-                          {skill}
-                        </span>
+                        <SkillChip key={skill} skill={skill} />
                       ))}
                     </div>
                   </div>
