@@ -145,11 +145,8 @@ export default function TechStackSection() {
           whileInView="visible"
           viewport={cinematicViewport}
         >
-          <p className="section-label">Tech Stack</p>
-          <h2 className="section-title">Modern web tools</h2>
-          <p className="section-description">
-            The tools I use to design, build and ship responsive websites.
-          </p>
+          <p className="section-label">Tools I use</p>
+          <h2 className="section-title">My tech stack</h2>
         </motion.div>
 
         <motion.div

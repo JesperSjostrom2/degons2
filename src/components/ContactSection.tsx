@@ -7,7 +7,7 @@ import { FiMail } from 'react-icons/fi'
 import type { IconType } from 'react-icons'
 import { cinematicHeader, cinematicPanel, cinematicViewport } from '@/lib/site-motion'
 
-const projectTypes = ['Landing page', 'Business website', 'Portfolio', 'Redesign / UI polish', 'Frontend build', 'Other']
+const projectTypes = ['Landing page', 'SaaS', 'SEO improvements', 'Redesign', 'Branding']
 
 interface SocialLink {
   name: string
@@ -40,8 +40,8 @@ const socialLinks: SocialLink[] = [
   },
   {
     name: 'Email',
-    handle: 'contact@jespersjostrom.se',
-    href: 'mailto:contact@jespersjostrom.se',
+    handle: 'contact@jespersjostrom.com',
+    href: 'mailto:contact@jespersjostrom.com',
     icon: FiMail,
   },
 ]
@@ -225,36 +225,36 @@ export default function ContactSection() {
 
               <form onSubmit={handleSubmit} className="p-6 md:p-8">
                 <div className="grid gap-4 md:grid-cols-2">
-                  <label className="space-y-2">
-                    <span className="text-sm font-medium text-[color:var(--site-text)]">Name</span>
+                  <label className="space-y-4 pl-0.5">
+                    <span className="block text-sm font-medium text-[color:var(--site-text)]">Name</span>
                     <input
                       value={name}
                       onChange={(event) => setName(event.target.value)}
                       required
-                        className="w-full rounded-xl border border-[color:var(--site-border)] bg-[rgba(5,5,5,0.045)] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[color:var(--site-muted)] focus:border-accent/60 focus:bg-[rgba(5,5,5,0.1)] dark:rounded-2xl dark:border-white/10 dark:bg-[rgba(5,5,5,0.045)] dark:text-white dark:placeholder:text-white/30 dark:focus:bg-[rgba(5,5,5,0.1)]"
+                      className="w-full rounded-[20px] border border-[color:var(--site-border)] bg-[rgba(5,5,5,0.045)] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[color:var(--site-muted)] focus:border-accent/60 focus:bg-[rgba(5,5,5,0.1)] dark:rounded-[20px] dark:border-white/10 dark:bg-[rgba(5,5,5,0.045)] dark:text-white dark:placeholder:text-white/30 dark:focus:bg-[rgba(5,5,5,0.1)]"
                         placeholder="Your name"
                       />
                   </label>
 
-                  <label className="space-y-2">
-                    <span className="text-sm font-medium text-[color:var(--site-text)]">Email</span>
+                  <label className="space-y-4 pl-0.5">
+                    <span className="block text-sm font-medium text-[color:var(--site-text)]">Email</span>
                     <input
                       type="email"
                       value={email}
                       onChange={(event) => setEmail(event.target.value)}
                       required
-                        className="w-full rounded-xl border border-[color:var(--site-border)] bg-[rgba(5,5,5,0.045)] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[color:var(--site-muted)] focus:border-accent/60 focus:bg-[rgba(5,5,5,0.1)] dark:rounded-2xl dark:border-white/10 dark:bg-[rgba(5,5,5,0.045)] dark:text-white dark:placeholder:text-white/30 dark:focus:bg-[rgba(5,5,5,0.1)]"
+                      className="w-full rounded-[20px] border border-[color:var(--site-border)] bg-[rgba(5,5,5,0.045)] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[color:var(--site-muted)] focus:border-accent/60 focus:bg-[rgba(5,5,5,0.1)] dark:rounded-[20px] dark:border-white/10 dark:bg-[rgba(5,5,5,0.045)] dark:text-white dark:placeholder:text-white/30 dark:focus:bg-[rgba(5,5,5,0.1)]"
                         placeholder="you@example.com"
                       />
                   </label>
 
-                  <label className="space-y-2">
-                    <span className="text-sm font-medium text-[color:var(--site-text)]">Project type</span>
+                  <label className="space-y-4 pl-0.5">
+                    <span className="block text-sm font-medium text-[color:var(--site-text)]">Project type</span>
                     <div className="relative">
                       <select
                         value={projectType}
                         onChange={(event) => setProjectType(event.target.value)}
-                        className="w-full appearance-none rounded-xl border border-[color:var(--site-border)] bg-[rgba(5,5,5,0.045)] py-3 pl-4 pr-12 text-[color:var(--site-text)] outline-none transition-colors duration-300 focus:border-accent/60 focus:bg-[rgba(5,5,5,0.1)] dark:rounded-2xl dark:border-white/10 dark:bg-[rgba(5,5,5,0.045)] dark:text-white dark:focus:bg-[rgba(5,5,5,0.1)]"
+                        className="w-full appearance-none rounded-[20px] border border-[color:var(--site-border)] bg-[rgba(5,5,5,0.045)] py-3 pl-4 pr-12 text-[color:var(--site-text)] outline-none transition-colors duration-300 focus:border-accent/60 focus:bg-[rgba(5,5,5,0.1)] dark:rounded-[20px] dark:border-white/10 dark:bg-[rgba(5,5,5,0.045)] dark:text-white dark:focus:bg-[rgba(5,5,5,0.1)]"
                       >
                         {projectTypes.map((type) => (
                           <option key={type} value={type} className="bg-[#050505] text-white">
@@ -266,26 +266,26 @@ export default function ContactSection() {
                     </div>
                   </label>
 
-                  <label className="space-y-2">
-                    <span className="text-sm font-medium text-[color:var(--site-text)]">Budget / timeline</span>
+                  <label className="space-y-4 pl-0.5">
+                    <span className="block text-sm font-medium text-[color:var(--site-text)]">Budget / timeline</span>
                     <input
                       value={budget}
                       onChange={(event) => setBudget(event.target.value)}
-                        className="w-full rounded-xl border border-[color:var(--site-border)] bg-[rgba(5,5,5,0.045)] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[color:var(--site-muted)] focus:border-accent/60 focus:bg-[rgba(5,5,5,0.1)] dark:rounded-2xl dark:border-white/10 dark:bg-[rgba(5,5,5,0.045)] dark:text-white dark:placeholder:text-white/30 dark:focus:bg-[rgba(5,5,5,0.1)]"
+                        className="w-full rounded-[20px] border border-[color:var(--site-border)] bg-[rgba(5,5,5,0.045)] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[color:var(--site-muted)] focus:border-accent/60 focus:bg-[rgba(5,5,5,0.1)] dark:rounded-[20px] dark:border-white/10 dark:bg-[rgba(5,5,5,0.045)] dark:text-white dark:placeholder:text-white/30 dark:focus:bg-[rgba(5,5,5,0.1)]"
                         placeholder="Optional, even a rough range helps"
                       />
                   </label>
                 </div>
 
-                <label className="mt-4 block space-y-2">
-                  <span className="text-sm font-medium text-[color:var(--site-text)]">Message</span>
+                <label className="mt-4 block space-y-4 pl-0.5">
+                  <span className="block text-sm font-medium text-[color:var(--site-text)]">Message</span>
                   <textarea
                     value={message}
                     onChange={(event) => setMessage(event.target.value)}
                     required
                     rows={7}
-                    className="w-full resize-none rounded-xl border border-[color:var(--site-border)] bg-[rgba(5,5,5,0.045)] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[color:var(--site-muted)] focus:border-accent/60 focus:bg-[rgba(5,5,5,0.1)] dark:rounded-2xl dark:border-white/10 dark:bg-[rgba(5,5,5,0.045)] dark:text-white dark:placeholder:text-white/30 dark:focus:bg-[rgba(5,5,5,0.1)]"
-                    placeholder="What are you trying to put online, improve, or explain better?"
+                    className="w-full resize-none rounded-[20px] border border-[color:var(--site-border)] bg-[rgba(5,5,5,0.045)] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[color:var(--site-muted)] focus:border-accent/60 focus:bg-[rgba(5,5,5,0.1)] dark:rounded-[20px] dark:border-white/10 dark:bg-[rgba(5,5,5,0.045)] dark:text-white dark:placeholder:text-white/30 dark:focus:bg-[rgba(5,5,5,0.1)]"
+                    placeholder="Tell me a bit about what you need."
                   />
                 </label>
 
@@ -295,7 +295,7 @@ export default function ContactSection() {
                       ? 'Message sent. I will get back to you soon.'
                       : status === 'error'
                         ? errorMessage
-                        : 'I read every message myself and reply with an honest next step.'}
+                        : 'I will get back to you with a clear next step.'}
                   </p>
                   <div className="relative shrink-0">
                     <button

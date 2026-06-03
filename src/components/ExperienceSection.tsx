@@ -27,6 +27,7 @@ interface Project {
   bulletPoints: string[]
   skills: string[]
   year: string
+  duration?: string
   image: ProjectSlide
   accentColor: string
   accentSoftColor: string
@@ -42,10 +43,10 @@ const projectsData: Project[] = [
     id: 1,
     title: 'ANDCREATIVE',
     displayTitle: 'ANDCREATIVE',
-    category: 'Web Design',
-    summary: 'A visual agency site built to make the work feel premium before a visitor reads a word.',
+    category: 'Design & Web',
+    summary: 'A website for a photography agency, built to let the images lead and guide more visitors into reaching out.',
     description:
-      "A dark, visual-first website concept for a creative agency. The goal was to make the brand feel sharp, cinematic, and easy to understand from the first scroll.",
+      "A website for a photography agency, built around strong images and a clear path for people to get in touch.",
     bulletPoints: [
       'Visual direction for a premium creative brand',
       'Responsive pages with motion used to support the story',
@@ -54,6 +55,7 @@ const projectsData: Project[] = [
     ],
     skills: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'motion.dev', 'shadcn/ui', 'GSAP', 'Vercel', 'Figma'],
     year: '2026',
+    duration: '2 Months',
     image: { type: 'image', src: '/assets/projects/andcreativeproduct.webp', objectPosition: 'top' },
     accentColor: '#f3f3f3',
     accentSoftColor: 'rgba(243, 243, 243, 0.14)',
@@ -68,13 +70,14 @@ const projectsData: Project[] = [
     title: 'Café & Bistro Kerma',
     displayTitle: 'TAHKON KERMA',
     category: 'Brand & Web',
-    summary: 'A warm restaurant site focused on atmosphere, practical info, and local trust.',
+    summary: 'A warm restaurant site that makes it easy to find the menu, opening hours, and the basics before visiting.',
     description:
-      'A cozy web direction for Tahkon Kerma Café & Bistro, balancing atmosphere with the basics visitors need quickly: what it is, where it is, and why it feels worth visiting.',
+      'A cozy site for Tahkon Kerma Café & Bistro, where I also designed the logo. The site was built around opening hours, the menu, and strong SEO so people could actually find it.',
     bulletPoints: [
       'Warm visual style matched to the restaurant setting',
-      'Layout built around menu, location, and visit planning',
-      'Brand and logo direction for a more finished identity',
+      'Layout built around opening hours, menu, and visit planning',
+      'Logo design and brand direction for a more finished identity',
+      'SEO-focused structure so people could find the site easily',
       'Mobile-first structure for people checking details on the go',
     ],
     skills: ['React', 'Figma', 'Illustrator', 'Logo Design', 'HTML', 'CSS', 'JavaScript'],
@@ -92,18 +95,19 @@ const projectsData: Project[] = [
     id: 3,
     title: 'Old Portfolio',
     displayTitle: 'OLD PORTFOLIO',
-    category: 'Development',
-    summary: 'My own portfolio, built to test how far I can push motion and presentation without losing usability.',
+    category: 'Personal & Web',
+    summary: 'My first portfolio, built with a backend and admin panel, and the first place I started learning how I wanted my work to look.',
     description:
-      'My personal portfolio and playground for polished frontend work. It is built to show taste, technical range, and the kind of detail I bring into client-facing websites.',
+      'My first portfolio website, built to create an online presence and get my work seen.',
     bulletPoints: [
       'Custom interactive sections instead of a template layout',
       'Responsive structure tuned for desktop and mobile',
-      'Motion and WebGL details balanced with performance work',
+      'Backend and admin panel for managing content',
       'Clearer positioning for both portfolio and freelance inquiries',
     ],
     skills: ['Next.js', 'React', 'Figma', 'HTML', 'CSS', 'JavaScript', 'MongoDB'],
     year: '2023',
+    duration: '1 Month',
     image: { type: 'image', src: '/assets/projects/ogportfolionew.webp', objectPosition: 'top' },
     accentColor: '#ff0066',
     accentSoftColor: 'rgba(255, 0, 102, 0.14)',
@@ -471,7 +475,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
                 <p className="mb-3.5 text-xs font-semibold uppercase tracking-[0.2em]" style={projectDetailLabelStyle}>Project Info</p>
                 <div className="grid gap-3 sm:grid-cols-2">
                   <ProjectMetaItem label="Role" value="Designer & Developer" icon={BadgeCheck} />
-                  <ProjectMetaItem label="Duration" value="3 Weeks" icon={Clock3} />
+                  <ProjectMetaItem label="Duration" value={project.duration ?? '3 Weeks'} icon={Clock3} />
                   <ProjectMetaItem label="Type" value="Web Application" icon={MonitorSmartphone} />
                   <ProjectMetaItem label="Live Site" value={project.liveSite} icon={Globe} href={`https://${project.liveSite}`} />
                 </div>
@@ -500,7 +504,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
                     <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em]" style={projectDetailLabelStyle}>Project Info</p>
                     <div className="grid gap-4">
                       <ProjectMetaItem label="Role" value="Designer & Developer" icon={BadgeCheck} />
-                      <ProjectMetaItem label="Duration" value="3 Weeks" icon={Clock3} />
+                      <ProjectMetaItem label="Duration" value={project.duration ?? '3 Weeks'} icon={Clock3} />
                       <ProjectMetaItem label="Type" value="Web Application" icon={MonitorSmartphone} />
                       <ProjectMetaItem label="Live Site" value={project.liveSite} icon={Globe} href={`https://${project.liveSite}`} />
                     </div>

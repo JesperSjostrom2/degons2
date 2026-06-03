@@ -1,7 +1,6 @@
 "use client"
 
 import { motion, useReducedMotion } from 'framer-motion'
-import GradientText from '@/components/GradientText'
 import ScrollReveal from '@/components/scroll-reveal'
 import SocialLinks from '@/components/social-links'
 import { useIsMobile } from '@/hooks/use-media-query'
@@ -36,26 +35,22 @@ export default function AboutSection() {
                     className="section-title group cursor-default leading-tight"
                     style={{ textShadow: '0 0 10px rgba(245, 239, 228, 0.12), 0 0 20px rgba(218, 197, 167, 0.05)' }}
                   >
-                    Always learning,
-                    <br />
-                    always{' '}
-                    <span className="relative inline-block">
-                      <GradientText className="font-accent" colors={['#8b7355', '#dac5a7', '#8b7355']}>
-                        moving
-                      </GradientText>
-                    </span>
+                    My story
                   </h2>
                 </ScrollReveal>
 
                 <ScrollReveal className="max-w-xl space-y-6 text-lg leading-[1.65] text-muted-foreground" delay={0.18}>
                   <p>
-                    I like building websites because they sit right between design, problem solving, and first impressions. A good site should feel good, but it should also make the next step obvious.
+                    I'm Jesper. I'm from Sweden and now live in Helsinki, Finland. I first got exposed to Java in school in 2016, and that was the start of me getting into development.
                   </p>
                   <p>
-                    My focus is frontend work with a strong eye for layout, motion, and small details. Landing pages, portfolios, redesigns, and business sites are the kind of projects I enjoy shaping from rough idea to finished experience.
+                    In 2020 I graduated as a high school engineer, and in 2023 I graduated as a frontend developer. After that I worked full-time as a frontend developer, which gave me a solid base for building real projects.
+                  </p>
+                  <p>
+                    Design quickly became the part I enjoyed most, so I decided to go freelance and focus on the kind of websites I actually want to build while helping people get a stronger online presence.
                   </p>
                   <p className="font-medium text-[color:var(--site-text)]">
-                    I&apos;m at my best when I can keep improving something until it feels clear, useful, and worth showing.
+                    When I'm not working, you can usually find me gaming, working out, or working on websites and other things I'm into.
                   </p>
                 </ScrollReveal>
 

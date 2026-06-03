@@ -483,19 +483,19 @@ const MagicBento: React.FC = () => {
 
   const getRemoteWorkCard = () => ({
     color: BENTO_ACCENTS.blue,
-    title: "Remote collaboration without friction",
-    description: "Async-friendly updates, flexible coordination, and clear progress keep the workflow smooth across locations and time zones.",
-    label: "Availability",
+    title: "Remote-first, wherever you are.",
+    description: "Easy collaboration across time zones and schedules.",
+    label: "AVAILABILITY",
     customContent: (
       <div className="remote-card relative flex h-full flex-col overflow-hidden">
         <div className="bento-dot-grid absolute inset-0" style={{ WebkitMaskImage: "radial-gradient(circle at 50% 100%, black 0 30%, transparent 65%)", maskImage: "radial-gradient(circle at 50% 100%, black 0 30%, transparent 65%)" }} />
         <div className="remote-card-copy relative z-20 flex flex-col p-6 pb-3">
-          <p className="bento-card-kicker">Availability</p>
+          <p className="bento-card-kicker">AVAILABILITY</p>
           <h2 className="bento-card-heading text-white">
             Remote-first,<br />
             <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.blue }}>wherever you are.</span>
           </h2>
-          <p className="bento-card-caption">Async-friendly updates and flexible coordination keep progress clear across locations.</p>
+          <p className="bento-card-caption">Easy collaboration across time zones and schedules.</p>
 
         </div>
 
@@ -531,9 +531,9 @@ const MagicBento: React.FC = () => {
   const cardData: BentoCardData[] = [
     {
       color: BENTO_ACCENTS.lavender,
-      title: "One connected website workflow",
-      description: "Structure, visuals, development, motion, responsiveness, polish, and launch readiness handled as one cohesive process.",
-      label: "End-to-end delivery",
+      title: "One workflow, handled together.",
+      description: "From concept to launch, every detail stays aligned.",
+      label: "END-TO-END DELIVERY",
       svgAsset: "endToEnd",
       customContent: (
         <div className="group/engine service-engine-card relative -m-8 flex h-[calc(100%+4rem)] flex-col overflow-hidden">
@@ -545,13 +545,13 @@ const MagicBento: React.FC = () => {
             isAnimating={animatedBentoAsset === "endToEnd"}
           />
 
-          <div className="bento-feature-copy bento-mobile-readable relative z-30 max-w-[16.5rem] p-6 sm:p-8">
-            <p className="bento-card-kicker">End-to-end delivery</p>
-            <h2 className="bento-card-heading text-white">
-              One workflow,<br />
-              <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.lavender }}>handled together.</span>
+          <div className="bento-feature-copy bento-mobile-readable relative z-30 max-w-[20rem] p-6 sm:p-8">
+            <p className="bento-card-kicker">END-TO-END DELIVERY</p>
+            <h2 className="bento-card-heading text-white" style={{ maxWidth: "17rem", fontSize: "clamp(1.14rem, 0.92rem + 0.5vw, 1.32rem)" }}>
+              Built as a complete<br />
+              <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.lavender }}>experience.</span>
             </h2>
-            <p className="bento-card-caption">From structure and visuals to development, motion, responsiveness, and launch polish, every part is shaped to feel connected.</p>
+            <p className="bento-card-caption">Design, development, SEO, and polish working together.</p>
           </div>
         </div>
       ),
@@ -559,19 +559,19 @@ const MagicBento: React.FC = () => {
     {
       color: BENTO_ACCENTS.olive,
       title: "Clear updates, smooth progress.",
-      description: "Quick replies, simple check-ins, and clear next steps keep the project moving without needless back-and-forth.",
-      label: "Clear Communication",
+      description: "No chasing. No guessing. Just steady progress.",
+      label: "CLEAR COMMUNICATION",
       customContent: (
         <div className="group/attention attention-chat-card relative -m-8 flex h-[calc(100%+4rem)] flex-col overflow-hidden">
           <div className="bento-dot-grid absolute inset-0" />
 
           <div className="bento-mobile-readable relative z-20 px-6 pb-0 pt-5">
-            <p className="bento-card-kicker">Clear communication</p>
+            <p className="bento-card-kicker">CLEAR COMMUNICATION</p>
             <h2 className="bento-card-heading text-[#f5efe4]">
               Clear updates,<br />
               <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.olive }}>smooth progress.</span>
             </h2>
-            <p className="bento-card-caption hidden sm:block mt-1">Quick replies and clear next steps keep the work moving.</p>
+            <p className="bento-card-caption hidden sm:block mt-1">No chasing. No guessing. Just steady progress.</p>
           </div>
 
           <div className="chat-showcase-messages relative z-30 mt-5 flex flex-1 flex-col gap-1 px-6 pb-0">
@@ -607,19 +607,19 @@ const MagicBento: React.FC = () => {
     },
     {
       color: BENTO_ACCENTS.champagne,
-      title: "Fast progress, clean execution",
-      description: "Quick iteration, clear decisions, and focused execution keep the project moving without sacrificing polish.",
-      label: "Fast Delivery",
+      title: "Move fast, launch clean.",
+      description: "Fast feedback loops without sacrificing quality.",
+      label: "FAST DELIVERY",
       svgAsset: "fastDelivery",
       customContent: (
         <div className="group/conversion relative flex h-full flex-col overflow-hidden">
           <div className="contact-card-content conversion-flow-copy bento-mobile-readable relative z-30 max-w-[17.5rem] p-6 sm:p-8">
-            <p className="bento-card-kicker">Fast delivery</p>
+            <p className="bento-card-kicker">FAST DELIVERY</p>
             <h2 className="bento-card-heading text-[#f5efe4]">
               Move fast,<br />
               <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.champagne }}>launch clean.</span>
             </h2>
-            <p className="bento-card-caption">Quick iterations and clear decisions keep progress moving without the chaos.</p>
+            <p className="bento-card-caption">Fast feedback loops without sacrificing quality.</p>
           </div>
 
           <div className="conversion-phone-wrap pointer-events-none absolute inset-0 z-20 flex items-center justify-center overflow-visible">
@@ -637,19 +637,19 @@ const MagicBento: React.FC = () => {
     getRemoteWorkCard(),
     {
       color: BENTO_ACCENTS.champagne,
-      title: "A polished first impression",
-      description: "Clear structure, refined details, and an intuitive flow that makes the business feel credible from the first few seconds.",
-      label: "Services",
+      title: "A site that feels effortless.",
+      description: "Clear, polished, and built to make the next step obvious.",
+      label: "FIRST IMPRESSION",
       svgAsset: "firstImpression",
       customContent: (
         <div className="group/selling relative -m-8 flex h-[calc(100%+4rem)] flex-col overflow-hidden">
           <div className="bento-feature-copy bento-mobile-readable relative z-20 max-w-[19rem] p-6 sm:p-8">
-            <p className="bento-card-kicker">First impression</p>
-            <h2 className="bento-card-heading text-white">
-              A site that<br />
-              <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.champagne }}>feels effortless.</span>
+            <p className="bento-card-kicker">FIRST IMPRESSION</p>
+            <h2 className="bento-card-heading text-white" style={{ fontSize: "clamp(1.14rem, 0.92rem + 0.5vw, 1.32rem)" }}>
+              Premium by<br />
+              <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.champagne }}>design.</span>
             </h2>
-            <p className="bento-card-caption">A calm, refined experience with clear structure, smooth details, and an intuitive path that makes the next step feel obvious.</p>
+            <p className="bento-card-caption">Every interaction is crafted to feel intentional.</p>
           </div>
 
           <div className="first-impression-svg-wrap absolute inset-0 z-10 flex items-center justify-center">
@@ -2491,7 +2491,11 @@ const MagicBento: React.FC = () => {
             font-size: 0.75rem;
             font-weight: 450;
             line-height: 1.38;
-            color: rgba(255, 255, 255, 0.54);
+            background: linear-gradient(180deg, #dcd7cc 0%, #b0aea5 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            -webkit-text-fill-color: transparent;
           }
 
           .bento-feature-copy .bento-card-caption {
