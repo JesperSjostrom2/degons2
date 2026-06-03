@@ -41,7 +41,7 @@ export default function AboutSection() {
 
                 <ScrollReveal className="max-w-xl space-y-6 text-lg leading-[1.65] text-muted-foreground" delay={0.18}>
                   <p>
-                    I'm Jesper. I'm from Sweden and now live in Helsinki, Finland. I first got exposed to Java in school in 2016, and that was the start of me getting into development.
+                    I&apos;m Jesper. I&apos;m from Sweden and now live in Helsinki, Finland. I first got exposed to Java in school in 2016, and that was the start of me getting into development.
                   </p>
                   <p>
                     In 2020 I graduated as a high school engineer, and in 2023 I graduated as a frontend developer. After that I worked full-time as a frontend developer, which gave me a solid base for building real projects.
@@ -50,7 +50,7 @@ export default function AboutSection() {
                     Design quickly became the part I enjoyed most, so I decided to go freelance and focus on the kind of websites I actually want to build while helping people get a stronger online presence.
                   </p>
                   <p className="font-medium text-[color:var(--site-text)]">
-                    When I'm not working, you can usually find me gaming, working out, or working on websites and other things I'm into.
+                    When I&apos;m not working, you can usually find me gaming, working out, or working on websites and other things I&apos;m into.
                   </p>
                 </ScrollReveal>
 
