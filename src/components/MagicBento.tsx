@@ -514,7 +514,7 @@ const MagicBento: React.FC = () => {
               targetFps={30}
               initRootMargin="1200px 0px"
               eagerInit
-              speed={shouldUseMobileBento ? 0 : 0.0016}
+              speed={shouldUseMobileBento ? 0 : 0.0024}
               interactive={false}
               showLabels={!shouldUseMobileBento}
               pauseOnScroll
