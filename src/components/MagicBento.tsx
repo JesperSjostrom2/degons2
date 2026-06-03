@@ -2488,7 +2488,7 @@ const MagicBento: React.FC = () => {
 
           .bento-card-caption {
             max-width: 14.75rem;
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             font-weight: 450;
             line-height: 1.38;
             background: linear-gradient(180deg, #dcd7cc 0%, #b0aea5 100%);
