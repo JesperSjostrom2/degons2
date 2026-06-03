@@ -219,26 +219,50 @@ const ProjectMetaItem = ({ label, value, icon: Icon, href }: ProjectMetaItemProp
 const ProjectCard = ({ project }: { project: Project }) => {
   const cardRef = useRef<HTMLElement>(null)
   const previewBadgeRef = useRef<HTMLSpanElement>(null)
+  const previewPointerTargetRef = useRef({ x: 0, y: 0 })
+  const previewPointerCurrentRef = useRef({ x: 0, y: 0 })
+  const previewAnimationFrameRef = useRef<number | null>(null)
   const [detailsOpen, setDetailsOpen] = useState(false)
   const [isInView, setIsInView] = useState(false)
   const [canAutoplayMedia, setCanAutoplayMedia] = useState(false)
   const [isProjectPreviewActive, setIsProjectPreviewActive] = useState(false)
   const [hasMounted, setHasMounted] = useState(false)
+  const shouldReduceMotion = useReducedMotion()
   const accentLabelStyle = { '--project-accent': project.accentColor } as CSSProperties
   const projectCardStyle = {
     '--project-accent': project.accentColor,
     '--project-atmosphere': project.atmosphereColor,
   } as CSSProperties
 
-  const handleProjectPreviewPointerMove = (event: MouseEvent<HTMLAnchorElement>) => {
+  const syncProjectPreviewBadgePosition = (x: number, y: number) => {
     const badge = previewBadgeRef.current
 
     if (!badge) {
       return
     }
 
-    badge.style.setProperty('--project-preview-x', `${event.clientX}px`)
-    badge.style.setProperty('--project-preview-y', `${event.clientY}px`)
+    badge.style.setProperty('--project-preview-x', `${x}px`)
+    badge.style.setProperty('--project-preview-y', `${y}px`)
+  }
+
+  const handleProjectPreviewPointerEnter = (event: MouseEvent<HTMLAnchorElement>) => {
+    const { clientX, clientY } = event
+
+    previewPointerTargetRef.current = { x: clientX, y: clientY }
+    previewPointerCurrentRef.current = { x: clientX, y: clientY }
+    syncProjectPreviewBadgePosition(clientX, clientY)
+    setIsProjectPreviewActive(true)
+  }
+
+  const handleProjectPreviewPointerMove = (event: MouseEvent<HTMLAnchorElement>) => {
+    const { clientX, clientY } = event
+
+    previewPointerTargetRef.current = { x: clientX, y: clientY }
+
+    if (shouldReduceMotion) {
+      previewPointerCurrentRef.current = { x: clientX, y: clientY }
+      syncProjectPreviewBadgePosition(clientX, clientY)
+    }
   }
 
   useEffect(() => {
@@ -286,6 +310,45 @@ const ProjectCard = ({ project }: { project: Project }) => {
     })
   }, [canAutoplayMedia, isInView])
 
+  useEffect(() => {
+    if (!isProjectPreviewActive || shouldReduceMotion) {
+      if (previewAnimationFrameRef.current !== null) {
+        cancelAnimationFrame(previewAnimationFrameRef.current)
+        previewAnimationFrameRef.current = null
+      }
+
+      return
+    }
+
+    const animatePreviewBadge = () => {
+      const current = previewPointerCurrentRef.current
+      const target = previewPointerTargetRef.current
+
+      current.x += (target.x - current.x) * 0.12
+      current.y += (target.y - current.y) * 0.12
+
+      if (Math.abs(target.x - current.x) < 0.1) {
+        current.x = target.x
+      }
+
+      if (Math.abs(target.y - current.y) < 0.1) {
+        current.y = target.y
+      }
+
+      syncProjectPreviewBadgePosition(current.x, current.y)
+      previewAnimationFrameRef.current = requestAnimationFrame(animatePreviewBadge)
+    }
+
+    previewAnimationFrameRef.current = requestAnimationFrame(animatePreviewBadge)
+
+    return () => {
+      if (previewAnimationFrameRef.current !== null) {
+        cancelAnimationFrame(previewAnimationFrameRef.current)
+        previewAnimationFrameRef.current = null
+      }
+    }
+  }, [isProjectPreviewActive, shouldReduceMotion])
+
   const projectPreviewBadge = (
     <span
       ref={previewBadgeRef}
@@ -293,18 +356,46 @@ const ProjectCard = ({ project }: { project: Project }) => {
       aria-hidden="true"
     >
       <span className="project-preview-badge__glow" />
+      <svg className="project-preview-badge__orbit" viewBox="0 0 100 100" aria-hidden="true">
+        <circle className="project-preview-badge__orbit-line" cx="50" cy="50" r="48.25" pathLength="100" />
+      </svg>
       <svg className="project-preview-badge__ring" viewBox="0 0 100 100">
         <defs>
           <path id={`project-open-path-${project.id}`} d="M50 50 m -34 0 a 34 34 0 1 1 68 0 a 34 34 0 1 1 -68 0" />
         </defs>
-        <text>
-          <textPath href={`#project-open-path-${project.id}`} startOffset="0%">
-            OPEN - VIEW - OPEN - VIEW - OPEN - VIEW - OPEN - VIEW -
+        <text className="project-preview-badge__label">
+          <textPath href={`#project-open-path-${project.id}`} startOffset="12.5%" textAnchor="middle">
+            OPEN
+          </textPath>
+        </text>
+        <text className="project-preview-badge__label">
+          <textPath href={`#project-open-path-${project.id}`} startOffset="45.75%" textAnchor="middle">
+            EXPLORE
+          </textPath>
+        </text>
+        <text className="project-preview-badge__label">
+          <textPath href={`#project-open-path-${project.id}`} startOffset="81%" textAnchor="middle">
+            DISCOVER
+          </textPath>
+        </text>
+        <text className="project-preview-badge__separator">
+          <textPath href={`#project-open-path-${project.id}`} startOffset="27.75%" textAnchor="middle">
+            •
+          </textPath>
+        </text>
+        <text className="project-preview-badge__separator">
+          <textPath href={`#project-open-path-${project.id}`} startOffset="63.75%" textAnchor="middle">
+            •
+          </textPath>
+        </text>
+        <text className="project-preview-badge__separator">
+          <textPath href={`#project-open-path-${project.id}`} startOffset="98.5%" textAnchor="middle">
+            •
           </textPath>
         </text>
       </svg>
       <span className="project-preview-badge__center">
-        <Eye className="h-5 w-5" strokeWidth={1.8} />
+        <Eye className="h-6 w-6" strokeWidth={1.75} />
       </span>
     </span>
   )
@@ -321,10 +412,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
                 rel="noopener noreferrer"
                 aria-label={`Open ${project.title} live site`}
                 className="group/project-preview project-preview-link relative block aspect-[16/10] overflow-hidden lg:h-full lg:aspect-auto"
-                onMouseEnter={(event) => {
-                  setIsProjectPreviewActive(true)
-                  handleProjectPreviewPointerMove(event)
-                }}
+                onMouseEnter={handleProjectPreviewPointerEnter}
                 onMouseMove={handleProjectPreviewPointerMove}
                 onMouseLeave={() => setIsProjectPreviewActive(false)}
               >
