@@ -112,6 +112,7 @@ const LightRays: React.FC<LightRaysProps> = ({
   const animationIdRef = useRef<number | null>(null);
   const meshRef = useRef<Mesh<Triangle, Program> | null>(null);
   const cleanupFunctionRef = useRef<(() => void) | null>(null);
+  const webglUnavailableRef = useRef(false);
   const [isVisible, setIsVisible] = useState(false);
   const observerRef = useRef<IntersectionObserver | null>(null);
 
@@ -138,6 +139,7 @@ const LightRays: React.FC<LightRaysProps> = ({
 
   useEffect(() => {
     if (!isVisible || !containerRef.current) return;
+    if (webglUnavailableRef.current) return;
 
     if (cleanupFunctionRef.current) {
       cleanupFunctionRef.current();
@@ -151,10 +153,17 @@ const LightRays: React.FC<LightRaysProps> = ({
 
       if (!containerRef.current) return;
 
-      const renderer = new Renderer({
-        dpr: Math.min(window.devicePixelRatio, MAX_RENDER_DPR),
-        alpha: true,
-      });
+      let renderer: Renderer;
+      try {
+        renderer = new Renderer({
+          dpr: Math.min(window.devicePixelRatio, MAX_RENDER_DPR),
+          alpha: true,
+        });
+      } catch (error) {
+        webglUnavailableRef.current = true;
+        console.warn("LightRays disabled: unable to create WebGL context.", error);
+        return;
+      }
       rendererRef.current = renderer;
 
       const gl = renderer.gl;

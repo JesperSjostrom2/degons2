@@ -6,12 +6,14 @@ import SiteLoadReveal from '@/components/site-load-reveal'
 import { prewarmBelowFoldAssets } from '@/lib/site-preload'
 
 const LOAD_REVEAL_DURATION_MS = 1940
+const LOAD_CONTENT_PREMOUNT_MS = 280
 const LOAD_REVEAL_EXIT_MS = 320
 
 export default function SiteShell({ children }: { children: ReactNode }) {
   const [shouldMountContent, setShouldMountContent] = useState(false)
   const [showLoader, setShowLoader] = useState(true)
   const [isLoaderExiting, setIsLoaderExiting] = useState(false)
+  const [canExitLoader, setCanExitLoader] = useState(false)
 
   useEffect(() => prewarmBelowFoldAssets(), [])
 
@@ -20,19 +22,27 @@ export default function SiteShell({ children }: { children: ReactNode }) {
 
     if (reduceMotion) {
       setShouldMountContent(true)
+      setCanExitLoader(true)
       setShowLoader(false)
       return
     }
 
-    const timeout = window.setTimeout(() => {
+    const contentTimeout = window.setTimeout(() => {
       setShouldMountContent(true)
+    }, Math.max(0, LOAD_REVEAL_DURATION_MS - LOAD_CONTENT_PREMOUNT_MS))
+
+    const loaderExitTimeout = window.setTimeout(() => {
+      setCanExitLoader(true)
     }, LOAD_REVEAL_DURATION_MS)
 
-    return () => window.clearTimeout(timeout)
+    return () => {
+      window.clearTimeout(contentTimeout)
+      window.clearTimeout(loaderExitTimeout)
+    }
   }, [])
 
   useEffect(() => {
-    if (!shouldMountContent || !showLoader) {
+    if (!shouldMountContent || !showLoader || !canExitLoader) {
       return
     }
 
@@ -54,7 +64,7 @@ export default function SiteShell({ children }: { children: ReactNode }) {
       window.cancelAnimationFrame(secondFrame)
       window.clearTimeout(removeLoaderTimeout)
     }
-  }, [shouldMountContent, showLoader])
+  }, [canExitLoader, shouldMountContent, showLoader])
 
   return (
     <>

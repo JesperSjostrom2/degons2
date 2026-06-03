@@ -8,13 +8,9 @@ import { ArrowRight, Copy } from 'lucide-react'
 import { shouldUseEnhancedMotion } from '@/lib/client-performance'
 import { cinematicEase } from '@/lib/site-motion'
 
-const heroAtmosphereFallback = (
-  <div className="h-full w-full bg-[radial-gradient(circle_at_50%_0%,rgba(218,197,167,0.18),transparent_42%),radial-gradient(circle_at_80%_22%,rgba(168,140,98,0.10),transparent_32%)]" />
-)
-
 const LightRays = dynamic(() => import('@/components/LightRays'), {
   ssr: false,
-  loading: () => heroAtmosphereFallback,
+  loading: () => null,
 })
 
 export default function Hero() {
@@ -64,24 +60,24 @@ export default function Hero() {
     <section id="home" className="hero-grain-density relative min-h-screen">
       {/* Background & Atmosphere Layers */}
       <div className="absolute inset-0 z-0 h-full w-full" style={{ minHeight: '100vh' }}>
-        {showLightRays ? (
-          <LightRays
-            raysOrigin="top-center"
-            raysColor="#ffffff"
-            raysSpeed={0.62}
-            lightSpread={0.56}
-            rayLength={2.1}
-            pulsating={false}
-            fadeDistance={1.34}
-            saturation={0.68}
-            followMouse={false}
-            mouseInfluence={0}
-            noiseAmount={0}
-            distortion={0}
-            className="h-full w-full opacity-10 saturate-125 dark:opacity-26 dark:saturate-95"
-          />
-        ) : (
-          heroAtmosphereFallback
+        {showLightRays && (
+          <div className="hero-light-rays h-full w-full">
+            <LightRays
+              raysOrigin="top-center"
+              raysColor="#ffffff"
+              raysSpeed={0.62}
+              lightSpread={0.56}
+              rayLength={2.1}
+              pulsating={false}
+              fadeDistance={1.34}
+              saturation={0.68}
+              followMouse={false}
+              mouseInfluence={0}
+              noiseAmount={0}
+              distortion={0}
+              className="h-full w-full opacity-10 saturate-125 dark:opacity-26 dark:saturate-95"
+            />
+          </div>
         )}
       </div>
 

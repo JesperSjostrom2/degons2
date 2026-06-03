@@ -14,6 +14,7 @@ interface ProjectSlide {
   type: 'image' | 'video'
   src: string
   objectPosition?: string
+  objectFit?: CSSProperties['objectFit']
 }
 
 interface Project {
@@ -53,7 +54,7 @@ const projectsData: Project[] = [
     ],
     skills: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'motion.dev', 'shadcn/ui', 'GSAP', 'Vercel', 'Figma'],
     year: '2026',
-    image: { type: 'image', src: '/assets/projects/andcreativeproduct.png', objectPosition: 'top' },
+    image: { type: 'image', src: '/assets/projects/andcreativeproduct.webp', objectPosition: 'top' },
     accentColor: '#f3f3f3',
     accentSoftColor: 'rgba(243, 243, 243, 0.14)',
     accentBorderColor: 'rgba(243, 243, 243, 0.42)',
@@ -78,7 +79,7 @@ const projectsData: Project[] = [
     ],
     skills: ['React', 'Figma', 'Illustrator', 'Logo Design', 'HTML', 'CSS', 'JavaScript'],
     year: '2024',
-    image: { type: 'image', src: '/assets/projects/kermaipad.png', objectPosition: 'top' },
+    image: { type: 'image', src: '/assets/projects/kermaipad.webp', objectPosition: 'top' },
     accentColor: '#d4af37',
     accentSoftColor: 'rgba(212, 175, 55, 0.14)',
     accentBorderColor: 'rgba(212, 175, 55, 0.42)',
@@ -103,7 +104,7 @@ const projectsData: Project[] = [
     ],
     skills: ['Next.js', 'React', 'Figma', 'HTML', 'CSS', 'JavaScript', 'MongoDB'],
     year: '2023',
-    image: { type: 'image', src: '/assets/projects/portfolioproduct.png', objectPosition: 'top' },
+    image: { type: 'image', src: '/assets/projects/ogportfolionew.webp', objectPosition: 'top' },
     accentColor: '#ff0066',
     accentSoftColor: 'rgba(255, 0, 102, 0.14)',
     accentBorderColor: 'rgba(255, 0, 102, 0.42)',
@@ -436,7 +437,10 @@ const ProjectCard = ({ project }: { project: Project }) => {
                       fill
                       sizes="(max-width: 1024px) 100vw, 50vw"
                       className="object-cover"
-                      style={{ objectPosition: project.image.objectPosition ?? 'center' }}
+                      style={{
+                        objectFit: project.image.objectFit ?? 'cover',
+                        objectPosition: project.image.objectPosition ?? 'center',
+                      }}
                     />
                   )}
                 </div>

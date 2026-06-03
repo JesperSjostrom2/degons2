@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Newsreader } from "next/font/google";
 import { Outfit } from "next/font/google";
 import { Source_Sans_3 } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import SiteShell from "@/components/site-shell";
 import "./globals.css";
 
@@ -98,6 +100,8 @@ export default function RootLayout({
       >
         <div className="cinematic-grain-overlay" />
         <SiteShell>{children}</SiteShell>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

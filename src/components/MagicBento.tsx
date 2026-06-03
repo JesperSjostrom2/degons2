@@ -509,12 +509,13 @@ const MagicBento: React.FC = () => {
               markerColor={REMOTE_GLOBE_MARKER_COLOR}
               arcColor={REMOTE_GLOBE_ARC_COLOR}
               theta={0.1}
+              mapBrightness={18}
               mapSamples={shouldUseMobileBento ? 1200 : 5200}
               maxDevicePixelRatio={1.25}
               targetFps={30}
               initRootMargin="1200px 0px"
               eagerInit
-              speed={shouldUseMobileBento ? 0 : 0.0024}
+              speed={shouldUseMobileBento ? 0 : 0.0031}
               interactive={false}
               showLabels={!shouldUseMobileBento}
               pauseOnScroll

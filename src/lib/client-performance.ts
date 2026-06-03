@@ -7,7 +7,7 @@ type NavigatorWithPerformanceHints = Navigator & {
   }
 }
 
-const PERFORMANCE_CACHE_KEY = 'site-enhanced-motion-ok-v2'
+const PERFORMANCE_CACHE_KEY = 'site-enhanced-motion-ok-v3'
 const PAGE_SETTLE_DELAY_MS = 150
 let enhancedMotionPromise: Promise<boolean> | null = null
 
@@ -97,7 +97,6 @@ const checkEnhancedMotion = async () => {
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
   if (reducedMotion || isClearlyLowPowerDevice()) {
-    window.sessionStorage.setItem(PERFORMANCE_CACHE_KEY, 'false')
     return false
   }
 
@@ -114,5 +113,11 @@ export const shouldUseEnhancedMotion = async () => {
     enhancedMotionPromise = checkEnhancedMotion()
   }
 
-  return enhancedMotionPromise
+  const canUseEnhancedMotion = await enhancedMotionPromise
+
+  if (!canUseEnhancedMotion) {
+    enhancedMotionPromise = null
+  }
+
+  return canUseEnhancedMotion
 }
