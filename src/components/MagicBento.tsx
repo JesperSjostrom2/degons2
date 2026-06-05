@@ -38,7 +38,20 @@ const REMOTE_GLOBE_MARKERS = [
   { id: "sydney", location: [-33.8688, 151.2093] as [number, number], label: "Sydney" },
   { id: "newyork", location: [40.7128, -74.006] as [number, number], label: "New York" },
   { id: "capetown", location: [-33.9249, 18.4241] as [number, number], label: "Cape Town" },
+  { id: "london", location: [51.5072, -0.1276] as [number, number], label: "London" },
+  { id: "berlin", location: [52.52, 13.405] as [number, number], label: "Berlin" },
+  { id: "singapore", location: [1.3521, 103.8198] as [number, number], label: "Singapore" },
+  { id: "losangeles", location: [34.0522, -118.2437] as [number, number], label: "Los Angeles" },
+  { id: "saopaulo", location: [-23.5558, -46.6396] as [number, number], label: "Sao Paulo" },
 ];
+
+const REMOTE_GLOBE_MOBILE_MARKERS = [
+  REMOTE_GLOBE_MARKERS[0],
+  REMOTE_GLOBE_MARKERS[1],
+  REMOTE_GLOBE_MARKERS[3],
+  REMOTE_GLOBE_MARKERS[6],
+  REMOTE_GLOBE_MARKERS[7],
+].filter(Boolean);
 
 const REMOTE_GLOBE_ARCS = [
   { id: "ny-hel", from: [40.7128, -74.006] as [number, number], to: [60.1699, 24.9384] as [number, number] },
@@ -509,16 +522,17 @@ const MagicBento: React.FC = () => {
               arcColor={REMOTE_GLOBE_ARC_COLOR}
               theta={0.1}
               mapBrightness={18}
-              mapSamples={shouldUseMobileBento ? 900 : 3200}
+              mapSamples={shouldUseMobileBento ? 1400 : 3200}
               maxDevicePixelRatio={1}
-              targetFps={30}
+              targetFps={shouldUseMobileBento ? 20 : 30}
               initRootMargin="2800px 0px"
               eagerInit
-              speed={shouldUseMobileBento ? 0 : 0.0031}
+              speed={shouldUseMobileBento ? 0.0066 : 0.0031}
               interactive={false}
-              showLabels={!shouldUseMobileBento}
+              showLabels
+              compactLabels={shouldUseMobileBento}
               pauseOnScroll
-              markers={REMOTE_GLOBE_MARKERS}
+              markers={shouldUseMobileBento ? REMOTE_GLOBE_MOBILE_MARKERS : REMOTE_GLOBE_MARKERS}
               arcs={REMOTE_GLOBE_ARCS}
             />
           </div>
@@ -2735,18 +2749,18 @@ const MagicBento: React.FC = () => {
             }
 
             .card-responsive .card:nth-child(4) .remote-card-globe-shell {
-              min-height: 10.5rem;
-              height: 58%;
+              min-height: 13rem;
+              height: 66%;
             }
 
             .card-responsive .card:nth-child(4) .remote-card-globe-position {
-              bottom: -34%;
-              height: 118%;
+              bottom: -68%;
+              height: 162%;
             }
 
             .card-responsive .card:nth-child(4) .remote-card-globe {
               opacity: 0.92;
-              transform: translateY(0) scale(0.78);
+              transform: translateY(7%) scale(1.14);
             }
 
             .premium-glass-surface {
@@ -2836,7 +2850,11 @@ const MagicBento: React.FC = () => {
 
             .card-responsive .card:nth-child(5) {
               order: 1;
-              min-height: 220px;
+              min-height: 228px;
+            }
+
+            .card-responsive .card:nth-child(5) .bento-mobile-readable {
+              max-width: 9.6rem;
             }
 
             .card-responsive .card:nth-child(1) {
@@ -2936,8 +2954,8 @@ const MagicBento: React.FC = () => {
             }
 
             .card-responsive .card:nth-child(5) .first-impression-svg {
-              width: min(86%, 24rem);
-              transform: translate3d(13%, 1.95rem, 0);
+              width: min(78%, 21.5rem);
+              transform: translate3d(19%, 2.35rem, 0);
             }
           }
 

@@ -35,6 +35,7 @@ export default function Hero() {
   const [showLightRays, setShowLightRays] = useState(false)
   const [copied, setCopied] = useState(false)
   const [shouldRevealHero, setShouldRevealHero] = useState(false)
+  const [shouldAnimateHero, setShouldAnimateHero] = useState(false)
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(min-width: 768px)')
@@ -64,6 +65,14 @@ export default function Hero() {
 
   useEffect(() => {
     const revealHero = () => setShouldRevealHero(true)
+    const canAnimateHero = window.matchMedia('(min-width: 768px)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    setShouldAnimateHero(canAnimateHero)
+
+    if (!canAnimateHero) {
+      setShouldRevealHero(true)
+      return
+    }
 
     if (!document.querySelector('.site-load-reveal')) {
       const frame = window.requestAnimationFrame(revealHero)
@@ -122,17 +131,17 @@ export default function Hero() {
           <div className="mobile-no-load-animation relative w-full max-w-6xl hero-cinematic-reveal">
 
             <h1 className="mx-auto max-w-[1080px] text-balance text-[clamp(2.45rem,5.6vw,5.1rem)] font-semibold leading-[1.02] tracking-[-0.055em] drop-shadow-[0_18px_60px_rgba(0,0,0,0.18)] dark:drop-shadow-[0_18px_60px_rgba(0,0,0,0.38)] hero-headline-bloom">
-              <motion.span className="block" custom={0.18} variants={heroLineReveal} initial="hidden" animate={shouldRevealHero ? 'visible' : 'hidden'}>
+              <motion.span className="block" custom={0.18} variants={heroLineReveal} initial={shouldAnimateHero ? 'hidden' : false} animate={shouldAnimateHero ? (shouldRevealHero ? 'visible' : 'hidden') : undefined}>
                 <span className="text-gradient-ivory">Hi, I&apos;m</span> <span className="text-gradient-jesper">Jesper.</span>
               </motion.span>
-              <motion.span className="block" custom={0.28} variants={heroLineReveal} initial="hidden" animate={shouldRevealHero ? 'visible' : 'hidden'}>
+              <motion.span className="block" custom={0.28} variants={heroLineReveal} initial={shouldAnimateHero ? 'hidden' : false} animate={shouldAnimateHero ? (shouldRevealHero ? 'visible' : 'hidden') : undefined}>
                 <span className="text-gradient-ivory">I build</span>{' '}
                 <span className="space-micro-planet-inline" />{' '}
                 <span className="relative inline-block text-gradient-ivory">
                   websites
                 </span>
               </motion.span>
-              <motion.span className="block" custom={0.38} variants={heroLineReveal} initial="hidden" animate={shouldRevealHero ? 'visible' : 'hidden'}>
+              <motion.span className="block" custom={0.38} variants={heroLineReveal} initial={shouldAnimateHero ? 'hidden' : false} animate={shouldAnimateHero ? (shouldRevealHero ? 'visible' : 'hidden') : undefined}>
                 <span className="text-gradient-ivory">you actually</span>{' '}
                 <span className="relative inline-block text-gradient-trust">
                   deserve.
@@ -143,8 +152,8 @@ export default function Hero() {
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
                     className="absolute -bottom-[0.15em] left-0 z-0"
-                    initial={{ pathLength: 0, opacity: 0 }}
-                    animate={shouldRevealHero ? { pathLength: 1, opacity: 0.85 } : { pathLength: 0, opacity: 0 }}
+                    initial={shouldAnimateHero ? { pathLength: 0, opacity: 0 } : false}
+                    animate={shouldAnimateHero ? (shouldRevealHero ? { pathLength: 1, opacity: 0.85 } : { pathLength: 0, opacity: 0 }) : { pathLength: 1, opacity: 0.85 }}
                     transition={{ delay: 1.35, duration: 1.8, ease: cinematicEase }}
                   >
                     <path
@@ -169,8 +178,8 @@ export default function Hero() {
           </div>
 
           <motion.div
-            initial={{ opacity: 0, y: 22, scale: 0.99 }}
-            animate={shouldRevealHero ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 22, scale: 0.99 }}
+            initial={shouldAnimateHero ? { opacity: 0, y: 22, scale: 0.99 } : false}
+            animate={shouldAnimateHero ? (shouldRevealHero ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 22, scale: 0.99 }) : undefined}
             transition={{ duration: 0.78, delay: 0.78, ease: cinematicEase }}
             className="mobile-no-load-animation relative z-20 mt-8 flex max-w-3xl flex-col items-center gap-6 md:mt-10"
           >
@@ -240,9 +249,9 @@ export default function Hero() {
       </div>
 
       <motion.div
-        className="planet-horizon pointer-events-none absolute bottom-[-7rem] left-1/2 z-10 h-[12rem] w-[92vw] max-w-[1320px] md:bottom-[-22rem] md:h-[28rem] md:w-[96vw] lg:w-[118vw]"
-        initial={{ opacity: 0, scale: 0.84 }}
-        animate={shouldRevealHero ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.84 }}
+        className="planet-horizon pointer-events-none absolute bottom-[-10.25rem] left-1/2 z-10 h-[16rem] w-[132vw] max-w-[1320px] md:bottom-[-22rem] md:h-[28rem] md:w-[96vw] lg:w-[118vw]"
+        initial={shouldAnimateHero ? { opacity: 0, scale: 0.84 } : false}
+        animate={shouldAnimateHero ? (shouldRevealHero ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.84 }) : undefined}
         transition={{ duration: 1.55, delay: 0.78, ease: cinematicEase }}
         style={{ x: '-50%', transformOrigin: '50% 60%' }}
       />

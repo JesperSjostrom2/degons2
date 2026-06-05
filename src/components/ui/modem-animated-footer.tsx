@@ -42,9 +42,9 @@ export const Footer = ({
     <section className={cn("relative w-full overflow-hidden", className)}>
       <footer className="relative overflow-hidden bg-[color:var(--site-bg)]">
         <div className="footer-top-glow pointer-events-none absolute left-1/2 top-0 z-20 h-px w-[94%] max-w-7xl -translate-x-1/2" />
-        <div className="relative mx-auto flex max-w-7xl flex-col px-6 py-10 md:py-12">
+        <div className="relative mx-auto flex max-w-7xl flex-col px-6 py-9 md:py-12">
           <div className="flex flex-col items-center text-center">
-            {statusSlot && <div className="mb-8">{statusSlot}</div>}
+            {statusSlot && <div className="mb-7 md:mb-8">{statusSlot}</div>}
 
             {socialLinks.length > 0 && (
               <div className="flex gap-2">
@@ -55,7 +55,7 @@ export const Footer = ({
             )}
 
             {navLinks.length > 0 && (
-              <nav className="mt-7 flex flex-wrap justify-center gap-x-6 gap-y-3 text-sm font-semibold text-muted-foreground">
+              <nav className="mt-7 flex w-full max-w-[21rem] flex-nowrap items-center justify-between text-[0.72rem] font-semibold text-muted-foreground min-[390px]:max-w-[23rem] min-[390px]:text-[0.8rem] sm:w-auto sm:max-w-none sm:flex-wrap sm:justify-center sm:gap-x-6 sm:gap-y-3 sm:text-sm">
                 {navLinks.map((link) => (
                   link.href.startsWith("#") ? (
                     <button

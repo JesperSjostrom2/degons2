@@ -610,6 +610,27 @@
       radial-gradient(ellipse at 50% 100%, rgba(255, 255, 255, 0.78) 0%, rgba(255, 255, 255, 0.34) 38%, rgba(218, 197, 167, 0.2) 62%, transparent 84%);
   }
 
+  @media (max-width: 767px) {
+    .planet-horizon {
+      background:
+        radial-gradient(circle at 50% 54%, rgba(5, 5, 5, 0.98) 0%, rgba(5, 5, 5, 0.98) 64%, rgba(5, 5, 5, 0.42) 78%, rgba(5, 5, 5, 0.08) 88%, transparent 94%),
+        linear-gradient(90deg, transparent 0%, rgba(245, 239, 228, 0.045) 18%, transparent 34%, rgba(126, 160, 190, 0.04) 52%, transparent 68%, rgba(218, 197, 167, 0.04) 84%, transparent 100%);
+      background-position: 0 0, 0 0;
+      background-size: 100% 100%, 220% 100%;
+      animation: planet-mobile-surface-drift 34s linear infinite;
+    }
+  }
+
+  @keyframes planet-mobile-surface-drift {
+    from {
+      background-position: 0 0, 0 0;
+    }
+
+    to {
+      background-position: 0 0, 220% 0;
+    }
+  }
+
   .hero-vignette {
     position: absolute;
     inset: 0;
@@ -2252,7 +2273,8 @@
     .floating-star-sparkle-x,
     .floating-star-sparkle-y,
     .hero-atmosphere-foreground,
-    .hero-atmosphere-dust {
+    .hero-atmosphere-dust,
+    .planet-horizon {
       animation: none;
     }
 

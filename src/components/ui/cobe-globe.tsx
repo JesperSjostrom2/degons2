@@ -112,6 +112,7 @@ interface GlobeProps {
   interactive?: boolean
   showLabels?: boolean
   pauseOnScroll?: boolean
+  compactLabels?: boolean
 }
 
 export function Globe({
@@ -139,6 +140,7 @@ export function Globe({
   interactive = true,
   showLabels = true,
   pauseOnScroll = false,
+  compactLabels = false,
 }: GlobeProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const pointerInteracting = useRef<{ x: number; y: number } | null>(null)
@@ -464,12 +466,12 @@ export function Globe({
             left: "anchor(center)",
             translate: "-50% 0",
             marginBottom: 8,
-            padding: "2px 6px",
+            padding: compactLabels ? "1px 4px" : "2px 6px",
             background: "#fff",
             color: "#000",
             fontFamily: "monospace",
-            fontSize: "0.6rem",
-            letterSpacing: "0.08em",
+            fontSize: compactLabels ? "0.48rem" : "0.6rem",
+            letterSpacing: compactLabels ? "0.04em" : "0.08em",
             textTransform: "uppercase" as const,
             whiteSpace: "nowrap" as const,
             pointerEvents: "none" as const,
@@ -484,8 +486,12 @@ export function Globe({
               top: "100%",
               left: "50%",
               transform: "translate3d(-50%, -1px, 0)",
-              border: "5px solid transparent",
+              borderLeft: compactLabels ? "4px solid transparent" : "5px solid transparent",
+              borderRight: compactLabels ? "4px solid transparent" : "5px solid transparent",
+              borderBottom: 0,
               borderTopColor: "#fff",
+              borderTopStyle: "solid",
+              borderTopWidth: compactLabels ? 4 : 5,
             }}
           />
         </div>
@@ -503,12 +509,12 @@ export function Globe({
               left: "anchor(center)",
               translate: "-50% 0",
               marginBottom: 8,
-              padding: "2px 6px",
+              padding: compactLabels ? "1px 4px" : "2px 6px",
               background: "#fff",
               color: "#1a1a2e",
               fontFamily: "monospace",
-              fontSize: "0.6rem",
-              letterSpacing: "0.08em",
+              fontSize: compactLabels ? "0.48rem" : "0.6rem",
+              letterSpacing: compactLabels ? "0.04em" : "0.08em",
               textTransform: "uppercase" as const,
               whiteSpace: "nowrap" as const,
               pointerEvents: "none" as const,
@@ -524,8 +530,12 @@ export function Globe({
                 top: "100%",
                 left: "50%",
                 transform: "translate3d(-50%, -1px, 0)",
-                border: "5px solid transparent",
+                borderLeft: compactLabels ? "4px solid transparent" : "5px solid transparent",
+                borderRight: compactLabels ? "4px solid transparent" : "5px solid transparent",
+                borderBottom: 0,
                 borderTopColor: "#fff",
+                borderTopStyle: "solid",
+                borderTopWidth: compactLabels ? 4 : 5,
               }}
             />
           </div>
