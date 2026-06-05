@@ -549,24 +549,24 @@ const ExperienceSection: React.FC = () => {
         <div className="mobile-no-load-animation mx-auto flex max-w-7xl flex-col gap-7">
           {projectsData.map((project, index) => {
             const depthPreset = [
-              { y: 52, scale: 0.985, blur: 10, duration: 0.92, delay: 0 },
-              { y: 72, scale: 0.965, blur: 14, duration: 1.02, delay: 0.1 },
-              { y: 88, scale: 0.95, blur: 18, duration: 1.14, delay: 0.2 },
-            ][index] ?? { y: 72, scale: 0.965, blur: 14, duration: 1.02, delay: 0.1 }
+              { y: 40, scale: 0.99, duration: 0.68, delay: 0 },
+              { y: 52, scale: 0.985, duration: 0.74, delay: 0.07 },
+              { y: 64, scale: 0.98, duration: 0.8, delay: 0.12 },
+            ][index] ?? { y: 52, scale: 0.985, duration: 0.74, delay: 0.07 }
 
             return (
               <motion.div
                 key={project.id}
                 className="mobile-no-load-animation cinematic-reveal-card"
-                initial={shouldReduceMotion ? false : { opacity: 0, y: depthPreset.y, scale: depthPreset.scale, rotateX: 6, filter: `blur(${depthPreset.blur}px)` }}
-                whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0, scale: 1, rotateX: 0, filter: 'blur(0px)' }}
+                initial={shouldReduceMotion ? false : { opacity: 0, y: depthPreset.y, scale: depthPreset.scale, rotateX: 4 }}
+                whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0, scale: 1, rotateX: 0 }}
                 viewport={{ once: true, amount: 0.14, margin: '0px 0px -14% 0px' }}
                 transition={{
                   duration: depthPreset.duration,
                   delay: shouldReduceMotion ? 0 : depthPreset.delay,
                   ease: [0.16, 1, 0.3, 1],
                 }}
-                style={{ willChange: shouldReduceMotion ? 'auto' : 'transform, opacity, filter' }}
+                style={{ willChange: shouldReduceMotion ? 'auto' : 'transform, opacity' }}
               >
                 <ProjectCard project={project} />
               </motion.div>

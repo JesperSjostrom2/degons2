@@ -3,6 +3,62 @@
 import { useEffect, useRef, useCallback, useMemo } from "react"
 import createGlobe from "cobe"
 
+let globeEngineWarmupPromise: Promise<void> | null = null
+
+export const warmCobeGlobeEngine = () => {
+  if (typeof window === "undefined") {
+    return Promise.resolve()
+  }
+
+  if (globeEngineWarmupPromise) {
+    return globeEngineWarmupPromise
+  }
+
+  globeEngineWarmupPromise = new Promise<void>((resolve) => {
+    const canvas = document.createElement("canvas")
+    canvas.width = 48
+    canvas.height = 48
+    canvas.style.cssText = "position:fixed;left:-100px;top:-100px;width:48px;height:48px;opacity:0;pointer-events:none;"
+    document.body.appendChild(canvas)
+
+    try {
+      const globe = createGlobe(canvas, {
+        devicePixelRatio: 1,
+        width: 48,
+        height: 48,
+        phi: 0,
+        theta: 0.1,
+        dark: 1,
+        diffuse: 1.5,
+        mapSamples: 900,
+        mapBrightness: 16,
+        baseColor: [0.1, 0.1, 0.1],
+        markerColor: [0.5, 0.64, 0.78],
+        glowColor: [1, 1, 1],
+        markerElevation: 0.01,
+        markers: [],
+        arcs: [],
+        arcColor: [0.42, 0.55, 0.68],
+        arcWidth: 0.5,
+        arcHeight: 0.25,
+        opacity: 0.7,
+      })
+
+      globe.update({ phi: 0.02, theta: 0.1 })
+      window.requestAnimationFrame(() => {
+        globe.destroy()
+        canvas.remove()
+        resolve()
+      })
+    } catch {
+      canvas.remove()
+      resolve()
+    }
+  })
+
+  return globeEngineWarmupPromise
+}
+
 const scheduleIdleWork = (callback: () => void) => {
   const requestIdleCallback = window.requestIdleCallback?.bind(window)
   const cancelIdleCallback = window.cancelIdleCallback?.bind(window)
@@ -418,8 +474,7 @@ export function Globe({
             whiteSpace: "nowrap" as const,
             pointerEvents: "none" as const,
             opacity: `var(--cobe-visible-${m.id}, 0)`,
-            filter: `blur(calc((1 - var(--cobe-visible-${m.id}, 0)) * 8px))`,
-            transition: "opacity 0.8s, filter 0.8s",
+            transition: "opacity 0.45s ease",
           }}
         >
           {m.label}
@@ -459,8 +514,7 @@ export function Globe({
               pointerEvents: "none" as const,
               boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
               opacity: `var(--cobe-visible-arc-${a.id}, 0)`,
-              filter: `blur(calc((1 - var(--cobe-visible-arc-${a.id}, 0)) * 8px))`,
-              transition: "opacity 0.8s, filter 0.8s",
+              transition: "opacity 0.45s ease",
             }}
           >
             {a.label}

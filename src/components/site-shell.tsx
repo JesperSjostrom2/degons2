@@ -6,7 +6,7 @@ import SiteLoadReveal from '@/components/site-load-reveal'
 import { prewarmBelowFoldAssets } from '@/lib/site-preload'
 
 const LOAD_REVEAL_DURATION_MS = 1940
-const LOAD_CONTENT_PREMOUNT_MS = 280
+const LOAD_CONTENT_PREMOUNT_MS = 860
 const LOAD_REVEAL_EXIT_MS = 320
 
 export default function SiteShell({ children }: { children: ReactNode }) {
@@ -53,6 +53,7 @@ export default function SiteShell({ children }: { children: ReactNode }) {
     firstFrame = window.requestAnimationFrame(() => {
       secondFrame = window.requestAnimationFrame(() => {
         setIsLoaderExiting(true)
+        window.dispatchEvent(new Event('site-loader-exit'))
         removeLoaderTimeout = window.setTimeout(() => {
           setShowLoader(false)
         }, LOAD_REVEAL_EXIT_MS)

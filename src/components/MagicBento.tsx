@@ -67,10 +67,9 @@ const createBentoCardReveal = (index: number): Variants => {
       rotateX: 0,
       rotateZ: 0,
       scale: 1,
-      filter: "blur(0px)",
       transition: {
-        duration: 1.02,
-        delay: Math.min(visualOrder * 0.07, 0.28),
+        duration: 0.7,
+        delay: Math.min(visualOrder * 0.045, 0.18),
         ease: cinematicEase,
       },
     },
@@ -510,10 +509,10 @@ const MagicBento: React.FC = () => {
               arcColor={REMOTE_GLOBE_ARC_COLOR}
               theta={0.1}
               mapBrightness={18}
-              mapSamples={shouldUseMobileBento ? 1200 : 5200}
-              maxDevicePixelRatio={1.25}
+              mapSamples={shouldUseMobileBento ? 900 : 3200}
+              maxDevicePixelRatio={1}
               targetFps={30}
-              initRootMargin="1200px 0px"
+              initRootMargin="2800px 0px"
               eagerInit
               speed={shouldUseMobileBento ? 0 : 0.0031}
               interactive={false}
@@ -2986,12 +2985,12 @@ const MagicBento: React.FC = () => {
             return (
               <motion.div
                 key={card.label}
-                className={`mobile-no-load-animation cinematic-reveal-card ${baseClassName} transform-gpu will-change-[transform,opacity,filter]`}
+                className={`mobile-no-load-animation cinematic-reveal-card ${baseClassName} transform-gpu will-change-[transform,opacity]`}
                 variants={createBentoCardReveal(index)}
                 initial={revealMotionDisabled ? false : "hidden"}
                 whileInView={revealMotionDisabled ? undefined : "visible"}
                 viewport={cinematicViewport}
-                style={{ willChange: revealMotionDisabled ? "auto" : "transform, opacity, filter" }}
+                style={{ willChange: revealMotionDisabled ? "auto" : "transform, opacity" }}
                 onMouseEnter={card.svgAsset ? () => startBentoSvgAnimation(card.svgAsset!) : undefined}
                 onMouseLeave={card.svgAsset ? () => stopBentoSvgAnimation(card.svgAsset!) : undefined}
                 onClick={card.svgAsset ? () => toggleBentoSvgAnimation(card.svgAsset!) : undefined}

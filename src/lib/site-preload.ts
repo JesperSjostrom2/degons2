@@ -41,7 +41,9 @@ const warmImageCache = (url: string) => {
 }
 
 const warmBentoClientCode = () => {
-  void import('@/components/ui/cobe-globe').catch(() => undefined)
+  void import('@/components/ui/cobe-globe')
+    .then((module) => module.warmCobeGlobeEngine())
+    .catch(() => undefined)
 }
 
 const warmHeroAtmosphere = () => {
@@ -62,20 +64,20 @@ export const prewarmBelowFoldAssets = () => {
 
   const cancelHeroAtmospherePreload = scheduleIdleWork(warmHeroAtmosphere, 420)
 
+  const cancelBentoCodePreload = scheduleIdleWork(warmBentoClientCode, 260)
+
   const cancelBentoPreload = scheduleIdleWork(() => {
     BENTO_ASSET_URLS.forEach(warmFetchCache)
-  }, 700)
+  }, 520)
 
   const cancelImagePreload = scheduleIdleWork(() => {
     BELOW_FOLD_IMAGE_URLS.forEach(warmImageCache)
   }, 1600)
 
-  const cancelClientCodePreload = scheduleIdleWork(warmBentoClientCode, 2200)
-
   return () => {
     cancelHeroAtmospherePreload()
+    cancelBentoCodePreload()
     cancelBentoPreload()
     cancelImagePreload()
-    cancelClientCodePreload()
   }
 }

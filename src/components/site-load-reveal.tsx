@@ -25,7 +25,7 @@ export default function SiteLoadReveal({ isExiting = false }: { isExiting?: bool
           <div className="site-load-reveal__track absolute inset-x-2 top-1/2 h-px -translate-y-1/2 overflow-hidden">
             <div className="absolute inset-0 bg-[#dac5a7]/10" />
             <div className="site-load-reveal__line absolute inset-0 origin-left bg-gradient-to-r from-[#8b7355]/10 via-[#f5efe4] to-[#dac5a7] shadow-[0_0_18px_rgba(218,197,167,0.34)]" />
-            <div className="site-load-reveal__scanner absolute top-1/2 h-1.5 w-5 -translate-y-1/2 rounded-full bg-[#f5efe4]/55 blur-[3px]" />
+            <div className="site-load-reveal__scanner absolute top-1/2 h-1.5 w-5 -translate-y-1/2 rounded-full bg-[#f5efe4]/55 shadow-[0_0_10px_rgba(245,239,228,0.28)]" />
           </div>
         </div>
       </div>

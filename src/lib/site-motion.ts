@@ -11,17 +11,15 @@ export const cinematicViewport = {
 export const cinematicHeader: Variants = {
   hidden: {
     opacity: 0,
-    y: 28,
-    scale: 0.985,
-    filter: 'blur(14px)',
+    y: 24,
+    scale: 0.992,
   },
   visible: {
     opacity: 1,
     y: 0,
     scale: 1,
-    filter: 'blur(0px)',
     transition: {
-      duration: 0.95,
+      duration: 0.84,
       ease: cinematicEase,
     },
   },
@@ -39,8 +37,7 @@ export const cinematicPanel = (direction: 'up' | 'left' | 'right' | 'deep' = 'up
     hidden: {
       opacity: 0,
       ...offset,
-      scale: 0.975,
-      filter: 'blur(18px)',
+      scale: 0.985,
       transformPerspective: 1200,
     },
     visible: {
@@ -50,9 +47,8 @@ export const cinematicPanel = (direction: 'up' | 'left' | 'right' | 'deep' = 'up
       rotateX: 0,
       rotateZ: 0,
       scale: 1,
-      filter: 'blur(0px)',
       transition: {
-        duration: 1.05,
+        duration: 0.78,
         ease: cinematicEase,
       },
     },
@@ -63,16 +59,14 @@ export const cinematicItem = (delay = 0): Variants => ({
   hidden: {
     opacity: 0,
     y: 18,
-    scale: 0.99,
-    filter: 'blur(10px)',
+    scale: 0.994,
   },
   visible: {
     opacity: 1,
     y: 0,
     scale: 1,
-    filter: 'blur(0px)',
     transition: {
-      duration: 0.78,
+      duration: 0.72,
       delay,
       ease: cinematicEase,
     },

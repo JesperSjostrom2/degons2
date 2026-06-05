@@ -13,9 +13,28 @@ const LightRays = dynamic(() => import('@/components/LightRays'), {
   loading: () => null,
 })
 
+const heroLineReveal = {
+  hidden: {
+    opacity: 0,
+    y: 36,
+    scale: 0.985,
+  },
+  visible: (delay: number) => ({
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.78,
+      delay,
+      ease: cinematicEase,
+    },
+  }),
+}
+
 export default function Hero() {
   const [showLightRays, setShowLightRays] = useState(false)
   const [copied, setCopied] = useState(false)
+  const [shouldRevealHero, setShouldRevealHero] = useState(false)
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(min-width: 768px)')
@@ -41,6 +60,19 @@ export default function Hero() {
       isMounted = false
       mediaQuery.removeEventListener('change', updateLightRays)
     }
+  }, [])
+
+  useEffect(() => {
+    const revealHero = () => setShouldRevealHero(true)
+
+    if (!document.querySelector('.site-load-reveal')) {
+      const frame = window.requestAnimationFrame(revealHero)
+      return () => window.cancelAnimationFrame(frame)
+    }
+
+    window.addEventListener('site-loader-exit', revealHero, { once: true })
+
+    return () => window.removeEventListener('site-loader-exit', revealHero)
   }, [])
 
   const handleCopyEmail = async () => {
@@ -87,61 +119,59 @@ export default function Hero() {
 
       <div className="container relative z-10 mx-auto flex min-h-screen items-center px-6 pb-12 pt-24 md:pb-16 md:pt-32">
         <div className="relative mx-auto flex w-full max-w-7xl -translate-y-6 flex-col items-center text-center md:-translate-y-8">
-          <motion.div
-            initial={{ opacity: 0, y: 42, scale: 0.975, filter: 'blur(18px)' }}
-            animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
-            transition={{ duration: 1.15, delay: 0.24, ease: cinematicEase }}
-            className="mobile-no-load-animation relative w-full max-w-6xl hero-cinematic-reveal"
-          >
+          <div className="mobile-no-load-animation relative w-full max-w-6xl hero-cinematic-reveal">
 
             <h1 className="mx-auto max-w-[1080px] text-balance text-[clamp(2.45rem,5.6vw,5.1rem)] font-semibold leading-[1.02] tracking-[-0.055em] drop-shadow-[0_18px_60px_rgba(0,0,0,0.18)] dark:drop-shadow-[0_18px_60px_rgba(0,0,0,0.38)] hero-headline-bloom">
-              <span className="text-gradient-ivory">Hi, I&apos;m</span> <span className="text-gradient-jesper">Jesper.</span>
-              <br />
-              <span className="text-gradient-ivory">I build</span>{' '}
-              <span className="space-micro-planet-inline" />{' '}
-              <span className="relative inline-block text-gradient-ivory">
-                websites
-              </span>
-              <br />
-              <span className="text-gradient-ivory">you actually</span>{' '}
-              <span className="relative inline-block text-gradient-trust">
-                deserve.
-                <motion.svg
-                  width="100%"
-                  height="12"
-                  viewBox="0 0 200 12"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="absolute -bottom-[0.15em] left-0 z-0"
-                  initial={{ pathLength: 0, opacity: 0 }}
-                  animate={{ pathLength: 1, opacity: 0.85 }}
-                  transition={{ delay: 1.65, duration: 2.2, ease: cinematicEase }}
-                  style={{ filter: 'blur(0.8px) drop-shadow(0 0 10px rgba(218, 197, 167, 0.18))' }}
-                >
-                  <path
-                    d="M10 9C50 5 150 5 190 9"
-                    stroke="url(#underline-gradient-trust)"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                  />
-                  <defs>
-                    <linearGradient id="underline-gradient-trust" x1="0" y1="0" x2="200" y2="0" gradientUnits="userSpaceOnUse">
-                      <stop offset="0" stopColor="#dac5a7" stopOpacity="0" />
-                      <stop offset="0.15" stopColor="#dac5a7" stopOpacity="0.45" />
-                      <stop offset="0.5" stopColor="#f5efe4" stopOpacity="0.9" />
-                      <stop offset="0.85" stopColor="#dac5a7" stopOpacity="0.45" />
-                      <stop offset="1" stopColor="#dac5a7" stopOpacity="0" />
-                    </linearGradient>
-                  </defs>
-                </motion.svg>
-              </span>
+              <motion.span className="block" custom={0.18} variants={heroLineReveal} initial="hidden" animate={shouldRevealHero ? 'visible' : 'hidden'}>
+                <span className="text-gradient-ivory">Hi, I&apos;m</span> <span className="text-gradient-jesper">Jesper.</span>
+              </motion.span>
+              <motion.span className="block" custom={0.28} variants={heroLineReveal} initial="hidden" animate={shouldRevealHero ? 'visible' : 'hidden'}>
+                <span className="text-gradient-ivory">I build</span>{' '}
+                <span className="space-micro-planet-inline" />{' '}
+                <span className="relative inline-block text-gradient-ivory">
+                  websites
+                </span>
+              </motion.span>
+              <motion.span className="block" custom={0.38} variants={heroLineReveal} initial="hidden" animate={shouldRevealHero ? 'visible' : 'hidden'}>
+                <span className="text-gradient-ivory">you actually</span>{' '}
+                <span className="relative inline-block text-gradient-trust">
+                  deserve.
+                  <motion.svg
+                    width="100%"
+                    height="12"
+                    viewBox="0 0 200 12"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="absolute -bottom-[0.15em] left-0 z-0"
+                    initial={{ pathLength: 0, opacity: 0 }}
+                    animate={shouldRevealHero ? { pathLength: 1, opacity: 0.85 } : { pathLength: 0, opacity: 0 }}
+                    transition={{ delay: 1.35, duration: 1.8, ease: cinematicEase }}
+                  >
+                    <path
+                      d="M10 9C50 5 150 5 190 9"
+                      stroke="url(#underline-gradient-trust)"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                    />
+                    <defs>
+                      <linearGradient id="underline-gradient-trust" x1="0" y1="0" x2="200" y2="0" gradientUnits="userSpaceOnUse">
+                        <stop offset="0" stopColor="#dac5a7" stopOpacity="0" />
+                        <stop offset="0.15" stopColor="#dac5a7" stopOpacity="0.45" />
+                        <stop offset="0.5" stopColor="#f5efe4" stopOpacity="0.9" />
+                        <stop offset="0.85" stopColor="#dac5a7" stopOpacity="0.45" />
+                        <stop offset="1" stopColor="#dac5a7" stopOpacity="0" />
+                      </linearGradient>
+                    </defs>
+                  </motion.svg>
+                </span>
+              </motion.span>
             </h1>
-          </motion.div>
+          </div>
 
           <motion.div
-            initial={{ opacity: 0, y: 26, scale: 0.99, filter: 'blur(12px)' }}
-            animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
-            transition={{ duration: 0.92, delay: 0.52, ease: cinematicEase }}
+            initial={{ opacity: 0, y: 22, scale: 0.99 }}
+            animate={shouldRevealHero ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 22, scale: 0.99 }}
+            transition={{ duration: 0.78, delay: 0.78, ease: cinematicEase }}
             className="mobile-no-load-animation relative z-20 mt-8 flex max-w-3xl flex-col items-center gap-6 md:mt-10"
           >
             <p className="max-w-2xl text-balance text-base leading-7 md:text-lg text-gradient-muted">
@@ -212,7 +242,7 @@ export default function Hero() {
       <motion.div
         className="planet-horizon pointer-events-none absolute bottom-[-7rem] left-1/2 z-10 h-[12rem] w-[92vw] max-w-[1320px] md:bottom-[-22rem] md:h-[28rem] md:w-[96vw] lg:w-[118vw]"
         initial={{ opacity: 0, scale: 0.84 }}
-        animate={{ opacity: 1, scale: 1 }}
+        animate={shouldRevealHero ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.84 }}
         transition={{ duration: 1.55, delay: 0.78, ease: cinematicEase }}
         style={{ x: '-50%', transformOrigin: '50% 60%' }}
       />

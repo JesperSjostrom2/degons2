@@ -60,7 +60,7 @@ export default function AboutSection() {
                   initial={shouldReduceMotion ? false : 'hidden'}
                   whileInView={shouldReduceMotion ? undefined : 'visible'}
                   viewport={{ once: true, amount: 0.16, margin: '0px 0px -10% 0px' }}
-                  style={{ willChange: shouldReduceMotion ? 'auto' : 'transform, opacity, filter' }}
+                  style={{ willChange: shouldReduceMotion ? 'auto' : 'transform, opacity' }}
                 >
                   <SocialLinks />
                 </motion.div>
@@ -69,11 +69,11 @@ export default function AboutSection() {
 
             <motion.div
               className="mobile-no-load-animation flex items-center justify-center lg:col-span-2"
-              initial={shouldDisablePortraitMotion ? false : { opacity: 0, y: 54, scale: 0.92, rotateX: 12, rotateZ: -2.6, filter: 'blur(18px)' }}
-              whileInView={shouldDisablePortraitMotion ? undefined : { opacity: 1, y: 0, scale: 1, rotateX: 0, rotateZ: 0, filter: 'blur(0px)' }}
+              initial={shouldDisablePortraitMotion ? false : { opacity: 0, y: 46, scale: 0.95, rotateX: 8, rotateZ: -1.8 }}
+              whileInView={shouldDisablePortraitMotion ? undefined : { opacity: 1, y: 0, scale: 1, rotateX: 0, rotateZ: 0 }}
               viewport={{ once: true, amount: 0.2, margin: '0px 0px -10% 0px' }}
               transition={{ duration: 1.16, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
-              style={{ transformPerspective: 1300, willChange: shouldDisablePortraitMotion ? 'auto' : 'transform, opacity, filter' }}
+              style={{ transformPerspective: 1300, willChange: shouldDisablePortraitMotion ? 'auto' : 'transform, opacity' }}
             >
               <motion.div
                 className="mobile-no-load-animation about-identity-panel relative w-full max-w-[26rem]"
@@ -87,8 +87,8 @@ export default function AboutSection() {
 
                 <motion.div
                   className="mobile-no-load-animation about-cinematic-frame group/about-portrait relative cursor-pointer overflow-hidden rounded-[1.7rem] border border-[color:var(--site-border)]/40 bg-[rgba(7,7,7,0.26)] p-3.5 backdrop-blur-[4px] [backdrop-filter:blur(4px)_saturate(120%)] [-webkit-backdrop-filter:blur(4px)_saturate(120%)] md:p-4"
-                  initial={shouldDisablePortraitMotion ? false : { opacity: 0, y: 18, scale: 0.985, filter: 'blur(8px)' }}
-                  whileInView={shouldDisablePortraitMotion ? undefined : { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
+                  initial={shouldDisablePortraitMotion ? false : { opacity: 0, y: 18, scale: 0.99 }}
+                  whileInView={shouldDisablePortraitMotion ? undefined : { opacity: 1, y: 0, scale: 1 }}
                   viewport={{ once: true, amount: 0.25, margin: '0px 0px -8% 0px' }}
                   transition={{ duration: 0.84, delay: 0.32, ease: [0.16, 1, 0.3, 1] }}
                 >
@@ -98,8 +98,8 @@ export default function AboutSection() {
                   <div data-about-profile className="about-portrait-stage relative h-[25.5rem] overflow-hidden rounded-[1.3rem] border border-[color:var(--site-border)]/45 bg-[linear-gradient(170deg,rgba(158,132,94,0.1)_0%,rgba(10,10,10,0.84)_50%,rgba(5,5,5,0.98)_100%)]">
                     <motion.div
                       className="mobile-no-load-animation about-portrait-image absolute inset-0 bg-[url('/assets/portrait.jpg')] bg-cover bg-center bg-no-repeat"
-                      initial={shouldDisablePortraitMotion ? false : { clipPath: 'inset(16% 8% 18% 8% round 1.1rem)', scale: 1.08, opacity: 0.52, filter: 'saturate(0.52) contrast(1.08) blur(8px)' }}
-                      whileInView={shouldDisablePortraitMotion ? undefined : { clipPath: 'inset(0% 0% 0% 0% round 0rem)', scale: 1.02, opacity: 0.96, filter: 'saturate(0.88) contrast(1.04) blur(0px)' }}
+                      initial={shouldDisablePortraitMotion ? false : { clipPath: 'inset(12% 6% 14% 6% round 1.1rem)', scale: 1.06, opacity: 0.62 }}
+                      whileInView={shouldDisablePortraitMotion ? undefined : { clipPath: 'inset(0% 0% 0% 0% round 0rem)', scale: 1.02, opacity: 0.96 }}
                       viewport={{ once: true, amount: 0.35, margin: '0px 0px -8% 0px' }}
                       transition={{ duration: 1.18, delay: 0.38, ease: [0.16, 1, 0.3, 1] }}
                     />
