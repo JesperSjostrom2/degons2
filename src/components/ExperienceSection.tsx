@@ -115,7 +115,7 @@ const projectsData: Project[] = [
     glowColor: '332 100 58',
     glowColors: ['#ff0066', '#ff0066', '#ff0066'],
     atmosphereColor: 'rgba(124, 99, 166, 0.11)',
-    liveSite: 'jespersjostrom.se',
+    liveSite: 'jespersjostrom2.github.io',
   },
 ]
 
