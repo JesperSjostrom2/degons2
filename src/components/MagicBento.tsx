@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import { User, Search, FileText, Send, Braces, Gift, ScanLine } from "lucide-react";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { useIsMobile } from "@/hooks/use-media-query";
@@ -234,6 +235,12 @@ const BENTO_SVG_PATHS = {
   firstImpression: "/assets/bento-cards/first-impression/Starrating.svg",
 };
 
+const BENTO_STATIC_SVG_PATHS = {
+  endToEnd: "/assets/bento-cards/static/end-to-end.svg",
+  fastDelivery: "/assets/bento-cards/static/fast-delivery.svg",
+  firstImpression: "/assets/bento-cards/static/first-impression.svg",
+};
+
 type BentoSvgAsset = keyof typeof BENTO_SVG_PATHS;
 
 type BentoSvgMarkup = {
@@ -392,6 +399,10 @@ const BentoAssetImage = ({
   }, []);
 
   useEffect(() => {
+    if (!isAnimating || svgMarkup) {
+      return;
+    }
+
     let isActive = true;
     const cancelIdleWork = scheduleIdleWork(() => {
       getBentoSvgMarkup(asset).then((markup) => {
@@ -406,7 +417,7 @@ const BentoAssetImage = ({
       isActive = false;
       cancelIdleWork();
     };
-  }, [asset]);
+  }, [asset, isAnimating, svgMarkup]);
 
   useEffect(() => {
     const svg = svgRef.current?.querySelector("svg") as ControllableSvgElement | null;
@@ -425,6 +436,22 @@ const BentoAssetImage = ({
     syncAnimationState(isAnimating);
   }, [asset, isAnimating, svgMarkup, syncAnimationState]);
 
+  if (!isAnimating || !svgMarkup) {
+    return (
+      <Image
+        className={className}
+        src={BENTO_STATIC_SVG_PATHS[asset]}
+        alt=""
+        aria-hidden="true"
+        width={width}
+        height={height}
+        loading="eager"
+        draggable={false}
+        unoptimized
+      />
+    );
+  }
+
   return (
     <div
       ref={svgRef}
@@ -432,7 +459,7 @@ const BentoAssetImage = ({
       aria-hidden="true"
       data-width={width}
       data-height={height}
-      dangerouslySetInnerHTML={{ __html: svgMarkup ? (isAnimating ? svgMarkup.animated : svgMarkup.static) : "" }}
+      dangerouslySetInnerHTML={{ __html: svgMarkup.animated }}
     />
   );
 };
@@ -522,7 +549,7 @@ const MagicBento: React.FC = () => {
               arcColor={REMOTE_GLOBE_ARC_COLOR}
               theta={0.1}
               mapBrightness={18}
-              mapSamples={shouldUseMobileBento ? 1400 : 3200}
+              mapSamples={shouldUseMobileBento ? 1000 : 1800}
               maxDevicePixelRatio={1}
               targetFps={shouldUseMobileBento ? 20 : 30}
               initRootMargin="2800px 0px"

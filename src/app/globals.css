@@ -306,7 +306,6 @@
     padding-bottom: 4.5rem;
   }
 
-  #why-me,
   #projects,
   #skills,
   #contact {
@@ -315,7 +314,7 @@
   }
 
   #why-me {
-    contain-intrinsic-size: 1180px;
+    contain: layout paint style;
   }
 
   #projects {

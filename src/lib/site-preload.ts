@@ -2,7 +2,13 @@
 
 import { shouldUseEnhancedMotion } from '@/lib/client-performance'
 
-const BENTO_ASSET_URLS = [
+const BENTO_STATIC_ASSET_URLS = [
+  '/assets/bento-cards/static/end-to-end.svg',
+  '/assets/bento-cards/static/fast-delivery.svg',
+  '/assets/bento-cards/static/first-impression.svg',
+]
+
+const BENTO_INTERACTIVE_ASSET_URLS = [
   '/assets/bento-cards/end-to-end-delivery/path.svg',
   '/assets/bento-cards/visitor-flow/time.svg',
   '/assets/bento-cards/first-impression/Starrating.svg',
@@ -66,9 +72,13 @@ export const prewarmBelowFoldAssets = () => {
 
   const cancelBentoCodePreload = scheduleIdleWork(warmBentoClientCode, 260)
 
-  const cancelBentoPreload = scheduleIdleWork(() => {
-    BENTO_ASSET_URLS.forEach(warmFetchCache)
+  const cancelBentoStaticPreload = scheduleIdleWork(() => {
+    BENTO_STATIC_ASSET_URLS.forEach(warmImageCache)
   }, 520)
+
+  const cancelBentoInteractivePreload = scheduleIdleWork(() => {
+    BENTO_INTERACTIVE_ASSET_URLS.forEach(warmFetchCache)
+  }, 2400)
 
   const cancelImagePreload = scheduleIdleWork(() => {
     BELOW_FOLD_IMAGE_URLS.forEach(warmImageCache)
@@ -77,7 +87,8 @@ export const prewarmBelowFoldAssets = () => {
   return () => {
     cancelHeroAtmospherePreload()
     cancelBentoCodePreload()
-    cancelBentoPreload()
+    cancelBentoStaticPreload()
+    cancelBentoInteractivePreload()
     cancelImagePreload()
   }
 }
