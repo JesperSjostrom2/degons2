@@ -165,36 +165,9 @@ export default function Hero() {
                 </span>
               </span>
               <span className="block">
-                <span className="text-gradient-ivory">you actually</span>{' '}
-                <span className="relative inline-block text-gradient-trust">
-                  deserve.
-                  <motion.svg
-                    width="100%"
-                    height="12"
-                    viewBox="0 0 200 12"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="absolute -bottom-[0.15em] left-0 z-0"
-                    initial={shouldAnimateHero === true ? { pathLength: 0, opacity: 0 } : false}
-                    animate={shouldAnimateHero === true ? (shouldRevealHero ? { pathLength: 1, opacity: 0.85 } : { pathLength: 0, opacity: 0 }) : { pathLength: 1, opacity: 0.85 }}
-                    transition={{ delay: 1.18, duration: 1.8, ease: cinematicEase }}
-                  >
-                    <path
-                      d="M10 9C50 5 150 5 190 9"
-                      stroke="url(#underline-gradient-trust)"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                    />
-                    <defs>
-                      <linearGradient id="underline-gradient-trust" x1="0" y1="0" x2="200" y2="0" gradientUnits="userSpaceOnUse">
-                        <stop offset="0" stopColor="#dac5a7" stopOpacity="0" />
-                        <stop offset="0.15" stopColor="#dac5a7" stopOpacity="0.45" />
-                        <stop offset="0.5" stopColor="#f5efe4" stopOpacity="0.9" />
-                        <stop offset="0.85" stopColor="#dac5a7" stopOpacity="0.45" />
-                        <stop offset="1" stopColor="#dac5a7" stopOpacity="0" />
-                      </linearGradient>
-                    </defs>
-                  </motion.svg>
+                <span className="text-gradient-ivory">from idea to</span>{' '}
+                <span className="inline-block text-gradient-trust">
+                  launch.
                 </span>
               </span>
             </motion.h1>
