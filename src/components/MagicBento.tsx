@@ -2228,13 +2228,30 @@ const MagicBento: React.FC = () => {
             grid-template-columns: 1fr;
             width: 100%;
             margin: 0 auto;
-            padding: 0.5rem;
+            padding: 0;
             position: relative;
+            gap: 0;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            border-radius: 28px;
+            isolation: isolate;
+            background: transparent;
           }
 
           .card-responsive .card {
             z-index: 1;
             contain: layout paint style;
+            border-radius: 0;
+          }
+
+          .card-responsive .premium-glass-surface {
+            border-radius: 0;
+            border: 0;
+            box-shadow: none;
+          }
+
+          .card-responsive .card:not(:nth-child(5)) {
+            border-top: 1px solid rgba(255, 255, 255, 0.07);
           }
 
           .bento-scroll-paused *,
@@ -2279,7 +2296,7 @@ const MagicBento: React.FC = () => {
 
           .bento-card-heading {
             margin-bottom: 0.42rem;
-            font-size: clamp(1.14rem, 0.92rem + 0.5vw, 1.32rem);
+            font-size: 1.75rem;
             font-weight: 700;
             line-height: 1.12;
             letter-spacing: -0.02em;
@@ -2287,7 +2304,7 @@ const MagicBento: React.FC = () => {
 
           .bento-feature-copy .bento-card-heading {
             margin-bottom: 0.62rem;
-            font-size: clamp(1.28rem, 1rem + 0.7vw, 1.52rem);
+            font-size: 1.75rem;
           }
 
           .bento-top-card-copy {
@@ -2296,8 +2313,26 @@ const MagicBento: React.FC = () => {
 
           .bento-top-card-heading {
             margin-bottom: 0.72rem !important;
-            font-size: clamp(1.4rem, 1.08rem + 0.72vw, 1.78rem) !important;
+            font-size: 1.75rem !important;
             line-height: 1.06;
+          }
+
+          .card-responsive .card:nth-child(2) .bento-card-heading,
+          .card-responsive .card:nth-child(3) .bento-card-heading,
+          .card-responsive .card:nth-child(4) .bento-card-heading {
+            font-size: 1.5rem;
+          }
+
+          .card-responsive .card:nth-child(2) .premium-glass-surface,
+          .card-responsive .card:nth-child(4) .premium-glass-surface {
+            background: transparent !important;
+          }
+
+          .card-responsive .card:nth-child(2) .premium-glass-surface::before,
+          .card-responsive .card:nth-child(2) .premium-glass-surface::after,
+          .card-responsive .card:nth-child(4) .premium-glass-surface::before,
+          .card-responsive .card:nth-child(4) .premium-glass-surface::after {
+            display: none;
           }
 
           .bento-top-card-copy .bento-card-caption {
@@ -2316,6 +2351,13 @@ const MagicBento: React.FC = () => {
             -webkit-background-clip: text;
             color: transparent;
             -webkit-text-fill-color: transparent;
+          }
+
+          .card-responsive .card:nth-child(2) .bento-card-caption,
+          .card-responsive .card:nth-child(3) .bento-card-caption,
+          .card-responsive .card:nth-child(4) .bento-card-caption {
+            font-size: 0.98rem;
+            line-height: 1.75rem;
           }
 
           .bento-feature-copy .bento-card-caption {
@@ -2379,7 +2421,7 @@ const MagicBento: React.FC = () => {
             .card-responsive {
               grid-template-columns: repeat(6, 1fr);
               grid-template-rows: repeat(4, minmax(0, 1fr));
-              gap: 0.65rem;
+              gap: 0;
               height: 1040px;
               min-height: 1040px;
             }
@@ -2407,6 +2449,7 @@ const MagicBento: React.FC = () => {
             .card-responsive .card:nth-child(4) {
               grid-column: 4 / 7;
               grid-row: 3 / 4;
+              border-left: 1px solid rgba(255, 255, 255, 0.07);
             }
 
             .card-responsive .card:nth-child(3) {
@@ -2419,7 +2462,7 @@ const MagicBento: React.FC = () => {
             .card-responsive {
               grid-template-columns: repeat(12, 1fr);
               grid-template-rows: repeat(2, minmax(0, 1fr));
-              gap: 0.65rem;
+              gap: 0;
               height: 740px;
               min-height: 740px;
               max-width: 1400px;
@@ -2439,21 +2482,28 @@ const MagicBento: React.FC = () => {
             .card-responsive .card:nth-child(1) {
               grid-column: 8 / 13;
               grid-row: 1 / 2;
+              border-top: 0;
+              border-left: 1px solid rgba(255, 255, 255, 0.07);
             }
 
             .card-responsive .card:nth-child(2) {
               grid-column: 1 / 5;
               grid-row: 2 / 3;
+              border-top: 1px solid rgba(255, 255, 255, 0.07);
             }
 
             .card-responsive .card:nth-child(4) {
               grid-column: 5 / 9;
               grid-row: 2 / 3;
+              border-top: 1px solid rgba(255, 255, 255, 0.07);
+              border-left: 1px solid rgba(255, 255, 255, 0.07);
             }
 
             .card-responsive .card:nth-child(3) {
               grid-column: 9 / 13;
               grid-row: 2 / 3;
+              border-top: 1px solid rgba(255, 255, 255, 0.07);
+              border-left: 1px solid rgba(255, 255, 255, 0.07);
             }
 
             .card-responsive .card:nth-child(1) .end-to-end-svg {
@@ -2648,7 +2698,7 @@ const MagicBento: React.FC = () => {
             }
 
             .card-responsive .bento-top-card-heading {
-              font-size: clamp(1.28rem, 1.08rem + 0.8vw, 1.5rem) !important;
+              font-size: 1.75rem !important;
             }
 
             .card-responsive .card:nth-child(1) {
@@ -2728,7 +2778,7 @@ const MagicBento: React.FC = () => {
 
             .card-responsive .card:nth-child(4) .remote-card-copy h2 {
               margin-bottom: 0.45rem;
-              font-size: 1.2rem;
+              font-size: 1.5rem;
               line-height: 1.2;
             }
 
