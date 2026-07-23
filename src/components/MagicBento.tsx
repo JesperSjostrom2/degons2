@@ -2329,9 +2329,7 @@ const MagicBento: React.FC = () => {
           }
 
           .card-responsive .card:nth-child(2) .premium-glass-surface::before,
-          .card-responsive .card:nth-child(2) .premium-glass-surface::after,
-          .card-responsive .card:nth-child(4) .premium-glass-surface::before,
-          .card-responsive .card:nth-child(4) .premium-glass-surface::after {
+          .card-responsive .card:nth-child(4) .premium-glass-surface::before {
             display: none;
           }
 
