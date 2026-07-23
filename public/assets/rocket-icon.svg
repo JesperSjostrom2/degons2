@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 139 172" fill="none" role="img" aria-labelledby="rocketTitle rocketDesc">
+  <title id="rocketTitle">Rocket icon</title>
+  <desc id="rocketDesc">A simple hand-drawn outline of a rocket with two side fins, a circular window, and a small exhaust mark.</desc>
+
+  <g stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Main rocket body -->
+    <path d="M41.5 121.5
+             C39.2 106.6 36.2 89.7 36.2 74.2
+             C36.2 53.5 48.2 31.4 62.2 24.3
+             C63.3 23.7 64.9 23.7 66.1 24.4
+             C80.4 32.3 92.4 53.9 92.4 74.2
+             C92.4 89.9 89.4 106.8 87.1 121.5
+             Z"/>
+
+    <!-- Left fin -->
+    <path d="M39.8 82.1
+             C26.6 88.5 18.4 98.9 18.4 109.3
+             L18.4 139.2
+             C18.4 142.3 21.2 143.2 23.4 140.9
+             L41.5 121.5
+             Z"/>
+
+    <!-- Right fin -->
+    <path d="M89.1 82.1
+             C102.3 88.5 110.5 98.9 110.5 109.3
+             L110.5 139.2
+             C110.5 142.3 107.7 143.2 105.5 140.9
+             L87.1 121.5
+             Z"/>
+
+    <!-- Window -->
+    <circle cx="64.3" cy="76.4" r="12.1"/>
+
+    <!-- Small body detail -->
+    <path d="M48.3 42.2H64.3"/>
+
+    <!-- Exhaust / motion mark -->
+    <path d="M52.2 133.2L59.1 147.3
+             C60.2 149.7 63.7 150.2 65.2 150.2
+             C66.7 150.2 69.8 149.6 70.8 147.3
+             L76.8 133.2"/>
+  </g>
+</svg>
