@@ -12,7 +12,7 @@ import { skillIconColors } from '@/lib/skill-colors'
 
 const experience = [
   {
-    dates: 'Apr 2024 to present',
+    dates: 'Apr 2024 - present',
     company: 'Freelance',
     role: 'Frontend Developer',
     visual: 'freelance',
@@ -37,7 +37,7 @@ const experience = [
     ],
   },
   {
-    dates: 'Nov 2023 to May 2024',
+    dates: 'Nov 2023 - May 2024',
     company: 'Cafe and Bistro Kerma',
     role: 'Brand and Web Developer',
     visual: 'kerma',
@@ -59,7 +59,7 @@ const experience = [
     ],
   },
   {
-    dates: 'Nov 2022 to Apr 2023',
+    dates: 'Nov 2022 - Apr 2023',
     company: 'Vello',
     role: 'Frontend Developer',
     visual: 'vello',
@@ -89,13 +89,13 @@ const education = [
   {
     school: 'KYH',
     program: 'Frontend Developer',
-    dates: 'Aug 2021 to May 2023',
+    dates: 'Aug 2021 - May 2023',
     detail: 'Specialization in frontend development',
   },
   {
     school: 'Östra Gymnasium',
     program: 'Computer Engineering',
-    dates: 'Aug 2020 to Jun 2021',
+    dates: 'Aug 2020 - Jun 2021',
     detail: 'Specialization in web development',
   },
 ]
@@ -115,13 +115,7 @@ export default function AboutSection() {
   const markerTop = useTransform(timelineProgress, [0, 1], ['0%', '100%'])
 
   return (
-    <section id="about" className="about-scene about-career-section relative overflow-hidden py-20 md:py-28">
-      <div className="about-scene-ambient pointer-events-none absolute inset-0" />
-      <div className="about-scene-depth pointer-events-none absolute inset-0" />
-      <div className="about-scene-haze pointer-events-none absolute inset-0" />
-      <div className="about-scene-vignette pointer-events-none absolute inset-0" />
-      <div className="about-scene-grain pointer-events-none absolute inset-0 opacity-25" />
-
+    <section id="about" className="about-career-section relative overflow-hidden py-20 md:py-28">
       <div className="container relative z-10 mx-auto px-6">
         <div className="about-story-layout mx-auto max-w-6xl">
           <motion.div
@@ -174,6 +168,7 @@ export default function AboutSection() {
           transition={{ duration: 0.7, ease: cinematicEase }}
         >
           <h2 className="section-title">Experience</h2>
+          <p className="about-experience-subtitle">Follow me through my journey as a frontend developer.</p>
         </motion.div>
 
         <div ref={timelineRef} className="about-career-timeline mx-auto max-w-7xl">
