@@ -2697,8 +2697,14 @@ const MagicBento: React.FC = () => {
               max-width: 12rem;
             }
 
-            .card-responsive .bento-top-card-heading {
-              font-size: 1.75rem !important;
+            .card-responsive .bento-card-heading {
+              font-size: 1.4rem !important;
+              line-height: 1.12;
+            }
+
+            .card-responsive .bento-card-caption {
+              font-size: 0.8rem !important;
+              line-height: 1.4 !important;
             }
 
             .card-responsive .card:nth-child(1) {
@@ -2778,14 +2784,10 @@ const MagicBento: React.FC = () => {
 
             .card-responsive .card:nth-child(4) .remote-card-copy h2 {
               margin-bottom: 0.45rem;
-              font-size: 1.5rem;
-              line-height: 1.2;
             }
 
             .card-responsive .card:nth-child(4) .remote-card-copy p {
               margin-bottom: 0;
-              font-size: 0.8rem;
-              line-height: 1.3;
             }
 
             .card-responsive .card:nth-child(2) .bento-mobile-readable {

@@ -497,11 +497,22 @@
   }
 
   .story-bridge-route {
-    display: block;
-    width: 10rem;
-    height: 4rem;
+    position: absolute;
+    bottom: -2.5rem;
+    left: calc(50% + 3.5rem);
+    display: none;
+    width: clamp(9.5rem, 12vw, 11.25rem);
+    height: auto;
+    transform: translateX(-50%);
     overflow: visible;
+    pointer-events: none;
     color: rgba(218, 197, 167, 0.68);
+  }
+
+  @media (min-width: 768px) {
+    .story-bridge-route {
+      display: block;
+    }
   }
 
   .story-bridge-rocket {
