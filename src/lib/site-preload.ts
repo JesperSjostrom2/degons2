@@ -5,13 +5,14 @@ import { shouldUseEnhancedMotion } from '@/lib/client-performance'
 const BENTO_STATIC_ASSET_URLS = [
   '/assets/bento-cards/static/end-to-end.svg',
   '/assets/bento-cards/static/fast-delivery.svg',
-  '/assets/bento-cards/static/first-impression.svg',
+  '/assets/bento-cards/first-impression/Wishlist.svg',
+  '/assets/bento-cards/avaibility-globe/International Shipping.svg',
 ]
 
 const BENTO_INTERACTIVE_ASSET_URLS = [
   '/assets/bento-cards/end-to-end-delivery/path.svg',
   '/assets/bento-cards/visitor-flow/time.svg',
-  '/assets/bento-cards/first-impression/Starrating.svg',
+  '/assets/bento-cards/first-impression/Wishlist.svg',
 ]
 
 const BELOW_FOLD_IMAGE_URLS = [
@@ -46,12 +47,6 @@ const warmImageCache = (url: string) => {
   image.src = url
 }
 
-const warmBentoClientCode = () => {
-  void import('@/components/ui/cobe-globe')
-    .then((module) => module.warmCobeGlobeEngine())
-    .catch(() => undefined)
-}
-
 const warmHeroAtmosphere = () => {
   if (!window.matchMedia('(min-width: 768px)').matches) {
     return
@@ -70,8 +65,6 @@ export const prewarmBelowFoldAssets = () => {
 
   const cancelHeroAtmospherePreload = scheduleIdleWork(warmHeroAtmosphere, 420)
 
-  const cancelBentoCodePreload = scheduleIdleWork(warmBentoClientCode, 260)
-
   const cancelBentoStaticPreload = scheduleIdleWork(() => {
     BENTO_STATIC_ASSET_URLS.forEach(warmImageCache)
   }, 520)
@@ -86,7 +79,6 @@ export const prewarmBelowFoldAssets = () => {
 
   return () => {
     cancelHeroAtmospherePreload()
-    cancelBentoCodePreload()
     cancelBentoStaticPreload()
     cancelBentoInteractivePreload()
     cancelImagePreload()
