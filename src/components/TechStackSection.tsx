@@ -146,19 +146,22 @@ export default function TechStackSection() {
           viewport={cinematicViewport}
         >
           <h2 className="section-title">My tech stack</h2>
+          <p className="section-description">
+            The technologies I enjoy using right now. Always open to better tools for the job.
+          </p>
         </motion.div>
 
         <motion.div
           ref={gridRef}
           onPointerLeave={hideHoverFill}
-          className="mobile-no-load-animation cinematic-reveal-card premium-glass-surface relative mx-auto flex max-w-7xl flex-wrap overflow-hidden rounded-[22px] md:grid md:grid-cols-3 md:rounded-[28px] lg:grid-cols-6"
+          className="mobile-no-load-animation cinematic-reveal-card relative mx-auto flex max-w-7xl flex-wrap overflow-hidden rounded-[22px] border border-[color:var(--site-border)] md:grid md:grid-cols-3 md:rounded-[28px] lg:grid-cols-6 dark:border-white/10"
           variants={cinematicPanel('deep')}
           initial="hidden"
           whileInView="visible"
           viewport={cinematicViewport}
         >
           <div
-            className="pointer-events-none absolute left-0 top-0 z-0 bg-[#a88c62] transition-[transform,width,height,border-radius,opacity] duration-300 ease-out"
+            className="pointer-events-none absolute left-0 top-0 z-0 bg-[#c2a77b] transition-[transform,width,height,border-radius,opacity] duration-300 ease-out"
             style={hoverFillStyle}
           />
 
