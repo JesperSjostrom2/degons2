@@ -5,10 +5,11 @@ import { createPortal } from 'react-dom'
 import type { ComponentType, SVGProps } from 'react'
 import Image from 'next/image'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import { ArrowUpRight, BadgeCheck, ChevronDown, Clock3, Code2, Eye, Figma, Globe, MonitorSmartphone, Palette, Sparkles, type LucideIcon } from 'lucide-react'
+import { ArrowUpRight, ChevronDown, Code2, Eye, Figma, Globe, Palette, Sparkles, type LucideIcon } from 'lucide-react'
 import { SiAdobeillustrator, SiCss3, SiFigma, SiFramer, SiHtml5, SiJavascript, SiMongodb, SiNextdotjs, SiReact, SiShadcnui, SiTailwindcss, SiThreedotjs, SiTypescript, SiVercel } from 'react-icons/si'
 import type { IconBaseProps } from 'react-icons'
 import { cinematicHeader, cinematicViewport } from '@/lib/site-motion'
+import { skillIconColors } from '@/lib/skill-colors'
 
 interface ProjectSlide {
   type: 'image' | 'video'
@@ -48,10 +49,9 @@ const projectsData: Project[] = [
     description:
       "A website for a photography agency, built around strong images and a clear path for people to get in touch.",
     bulletPoints: [
-      'Visual direction for a premium creative brand',
-      'Responsive pages with motion used to support the story',
-      'Media-heavy sections structured to stay usable',
-      'Clear path from first impression to contact',
+      'Built a contact focused photography site to improve visibility, establish a stronger online presence, and turn visitors into leads.',
+      'Optimized image delivery across media heavy pages to keep the portfolio fast without losing visual quality.',
+      'Created a responsive Next.js experience with motion and a clear path from the work to contact.',
     ],
     skills: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'motion.dev', 'shadcn/ui', 'GSAP', 'Vercel', 'Figma'],
     year: '2026',
@@ -74,11 +74,9 @@ const projectsData: Project[] = [
     description:
       'A cozy site for Tahkon Kerma Café & Bistro, where I also designed the logo. The site was built around opening hours, the menu, and strong SEO so people could actually find it.',
     bulletPoints: [
-      'Warm visual style matched to the restaurant setting',
-      'Layout built around opening hours, menu, and visit planning',
-      'Logo design and brand direction for a more finished identity',
-      'SEO-focused structure so people could find the site easily',
-      'Mobile-first structure for people checking details on the go',
+      'Built a customer focused site for the menu, opening hours, location, and reservation details.',
+      'Created the logo and brand identity to give the restaurant a stronger and more consistent presence.',
+      'Structured the site around local SEO so customers could find the restaurant online.',
     ],
     skills: ['React', 'Figma', 'Illustrator', 'Logo Design', 'HTML', 'CSS', 'JavaScript'],
     year: '2024',
@@ -100,10 +98,9 @@ const projectsData: Project[] = [
     description:
       'My first portfolio website, built to create an online presence and get my work seen.',
     bulletPoints: [
-      'Custom interactive sections instead of a template layout',
-      'Responsive structure tuned for desktop and mobile',
-      'Backend and admin panel for managing content',
-      'Clearer positioning for both portfolio and freelance inquiries',
+      'Built a full portfolio website with a backend and admin area for managing page content.',
+      'Added login based access so the site could be edited without changing the frontend code.',
+      'Used the project as exam work to build a working portfolio and understand how a complete web system fits together.',
     ],
     skills: ['Next.js', 'React', 'Figma', 'HTML', 'CSS', 'JavaScript', 'MongoDB'],
     year: '2023',
@@ -159,8 +156,6 @@ const fallbackSkillIcons: Record<string, LucideIcon> = {
   'Brand Identity': Sparkles,
 }
 
-const PROJECT_SKILL_ICON_COLOR = '#dac5a7'
-
 const skillIconClassNames: Record<string, string> = {
   'motion.dev': 'h-[0.6rem] w-[1rem]',
   GSAP: 'h-[0.8rem] w-[0.65rem]',
@@ -172,12 +167,12 @@ const SkillChip = ({ skill }: { skill: string }) => {
   const iconClassName = skillIconClassNames[skill] ?? 'h-3.5 w-3.5'
 
   return (
-    <span className="project-skill-chip inline-flex items-center gap-1.5 rounded-[0.7rem] px-3 py-1.5 text-xs text-[color:var(--site-text)] dark:text-white/72">
+    <span className="project-skill-chip project-technology-chip inline-flex items-center gap-1.5 rounded-[0.7rem] px-3 py-1.5 text-xs text-[color:var(--site-text)] dark:text-white/72">
       <span className="flex h-4 w-4 shrink-0 items-center justify-center">
         {BrandIcon ? (
-          <BrandIcon className={`${iconClassName} shrink-0`} style={{ color: PROJECT_SKILL_ICON_COLOR }} />
+          <BrandIcon className={`${iconClassName} shrink-0`} style={{ color: skillIconColors[skill] ?? '#b0aea5' }} />
         ) : (
-          <FallbackIcon className={`${iconClassName} shrink-0`} style={{ color: PROJECT_SKILL_ICON_COLOR }} />
+          <FallbackIcon className={`${iconClassName} shrink-0`} style={{ color: skillIconColors[skill] ?? '#b0aea5' }} />
         )}
       </span>
       {skill}
@@ -185,7 +180,7 @@ const SkillChip = ({ skill }: { skill: string }) => {
   )
 }
 
-const projectDetailLabelStyle = { color: '#dac5a7' } as const
+const projectDetailLabelStyle = { color: '#b0aea5' } as const
 
 interface ProjectMetaItemProps {
   label: string
@@ -221,6 +216,31 @@ const ProjectMetaItem = ({ label, value, icon: Icon, href }: ProjectMetaItemProp
   return <div className="project-meta-card">{content}</div>
 }
 
+const ProjectDetails = ({ project }: { project: Project }) => (
+  <>
+    <div className="project-highlights-block" style={{ '--project-accent': project.accentColor } as CSSProperties}>
+      <p className="mb-3.5 text-xs font-semibold uppercase tracking-[0.2em]" style={projectDetailLabelStyle}>Highlights</p>
+      <ul className="project-highlights-list">
+        {project.bulletPoints.map((point) => (
+          <li key={point}>{point}</li>
+        ))}
+      </ul>
+      <div className="project-live-site">
+        <ProjectMetaItem label="Live Site" value={project.liveSite} icon={Globe} href={`https://${project.liveSite}`} />
+      </div>
+    </div>
+
+    <div className="project-technologies-block">
+      <p className="mb-3.5 text-xs font-semibold uppercase tracking-[0.2em]" style={projectDetailLabelStyle}>Technologies</p>
+      <div className="flex flex-wrap gap-2">
+        {project.skills.map((skill) => (
+          <SkillChip key={skill} skill={skill} />
+        ))}
+      </div>
+    </div>
+  </>
+)
+
 const ProjectCard = ({ project }: { project: Project }) => {
   const cardRef = useRef<HTMLElement>(null)
   const previewBadgeRef = useRef<HTMLSpanElement>(null)
@@ -233,7 +253,6 @@ const ProjectCard = ({ project }: { project: Project }) => {
   const [isProjectPreviewActive, setIsProjectPreviewActive] = useState(false)
   const [hasMounted, setHasMounted] = useState(false)
   const shouldReduceMotion = useReducedMotion()
-  const accentLabelStyle = { '--project-accent': project.accentColor } as CSSProperties
   const projectCardStyle = {
     '--project-accent': project.accentColor,
     '--project-atmosphere': project.atmosphereColor,
@@ -453,12 +472,8 @@ const ProjectCard = ({ project }: { project: Project }) => {
           </div>
 
           <div className="p-6 pt-7 sm:p-8 lg:flex lg:h-full lg:flex-col lg:px-9 lg:pb-9 lg:pt-8">
-            <div className="mb-5 hidden items-center justify-between gap-3 lg:flex">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--project-accent)]" style={accentLabelStyle}>{project.category}</p>
-              <span className="project-skill-chip inline-flex items-center rounded-[0.7rem] px-3 py-1.5 text-xs font-semibold text-[color:var(--site-muted)] dark:text-white/72">{project.year}</span>
-            </div>
             <h3 className="text-4xl font-bold uppercase leading-tight tracking-tight text-[color:var(--site-text)] dark:text-white">{project.displayTitle}</h3>
-            <p className="mt-4 pb-5 text-sm leading-7 text-[color:var(--site-muted)] dark:text-white/72">{project.description}</p>
+            <p className="mt-4 pb-5 text-base leading-7 text-[color:var(--site-muted)] dark:text-white/72">{project.description}</p>
 
             <button
               type="button"
@@ -471,24 +486,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
             </button>
 
             <div className="hidden lg:flex lg:flex-1 lg:flex-col">
-              <div className="py-5">
-                <p className="mb-3.5 text-xs font-semibold uppercase tracking-[0.2em]" style={projectDetailLabelStyle}>Project Info</p>
-                <div className="grid gap-3 sm:grid-cols-2">
-                  <ProjectMetaItem label="Role" value="Designer & Developer" icon={BadgeCheck} />
-                  <ProjectMetaItem label="Duration" value={project.duration ?? '3 Weeks'} icon={Clock3} />
-                  <ProjectMetaItem label="Type" value="Web Application" icon={MonitorSmartphone} />
-                  <ProjectMetaItem label="Live Site" value={project.liveSite} icon={Globe} href={`https://${project.liveSite}`} />
-                </div>
-              </div>
-
-              <div className="pt-5 lg:mt-auto">
-                <p className="mb-3.5 text-xs font-semibold uppercase tracking-[0.2em]" style={projectDetailLabelStyle}>Technologies</p>
-                <div className="flex flex-wrap gap-2">
-                  {project.skills.map((skill) => (
-                    <SkillChip key={skill} skill={skill} />
-                  ))}
-                </div>
-              </div>
+              <ProjectDetails project={project} />
             </div>
 
             <AnimatePresence initial={false}>
@@ -500,24 +498,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
                   exit={{ height: 0, opacity: 0 }}
                   transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
                 >
-                  <div className="py-6">
-                    <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em]" style={projectDetailLabelStyle}>Project Info</p>
-                    <div className="grid gap-4">
-                      <ProjectMetaItem label="Role" value="Designer & Developer" icon={BadgeCheck} />
-                      <ProjectMetaItem label="Duration" value={project.duration ?? '3 Weeks'} icon={Clock3} />
-                      <ProjectMetaItem label="Type" value="Web Application" icon={MonitorSmartphone} />
-                      <ProjectMetaItem label="Live Site" value={project.liveSite} icon={Globe} href={`https://${project.liveSite}`} />
-                    </div>
-                  </div>
-
-                  <div className="pt-6">
-                    <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em]" style={projectDetailLabelStyle}>Technologies</p>
-                    <div className="flex flex-wrap gap-2">
-                      {project.skills.map((skill) => (
-                        <SkillChip key={skill} skill={skill} />
-                      ))}
-                    </div>
-                  </div>
+                  <ProjectDetails project={project} />
                 </motion.div>
               )}
             </AnimatePresence>
@@ -542,8 +523,7 @@ const ExperienceSection: React.FC = () => {
           whileInView="visible"
           viewport={cinematicViewport}
         >
-          <p className="section-label">Selected Work</p>
-          <h2 className="section-title">My Past Projects</h2>
+          <h2 className="section-title">Past projects</h2>
         </motion.div>
 
         <div className="mobile-no-load-animation mx-auto flex max-w-7xl flex-col gap-7">
