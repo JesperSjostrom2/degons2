@@ -145,7 +145,6 @@ export default function TechStackSection() {
           whileInView="visible"
           viewport={cinematicViewport}
         >
-          <p className="section-label">Tools I use</p>
           <h2 className="section-title">My tech stack</h2>
         </motion.div>
 

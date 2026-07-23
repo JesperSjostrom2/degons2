@@ -158,7 +158,6 @@ export default function ContactSection() {
           whileInView="visible"
           viewport={cinematicViewport}
         >
-          <p className="section-label">Contact</p>
           <h2 className="section-title">Let&apos;s talk about your site</h2>
           <p className="section-description">
             Tell me what you need online: a landing page, portfolio, business site, redesign, or just a better first impression.
