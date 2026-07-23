@@ -114,7 +114,7 @@ Recommended accent serif: **Newsreader** for emphasis words.
 | Card Heading | 20px–26px | 600 | 1.20–1.30 | Standard card titles |
 | Body Large | 18px–20px | 400–500 | 1.60 | Intro paragraphs |
 | Body | 16px | 400–500 | 1.55–1.65 | Standard text |
-| Small Body | 14px–15px | 400–500 | 1.45–1.60 | Card descriptions |
+| Small Body | 16px | 400–500 | 1.45–1.60 | Card descriptions |
 | Label | 12px–14px | 500–600 | 1.25 | Section labels, metadata |
 | Overline | 12px–14px | 500–600 | 1.40 | Uppercase section labels |
 ### Principles
