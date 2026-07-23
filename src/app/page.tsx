@@ -10,6 +10,9 @@ import Footer from '@/components/footer'
 import ProgressScrollbar from '@/components/ProgressScrollbar'
 import AboutSection from '@/components/AboutSection'
 import WhyMeSection from '@/components/WhyMeSection'
+import ProcessJourney from '@/components/ProcessJourney'
+import StoryBridge from '@/components/StoryBridge'
+import BentoProcessBridge from '@/components/BentoProcessBridge'
 
 export default function Home() {
   return (
@@ -24,8 +27,12 @@ export default function Home() {
         <Navbar />
         <Hero />
 
-        <WhyMeSection />
+        <BentoProcessBridge>
+          <WhyMeSection />
+          <ProcessJourney />
+        </BentoProcessBridge>
         <ExperienceSection />
+        <StoryBridge />
         <AboutSection />
         <TechStackSection />
         <ContactSection />
