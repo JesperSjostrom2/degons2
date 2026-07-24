@@ -1,31 +1,41 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState, type CSSProperties, type FormEvent } from 'react'
-import { motion } from 'framer-motion'
-import { ArrowRight, ChevronDown, Github, Linkedin, Loader2, type LucideIcon } from 'lucide-react'
+import { AnimatePresence, motion } from 'framer-motion'
+import { ArrowRight, BriefcaseBusiness, CalendarClock, ChevronDown, Github, Linkedin, Loader2, Mail, MessageSquare, UserRound } from 'lucide-react'
 import { FiMail } from 'react-icons/fi'
-import type { IconType } from 'react-icons'
 import { cinematicHeader, cinematicPanel, cinematicViewport } from '@/lib/site-motion'
 
 const projectTypes = ['Landing page', 'SaaS', 'SEO improvements', 'Redesign', 'Branding']
 
-interface SocialLink {
-  name: string
-  handle: string
-  href: string
-  icon: LucideIcon | IconType
-}
+const frequentlyAskedQuestions = [
+  {
+    question: 'Do I need a finished brief?',
+    answer: 'No. A rough idea, a reference, or a link is enough to start the conversation.',
+  },
+  {
+    question: 'What kind of websites do you build?',
+    answer: 'I work on a wide range of website projects, including personal sites, portfolios, business websites, product pages, landing pages, redesigns, and more. If you have something specific in mind, feel free to ask.',
+  },
+  {
+    question: 'How much does a website cost?',
+    answer: 'Every project is scoped individually, so I do not use a fixed price list. Once I understand your goals, pages, and functionality, I will send a clear quote before any work begins.',
+  },
+  {
+    question: 'How long does a project take?',
+    answer: 'The timeline depends on the scope and feedback speed. After our first conversation, I will outline the expected schedule and milestones before we begin.',
+  },
+  {
+    question: 'How does the project work?',
+    answer: 'We define the goal, agree on the direction, then move through design, development, feedback, and launch with clear next steps.',
+  },
+  {
+    question: 'Can you improve an existing site?',
+    answer: 'Yes. I can refine the design, improve usability, rebuild weak sections, or give the whole site a clearer direction.',
+  },
+]
 
-interface HoverBounds {
-  opacity: number
-  x: number
-  y: number
-  width: number
-  height: number
-  borderRadius: string
-}
-
-const socialLinks: SocialLink[] = [
+const socialLinks = [
   {
     name: 'GitHub',
     handle: '@jespersjostrom2',
@@ -34,7 +44,7 @@ const socialLinks: SocialLink[] = [
   },
   {
     name: 'LinkedIn',
-    handle: 'jesper-sjostrom',
+    handle: 'jesper sjöström',
     href: 'https://www.linkedin.com/in/jesper-sj%C3%B6str%C3%B6m-521995232/',
     icon: Linkedin,
   },
@@ -53,8 +63,9 @@ export default function ContactSection() {
   const [projectType, setProjectType] = useState(projectTypes[0])
   const [budget, setBudget] = useState('')
   const [message, setMessage] = useState('')
+  const [openQuestion, setOpenQuestion] = useState<number | null>(null)
   const [activeSocial, setActiveSocial] = useState<string | null>(null)
-  const [hoverBounds, setHoverBounds] = useState<HoverBounds>({
+  const [hoverBounds, setHoverBounds] = useState({
     opacity: 0,
     x: 0,
     y: 0,
@@ -75,11 +86,10 @@ export default function ContactSection() {
     const gridRect = grid.getBoundingClientRect()
     const elementRect = element.getBoundingClientRect()
     const threshold = 2
-    const touchesTop = Math.abs(elementRect.top - gridRect.top) <= threshold
     const touchesRight = Math.abs(elementRect.right - gridRect.right) <= threshold
     const touchesBottom = Math.abs(elementRect.bottom - gridRect.bottom) <= threshold
     const touchesLeft = Math.abs(elementRect.left - gridRect.left) <= threshold
-    const radius = '24px'
+    const radius = '20px'
 
     setActiveSocial(socialName)
     setHoverBounds({
@@ -88,7 +98,7 @@ export default function ContactSection() {
       y: elementRect.top - gridRect.top,
       width: elementRect.width,
       height: elementRect.height,
-      borderRadius: `${touchesTop && touchesLeft ? radius : '0px'} ${touchesTop && touchesRight ? radius : '0px'} ${touchesBottom && touchesRight ? radius : '0px'} ${touchesBottom && touchesLeft ? radius : '0px'}`,
+      borderRadius: `0px 0px ${touchesBottom && touchesRight ? radius : '0px'} ${touchesBottom && touchesLeft ? radius : '0px'}`,
     })
   }, [])
 
@@ -160,63 +170,65 @@ export default function ContactSection() {
         >
           <h2 className="section-title">Let&apos;s talk about your site</h2>
           <p className="section-description">
-            Tell me what you need online: a landing page, portfolio, business site, redesign, or just a better first impression.
+            Tell me what you&apos;re building, where it stands, and what you want next.
           </p>
         </motion.div>
 
         <motion.div
-          className="mobile-no-load-animation cinematic-reveal-card mx-auto max-w-6xl"
+          className="mobile-no-load-animation cinematic-reveal-card mx-auto max-w-7xl"
           variants={cinematicPanel('deep')}
           initial="hidden"
           whileInView="visible"
           viewport={cinematicViewport}
         >
-            <div className="surface-hover-glow premium-glass-surface relative grid overflow-hidden rounded-[28px] backdrop-blur-sm lg:grid-cols-[0.9fr_1.35fr]">
-              <aside className="flex flex-col justify-between border-b border-[color:var(--site-border)] p-6 md:p-8 lg:border-b-0 lg:border-r dark:border-white/10">
-                <div>
-                  <p className="mb-3 text-sm uppercase tracking-[0.24em] text-accent/70">Find Me</p>
-                  <h3 className="text-2xl font-bold tracking-[-0.025em] text-[color:var(--site-text)] md:text-3xl">Send the rough version</h3>
-                  <p className="mt-4 text-sm leading-6 text-muted-foreground">
-                    You do not need a polished brief. A goal, a link, or a few notes is enough to start the conversation.
-                  </p>
-                </div>
+            <div className="surface-hover-glow relative grid overflow-hidden rounded-[28px] border border-[color:var(--site-border)] lg:grid-cols-[1fr_1.2fr] dark:border-white/10">
+              <aside className="flex flex-col border-b border-[color:var(--site-border)] p-6 md:p-8 lg:border-b-0 lg:border-r dark:border-white/10">
+                <h3 className="mb-6 text-xl font-bold tracking-[-0.025em] text-[color:var(--site-text)] md:text-2xl">Frequently asked questions</h3>
 
-                <div
-                  ref={socialGridRef}
-                  onPointerLeave={hideSocialFill}
-                  className="premium-glass-surface relative mt-8 grid overflow-hidden rounded-[24px] sm:grid-cols-3 lg:grid-cols-1"
-                >
-                  <div
-                    className="pointer-events-none absolute left-0 top-0 z-0 bg-[#a88c62] transition-[transform,width,height,border-radius,opacity] duration-300 ease-out"
-                    style={hoverFillStyle}
-                  />
-
-                  {socialLinks.map((social) => {
-                    const Icon = social.icon
-                    const isActive = activeSocial === social.name
-                    const isExternal = social.href.startsWith('http')
-
+                <div className="overflow-hidden rounded-[22px] border border-[color:var(--site-border)] lg:flex lg:flex-1 lg:flex-col dark:border-white/10">
+                  {frequentlyAskedQuestions.map((item, index) => {
+                    const isOpen = openQuestion === index
                     return (
-                      <a
-                        key={social.name}
-                        href={social.href}
-                        target={isExternal ? '_blank' : undefined}
-                        rel={isExternal ? 'noreferrer' : undefined}
-                        onPointerEnter={(event) => moveSocialFill(event.currentTarget, social.name)}
-                        onFocus={(event) => moveSocialFill(event.currentTarget, social.name)}
-                        onBlur={hideSocialFill}
-                        className={`group relative z-10 flex min-h-32 items-center gap-4 border-b border-[color:var(--site-border)] p-5 transition-colors duration-300 last:border-b-0 sm:border-b-0 sm:border-r sm:last:border-r-0 lg:border-b lg:border-r-0 dark:border-white/10 ${
-                          isActive ? 'text-background' : 'text-[color:var(--site-text)] hover:text-background dark:text-white/90'
-                        }`}
+                      <div
+                        key={item.question}
+                        className="border-b border-[color:var(--site-border)] last:border-b-0 lg:flex lg:flex-1 lg:flex-col lg:justify-center dark:border-white/10"
                       >
-                        <Icon className="h-9 w-9 shrink-0 transition-colors duration-300" />
-                        <span>
-                          <span className="block text-lg font-semibold">{social.name}</span>
-                          <span className={`mt-1 block break-all text-sm transition-colors duration-300 ${isActive ? 'text-background/70' : 'text-[color:var(--site-muted)] group-hover:text-background/70 dark:text-white/45'}`}>
-                            {social.handle}
+                        <button
+                          type="button"
+                          aria-expanded={isOpen}
+                          aria-controls={`faq-answer-${index}`}
+                          onClick={() => setOpenQuestion(isOpen ? null : index)}
+                          className="group flex w-full cursor-pointer items-center justify-between gap-4 px-4 py-4 text-left text-sm font-medium"
+                        >
+                          <span className="bg-gradient-to-b from-[#dcd7cc] to-[#8f8b82] bg-clip-text text-transparent transition-opacity duration-300 group-hover:opacity-75">
+                            {item.question}
                           </span>
-                        </span>
-                      </a>
+                          <motion.span
+                            animate={{ rotate: isOpen ? 45 : 0 }}
+                            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                            className="shrink-0 text-lg font-light text-[color:var(--site-muted)]"
+                          >
+                            +
+                          </motion.span>
+                        </button>
+
+                        <AnimatePresence initial={false}>
+                          {isOpen ? (
+                            <motion.div
+                              id={`faq-answer-${index}`}
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: 'auto', opacity: 1 }}
+                              exit={{ height: 0, opacity: 0 }}
+                              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                              className="overflow-hidden"
+                            >
+                              <p className="px-4 pb-4 pl-11 text-sm leading-6 text-muted-foreground">
+                                {item.answer}
+                              </p>
+                            </motion.div>
+                          ) : null}
+                        </AnimatePresence>
+                      </div>
                     )
                   })}
                 </div>
@@ -225,30 +237,30 @@ export default function ContactSection() {
               <form onSubmit={handleSubmit} className="p-6 md:p-8">
                 <div className="grid gap-4 md:grid-cols-2">
                   <label className="space-y-4 pl-0.5">
-                    <span className="block text-sm font-medium text-[color:var(--site-text)]">Name</span>
+                    <span className="flex items-center gap-2 text-base font-semibold text-[color:var(--site-text)]"><UserRound className="h-4 w-4 text-[color:var(--site-muted)]" />Name</span>
                     <input
                       value={name}
                       onChange={(event) => setName(event.target.value)}
                       required
-                      className="w-full rounded-[20px] border border-[color:var(--site-border)] bg-[rgba(5,5,5,0.045)] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[color:var(--site-muted)] focus:border-accent/60 focus:bg-[rgba(5,5,5,0.1)] dark:rounded-[20px] dark:border-white/10 dark:bg-[rgba(5,5,5,0.045)] dark:text-white dark:placeholder:text-white/30 dark:focus:bg-[rgba(5,5,5,0.1)]"
+                      className="w-full rounded-[20px] border border-[color:var(--site-border)] bg-[rgba(5,5,5,0.045)] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[#8f8b82] focus:border-accent/60 focus:bg-[rgba(5,5,5,0.1)] dark:rounded-[20px] dark:border-white/10 dark:bg-[rgba(5,5,5,0.045)] dark:text-white dark:placeholder:text-white/50 dark:focus:bg-[rgba(5,5,5,0.1)]"
                         placeholder="Your name"
                       />
                   </label>
 
                   <label className="space-y-4 pl-0.5">
-                    <span className="block text-sm font-medium text-[color:var(--site-text)]">Email</span>
+                    <span className="flex items-center gap-2 text-base font-semibold text-[color:var(--site-text)]"><Mail className="h-4 w-4 text-[color:var(--site-muted)]" />Email</span>
                     <input
                       type="email"
                       value={email}
                       onChange={(event) => setEmail(event.target.value)}
                       required
-                      className="w-full rounded-[20px] border border-[color:var(--site-border)] bg-[rgba(5,5,5,0.045)] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[color:var(--site-muted)] focus:border-accent/60 focus:bg-[rgba(5,5,5,0.1)] dark:rounded-[20px] dark:border-white/10 dark:bg-[rgba(5,5,5,0.045)] dark:text-white dark:placeholder:text-white/30 dark:focus:bg-[rgba(5,5,5,0.1)]"
+                      className="w-full rounded-[20px] border border-[color:var(--site-border)] bg-[rgba(5,5,5,0.045)] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[#8f8b82] focus:border-accent/60 focus:bg-[rgba(5,5,5,0.1)] dark:rounded-[20px] dark:border-white/10 dark:bg-[rgba(5,5,5,0.045)] dark:text-white dark:placeholder:text-white/50 dark:focus:bg-[rgba(5,5,5,0.1)]"
                         placeholder="you@example.com"
                       />
                   </label>
 
                   <label className="space-y-4 pl-0.5">
-                    <span className="block text-sm font-medium text-[color:var(--site-text)]">Project type</span>
+                    <span className="flex items-center gap-2 text-base font-semibold text-[color:var(--site-text)]"><BriefcaseBusiness className="h-4 w-4 text-[color:var(--site-muted)]" />Project type</span>
                     <div className="relative">
                       <select
                         value={projectType}
@@ -266,24 +278,24 @@ export default function ContactSection() {
                   </label>
 
                   <label className="space-y-4 pl-0.5">
-                    <span className="block text-sm font-medium text-[color:var(--site-text)]">Budget / timeline</span>
+                    <span className="flex items-center gap-2 text-base font-semibold text-[color:var(--site-text)]"><CalendarClock className="h-4 w-4 text-[color:var(--site-muted)]" />Budget / timeline</span>
                     <input
                       value={budget}
                       onChange={(event) => setBudget(event.target.value)}
-                        className="w-full rounded-[20px] border border-[color:var(--site-border)] bg-[rgba(5,5,5,0.045)] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[color:var(--site-muted)] focus:border-accent/60 focus:bg-[rgba(5,5,5,0.1)] dark:rounded-[20px] dark:border-white/10 dark:bg-[rgba(5,5,5,0.045)] dark:text-white dark:placeholder:text-white/30 dark:focus:bg-[rgba(5,5,5,0.1)]"
+                        className="w-full rounded-[20px] border border-[color:var(--site-border)] bg-[rgba(5,5,5,0.045)] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[#8f8b82] focus:border-accent/60 focus:bg-[rgba(5,5,5,0.1)] dark:rounded-[20px] dark:border-white/10 dark:bg-[rgba(5,5,5,0.045)] dark:text-white dark:placeholder:text-white/50 dark:focus:bg-[rgba(5,5,5,0.1)]"
                         placeholder="Optional, even a rough range helps"
                       />
                   </label>
                 </div>
 
                 <label className="mt-4 block space-y-4 pl-0.5">
-                  <span className="block text-sm font-medium text-[color:var(--site-text)]">Message</span>
+                  <span className="flex items-center gap-2 text-base font-semibold text-[color:var(--site-text)]"><MessageSquare className="h-4 w-4 text-[color:var(--site-muted)]" />Message</span>
                   <textarea
                     value={message}
                     onChange={(event) => setMessage(event.target.value)}
                     required
                     rows={7}
-                    className="w-full resize-none rounded-[20px] border border-[color:var(--site-border)] bg-[rgba(5,5,5,0.045)] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[color:var(--site-muted)] focus:border-accent/60 focus:bg-[rgba(5,5,5,0.1)] dark:rounded-[20px] dark:border-white/10 dark:bg-[rgba(5,5,5,0.045)] dark:text-white dark:placeholder:text-white/30 dark:focus:bg-[rgba(5,5,5,0.1)]"
+                    className="w-full resize-none rounded-[20px] border border-[color:var(--site-border)] bg-[rgba(5,5,5,0.045)] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[#8f8b82] focus:border-accent/60 focus:bg-[rgba(5,5,5,0.1)] dark:rounded-[20px] dark:border-white/10 dark:bg-[rgba(5,5,5,0.045)] dark:text-white dark:placeholder:text-white/50 dark:focus:bg-[rgba(5,5,5,0.1)]"
                     placeholder="Tell me a bit about what you need."
                   />
                 </label>
@@ -294,7 +306,7 @@ export default function ContactSection() {
                       ? 'Message sent. I will get back to you soon.'
                       : status === 'error'
                         ? errorMessage
-                        : 'I will get back to you with a clear next step.'}
+                        : 'Usually replies within one to two business days.'}
                   </p>
                   <div className="relative shrink-0">
                     <button
@@ -329,9 +341,49 @@ export default function ContactSection() {
                     </button>
                   </div>
                 </div>
+
               </form>
+
+              <div className="border-t border-[color:var(--site-border)] lg:col-span-2 dark:border-white/10">
+                <p className="px-6 pb-4 pt-5 text-sm text-muted-foreground">You can also reach me here.</p>
+                <div
+                  ref={socialGridRef}
+                  onPointerLeave={hideSocialFill}
+                  className="relative grid overflow-hidden border-t border-[color:var(--site-border)] sm:grid-cols-3 dark:border-white/10"
+                >
+                  <div
+                    className="pointer-events-none absolute left-0 top-0 z-0 bg-[#c2a77b] transition-[transform,width,height,border-radius,opacity] duration-300 ease-out"
+                    style={hoverFillStyle}
+                  />
+                  {socialLinks.map((social, index) => {
+                    const Icon = social.icon
+                    const isExternal = social.href.startsWith('http')
+                    const isActive = activeSocial === social.name
+
+                    return (
+                      <a
+                        key={social.name}
+                        href={social.href}
+                        target={isExternal ? '_blank' : undefined}
+                        rel={isExternal ? 'noreferrer' : undefined}
+                        onPointerEnter={(event) => moveSocialFill(event.currentTarget, social.name)}
+                        onFocus={(event) => moveSocialFill(event.currentTarget, social.name)}
+                        onBlur={hideSocialFill}
+                        className={`group relative z-10 flex min-w-0 items-center gap-3 px-6 py-5 transition-colors duration-300 ${index < socialLinks.length - 1 ? 'border-b sm:border-b-0 sm:border-r' : ''} border-[color:var(--site-border)] ${isActive ? 'text-background' : 'text-[color:var(--site-text)] dark:text-white/90'}`}
+                      >
+                        <Icon className="h-5 w-5 shrink-0 transition-colors duration-300" />
+                        <span className="min-w-0">
+                          <span className="block text-sm font-medium">{social.name}</span>
+                          <span className={`block truncate text-xs transition-colors duration-300 ${isActive ? 'text-background/70' : 'text-muted-foreground'}`}>{social.handle}</span>
+                        </span>
+                      </a>
+                    )
+                  })}
+                </div>
+              </div>
             </div>
         </motion.div>
+
       </div>
     </section>
   )

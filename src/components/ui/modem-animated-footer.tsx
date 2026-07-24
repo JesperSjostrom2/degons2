@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import type { ReactNode } from "react"
+import Image from "next/image"
 
 import { SocialIconLink } from "@/components/social-icon-link"
 import { cn } from "@/lib/utils"
@@ -77,8 +78,15 @@ export const Footer = ({
           </div>
 
           <div className="relative z-10 mt-10 flex flex-col items-center gap-3 md:mt-12">
-            <p className="text-center text-sm font-medium text-muted-foreground">
-              Design & built by {brandName}
+            <p className="inline-flex items-center text-center text-sm font-medium text-muted-foreground">
+              © {new Date().getFullYear()} · Design & built by {brandName}
+              <Image
+                src="/assets/minilogo.png"
+                alt=""
+                width={12}
+                height={12}
+                className="ml-1 h-3 w-3 shrink-0 self-center opacity-60"
+              />
             </p>
             {creatorName && creatorUrl && (
               <Link href={creatorUrl} className="text-xs text-[color:var(--site-muted)] transition-colors duration-300 hover:text-accent">
@@ -86,6 +94,7 @@ export const Footer = ({
               </Link>
             )}
           </div>
+
         </div>
 
       </footer>

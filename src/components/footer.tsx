@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 
-import { portfolioSocialLinks } from '@/components/social-links'
 import { Footer as AnimatedFooter } from '@/components/ui/modem-animated-footer'
 import { siteNavItems } from '@/lib/site-config'
 
@@ -41,7 +40,6 @@ export default function Footer() {
   return (
     <AnimatedFooter
       brandName="Jesper Sjöström"
-      socialLinks={portfolioSocialLinks}
       navLinks={siteNavItems}
       statusSlot={statusSlot}
     />
