@@ -10,6 +10,7 @@ import { SiAdobeillustrator, SiCss3, SiFigma, SiFramer, SiHtml5, SiJavascript, S
 import type { IconBaseProps } from 'react-icons'
 import { cinematicHeader, cinematicViewport } from '@/lib/site-motion'
 import { skillIconColors } from '@/lib/skill-colors'
+import ProjectShowcaseMedia from '@/components/ProjectShowcaseMedia'
 
 interface ProjectSlide {
   type: 'image' | 'video'
@@ -22,6 +23,8 @@ interface Project {
   id: number
   title: string
   displayTitle: string
+  logoSrc?: string
+  logoAlt?: string
   category: string
   summary: string
   description: string
@@ -42,8 +45,10 @@ interface Project {
 const projectsData: Project[] = [
   {
     id: 1,
-    title: 'ANDCREATIVE',
-    displayTitle: 'ANDCREATIVE',
+    title: 'Andcreative',
+    displayTitle: 'Andcreative',
+    logoSrc: '/assets/andcreativewhite.png',
+    logoAlt: 'AndCreative logo',
     category: 'Design & Web',
     summary: 'A website for a photography agency, built to let the images lead and guide more visitors into reaching out.',
     description:
@@ -68,7 +73,9 @@ const projectsData: Project[] = [
   {
     id: 2,
     title: 'Café & Bistro Kerma',
-    displayTitle: 'TAHKON KERMA',
+    displayTitle: 'Tahkon Kerma',
+    logoSrc: '/assets/kermainverted.png',
+    logoAlt: 'Tahkon Kerma logo',
     category: 'Brand & Web',
     summary: 'A warm restaurant site that makes it easy to find the menu, opening hours, and the basics before visiting.',
     description:
@@ -92,7 +99,7 @@ const projectsData: Project[] = [
   {
     id: 3,
     title: 'Old Portfolio',
-    displayTitle: 'OLD PORTFOLIO',
+    displayTitle: 'Old Portfolio',
     category: 'Personal & Web',
     summary: 'My first portfolio, built with a backend and admin panel, and the first place I started learning how I wanted my work to look.',
     description:
@@ -428,8 +435,19 @@ const ProjectCard = ({ project }: { project: Project }) => {
     <>
       <article ref={cardRef} className="project-card-atmosphere premium-glass-surface group overflow-hidden rounded-[28px]" style={projectCardStyle}>
         <div className="grid border-b border-[color:var(--site-border)] lg:grid-cols-[1.2fr_1fr] dark:border-white/10">
-          <div className="relative min-h-[220px] overflow-hidden p-0 sm:min-h-[280px] lg:min-h-[420px] lg:self-stretch lg:p-7">
-            <div className="relative z-10 mx-auto max-w-[760px] overflow-hidden rounded-t-[28px] border-b border-[color:var(--site-border)] bg-[rgba(0,0,0,0.15)] backdrop-blur-[4px] [backdrop-filter:blur(4px)_saturate(130%)] [-webkit-backdrop-filter:blur(4px)_saturate(130%)] dark:border-white/10 lg:h-full lg:rounded-2xl lg:border">
+          <div className={`relative min-h-[220px] overflow-hidden p-0 sm:min-h-[280px] lg:min-h-[420px] lg:self-stretch ${project.id === 1 ? '' : 'lg:p-7'}`}>
+            {project.id === 1 ? (
+              <ProjectShowcaseMedia
+                href={`https://${project.liveSite}`}
+                primaryImage="/assets/projects/andcreative1.png"
+                secondaryImage="/assets/projects/andcreative2.png"
+                primaryAlt="AndCreative homepage"
+                secondaryAlt="AndCreative project page"
+                projectLabel="Andcreative"
+                priority
+              />
+            ) : (
+              <div className="relative z-10 mx-auto max-w-[760px] overflow-hidden rounded-t-[28px] border-b border-[color:var(--site-border)] bg-[rgba(0,0,0,0.15)] backdrop-blur-[4px] [backdrop-filter:blur(4px)_saturate(130%)] [-webkit-backdrop-filter:blur(4px)_saturate(130%)] dark:border-white/10 lg:h-full lg:rounded-2xl lg:border">
               <a
                 href={`https://${project.liveSite}`}
                 target="_blank"
@@ -468,11 +486,23 @@ const ProjectCard = ({ project }: { project: Project }) => {
                   )}
                 </div>
               </a>
-            </div>
+              </div>
+            )}
           </div>
 
           <div className="p-6 pt-7 sm:p-8 lg:flex lg:h-full lg:flex-col lg:px-9 lg:pb-9 lg:pt-8">
-            <h3 className="text-4xl font-bold uppercase leading-tight tracking-tight text-[color:var(--site-text)] dark:text-white">{project.displayTitle}</h3>
+            <div className="project-title-lockup">
+              <h3 className="text-4xl font-bold leading-tight tracking-tight text-[color:var(--site-text)] dark:text-white">{project.displayTitle}</h3>
+              {project.logoSrc ? (
+                <Image
+                  src={project.logoSrc}
+                  alt={project.logoAlt ?? ''}
+                  width={96}
+                  height={56}
+                  className="project-title-lockup__logo"
+                />
+              ) : null}
+            </div>
             <p className="mt-4 pb-5 text-base leading-7 text-[color:var(--site-muted)] dark:text-white/72">{project.description}</p>
 
             <button
