@@ -1,16 +1,38 @@
 "use client"
 
-import { useEffect, useRef, useState, type CSSProperties, type MouseEvent } from 'react'
-import { createPortal } from 'react-dom'
-import type { ComponentType, SVGProps } from 'react'
+import { useEffect, useMemo, useState, type CSSProperties, type ComponentType, type SVGProps } from 'react'
 import Image from 'next/image'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import { ArrowUpRight, ChevronDown, Code2, Eye, Figma, Globe, Palette, Sparkles, type LucideIcon } from 'lucide-react'
-import { SiAdobeillustrator, SiCss3, SiFigma, SiFramer, SiHtml5, SiJavascript, SiMongodb, SiNextdotjs, SiReact, SiShadcnui, SiTailwindcss, SiThreedotjs, SiTypescript, SiVercel } from 'react-icons/si'
+import {
+  AppWindow,
+  ArrowUpRight,
+  Code2,
+  Gauge,
+  MonitorSmartphone,
+  Search,
+  X,
+  type LucideIcon,
+} from 'lucide-react'
+import {
+  SiAdobeillustrator,
+  SiCss3,
+  SiFigma,
+  SiFramer,
+  SiHtml5,
+  SiJavascript,
+  SiMongodb,
+  SiNextdotjs,
+  SiReact,
+  SiShadcnui,
+  SiTailwindcss,
+  SiThreedotjs,
+  SiTypescript,
+  SiVercel,
+} from 'react-icons/si'
 import type { IconBaseProps } from 'react-icons'
-import { cinematicHeader, cinematicViewport } from '@/lib/site-motion'
+import { cinematicHeader, cinematicItem, cinematicViewport } from '@/lib/site-motion'
 import { skillIconColors } from '@/lib/skill-colors'
-import ProjectShowcaseMedia from '@/components/ProjectShowcaseMedia'
+import FloatingStars from '@/components/floating-stars'
 
 interface ProjectSlide {
   type: 'image' | 'video'
@@ -19,25 +41,37 @@ interface ProjectSlide {
   objectFit?: CSSProperties['objectFit']
 }
 
+interface ProjectPaletteColor {
+  name: string
+  value: string
+}
+
+interface ProjectScopeItem {
+  label: string
+  /** Key into `brandSkillIcons` — renders the real tool logo in its brand colour. */
+  brand?: string
+  /** Fallback for deliverables that don't map to a tool. */
+  icon?: LucideIcon
+}
+
 interface Project {
   id: number
   title: string
   displayTitle: string
+  tagline: string
   logoSrc?: string
   logoAlt?: string
-  category: string
-  summary: string
-  description: string
-  bulletPoints: string[]
   skills: string[]
-  year: string
-  duration?: string
+  palette: ProjectPaletteColor[]
+  scope: ProjectScopeItem[]
+  bulletPoints: string[]
+  mediaCaption: string
+  outcomes: string[]
+  mediaImages: ProjectSlide[]
   image: ProjectSlide
   accentColor: string
   accentSoftColor: string
   accentBorderColor: string
-  glowColor: string
-  glowColors: string[]
   atmosphereColor: string
   liveSite: string
 }
@@ -47,52 +81,78 @@ const projectsData: Project[] = [
     id: 1,
     title: 'Andcreative',
     displayTitle: 'Andcreative',
+    tagline: 'Photography & film agency',
     logoSrc: '/assets/andcreativewhite.png',
     logoAlt: 'AndCreative logo',
-    category: 'Design & Web',
-    summary: 'A website for a photography agency, built to let the images lead and guide more visitors into reaching out.',
-    description:
-      "A website for a photography agency, built around strong images and a clear path for people to get in touch.",
+    skills: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'motion.dev', 'shadcn/ui', 'GSAP', 'Vercel', 'Figma'],
+    palette: [
+      { name: 'Cream', value: '#f5efe4' },
+      { name: 'Graphite', value: '#676a70' },
+      { name: 'Mist', value: '#d9d5cb' },
+      { name: 'White', value: '#f3f3f3' },
+    ],
+    scope: [
+      { label: 'Website design', brand: 'Figma' },
+      { label: 'Frontend development', brand: 'Next.js' },
+      { label: 'Motion & interaction', brand: 'GSAP' },
+      { label: 'Image optimization', icon: Gauge },
+    ],
     bulletPoints: [
-      'Built a contact focused photography site to improve visibility, establish a stronger online presence, and turn visitors into leads.',
-      'Optimized image delivery across media heavy pages to keep the portfolio fast without losing visual quality.',
+      'Built a contact-focused photography site to improve visibility and turn visitors into leads.',
+      'Optimized image delivery across media-heavy pages to keep the portfolio fast without losing quality.',
       'Created a responsive Next.js experience with motion and a clear path from the work to contact.',
     ],
-    skills: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'motion.dev', 'shadcn/ui', 'GSAP', 'Vercel', 'Figma'],
-    year: '2026',
-    duration: '2 Months',
+    mediaCaption: 'Photography-led pages',
+    outcomes: ['Website design', 'Website development', 'Image optimization', 'SEO structure', 'Responsive UI'],
+    mediaImages: [
+      { type: 'image', src: '/assets/projects/andcreative1.png', objectPosition: 'top' },
+      { type: 'image', src: '/assets/projects/andcreative2.png', objectPosition: 'top' },
+      { type: 'image', src: '/assets/projects/andcreativeproduct.webp', objectPosition: 'top' },
+    ],
     image: { type: 'image', src: '/assets/projects/andcreativeproduct.webp', objectPosition: 'top' },
     accentColor: '#f3f3f3',
     accentSoftColor: 'rgba(243, 243, 243, 0.14)',
     accentBorderColor: 'rgba(243, 243, 243, 0.42)',
-    glowColor: '0 0 92',
-    glowColors: ['#f3f3f3', '#f3f3f3', '#f3f3f3'],
     atmosphereColor: 'rgba(242, 243, 245, 0.11)',
     liveSite: 'andcreative.se',
   },
   {
     id: 2,
-    title: 'Café & Bistro Kerma',
+    title: 'Cafe & Bistro Kerma',
     displayTitle: 'Tahkon Kerma',
+    tagline: 'Cafe & bistro',
     logoSrc: '/assets/kermainverted.png',
     logoAlt: 'Tahkon Kerma logo',
-    category: 'Brand & Web',
-    summary: 'A warm restaurant site that makes it easy to find the menu, opening hours, and the basics before visiting.',
-    description:
-      'A cozy site for Tahkon Kerma Café & Bistro, where I also designed the logo. The site was built around opening hours, the menu, and strong SEO so people could actually find it.',
-    bulletPoints: [
-      'Built a customer focused site for the menu, opening hours, location, and reservation details.',
-      'Created the logo and brand identity to give the restaurant a stronger and more consistent presence.',
-      'Structured the site around local SEO so customers could find the restaurant online.',
-    ],
     skills: ['React', 'Figma', 'Illustrator', 'Logo Design', 'HTML', 'CSS', 'JavaScript'],
-    year: '2024',
+    palette: [
+      { name: 'Ink', value: '#141413' },
+      { name: 'Cream', value: '#f7ead8' },
+      { name: 'Kerma Gold', value: '#d4af37' },
+      { name: 'Bronze', value: '#8b7355' },
+      { name: 'Olive', value: '#8fa58a' },
+    ],
+    scope: [
+      { label: 'Logo design', brand: 'Illustrator' },
+      { label: 'Website design', brand: 'Figma' },
+      { label: 'Frontend build', brand: 'React' },
+      { label: 'Local SEO', icon: Search },
+    ],
+    bulletPoints: [
+      'Built a customer-focused site around the menu, opening hours, location and reservation details.',
+      'Created the logo and brand identity to give the restaurant a stronger, more consistent presence.',
+      'Structured the site around local SEO so customers could actually find the restaurant online.',
+    ],
+    mediaCaption: 'Menu and visit pages',
+    outcomes: ['Logo design', 'Website design', 'Local SEO', 'Menu pages', 'Responsive UI'],
+    mediaImages: [
+      { type: 'image', src: '/assets/projects/kermaipad.webp', objectPosition: 'top' },
+      { type: 'image', src: '/assets/projects/kermaproduct.png', objectPosition: 'top' },
+      { type: 'image', src: '/assets/projects/kermaipad.png', objectPosition: 'top' },
+    ],
     image: { type: 'image', src: '/assets/projects/kermaipad.webp', objectPosition: 'top' },
     accentColor: '#d4af37',
     accentSoftColor: 'rgba(212, 175, 55, 0.14)',
     accentBorderColor: 'rgba(212, 175, 55, 0.42)',
-    glowColor: '43 63 55',
-    glowColors: ['#d4af37', '#d4af37', '#d4af37'],
     atmosphereColor: 'rgba(181, 133, 76, 0.12)',
     liveSite: 'tahkonkerma.fi',
   },
@@ -100,24 +160,37 @@ const projectsData: Project[] = [
     id: 3,
     title: 'Old Portfolio',
     displayTitle: 'Old Portfolio',
-    category: 'Personal & Web',
-    summary: 'My first portfolio, built with a backend and admin panel, and the first place I started learning how I wanted my work to look.',
-    description:
-      'My first portfolio website, built to create an online presence and get my work seen.',
+    tagline: 'Personal portfolio',
+    skills: ['Next.js', 'React', 'Figma', 'HTML', 'CSS', 'JavaScript', 'MongoDB'],
+    palette: [
+      { name: 'Black', value: '#080808' },
+      { name: 'Pink', value: '#ff0066' },
+      { name: 'Violet', value: '#7c63a6' },
+      { name: 'Cream', value: '#f5efe4' },
+      { name: 'Blue', value: '#3898ec' },
+    ],
+    scope: [
+      { label: 'Portfolio design', brand: 'Figma' },
+      { label: 'Frontend build', brand: 'React' },
+      { label: 'Backend & database', brand: 'MongoDB' },
+      { label: 'Admin panel', icon: MonitorSmartphone },
+    ],
     bulletPoints: [
       'Built a full portfolio website with a backend and admin area for managing page content.',
-      'Added login based access so the site could be edited without changing the frontend code.',
-      'Used the project as exam work to build a working portfolio and understand how a complete web system fits together.',
+      'Added login-based access so the site could be edited without touching the frontend code.',
+      'Used the project as exam work to understand how a complete web system fits together.',
     ],
-    skills: ['Next.js', 'React', 'Figma', 'HTML', 'CSS', 'JavaScript', 'MongoDB'],
-    year: '2023',
-    duration: '1 Month',
+    mediaCaption: 'Portfolio and admin views',
+    outcomes: ['Portfolio UI', 'Admin panel', 'Backend', 'MongoDB', 'Authentication'],
+    mediaImages: [
+      { type: 'image', src: '/assets/projects/ogportfolionew.webp', objectPosition: 'top' },
+      { type: 'image', src: '/assets/projects/ogportfolionew.webp', objectPosition: 'center' },
+      { type: 'image', src: '/assets/projects/ogportfolionew.webp', objectPosition: 'bottom' },
+    ],
     image: { type: 'image', src: '/assets/projects/ogportfolionew.webp', objectPosition: 'top' },
     accentColor: '#ff0066',
     accentSoftColor: 'rgba(255, 0, 102, 0.14)',
     accentBorderColor: 'rgba(255, 0, 102, 0.42)',
-    glowColor: '332 100 58',
-    glowColors: ['#ff0066', '#ff0066', '#ff0066'],
     atmosphereColor: 'rgba(124, 99, 166, 0.11)',
     liveSite: 'jespersjostrom2.github.io',
   },
@@ -156,392 +229,339 @@ const brandSkillIcons: Record<string, SkillIconComponent> = {
   'Three.js': SiThreedotjs,
 }
 
-const fallbackSkillIcons: Record<string, LucideIcon> = {
-  'UI/UX': Figma,
-  'Web Design': Palette,
-  'Logo Design': Palette,
-  'Brand Identity': Sparkles,
-}
-
 const skillIconClassNames: Record<string, string> = {
-  'motion.dev': 'h-[0.6rem] w-[1rem]',
-  GSAP: 'h-[0.8rem] w-[0.65rem]',
+  'motion.dev': 'h-[0.72rem] w-[1.2rem]',
+  GSAP: 'h-[1rem] w-[0.8rem]',
 }
 
-const SkillChip = ({ skill }: { skill: string }) => {
-  const BrandIcon = brandSkillIcons[skill]
-  const FallbackIcon = fallbackSkillIcons[skill] || Code2
-  const iconClassName = skillIconClassNames[skill] ?? 'h-3.5 w-3.5'
+const scopeIconColors = ['#7fb4e8', '#b79cf0', '#68cfb4', '#f0c368']
+
+const tileMotion = (order: number) => ({
+  variants: cinematicItem(order * 0.05),
+  initial: 'hidden' as const,
+  animate: 'visible' as const,
+})
+
+// Every swatch is full-height and starts flush at the top, so the pill is always completely
+// covered — nothing ever leaves the container. Sliding a colour DOWN is what uncovers the one
+// stacked behind it; retracting slides it back up to flush, hiding that colour again.
+const PALETTE_BAND_BOTTOM = 70
+const PALETTE_STEP_MS = 560
+const PALETTE_HOLD_MS = 1400
+
+const usePaletteSequence = (moves: number, enabled: boolean) => {
+  const [state, setState] = useState({ settled: 0, retracting: false })
+
+  useEffect(() => {
+    if (!enabled || moves < 1) return
+
+    setState({ settled: 0, retracting: false })
+    let timer: ReturnType<typeof setTimeout>
+    let step = 0
+
+    const tick = () => {
+      // 0..moves-1 slides colours down one by one, moves..2*moves-1 slides them back up
+      const cycle = step % (moves * 2)
+      const isBuilding = cycle < moves
+      const next = isBuilding ? cycle + 1 : moves - (cycle - moves) - 1
+      setState({ settled: next, retracting: !isBuilding })
+      const atBoundary = next === moves || next === 0
+      step += 1
+      timer = setTimeout(tick, atBoundary ? PALETTE_HOLD_MS : PALETTE_STEP_MS)
+    }
+
+    timer = setTimeout(tick, 600)
+
+    return () => clearTimeout(timer)
+  }, [moves, enabled])
+
+  return state
+}
+
+const ProjectPalette = ({ project }: { project: Project }) => {
+  const shouldReduceMotion = useReducedMotion()
+  const total = project.palette.length
+  // The backmost swatch rests flush at the top, so only the ones in front of it ever travel.
+  const { settled, retracting } = usePaletteSequence(total - 1, !shouldReduceMotion)
+
+  const restOffsets = useMemo(
+    () =>
+      project.palette.map((_, index) =>
+        total === 1 ? 0 : PALETTE_BAND_BOTTOM - (PALETTE_BAND_BOTTOM * index) / (total - 1),
+      ),
+    [project.palette, total],
+  )
 
   return (
-    <span className="project-skill-chip project-technology-chip inline-flex items-center gap-1.5 rounded-[0.7rem] px-3 py-1.5 text-xs text-[color:var(--site-text)] dark:text-white/72">
-      <span className="flex h-4 w-4 shrink-0 items-center justify-center">
-        {BrandIcon ? (
-          <BrandIcon className={`${iconClassName} shrink-0`} style={{ color: skillIconColors[skill] ?? '#b0aea5' }} />
-        ) : (
-          <FallbackIcon className={`${iconClassName} shrink-0`} style={{ color: skillIconColors[skill] ?? '#b0aea5' }} />
-        )}
-      </span>
-      {skill}
-    </span>
+    <motion.div className="project-bento-tile project-bento-tile--palette" {...tileMotion(0)}>
+      <p className="project-bento-label">Colour Palette</p>
+      <div className="project-palette-stack" aria-label={`${project.title} colour palette`}>
+        {project.palette.map((color, index) => {
+          const isDown = shouldReduceMotion || index < settled
+
+          return (
+            <motion.span
+              key={color.name}
+              className="project-palette-swatch"
+              style={{ '--palette-color': color.value, zIndex: total - index } as CSSProperties}
+              initial={false}
+              animate={{ y: `${isDown ? restOffsets[index] : 0}%` }}
+              transition={
+                shouldReduceMotion
+                  ? { duration: 0 }
+                  : retracting
+                    // Slight dip before it heads back up, so it reads as gathering momentum.
+                    ? { duration: 0.66, ease: [0.36, -0.18, 0.4, 1] }
+                    : { type: 'spring', stiffness: 96, damping: 17, mass: 1.1 }
+              }
+            />
+          )
+        })}
+      </div>
+    </motion.div>
   )
 }
 
-const projectDetailLabelStyle = { color: '#b0aea5' } as const
-
-interface ProjectMetaItemProps {
-  label: string
-  value: string
-  icon: LucideIcon
-  href?: string
-}
-
-const ProjectMetaItem = ({ label, value, icon: Icon, href }: ProjectMetaItemProps) => {
-  const content = (
-    <>
-      <span className="project-meta-card__icon-shell" aria-hidden="true">
-        <Icon className="project-meta-card__icon" strokeWidth={1.8} />
-      </span>
-      <span className="project-meta-card__copy">
-        <span className="project-meta-card__label">{label}</span>
-        <span className="project-meta-card__value">
-          {value}
-          {href ? <ArrowUpRight className="project-meta-card__arrow" strokeWidth={1.9} /> : null}
-        </span>
-      </span>
-    </>
-  )
-
-  if (href) {
-    return (
-      <a href={href} target="_blank" rel="noopener noreferrer" className="project-meta-card group/meta-card">
-        {content}
-      </a>
-    )
-  }
-
-  return <div className="project-meta-card">{content}</div>
-}
-
-const ProjectDetails = ({ project }: { project: Project }) => (
-  <>
-    <div className="project-highlights-block" style={{ '--project-accent': project.accentColor } as CSSProperties}>
-      <p className="mb-3.5 text-xs font-semibold uppercase tracking-[0.2em]" style={projectDetailLabelStyle}>Highlights</p>
-      <ul className="project-highlights-list">
-        {project.bulletPoints.map((point) => (
-          <li key={point}>{point}</li>
-        ))}
-      </ul>
-      <div className="project-live-site">
-        <ProjectMetaItem label="Live Site" value={project.liveSite} icon={Globe} href={`https://${project.liveSite}`} />
-      </div>
-    </div>
-
-    <div className="project-technologies-block">
-      <p className="mb-3.5 text-xs font-semibold uppercase tracking-[0.2em]" style={projectDetailLabelStyle}>Technologies</p>
-      <div className="flex flex-wrap gap-2">
-        {project.skills.map((skill) => (
-          <SkillChip key={skill} skill={skill} />
-        ))}
-      </div>
-    </div>
-  </>
+/** Four-point star used as both the ring's decoration and the delivered-list bullet. */
+const StarMark = (props: SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
+    <path d="M12 0c.6 6.2 5.2 10.8 12 12-6.8 1.2-11.4 5.8-12 12-.6-6.2-5.2-10.8-12-12C6.8 10.8 11.4 6.2 12 0Z" />
+  </svg>
 )
 
-const ProjectCard = ({ project }: { project: Project }) => {
-  const cardRef = useRef<HTMLElement>(null)
-  const previewBadgeRef = useRef<HTMLSpanElement>(null)
-  const previewPointerTargetRef = useRef({ x: 0, y: 0 })
-  const previewPointerCurrentRef = useRef({ x: 0, y: 0 })
-  const previewAnimationFrameRef = useRef<number | null>(null)
-  const [detailsOpen, setDetailsOpen] = useState(false)
-  const [isInView, setIsInView] = useState(false)
-  const [canAutoplayMedia, setCanAutoplayMedia] = useState(false)
-  const [isProjectPreviewActive, setIsProjectPreviewActive] = useState(false)
-  const [hasMounted, setHasMounted] = useState(false)
-  const shouldReduceMotion = useReducedMotion()
-  const projectCardStyle = {
-    '--project-accent': project.accentColor,
-    '--project-atmosphere': project.atmosphereColor,
-  } as CSSProperties
+const ORBIT_STAR_ANGLES = [38, 128, 218, 308]
 
-  const syncProjectPreviewBadgePosition = (x: number, y: number) => {
-    const badge = previewBadgeRef.current
+/**
+ * Brand name orbiting an empty centre — the logo has its own tile. Reuses the circular
+ * textPath treatment from the cursor-following badge in ProjectShowcaseMedia, but spins
+ * continuously in place.
+ */
+const ORBIT_RADIUS = 37
+const ORBIT_CIRCUMFERENCE = 2 * Math.PI * ORBIT_RADIUS
 
-    if (!badge) {
-      return
-    }
-
-    badge.style.setProperty('--project-preview-x', `${x}px`)
-    badge.style.setProperty('--project-preview-y', `${y}px`)
-  }
-
-  const handleProjectPreviewPointerEnter = (event: MouseEvent<HTMLAnchorElement>) => {
-    const { clientX, clientY } = event
-
-    previewPointerTargetRef.current = { x: clientX, y: clientY }
-    previewPointerCurrentRef.current = { x: clientX, y: clientY }
-    syncProjectPreviewBadgePosition(clientX, clientY)
-    setIsProjectPreviewActive(true)
-  }
-
-  const handleProjectPreviewPointerMove = (event: MouseEvent<HTMLAnchorElement>) => {
-    const { clientX, clientY } = event
-
-    previewPointerTargetRef.current = { x: clientX, y: clientY }
-
-    if (shouldReduceMotion) {
-      previewPointerCurrentRef.current = { x: clientX, y: clientY }
-      syncProjectPreviewBadgePosition(clientX, clientY)
-    }
-  }
-
-  useEffect(() => {
-    setHasMounted(true)
-  }, [])
-
-  useEffect(() => {
-    if (!cardRef.current) return
-
-    const observer = new IntersectionObserver(
-      ([entry]) => setIsInView(entry.isIntersecting),
-      { rootMargin: '200px 0px', threshold: 0.05 },
-    )
-
-    observer.observe(cardRef.current)
-
-    return () => observer.disconnect()
-  }, [])
-
-  useEffect(() => {
-    const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-    const updateAutoplayPreference = () => setCanAutoplayMedia(!reducedMotionQuery.matches)
-
-    updateAutoplayPreference()
-    reducedMotionQuery.addEventListener('change', updateAutoplayPreference)
-
-    return () => reducedMotionQuery.removeEventListener('change', updateAutoplayPreference)
-  }, [])
-
-  useEffect(() => {
-    if (!cardRef.current) return
-
-    const videos = Array.from(cardRef.current.querySelectorAll<HTMLVideoElement>('video[data-autoplay-preview]'))
-
-    videos.forEach((video) => {
-      const isVisible = video.getClientRects().length > 0
-
-      if (canAutoplayMedia && isInView && isVisible) {
-        video.muted = true
-        void video.play().catch(() => undefined)
-        return
-      }
-
-      video.pause()
-    })
-  }, [canAutoplayMedia, isInView])
-
-  useEffect(() => {
-    if (!isProjectPreviewActive || shouldReduceMotion) {
-      if (previewAnimationFrameRef.current !== null) {
-        cancelAnimationFrame(previewAnimationFrameRef.current)
-        previewAnimationFrameRef.current = null
-      }
-
-      return
-    }
-
-    const animatePreviewBadge = () => {
-      const current = previewPointerCurrentRef.current
-      const target = previewPointerTargetRef.current
-
-      current.x += (target.x - current.x) * 0.12
-      current.y += (target.y - current.y) * 0.12
-
-      if (Math.abs(target.x - current.x) < 0.1) {
-        current.x = target.x
-      }
-
-      if (Math.abs(target.y - current.y) < 0.1) {
-        current.y = target.y
-      }
-
-      syncProjectPreviewBadgePosition(current.x, current.y)
-      previewAnimationFrameRef.current = requestAnimationFrame(animatePreviewBadge)
-    }
-
-    previewAnimationFrameRef.current = requestAnimationFrame(animatePreviewBadge)
-
-    return () => {
-      if (previewAnimationFrameRef.current !== null) {
-        cancelAnimationFrame(previewAnimationFrameRef.current)
-        previewAnimationFrameRef.current = null
-      }
-    }
-  }, [isProjectPreviewActive, shouldReduceMotion])
-
-  const projectPreviewBadge = (
-    <span
-      ref={previewBadgeRef}
-      className={`project-preview-badge ${isProjectPreviewActive ? 'project-preview-badge--active' : ''}`}
-      aria-hidden="true"
-    >
-      <span className="project-preview-badge__glow" />
-      <svg className="project-preview-badge__orbit" viewBox="0 0 100 100" aria-hidden="true">
-        <circle className="project-preview-badge__orbit-line" cx="50" cy="50" r="48.25" pathLength="100" />
-      </svg>
-      <svg className="project-preview-badge__ring" viewBox="0 0 100 100">
-        <defs>
-          <path id={`project-open-path-${project.id}`} d="M50 50 m -34 0 a 34 34 0 1 1 68 0 a 34 34 0 1 1 -68 0" />
-        </defs>
-        <text className="project-preview-badge__label">
-          <textPath href={`#project-open-path-${project.id}`} startOffset="12.5%" textAnchor="middle">
-            OPEN
-          </textPath>
-        </text>
-        <text className="project-preview-badge__label">
-          <textPath href={`#project-open-path-${project.id}`} startOffset="45.75%" textAnchor="middle">
-            EXPLORE
-          </textPath>
-        </text>
-        <text className="project-preview-badge__label">
-          <textPath href={`#project-open-path-${project.id}`} startOffset="81%" textAnchor="middle">
-            DISCOVER
-          </textPath>
-        </text>
-        <text className="project-preview-badge__separator">
-          <textPath href={`#project-open-path-${project.id}`} startOffset="27.75%" textAnchor="middle">
-            •
-          </textPath>
-        </text>
-        <text className="project-preview-badge__separator">
-          <textPath href={`#project-open-path-${project.id}`} startOffset="63.75%" textAnchor="middle">
-            •
-          </textPath>
-        </text>
-        <text className="project-preview-badge__separator">
-          <textPath href={`#project-open-path-${project.id}`} startOffset="98.5%" textAnchor="middle">
-            •
-          </textPath>
-        </text>
-      </svg>
-      <span className="project-preview-badge__center">
-        <Eye className="h-6 w-6" strokeWidth={1.75} />
-      </span>
-    </span>
-  )
+const BrandOrbitRing = ({ project }: { project: Project }) => {
+  const pathId = `project-orbit-path-${project.id}`
+  // One continuous string stretched to exactly one lap, so it can never overlap itself.
+  const ringText = `${project.displayTitle} • ${project.tagline} • `
 
   return (
-    <>
-      <article ref={cardRef} className="project-card-atmosphere premium-glass-surface group overflow-hidden rounded-[28px]" style={projectCardStyle}>
-        <div className="grid border-b border-[color:var(--site-border)] lg:grid-cols-[1.2fr_1fr] dark:border-white/10">
-          <div className={`relative min-h-[220px] overflow-hidden p-0 sm:min-h-[280px] lg:min-h-[420px] lg:self-stretch ${project.id === 1 ? '' : 'lg:p-7'}`}>
-            {project.id === 1 ? (
-              <ProjectShowcaseMedia
-                href={`https://${project.liveSite}`}
-                primaryImage="/assets/projects/andcreative1.png"
-                secondaryImage="/assets/projects/andcreative2.png"
-                primaryAlt="AndCreative homepage"
-                secondaryAlt="AndCreative project page"
-                projectLabel="Andcreative"
-                priority
-              />
-            ) : (
-              <div className="relative z-10 mx-auto max-w-[760px] overflow-hidden rounded-t-[28px] border-b border-[color:var(--site-border)] bg-[rgba(0,0,0,0.15)] backdrop-blur-[4px] [backdrop-filter:blur(4px)_saturate(130%)] [-webkit-backdrop-filter:blur(4px)_saturate(130%)] dark:border-white/10 lg:h-full lg:rounded-2xl lg:border">
-              <a
-                href={`https://${project.liveSite}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`Open ${project.title} live site`}
-                className="group/project-preview project-preview-link relative block aspect-[16/10] overflow-hidden lg:h-full lg:aspect-auto"
-                onMouseEnter={handleProjectPreviewPointerEnter}
-                onMouseMove={handleProjectPreviewPointerMove}
-                onMouseLeave={() => setIsProjectPreviewActive(false)}
-              >
-                <div className="project-preview-media absolute inset-0">
-                  {project.image.type === 'video' ? (
-                    <video
-                      data-autoplay-preview
-                      src={project.image.src}
-                      className="h-full w-full object-cover"
-                      autoPlay={canAutoplayMedia && isInView}
-                      muted
-                      loop
-                      playsInline
-                      preload={isInView ? 'metadata' : 'none'}
-                      aria-label={`${project.title} preview`}
-                    />
-                  ) : (
-                    <Image
-                      src={project.image.src}
-                      alt={`${project.title} preview`}
-                      fill
-                      sizes="(max-width: 1024px) 100vw, 50vw"
-                      className="object-cover"
-                      style={{
-                        objectFit: project.image.objectFit ?? 'cover',
-                        objectPosition: project.image.objectPosition ?? 'center',
-                      }}
-                    />
-                  )}
-                </div>
-              </a>
-              </div>
-            )}
-          </div>
+    <div className="project-orbit-ring">
+      <svg className="project-orbit-ring__text" viewBox="0 0 100 100" aria-hidden="true">
+        <defs>
+          <path
+            id={pathId}
+            d={`M50 50 m -${ORBIT_RADIUS} 0 a ${ORBIT_RADIUS} ${ORBIT_RADIUS} 0 1 1 ${ORBIT_RADIUS * 2} 0 a ${ORBIT_RADIUS} ${ORBIT_RADIUS} 0 1 1 -${ORBIT_RADIUS * 2} 0`}
+          />
+        </defs>
+        <text>
+          <textPath
+            href={`#${pathId}`}
+            startOffset="0"
+            textLength={ORBIT_CIRCUMFERENCE}
+            lengthAdjust="spacing"
+          >
+            {ringText}
+          </textPath>
+        </text>
+      </svg>
 
-          <div className="p-6 pt-7 sm:p-8 lg:flex lg:h-full lg:flex-col lg:px-9 lg:pb-9 lg:pt-8">
-            <div className="project-title-lockup">
-              <h3 className="text-4xl font-bold leading-tight tracking-tight text-[color:var(--site-text)] dark:text-white">{project.displayTitle}</h3>
-              {project.logoSrc ? (
-                <Image
-                  src={project.logoSrc}
-                  alt={project.logoAlt ?? ''}
-                  width={96}
-                  height={56}
-                  className="project-title-lockup__logo"
-                />
-              ) : null}
-            </div>
-            <p className="mt-4 pb-5 text-base leading-7 text-[color:var(--site-muted)] dark:text-white/72">{project.description}</p>
-
-            <button
-              type="button"
-              onClick={() => setDetailsOpen((open) => !open)}
-              className="mt-5 inline-flex items-center gap-2 rounded-full border border-[color:var(--site-border)] bg-[color:var(--site-hover)] px-4 py-2 text-sm font-medium text-[color:var(--site-text)] transition-colors hover:border-accent/55 hover:text-accent lg:hidden"
-              aria-expanded={detailsOpen}
-            >
-              {detailsOpen ? 'Hide details' : 'Show details'}
-              <ChevronDown className={`h-4 w-4 transition-transform duration-300 ${detailsOpen ? 'rotate-180' : ''}`} />
-            </button>
-
-            <div className="hidden lg:flex lg:flex-1 lg:flex-col">
-              <ProjectDetails project={project} />
-            </div>
-
-            <AnimatePresence initial={false}>
-              {detailsOpen && (
-                <motion.div
-                  className="overflow-hidden lg:hidden"
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
-                >
-                  <ProjectDetails project={project} />
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        </div>
-      </article>
-      {hasMounted ? createPortal(projectPreviewBadge, document.body) : null}
-    </>
+      {ORBIT_STAR_ANGLES.map((angle) => (
+        <StarMark
+          key={angle}
+          className="project-orbit-ring__star h-3.5 w-3.5"
+          style={{ '--star-angle': `${angle}deg` } as CSSProperties}
+        />
+      ))}
+    </div>
   )
 }
 
+const ScopeRowIcon = ({ item, index }: { item: ProjectScopeItem; index: number }) => {
+  const BrandIcon = item.brand ? brandSkillIcons[item.brand] : undefined
+
+  if (BrandIcon) {
+    return (
+      <span className="project-scope-list__icon project-scope-list__icon--brand" aria-hidden="true">
+        <BrandIcon
+          className={`${skillIconClassNames[item.brand!] ?? 'h-4 w-4'} shrink-0`}
+          style={{ color: skillIconColors[item.brand!] ?? '#f5efe4' }}
+        />
+      </span>
+    )
+  }
+
+  const FallbackIcon = item.icon ?? Code2
+
+  return (
+    <span
+      className="project-scope-list__icon"
+      style={{ '--scope-color': scopeIconColors[index % scopeIconColors.length] } as CSSProperties}
+      aria-hidden="true"
+    >
+      <FallbackIcon className="h-4 w-4" strokeWidth={1.9} />
+    </span>
+  )
+}
+
+const ProjectScope = ({ project }: { project: Project }) => (
+  <motion.div className="project-bento-tile project-bento-tile--scope" {...tileMotion(1)}>
+    <div className="project-scope-window">
+      <div className="project-scope-window__bar">
+        <span className="project-scope-window__app">
+          <span className="project-scope-window__app-icon" aria-hidden="true">
+            <AppWindow className="h-3.5 w-3.5" strokeWidth={2.1} />
+          </span>
+          Project scope
+        </span>
+        <span className="project-scope-window__close" aria-hidden="true">
+          <X className="h-3.5 w-3.5" strokeWidth={2.4} />
+        </span>
+      </div>
+      <div className="project-scope-window__byline">
+        <span>Completed by:</span>
+        <strong className="project-scope-window__byline-badge">Jesper</strong>
+      </div>
+      <div className="project-scope-list">
+        {project.scope.map((item, index) => (
+          <div key={item.label} className="project-scope-list__item">
+            <ScopeRowIcon item={item} index={index} />
+            <span>{item.label}</span>
+          </div>
+        ))}
+      </div>
+      <a href={`https://${project.liveSite}`} target="_blank" rel="noopener noreferrer" className="project-scope-window__link">
+        open site
+        <ArrowUpRight className="h-3.5 w-3.5" />
+      </a>
+    </div>
+  </motion.div>
+)
+
+
+const ProjectPreview = ({ project }: { project: Project }) => (
+  <motion.div className="project-bento-tile project-bento-tile--preview" {...tileMotion(2)}>
+    <BrandOrbitRing project={project} />
+  </motion.div>
+)
+
+const ProjectBrandCard = ({ project }: { project: Project }) => (
+  <motion.div className="project-bento-tile project-bento-tile--brand" {...tileMotion(4)}>
+    <div className="project-brand-card__mark">
+      {project.logoSrc ? (
+        <Image src={project.logoSrc} alt={project.logoAlt ?? ''} width={150} height={90} className="h-auto max-h-20 w-auto max-w-[11rem] object-contain" />
+      ) : (
+        <span>{project.displayTitle.slice(0, 2)}</span>
+      )}
+    </div>
+  </motion.div>
+)
+
+const ProjectDescription = ({ project }: { project: Project }) => (
+  <motion.div className="project-bento-tile project-bento-tile--description" {...tileMotion(5)}>
+    <p className="project-bento-tagline">{project.tagline}</p>
+    <h3>{project.displayTitle}</h3>
+    <a href={`https://${project.liveSite}`} target="_blank" rel="noopener noreferrer" className="project-bento-cta group/project-view">
+      <span>Check live site</span>
+      <span className="project-bento-cta__icon" aria-hidden="true">
+        <ArrowUpRight className="h-4 w-4" />
+      </span>
+    </a>
+  </motion.div>
+)
+
+const ProjectMediaProof = ({ project }: { project: Project }) => (
+  <motion.div className="project-bento-tile project-bento-tile--media" {...tileMotion(3)}>
+    <div className="project-media-stack">
+      {project.mediaImages.slice(0, 3).map((media, index) => (
+        <motion.div
+          key={`${media.src}-${index}`}
+          className="project-media-stack__frame"
+          variants={cinematicItem(0.18 + index * 0.1)}
+          initial="hidden"
+          animate="visible"
+        >
+          <Image
+            src={media.src}
+            alt={`${project.title} supporting visual ${index + 1}`}
+            fill
+            sizes="(max-width: 1024px) 50vw, 18vw"
+            className="object-cover"
+            style={{
+              objectFit: media.objectFit ?? 'cover',
+              objectPosition: media.objectPosition ?? 'top',
+            }}
+          />
+        </motion.div>
+      ))}
+    </div>
+
+    <p className="project-media-caption">{project.mediaCaption}</p>
+  </motion.div>
+)
+
+const ProjectDelivered = ({ project }: { project: Project }) => (
+  <motion.div className="project-bento-tile project-bento-tile--delivered" {...tileMotion(6)}>
+    <p className="project-bento-label">What I delivered</p>
+    <ul className="project-delivered-list">
+      {project.bulletPoints.map((point, index) => (
+        <motion.li
+          key={point}
+          className="project-delivered-list__item"
+          variants={cinematicItem(0.32 + index * 0.12)}
+          initial="hidden"
+          animate="visible"
+        >
+          <span className="project-delivered-list__star" aria-hidden="true">
+            <StarMark className="h-3.5 w-3.5" />
+          </span>
+          <span className="project-delivered-list__copy">{point}</span>
+        </motion.li>
+      ))}
+    </ul>
+  </motion.div>
+)
+
+const ProjectOutcomes = ({ project }: { project: Project }) => (
+  <motion.div className="project-bento-tile project-bento-tile--outcomes" {...tileMotion(7)}>
+    <div className="project-outcome-ribbons">
+      {project.outcomes.map((outcome) => (
+        <span key={outcome}>{outcome}</span>
+      ))}
+    </div>
+  </motion.div>
+)
+
+const ProjectCaseStudy = ({ project }: { project: Project }) => (
+  <motion.div
+    key={project.id}
+    className="project-case-study-grid"
+    style={{
+      '--project-accent': project.accentColor,
+      '--project-accent-soft': project.accentSoftColor,
+      '--project-accent-border': project.accentBorderColor,
+      '--project-atmosphere': project.atmosphereColor,
+    } as CSSProperties}
+    initial={{ opacity: 0, y: 18, scale: 0.985 }}
+    animate={{ opacity: 1, y: 0, scale: 1 }}
+    exit={{ opacity: 0, y: -14, scale: 0.985 }}
+    transition={{ duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
+  >
+    <FloatingStars className="project-case-study-grid__stars" count={22} mobileCount={8} />
+    <ProjectPalette project={project} />
+    <ProjectScope project={project} />
+    <ProjectPreview project={project} />
+    <ProjectMediaProof project={project} />
+    <ProjectBrandCard project={project} />
+    <ProjectDescription project={project} />
+    <ProjectDelivered project={project} />
+    <ProjectOutcomes project={project} />
+  </motion.div>
+)
+
 const ExperienceSection: React.FC = () => {
+  const [activeProjectId, setActiveProjectId] = useState(projectsData[0].id)
   const shouldReduceMotion = useReducedMotion()
+  const activeProject = projectsData.find((project) => project.id === activeProjectId) ?? projectsData[0]
 
   return (
     <section id="projects" className="site-section">
@@ -556,35 +576,46 @@ const ExperienceSection: React.FC = () => {
           <h2 className="section-title">Past projects</h2>
         </motion.div>
 
-        <div className="mobile-no-load-animation mx-auto flex max-w-7xl flex-col gap-7">
-          {projectsData.map((project, index) => {
-            const depthPreset = [
-              { y: 40, scale: 0.99, duration: 0.68, delay: 0 },
-              { y: 52, scale: 0.985, duration: 0.74, delay: 0.07 },
-              { y: 64, scale: 0.98, duration: 0.8, delay: 0.12 },
-            ][index] ?? { y: 52, scale: 0.985, duration: 0.74, delay: 0.07 }
+        <motion.div
+          className="mobile-no-load-animation mx-auto max-w-[92rem]"
+          initial={shouldReduceMotion ? false : { opacity: 0, y: 42, scale: 0.99, rotateX: 4 }}
+          whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0, scale: 1, rotateX: 0 }}
+          viewport={{ once: true, amount: 0.14, margin: '0px 0px -14% 0px' }}
+          transition={{ duration: 0.72, ease: [0.16, 1, 0.3, 1] }}
+          style={{ willChange: shouldReduceMotion ? 'auto' : 'transform, opacity' }}
+        >
+          <div className="project-bento-picker">
+            <span>Pick a project:</span>
+            <div className="project-bento-picker__buttons" role="tablist" aria-label="Project showcase picker">
+              {projectsData.map((project) => {
+                const isActive = project.id === activeProject.id
 
-            return (
-              <motion.div
-                key={project.id}
-                className="mobile-no-load-animation cinematic-reveal-card"
-                initial={shouldReduceMotion ? false : { opacity: 0, y: depthPreset.y, scale: depthPreset.scale, rotateX: 4 }}
-                whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0, scale: 1, rotateX: 0 }}
-                viewport={{ once: true, amount: 0.14, margin: '0px 0px -14% 0px' }}
-                transition={{
-                  duration: depthPreset.duration,
-                  delay: shouldReduceMotion ? 0 : depthPreset.delay,
-                  ease: [0.16, 1, 0.3, 1],
-                }}
-                style={{ willChange: shouldReduceMotion ? 'auto' : 'transform, opacity' }}
-              >
-                <ProjectCard project={project} />
-              </motion.div>
-            )
-          })}
-        </div>
+                return (
+                  <button
+                    key={project.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={isActive}
+                    className={`project-bento-picker__button ${isActive ? 'project-bento-picker__button--active' : ''}`}
+                    onClick={() => setActiveProjectId(project.id)}
+                    style={{ '--project-accent': project.accentColor } as CSSProperties}
+                  >
+                    {project.logoSrc ? (
+                      <Image src={project.logoSrc} alt="" width={58} height={38} className="h-auto max-h-8 w-auto max-w-12 object-contain" />
+                    ) : (
+                      <span>{project.displayTitle.slice(0, 2)}</span>
+                    )}
+                    <span className="sr-only">{project.displayTitle}</span>
+                  </button>
+                )
+              })}
+            </div>
+          </div>
 
-
+          <AnimatePresence mode="wait">
+            <ProjectCaseStudy project={activeProject} />
+          </AnimatePresence>
+        </motion.div>
       </div>
     </section>
   )

@@ -1,7 +1,10 @@
 {
   "permissions": {
     "allow": [
-      "Read(c:\\Users\\Jepps\\Downloads/**)"
+      "Read(c:\\Users\\Jepps\\Downloads/**)",
+      "Bash(grep -n \"^\\\\s*\\\\.card[ ,{:]\\\\|^\\\\s*\\\\.bento-section\\\\|^\\\\s*\\\\.card::\\\\|card-border-glow\\\\|--border-color\\\\|--glow-color\\\\|\\\\.card--\" \"C:/Users/Jesper/Projects/degons2/src/components/MagicBento.tsx\")",
+      "Bash(npx tsc *)",
+      "Bash(npx next *)"
     ],
     "deny": [],
     "ask": []
