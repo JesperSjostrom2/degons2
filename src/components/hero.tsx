@@ -5,10 +5,10 @@ import dynamic from 'next/dynamic'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowRight, Copy } from 'lucide-react'
 
-import { shouldUseEnhancedMotion } from '@/lib/client-performance'
+import { useEnhancedVisuals } from '@/lib/use-enhanced-visuals'
 import { cinematicEase } from '@/lib/site-motion'
 
-const LightRays = dynamic(() => import('@/components/LightRays'), {
+const SideRays = dynamic(() => import('@/components/SideRays'), {
   ssr: false,
   loading: () => null,
 })
@@ -50,36 +50,10 @@ const heroSupportReveal = {
 }
 
 export default function Hero() {
-  const [showLightRays, setShowLightRays] = useState(false)
   const [copied, setCopied] = useState(false)
   const [shouldRevealHero, setShouldRevealHero] = useState(false)
   const [shouldAnimateHero, setShouldAnimateHero] = useState<boolean | null>(null)
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(min-width: 768px)')
-    let isMounted = true
-    let motionRequestId = 0
-
-    const updateLightRays = async () => {
-      const requestId = motionRequestId + 1
-      motionRequestId = requestId
-      const canUseMotion = mediaQuery.matches && await shouldUseEnhancedMotion()
-
-      if (!isMounted || requestId !== motionRequestId) {
-        return
-      }
-
-      setShowLightRays(mediaQuery.matches && canUseMotion)
-    }
-
-    updateLightRays()
-    mediaQuery.addEventListener('change', updateLightRays)
-
-    return () => {
-      isMounted = false
-      mediaQuery.removeEventListener('change', updateLightRays)
-    }
-  }, [])
+  const showLightRays = useEnhancedVisuals()
 
   useEffect(() => {
     const revealHero = () => setShouldRevealHero(true)
@@ -121,27 +95,28 @@ export default function Hero() {
       <div className="absolute inset-0 z-0 h-full w-full" style={{ minHeight: '100vh' }}>
         {showLightRays && (
           <div className="hero-light-rays h-full w-full">
-            <LightRays
-              raysOrigin="top-center"
-              raysColor="#ffffff"
-              raysSpeed={0.62}
-              lightSpread={0.56}
-              rayLength={2.1}
-              pulsating={false}
-              fadeDistance={1.34}
-              saturation={0.68}
-              followMouse={false}
-              mouseInfluence={0}
-              noiseAmount={0}
-              distortion={0}
-              className="h-full w-full opacity-10 saturate-125 dark:opacity-26 dark:saturate-95"
+            <SideRays
+              origin="top-right"
+              rayColor1="#dac5a7"
+              rayColor2="#f5efe4"
+              speed={0.7}
+              intensity={0.9}
+              spread={1.5}
+              tilt={-4}
+              saturation={0.5}
+              blend={0.6}
+              falloff={2.4}
+              opacity={0.5}
+              className="h-full w-full"
             />
           </div>
         )}
       </div>
 
-      <div className="hero-vignette" />
-      <div className="hero-atmosphere-foreground pointer-events-none absolute inset-0 z-[1]" />
+      {/* No vignette and no atmosphere tint here on purpose. Both were
+          full-bleed layers bounded by the hero, so they gave it a colour of
+          its own and a visible seam where they masked out. The rays are the
+          only light source in the hero. */}
       <div className="hero-atmosphere-dust pointer-events-none absolute inset-0 z-[1]" />
 
       <div className="container relative z-10 mx-auto flex min-h-screen items-center px-6 pb-12 pt-24 md:pb-16 md:pt-32">
@@ -149,7 +124,7 @@ export default function Hero() {
           <div className="mobile-no-load-animation relative w-full max-w-6xl hero-cinematic-reveal">
 
             <motion.h1
-              className="mx-auto max-w-[1080px] text-balance text-[clamp(2.45rem,5.6vw,5.1rem)] font-semibold leading-[1.02] tracking-[-0.055em] drop-shadow-[0_18px_60px_rgba(0,0,0,0.18)] will-change-[transform,opacity] dark:drop-shadow-[0_18px_60px_rgba(0,0,0,0.38)] hero-headline-bloom"
+              className="mx-auto max-w-[1080px] text-balance text-[clamp(2.45rem,5.6vw,5.1rem)] font-semibold leading-[1.02] tracking-[-0.055em] drop-shadow-[0_18px_60px_rgba(0,0,0,0.18)] will-change-[transform,opacity] dark:drop-shadow-[0_18px_60px_rgba(0,0,0,0.38)]"
               variants={heroTextReveal}
               initial={shouldAnimateHero === true ? 'hidden' : false}
               animate={shouldAnimateHero === true ? (shouldRevealHero ? 'visible' : 'hidden') : undefined}

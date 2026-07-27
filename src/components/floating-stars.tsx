@@ -2,6 +2,8 @@
 
 import { useEffect, useState, type CSSProperties } from 'react'
 
+export type StarLayer = 'far' | 'mid' | 'near'
+
 interface Star {
   id: number
   style: CSSProperties
@@ -11,17 +13,38 @@ interface FloatingStarsProps {
   className?: string
   count?: number
   mobileCount?: number
+  /** Depth band — nearer layers render larger and brighter. */
+  layer?: StarLayer
 }
+
+// Sizing/brightness only — parallax travel lives on the wrapping
+// [data-atmosphere] band in page.tsx, which AtmosphereController writes to.
+//
+// These must stay in step with the per-band travel: a band that moves faster
+// is nearer the viewer, so it also has to be bigger and brighter or the depth
+// cue contradicts itself.
+const LAYER_CONFIG: Record<StarLayer, { sizeScale: number; brightnessScale: number }> = {
+  far: { sizeScale: 0.6, brightnessScale: 0.5 },
+  mid: { sizeScale: 1, brightnessScale: 0.85 },
+  near: { sizeScale: 1.9, brightnessScale: 1.25 },
+}
+
+// Most stars stay white; a handful of tinted ones read as spectral variety.
+const STAR_TINTS = ['#dac5a7', '#7fa7c8', '#a79ac7'] as const
+const TINT_CHANCE = 0.15
 
 const randomBetween = (min: number, max: number) => Math.random() * (max - min) + min
 
-const generateStars = (count: number): Star[] => {
+const generateStars = (count: number, layer: StarLayer): Star[] => {
+  const { sizeScale, brightnessScale } = LAYER_CONFIG[layer]
+
   return Array.from({ length: count }, (_, id) => {
-    const size = randomBetween(0.3, 1.1)
-    const brightness = randomBetween(0.3, 1)
+    const size = randomBetween(0.5, 1.5) * sizeScale
+    const brightness = Math.min(1, randomBetween(0.3, 1) * brightnessScale)
     const flickerSpeed = randomBetween(3, 7)
-    const glowIntensity = randomBetween(1, 3)
+    const glowIntensity = randomBetween(2, 4) * sizeScale
     const animationDuration = randomBetween(25, 45)
+    const tint = Math.random() < TINT_CHANCE ? STAR_TINTS[Math.floor(Math.random() * STAR_TINTS.length)] : '#ffffff'
 
     return {
       id,
@@ -30,6 +53,7 @@ const generateStars = (count: number): Star[] => {
         top: `${randomBetween(0, 100)}%`,
         '--star-size': `${size}px`,
         '--star-glow-size': `${glowIntensity}px`,
+        '--star-tint': tint,
         '--star-brightness': `${brightness}`,
         '--star-brightness-low': `${brightness * 0.6}`,
         '--star-brightness-mid': `${brightness * 0.8}`,
@@ -53,26 +77,27 @@ export default function FloatingStars({
   className = 'absolute inset-0 overflow-hidden pointer-events-none',
   count = 30,
   mobileCount = 12,
+  layer,
 }: FloatingStarsProps) {
   const [stars, setStars] = useState<Star[]>([])
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(max-width: 767px)')
-    const updateStars = () => setStars(generateStars(mediaQuery.matches ? mobileCount : count))
+    const updateStars = () => setStars(generateStars(mediaQuery.matches ? mobileCount : count, layer ?? 'mid'))
 
     updateStars()
     mediaQuery.addEventListener('change', updateStars)
 
     return () => mediaQuery.removeEventListener('change', updateStars)
-  }, [count, mobileCount])
+  }, [count, mobileCount, layer])
 
   return (
     <div className={className}>
       {stars.map((star) => (
         <div key={star.id} className="floating-star absolute will-change-transform" style={star.style}>
           <div className="floating-star-inner relative">
-            <div className="floating-star-glow absolute rounded-full bg-white/15 blur-sm" />
-            <div className="floating-star-core absolute rounded-full bg-white" />
+            <div className="floating-star-glow absolute rounded-full blur-sm" />
+            <div className="floating-star-core absolute rounded-full" />
             <div className="floating-star-sparkle-x absolute" />
             <div className="floating-star-sparkle-y absolute" />
           </div>

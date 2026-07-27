@@ -64,8 +64,6 @@
   --border: rgba(255, 255, 255, 0.1);
   --input: rgba(255, 255, 255, 0.15);
   --ring: #dac5a7;
-  --site-bg: #080808;
-  --site-bg-deep: #141413;
   --site-text: #f5efe4;
   --site-text-strong: #ffffff;
   --site-muted: #b0aea5;
@@ -77,6 +75,32 @@
   --site-card-glow-bg: #050505;
   --site-hover: rgba(255, 255, 255, 0.1);
   --nav-mobile-bg: rgba(20, 20, 19, 0.7);
+
+  /* --- The water column ---
+     Light in water attenuates exponentially: fastest just under the surface,
+     then a long smooth tail. Crucially it does so *uniformly* across the
+     whole field of view — there is no shape. So the sky is two flat colours
+     cross-fading on opacity, never a gradient. A fixed gradient is a shape
+     that rides along with the viewport, which is what produced the visible
+     seam and the banding this replaced. */
+  --sky-surface: #0d0d0b;
+  --sky-abyss: #030303;
+
+  /* Panels are a flat pure black at every depth. They do NOT need to track
+     the sky: --sky-abyss floors at #030303, so #000 is guaranteed darker
+     everywhere and contrast can never invert. Driving this from scroll meant
+     a :root custom property write, which invalidates style for the entire
+     document — brutal over the bento, which is both the heaviest subtree and
+     where the light curve is steepest. */
+  --panel-bg: #000000;
+  /* Top-edge highlight on raised surfaces. Deliberately constant: these feed
+     a four-stop gradient on .card-responsive::after, so making them
+     scroll-dependent re-rastered that layer on every change. The rims still
+     appear to strengthen as you descend, because the sky behind them darkens
+     while they hold — which is the intended edge-defined look anyway. */
+  --rim-light: rgba(255, 255, 255, 0.055);
+  --rim-light-soft: rgba(255, 255, 255, 0.032);
+  --rim-border: rgba(255, 255, 255, 0.07);
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
@@ -127,7 +151,11 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
+    /* Only ever visible on overscroll bounce, which in practice happens at
+       the bottom of the page — so it matches the deepest water, not the
+       surface. */
+    background: var(--sky-abyss);
     overflow-x: hidden;
   }
 
@@ -203,6 +231,9 @@
   }
 
   :root {
+    /* Deliberately constant. This overlay is 300% x 300% (nine viewports)
+       with mix-blend-mode: soft-light — driving its opacity from scroll
+       re-rasters the whole thing every frame. Not worth it. */
     --grain-opacity: 0.024;
     /* Further reduced for a 'felt, not seen' quality */
     --hero-grain-intensity: 0.052;
@@ -295,10 +326,6 @@
     -webkit-background-clip: text;
     color: transparent;
     -webkit-text-fill-color: transparent;
-  }
-
-  .hero-headline-bloom {
-    text-shadow: 0 0 45px rgba(255, 255, 255, 0.04), 0 0 20px rgba(255, 255, 255, 0.02);
   }
 
   .site-section {
@@ -427,15 +454,31 @@
     isolation: isolate;
     background: transparent;
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.055),
+      inset 0 1px 0 var(--rim-light),
       inset 0 -1px 0 rgba(218, 197, 167, 0.025);
-    backdrop-filter: blur(4px) saturate(130%);
-    -webkit-backdrop-filter: blur(4px) saturate(130%);
+  }
+
+  /* Lit top edge, brightest at centre — matches the bento grid. */
+  .journey-panel::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    z-index: 3;
+    pointer-events: none;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        var(--rim-light-soft) 18%,
+        var(--rim-light) 50%,
+        var(--rim-light-soft) 82%,
+        transparent 100%);
   }
 
   .process-step {
     isolation: isolate;
-    background: transparent;
+    background: var(--panel-bg);
   }
 
   .process-step::after {
@@ -620,9 +663,24 @@
     transform-style: preserve-3d;
   }
 
+  /* The ray canvas is exactly hero-height, so without a mask the rays are
+     still bright where it ends and you get a hard horizontal cut across the
+     whole viewport at the hero's bottom edge. Fade them out well before it. */
   .hero-light-rays {
     opacity: 0;
     animation: hero-light-rays-in 180ms ease-out 60ms both;
+    mask-image: linear-gradient(to bottom,
+        black 0%,
+        black 42%,
+        rgba(0, 0, 0, 0.55) 66%,
+        rgba(0, 0, 0, 0.16) 84%,
+        transparent 96%);
+    -webkit-mask-image: linear-gradient(to bottom,
+        black 0%,
+        black 42%,
+        rgba(0, 0, 0, 0.55) 66%,
+        rgba(0, 0, 0, 0.16) 84%,
+        transparent 96%);
   }
 
   .site-load-reveal {
@@ -865,28 +923,6 @@
     }
   }
 
-  .hero-vignette {
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at 50% 50%, transparent 20%, rgba(0, 0, 0, 0.22) 100%);
-    mask-image: linear-gradient(to bottom, black 0%, black 85%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to bottom, black 0%, black 85%, transparent 100%);
-    pointer-events: none;
-    z-index: 2;
-    contain: paint;
-  }
-
-  .hero-atmosphere-foreground {
-    background:
-      radial-gradient(52rem 26rem at 76% 24%, rgba(240, 234, 223, 0.08), rgba(240, 234, 223, 0) 78%),
-      radial-gradient(58rem 36rem at 54% 68%, rgba(8, 12, 18, 0.24), rgba(8, 12, 18, 0) 84%),
-      linear-gradient(180deg, rgba(3, 4, 8, 0) 0%, rgba(3, 4, 8, 0.2) 70%, rgba(3, 4, 8, 0.34) 100%);
-    opacity: 0.72;
-    mask-image: linear-gradient(to bottom, black 0%, black 80%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to bottom, black 0%, black 80%, transparent 100%);
-    animation: hero-atmosphere-breathe 24s ease-in-out infinite;
-  }
-
   .hero-atmosphere-dust {
     background-image:
       radial-gradient(circle at 22% 26%, rgba(245, 239, 228, 0.22) 0.7px, transparent 1.3px),
@@ -899,31 +935,20 @@
     animation: hero-dust-drift 34s linear infinite;
   }
 
-  .warm-section-bg {
-    background:
-      radial-gradient(circle at 16% 18%, rgba(139, 115, 85, 0.07), transparent 30%),
-      radial-gradient(circle at 82% 68%, rgba(143, 165, 138, 0.045), transparent 28%),
-      linear-gradient(180deg, var(--site-bg-deep), var(--site-bg) 52%, var(--site-bg));
-  }
-
-  .warm-section-overlay {
-    background: transparent;
-  }
-
   /* Premium Cinematic Surface System */
   .premium-glass-surface {
     position: relative;
     background: linear-gradient(180deg, rgba(14, 14, 13, 0.7) 0%, rgba(2, 2, 2, 0.85) 100%);
     border: 1px solid rgba(255, 255, 255, 0.035);
     box-shadow:
-      inset 0 1px 0 0 rgba(255, 255, 255, 0.08),
+      inset 0 1px 0 0 var(--rim-light),
       inset 0 0 0 1px rgba(255, 255, 255, 0.015);
     backdrop-filter: blur(6px) saturate(120%);
     -webkit-backdrop-filter: blur(6px) saturate(120%);
     color: var(--site-text);
   }
 
-  .premium-glass-surface:not(.project-card-atmosphere)::before {
+  .premium-glass-surface::before {
     content: '';
     position: absolute;
     inset: 0;
@@ -937,104 +962,8 @@
     background: linear-gradient(180deg, rgba(14, 14, 13, 0.6) 0%, rgba(2, 2, 2, 0.8) 100%);
     border-color: rgba(255, 255, 255, 0.04);
     box-shadow:
-      inset 0 1px 0 0 rgba(255, 255, 255, 0.08),
+      inset 0 1px 0 0 var(--rim-light),
       inset 0 0 0 1px rgba(255, 255, 255, 0.015);
-  }
-
-  .project-card-atmosphere {
-    position: relative;
-    isolation: isolate;
-    background: transparent;
-    background-color: transparent;
-    border-color: rgba(255, 255, 255, 0.075);
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.055),
-      inset 0 0 0 1px rgba(255, 255, 255, 0.012);
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    transform: translate3d(0, 0, 0);
-    will-change: transform;
-    transition:
-      background-color 620ms cubic-bezier(0.16, 1, 0.3, 1),
-      border-color 620ms cubic-bezier(0.16, 1, 0.3, 1),
-      box-shadow 720ms cubic-bezier(0.16, 1, 0.3, 1),
-      transform 720ms cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .dark .project-card-atmosphere {
-    background: transparent;
-    border-color: rgba(255, 255, 255, 0.075);
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.055),
-      inset 0 0 0 1px rgba(255, 255, 255, 0.012);
-  }
-
-  .project-card-atmosphere::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    inset: -1px;
-    border-radius: inherit;
-    background:
-      radial-gradient(120% 78% at 50% -8%, rgba(245, 239, 228, 0.14) 0%, transparent 56%),
-      linear-gradient(180deg, rgba(176, 174, 165, 0.07) 0%, rgba(255, 255, 255, 0.016) 16%, transparent 34%);
-    opacity: 0;
-    transform: translate3d(0, -10px, 0) scale3d(0.98, 0.92, 1);
-    transform-origin: 50% 0%;
-    filter: blur(20px);
-    transition:
-      opacity 300ms ease,
-      transform 420ms cubic-bezier(0.22, 1, 0.36, 1),
-      filter 420ms cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  .project-card-atmosphere::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    border-radius: inherit;
-    background:
-      linear-gradient(180deg, rgba(245, 239, 228, 0.13) 0%, rgba(176, 174, 165, 0.05) 8%, transparent 18%),
-      radial-gradient(72% 20% at 50% 0%, rgba(245, 239, 228, 0.16) 0%, rgba(176, 174, 165, 0.07) 42%, transparent 78%);
-    opacity: 0;
-    transform: translate3d(0, -14px, 0) scale3d(0.98, 0.9, 1);
-    transform-origin: 50% 0%;
-    mask-image: linear-gradient(180deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.92) 18%, rgba(0, 0, 0, 0.22) 36%, rgba(0, 0, 0, 0) 50%);
-    -webkit-mask-image: linear-gradient(180deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.92) 18%, rgba(0, 0, 0, 0.22) 36%, rgba(0, 0, 0, 0) 50%);
-    transition:
-      opacity 300ms ease,
-      transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  .project-card-atmosphere:hover {
-    background-color: rgba(245, 239, 228, 0.014);
-    border-color: rgba(245, 239, 228, 0.16);
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.13),
-      inset 0 0 0 1px rgba(255, 255, 255, 0.025),
-      0 0 0 1px rgba(176, 174, 165, 0.09),
-      0 30px 80px rgba(0, 0, 0, 0.38);
-    transform: translate3d(0, -8px, 0);
-  }
-
-  .project-card-atmosphere:hover::before {
-    opacity: 0.52;
-    transform: translate3d(0, 0, 0) scale3d(1, 1, 1);
-    filter: blur(24px);
-  }
-
-  .project-card-atmosphere:hover::after {
-    opacity: 0.68;
-    transform: translate3d(0, 0, 0) scale3d(1, 1, 1);
-  }
-
-  .project-card-atmosphere>* {
-    position: relative;
-    z-index: 1;
   }
 
   .project-preview-link {
@@ -1051,15 +980,6 @@
     transition: transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
     will-change: transform;
     transform: scale(1);
-  }
-
-  .project-card-atmosphere:hover .project-preview-link {
-    filter: brightness(1.07) saturate(1.04);
-    transform: translate3d(0, -3px, 0) rotate(-0.75deg) scale(1.018);
-  }
-
-  .project-card-atmosphere:hover .project-preview-media {
-    transform: scale(1.045);
   }
 
   .project-showcase-media {
@@ -1255,45 +1175,6 @@
     }
   }
 
-  @media (hover: hover) and (pointer: fine) {
-    .project-card-atmosphere:hover .project-showcase-media {
-      background-color: rgba(245, 239, 228, 0.018);
-      box-shadow:
-        inset 0 1px 0 rgba(245, 239, 228, 0.15),
-        inset -1px 0 0 rgba(245, 239, 228, 0.14),
-        inset 0 -1px 0 rgba(0, 0, 0, 0.72);
-    }
-
-    .project-card-atmosphere:hover .project-showcase-media::before {
-      opacity: 1;
-      filter: brightness(1.35);
-      transform: scale(1.025);
-    }
-
-    .project-card-atmosphere:hover .project-showcase-media::after {
-      opacity: 0.66;
-    }
-
-    .project-card-atmosphere:hover .project-showcase-media__brand-word {
-      opacity: 0.84;
-      transform: translateX(-50%) translateY(-0.18rem);
-    }
-
-    .project-card-atmosphere:hover .project-showcase-frame--primary {
-      z-index: 1;
-      opacity: 0.74;
-      transform: translate3d(-56%, -2%, -140px) rotate(-5deg) scale(0.93);
-      box-shadow: 0 0.9rem 2.2rem rgba(0, 0, 0, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.3);
-    }
-
-    .project-card-atmosphere:hover .project-showcase-frame--secondary {
-      z-index: 3;
-      opacity: 1;
-      transform: translate3d(-34%, 3%, 0) scale(1.02) rotate(3deg);
-      box-shadow: 0 1.8rem 4.4rem rgba(0, 0, 0, 0.68), 0 0 2.2rem rgba(245, 239, 228, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.38);
-    }
-  }
-
   @media (max-width: 767px) {
     .project-showcase-media {
       min-height: 320px;
@@ -1317,7 +1198,6 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .project-card-atmosphere,
     .project-preview-link,
     .project-preview-media,
     .project-showcase-media,
@@ -1327,13 +1207,6 @@
     .project-showcase-media__topline,
     .project-showcase-media__brand-word {
       transition: none;
-    }
-
-    .project-card-atmosphere:hover,
-    .project-card-atmosphere:hover .project-preview-link,
-    .project-card-atmosphere:hover .project-preview-media {
-      filter: none;
-      transform: none;
     }
 
     .project-showcase-frame--secondary {
@@ -1440,8 +1313,6 @@
       inset 0 1px 0 rgba(255, 255, 255, 0.72),
       0 16px 48px rgba(0, 0, 0, 0.28),
       0 0 0 1px rgba(218, 197, 167, 0.28);
-    backdrop-filter: blur(10px) saturate(130%);
-    -webkit-backdrop-filter: blur(10px) saturate(130%);
   }
 
   .project-skill-chip {
@@ -1669,20 +1540,30 @@
     background: #f5efe4;
   }
 
+  /* Meteors run on ONE shared 44s cycle with four slots offset by 11s each.
+     Two things follow from that: no two can ever be on screen together, and
+     the streak duration is decoupled from the loop length. The old scheme
+     scaled the visible window to the cycle, so a long loop meant an
+     eight-second crawl, which is the opposite of what a meteor looks like.
+     Here each pass is ~1.1s (2.5% of 44s) no matter how rare it is. */
   .space-background-meteor {
+    --meteor-rotate: -158deg;
+    --meteor-travel-x: calc(100vw + 12rem);
+    --meteor-travel-y: 38vh;
+    --meteor-peak-opacity: 0.3;
     left: -7rem;
     top: 12vh;
     width: 3.25rem;
     height: 1px;
     border-radius: 9999px;
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.46) 0%, rgba(218, 197, 167, 0.14) 34%, rgba(218, 197, 167, 0.03) 68%, transparent 100%);
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.5) 0%, rgba(218, 197, 167, 0.16) 34%, rgba(218, 197, 167, 0.03) 68%, transparent 100%);
     box-shadow:
       0 0 5px rgba(255, 255, 255, 0.22),
       0 0 14px rgba(218, 197, 167, 0.1);
     opacity: 0;
-    transform: rotate(-158deg);
+    transform: rotate(var(--meteor-rotate));
     transform-origin: 0% 50%;
-    animation: space-background-meteor-pass 18s linear infinite;
+    animation: space-background-meteor-pass 44s linear infinite;
   }
 
   .space-background-meteor::after {
@@ -1693,9 +1574,49 @@
     width: 0.12rem;
     height: 0.12rem;
     border-radius: 9999px;
-    background: rgba(255, 255, 255, 0.52);
-    box-shadow: 0 0 7px rgba(255, 255, 255, 0.32);
+    background: rgba(255, 255, 255, 0.62);
+    box-shadow: 0 0 7px rgba(255, 255, 255, 0.4);
     transform: translateY(-50%);
+  }
+
+  .space-background-meteor--a {
+    animation-delay: 0s;
+  }
+
+  /* Shallower and higher up. */
+  .space-background-meteor--b {
+    top: 34vh;
+    width: 2.6rem;
+    --meteor-rotate: -168deg;
+    --meteor-travel-y: 20vh;
+    --meteor-peak-opacity: 0.24;
+    animation-delay: -11s;
+  }
+
+  /* Crosses the other way, so the sky doesn't read as a conveyor belt. */
+  .space-background-meteor--c {
+    left: auto;
+    right: -7rem;
+    top: 6vh;
+    width: 2.9rem;
+    --meteor-rotate: -24deg;
+    --meteor-travel-x: calc(-100vw - 12rem);
+    --meteor-travel-y: 34vh;
+    --meteor-peak-opacity: 0.26;
+    animation-delay: -22s;
+  }
+
+  /* The bright one. */
+  .space-background-meteor--d {
+    top: 21vh;
+    width: 5.25rem;
+    --meteor-rotate: -152deg;
+    --meteor-travel-y: 48vh;
+    --meteor-peak-opacity: 0.5;
+    box-shadow:
+      0 0 8px rgba(255, 255, 255, 0.36),
+      0 0 22px rgba(218, 197, 167, 0.18);
+    animation-delay: -33s;
   }
 
   .space-micro-planet {
@@ -1801,20 +1722,6 @@
     }
   }
 
-  @keyframes hero-atmosphere-breathe {
-
-    0%,
-    100% {
-      opacity: 0.66;
-      transform: translate3d(0, 0, 0);
-    }
-
-    50% {
-      opacity: 0.78;
-      transform: translate3d(0, -5px, 0);
-    }
-  }
-
   @keyframes hero-dust-drift {
 
     0%,
@@ -1837,30 +1744,34 @@
     z-index: -1;
   }
 
+  /* 2.5% of a 44s cycle ~= 1.1s of travel. The opacity flares to peak early
+     then falls away, and the streak stretches then contracts, so it reads as
+     something burning up rather than a line being slid across. */
   @keyframes space-background-meteor-pass {
 
-    0%,
-    72% {
+    0% {
       opacity: 0;
-      transform: translate3d(0, 0, 0) rotate(-158deg);
+      transform: translate3d(0, 0, 0) rotate(var(--meteor-rotate)) scaleX(0.4);
     }
 
-    73% {
-      opacity: 0.26;
+    0.35% {
+      opacity: var(--meteor-peak-opacity);
+      transform:
+        translate3d(calc(var(--meteor-travel-x) * 0.14), calc(var(--meteor-travel-y) * 0.14), 0) rotate(var(--meteor-rotate)) scaleX(1.15);
     }
 
-    80% {
-      opacity: 0.26;
+    1.4% {
+      opacity: calc(var(--meteor-peak-opacity) * 0.7);
     }
 
-    86% {
+    2.5% {
       opacity: 0;
-      transform: translate3d(calc(100vw + 12rem), 38vh, 0) rotate(-158deg);
+      transform: translate3d(var(--meteor-travel-x), var(--meteor-travel-y), 0) rotate(var(--meteor-rotate)) scaleX(0.55);
     }
 
     100% {
       opacity: 0;
-      transform: translate3d(calc(100vw + 12rem), 38vh, 0) rotate(-158deg);
+      transform: translate3d(var(--meteor-travel-x), var(--meteor-travel-y), 0) rotate(var(--meteor-rotate)) scaleX(0.55);
     }
   }
 
@@ -2193,17 +2104,6 @@
     transform: scale(1.05);
   }
 
-  .cursor-trail {
-    pointer-events: none;
-    position: fixed;
-    z-index: 9999;
-    width: 20px;
-    height: 20px;
-    background: radial-gradient(circle, rgba(218, 197, 167, 0.6) 0%, transparent 70%);
-    border-radius: 50%;
-    mix-blend-mode: screen;
-  }
-
   .about-career-section {
     contain: layout style;
     content-visibility: visible;
@@ -2214,20 +2114,6 @@
 
   section.about-career-section {
     overflow: visible;
-  }
-
-  .about-career-section::before {
-    content: '';
-    position: absolute;
-    z-index: 0;
-    inset: -18rem 0;
-    pointer-events: none;
-    background: radial-gradient(
-      ellipse 142% 56% at 50% 50%,
-      rgba(0, 0, 0, 0.5) 0%,
-      rgba(0, 0, 0, 0.28) 46%,
-      rgba(0, 0, 0, 0) 100%
-    );
   }
 
   .about-story-layout {
@@ -2314,7 +2200,7 @@
     overflow: hidden;
     border: 1px solid rgba(245, 239, 228, 0.08);
     border-radius: 50%;
-    background: #080808;
+    background: var(--panel-bg);
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.08),
       0 10px 26px rgba(0, 0, 0, 0.3);
@@ -2594,13 +2480,13 @@
   .about-career-company-mark-kerma {
     padding: 0.26rem;
     border: 0;
-    background: #000;
+    background: var(--panel-bg);
   }
 
   .about-career-company-mark-freelance {
     padding: 0.34rem;
     border: 0;
-    background: #080808;
+    background: var(--panel-bg);
   }
 
   .about-career-company-line h3 {
@@ -2648,6 +2534,9 @@
     display: block;
     width: 0.72rem;
     height: 0.72rem;
+    /* Fake-transparent ring punching a hole in the rail behind it. A fixed
+       mid-dark value: at 2px the mismatch against the sky is imperceptible,
+       and tracking it would cost a document-wide style invalidation. */
     border: 2px solid #080808;
     border-radius: 9999px;
     background: var(--career-accent, #dac5a7);
@@ -3362,6 +3251,96 @@
     }
   }
 
+  .contact-panel {
+    background: var(--panel-bg);
+    isolation: isolate;
+  }
+
+  .contact-panel::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    z-index: 20;
+    pointer-events: none;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        var(--rim-light-soft) 18%,
+        var(--rim-light) 50%,
+        var(--rim-light-soft) 82%,
+        transparent 100%);
+  }
+
+  /* Black fill goes on the grid container, NOT the cells: the gold hover fill
+     is a shared z-0 element behind cells at z-10, so opaque cells would hide
+     it entirely. */
+  .tech-stack-grid {
+    background: var(--panel-bg);
+    isolation: isolate;
+  }
+
+  .tech-stack-grid::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    z-index: 20;
+    pointer-events: none;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        var(--rim-light-soft) 18%,
+        var(--rim-light) 50%,
+        var(--rim-light-soft) 82%,
+        transparent 100%);
+  }
+
+  /* Parallax band. Overscanned so the upward drift never empties the bottom
+     edge. Transform and opacity are written per frame by AtmosphereController
+     straight onto this element — never from a :root variable, which would
+     invalidate the whole cascade. The values here are the resting state used
+     before hydration and under reduced motion. */
+  .star-band {
+    top: -14vh;
+    right: 0;
+    left: 0;
+    opacity: 0.85;
+    will-change: transform, opacity;
+  }
+
+  /* Bottom overscan per band, sized to stay ahead of that band's own travel
+     (data-parallax in page.tsx). The band drifts upward as you descend, so if
+     it runs out of height its lower edge becomes a visible empty strip. */
+  .star-band--far {
+    bottom: -26vh;
+  }
+
+  .star-band--mid {
+    bottom: -66vh;
+  }
+
+  .star-band--near {
+    bottom: -135vh;
+  }
+
+  /* The water column: two flat colour layers cross-fading on opacity.
+     Deliberately NO spatial gradient — a fixed gradient is a shape that rides
+     along with the viewport, which is what produced the visible seam and the
+     banding. A solid colour cross-fade darkens the whole field of view
+     uniformly, stays on the compositor, and cannot band. */
+  .sky-surface {
+    background: var(--sky-surface);
+  }
+
+  .sky-abyss {
+    background: var(--sky-abyss);
+    opacity: 0;
+    will-change: opacity;
+  }
+
   .floating-star {
     animation: floating-star-x var(--star-float-duration) linear var(--star-delay) infinite;
     opacity: 0;
@@ -3376,6 +3355,7 @@
     height: var(--star-glow-size);
     left: calc(var(--star-glow-size) / -2);
     top: calc(var(--star-glow-size) / -2);
+    background: color-mix(in srgb, var(--star-tint, #ffffff) 18%, transparent);
   }
 
   .floating-star-core {
@@ -3383,7 +3363,8 @@
     height: var(--star-size);
     left: calc(var(--star-size) / -2);
     top: calc(var(--star-size) / -2);
-    box-shadow: 0 0 calc(var(--star-size) * 1.5) rgba(255, 255, 255, 0.6);
+    background: color-mix(in srgb, var(--star-tint, #ffffff) 88%, #ffffff);
+    box-shadow: 0 0 calc(var(--star-size) * 2.2) color-mix(in srgb, var(--star-tint, #ffffff) 60%, transparent);
   }
 
   .floating-star-sparkle-x,
@@ -3494,7 +3475,6 @@
     .floating-star-inner,
     .floating-star-sparkle-x,
     .floating-star-sparkle-y,
-    .hero-atmosphere-foreground,
     .hero-atmosphere-dust,
     .planet-horizon {
       animation: none;
@@ -3502,6 +3482,24 @@
 
     .floating-star {
       opacity: var(--star-brightness);
+    }
+
+    /* AtmosphereController never attaches here, so these keep their resting
+       values and the overlays stay fully transparent. */
+    .star-band {
+      transform: none;
+      will-change: auto;
+    }
+
+    .space-background-meteor {
+      display: none;
+    }
+
+    /* The controller never attaches here, so the abyss layer would stay at
+       opacity 0 and the page would sit at surface brightness forever. Pin it
+       to a mid depth so reduced motion still reads as "underwater". */
+    .sky-abyss {
+      opacity: 0.72;
     }
 
     .about-light-orb-left,
@@ -3586,7 +3584,6 @@
     .floating-star-inner,
     .floating-star-sparkle-x,
     .floating-star-sparkle-y,
-    .hero-atmosphere-foreground,
     .hero-atmosphere-dust,
     .about-light-orb-left,
     .about-light-orb-right,
@@ -3619,11 +3616,6 @@
       -webkit-backdrop-filter: none !important;
     }
 
-    .project-card-atmosphere::before,
-    .project-card-atmosphere::after {
-      filter: none;
-    }
-
     .about-scene-ambient,
     .about-scene-haze,
     .about-scene-bloom,
@@ -3642,7 +3634,6 @@
   }
 
   @supports (-webkit-hyphens: none) {
-    .hero-atmosphere-foreground,
     .hero-atmosphere-dust,
     .about-scene-ambient,
     .about-scene-bloom,
@@ -3678,7 +3669,6 @@
   html.mobile-zoomed .floating-star-inner,
   html.mobile-zoomed .floating-star-sparkle-x,
   html.mobile-zoomed .floating-star-sparkle-y,
-  html.mobile-zoomed .hero-atmosphere-foreground,
   html.mobile-zoomed .hero-atmosphere-dust,
   html.mobile-zoomed .about-light-orb-left,
   html.mobile-zoomed .about-light-orb-right,
@@ -3696,6 +3686,7 @@
 
   html.mobile-zoomed .space-background-meteor,
   html.mobile-zoomed .floating-star,
+  html.mobile-zoomed .star-band,
   html.mobile-zoomed .hero-atmosphere-dust,
   html.mobile-zoomed .about-scene-dust,
   html.mobile-zoomed .about-floating-particles {
@@ -3826,14 +3817,22 @@
     overflow: hidden;
   }
 
-  /* Sits above the tiles — they're opaque now, so behind them the particles would never show. */
-  .project-case-study-grid__stars {
+  /* Lit top edge across the whole case-study grid. */
+  .project-case-study-grid::after {
+    content: '';
     position: absolute;
-    inset: 0;
-    z-index: 5;
-    overflow: hidden;
-    opacity: 0.45;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    z-index: 6;
     pointer-events: none;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        var(--rim-light-soft) 18%,
+        var(--rim-light) 50%,
+        var(--rim-light-soft) 82%,
+        transparent 100%);
   }
 
   .project-bento-tile {
@@ -3843,8 +3842,9 @@
     min-height: 0;
     flex-direction: column;
     overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.065);
-    background: transparent;
+    border: 1px solid var(--rim-border);
+    box-shadow: inset 0 1px 0 var(--rim-light-soft);
+    background: var(--panel-bg);
     padding: 1.55rem;
     isolation: isolate;
   }

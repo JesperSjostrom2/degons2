@@ -32,7 +32,6 @@ import {
 import type { IconBaseProps } from 'react-icons'
 import { cinematicHeader, cinematicItem, cinematicViewport } from '@/lib/site-motion'
 import { skillIconColors } from '@/lib/skill-colors'
-import FloatingStars from '@/components/floating-stars'
 
 interface ProjectSlide {
   type: 'image' | 'video'
@@ -546,7 +545,6 @@ const ProjectCaseStudy = ({ project }: { project: Project }) => (
     exit={{ opacity: 0, y: -14, scale: 0.985 }}
     transition={{ duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
   >
-    <FloatingStars className="project-case-study-grid__stars" count={22} mobileCount={8} />
     <ProjectPalette project={project} />
     <ProjectScope project={project} />
     <ProjectPreview project={project} />
@@ -564,7 +562,8 @@ const ExperienceSection: React.FC = () => {
   const activeProject = projectsData.find((project) => project.id === activeProjectId) ?? projectsData[0]
 
   return (
-    <section id="projects" className="site-section">
+    <section id="projects" className="site-section relative isolate">
+
       <div className="container mx-auto px-6">
         <motion.div
           className="mobile-no-load-animation section-header cinematic-section-header"

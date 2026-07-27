@@ -154,7 +154,7 @@ export default function TechStackSection() {
         <motion.div
           ref={gridRef}
           onPointerLeave={hideHoverFill}
-          className="mobile-no-load-animation cinematic-reveal-card relative mx-auto flex max-w-7xl flex-wrap overflow-hidden rounded-[22px] border border-[color:var(--site-border)] md:grid md:grid-cols-3 md:rounded-[28px] lg:grid-cols-6 dark:border-white/10"
+          className="tech-stack-grid mobile-no-load-animation cinematic-reveal-card relative mx-auto flex max-w-7xl flex-wrap overflow-hidden rounded-[22px] border border-[color:var(--rim-border)] md:grid md:grid-cols-3 md:rounded-[28px] lg:grid-cols-6"
           variants={cinematicPanel('deep')}
           initial="hidden"
           whileInView="visible"
@@ -178,7 +178,7 @@ export default function TechStackSection() {
                 onPointerEnter={(event) => moveHoverFill(event.currentTarget, tech.name)}
                 onFocus={(event) => moveHoverFill(event.currentTarget, tech.name)}
                 onBlur={hideHoverFill}
-                className={`group relative z-10 flex basis-1/2 items-center justify-center border-b border-r border-[color:var(--site-border)] p-3 transition-colors duration-300 sm:basis-1/3 md:basis-auto dark:border-white/10 ${tech.featured
+                className={`group relative z-10 flex basis-1/2 items-center justify-center border-b border-r border-white/[0.07] p-3 transition-colors duration-300 sm:basis-1/3 md:basis-auto ${tech.featured
                     ? 'min-h-[98px] md:col-span-1 md:min-h-[250px] md:p-10 lg:col-span-2 lg:min-h-[330px]'
                     : 'min-h-[86px] md:min-h-[170px] md:p-8 lg:col-span-1 lg:border-b-0'
                   } ${isActive ? 'text-background' : 'text-[color:var(--site-text)] hover:text-background dark:text-white/90'}`}

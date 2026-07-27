@@ -375,7 +375,7 @@ const MagicBento: React.FC = () => {
 
           </div>
 
-          <div className="chat-input-bar relative z-40 mx-6 mb-3 mt-1.5 flex items-center gap-3 rounded-[0.85rem] border border-[color:var(--site-border)]/40 bg-[color:var(--site-bg)]/60 px-3.5 py-2 shadow-inner backdrop-blur-md dark:border-white/10 dark:bg-white/[0.02]">
+          <div className="chat-input-bar relative z-40 mx-6 mb-3 mt-1.5 flex items-center gap-3 rounded-[0.85rem] border border-white/10 bg-white/[0.02] px-3.5 py-2 shadow-inner backdrop-blur-md">
             <span className="text-[1.05rem] font-light leading-none text-[color:var(--site-muted)] dark:text-white/50">+</span>
             <span className="chat-input-text flex-1 text-[12px] text-[color:var(--site-muted)] dark:text-white/40">Type a message</span>
             <Send className="h-3 w-3 text-[color:var(--site-muted)] dark:text-white/40" />
@@ -2232,7 +2232,7 @@ const MagicBento: React.FC = () => {
             position: relative;
             gap: 0;
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.09);
+            border: 1px solid var(--rim-border);
             border-radius: 28px;
             isolation: isolate;
             background: transparent;
@@ -2248,11 +2248,36 @@ const MagicBento: React.FC = () => {
             border-radius: 0;
             border: 0;
             box-shadow: none;
+            /* Opaque fill below, so the inherited blur can never be seen. */
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            /* Tracks the sky as it darkens — always a few points below it, so
+               contrast softens with depth but never inverts. */
+            background: var(--panel-bg);
           }
 
           .card-responsive .card:not(:nth-child(5)) {
             border-top: 1px solid rgba(255, 255, 255, 0.07);
           }
+
+          /* Lit top edge — brightest at centre, where the hero light is. */
+          .card-responsive::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            z-index: 2;
+            pointer-events: none;
+            background: linear-gradient(90deg,
+                transparent 0%,
+                var(--rim-light-soft) 18%,
+                var(--rim-light) 50%,
+                var(--rim-light-soft) 82%,
+                transparent 100%);
+          }
+
 
           .bento-scroll-paused *,
           .bento-scroll-paused *::before,
@@ -2321,11 +2346,6 @@ const MagicBento: React.FC = () => {
           .card-responsive .card:nth-child(3) .bento-card-heading,
           .card-responsive .card:nth-child(4) .bento-card-heading {
             font-size: 1.5rem;
-          }
-
-          .card-responsive .card:nth-child(2) .premium-glass-surface,
-          .card-responsive .card:nth-child(4) .premium-glass-surface {
-            background: transparent !important;
           }
 
           .card-responsive .card:nth-child(2) .premium-glass-surface::before,
@@ -2865,11 +2885,11 @@ const MagicBento: React.FC = () => {
             const baseClassName = `card group/bento relative ${index === 2 ? 'min-h-[170px]' : 'min-h-[180px]'} w-full max-w-full rounded-[20px]`;
             const cardInnerClassName = `premium-glass-surface ${card.svgAsset ? 'svg-only-card' : ''} relative flex h-full flex-col justify-between overflow-hidden rounded-[20px] font-light transition-all duration-300 ease-in-out ${index === 2 || index === 3 ? 'p-0' : 'p-8'}`;
 
+            // The cards are opaque now, so there is nothing behind them to
+            // blur — the backdrop-filter that used to live here was pure
+            // compositing cost.
             const cardStyle = {
               '--bento-accent': card.color,
-              backdropFilter: "blur(4px) saturate(130%)",
-              WebkitBackdropFilter: "blur(4px) saturate(130%)",
-              background: 'transparent',
             } as React.CSSProperties;
 
             const content = card.customContent || (
@@ -2903,7 +2923,7 @@ const MagicBento: React.FC = () => {
                 viewport={cinematicViewport}
                 style={{ willChange: revealMotionDisabled ? "auto" : "transform, opacity" }}
               >
-                <div className={`${cardInnerClassName} bg-transparent`} style={cardStyle}>
+                <div className={cardInnerClassName} style={cardStyle}>
                   {content}
                 </div>
               </motion.div>

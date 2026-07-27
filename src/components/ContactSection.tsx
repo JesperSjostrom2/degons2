@@ -159,8 +159,8 @@ export default function ContactSection() {
   }
 
   return (
-    <section id="contact" className="site-section min-h-screen">
-      <div className="container mx-auto px-6">
+    <section id="contact" className="site-section relative isolate min-h-screen">
+      <div className="container relative mx-auto px-6">
         <motion.div
           className="mobile-no-load-animation section-header cinematic-section-header"
           variants={cinematicHeader}
@@ -181,17 +181,24 @@ export default function ContactSection() {
           whileInView="visible"
           viewport={cinematicViewport}
         >
-            <div className="surface-hover-glow relative grid overflow-hidden rounded-[28px] border border-[color:var(--site-border)] lg:grid-cols-[1fr_1.2fr] dark:border-white/10">
-              <aside className="flex flex-col border-b border-[color:var(--site-border)] p-6 md:p-8 lg:border-b-0 lg:border-r dark:border-white/10">
+            <div className="contact-panel relative z-10 grid overflow-hidden rounded-[28px] border border-[color:var(--rim-border)] lg:grid-cols-[1fr_1.2fr]">
+              <aside className="flex flex-col border-b border-white/[0.07] p-6 md:p-8 lg:border-b-0 lg:border-r">
                 <h3 className="mb-6 text-xl font-bold tracking-[-0.025em] text-[color:var(--site-text)] md:text-2xl">Frequently asked questions</h3>
 
-                <div className="overflow-hidden rounded-[22px] border border-[color:var(--site-border)] lg:flex lg:flex-1 lg:flex-col dark:border-white/10">
+                {/* Hugs its content rather than stretching to the column
+                    height — otherwise the rows have to absorb the slack and
+                    the box reads as half empty. */}
+                <div className="overflow-hidden rounded-[22px] border border-white/[0.07] bg-white/[0.02]">
                   {frequentlyAskedQuestions.map((item, index) => {
                     const isOpen = openQuestion === index
                     return (
+                      // Natural height, never flex-1 + justify-center: that
+                      // made every row share the container height and
+                      // re-centre its content whenever one opened, which is
+                      // what threw the questions upward.
                       <div
                         key={item.question}
-                        className="border-b border-[color:var(--site-border)] last:border-b-0 lg:flex lg:flex-1 lg:flex-col lg:justify-center dark:border-white/10"
+                        className="border-b border-white/[0.07] last:border-b-0"
                       >
                         <button
                           type="button"
@@ -222,9 +229,11 @@ export default function ContactSection() {
                               transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                               className="overflow-hidden"
                             >
-                              <p className="px-4 pb-4 pl-11 text-sm leading-6 text-muted-foreground">
-                                {item.answer}
-                              </p>
+                              <div className="border-t border-white/[0.06] px-4 py-4">
+                                <p className="text-sm leading-6 text-muted-foreground">
+                                  {item.answer}
+                                </p>
+                              </div>
                             </motion.div>
                           ) : null}
                         </AnimatePresence>
@@ -242,7 +251,7 @@ export default function ContactSection() {
                       value={name}
                       onChange={(event) => setName(event.target.value)}
                       required
-                      className="w-full rounded-[20px] border border-[color:var(--site-border)] bg-[rgba(5,5,5,0.045)] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[#8f8b82] focus:border-accent/60 focus:bg-[rgba(5,5,5,0.1)] dark:rounded-[20px] dark:border-white/10 dark:bg-[rgba(5,5,5,0.045)] dark:text-white dark:placeholder:text-white/50 dark:focus:bg-[rgba(5,5,5,0.1)]"
+                      className="w-full rounded-[20px] border border-[color:var(--site-border)] bg-white/[0.035] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[#8f8b82] focus:border-accent/60 focus:bg-white/[0.065] dark:rounded-[20px] dark:border-white/10 dark:bg-white/[0.035] dark:text-white dark:placeholder:text-white/50 dark:focus:bg-white/[0.065]"
                         placeholder="Your name"
                       />
                   </label>
@@ -254,7 +263,7 @@ export default function ContactSection() {
                       value={email}
                       onChange={(event) => setEmail(event.target.value)}
                       required
-                      className="w-full rounded-[20px] border border-[color:var(--site-border)] bg-[rgba(5,5,5,0.045)] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[#8f8b82] focus:border-accent/60 focus:bg-[rgba(5,5,5,0.1)] dark:rounded-[20px] dark:border-white/10 dark:bg-[rgba(5,5,5,0.045)] dark:text-white dark:placeholder:text-white/50 dark:focus:bg-[rgba(5,5,5,0.1)]"
+                      className="w-full rounded-[20px] border border-[color:var(--site-border)] bg-white/[0.035] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[#8f8b82] focus:border-accent/60 focus:bg-white/[0.065] dark:rounded-[20px] dark:border-white/10 dark:bg-white/[0.035] dark:text-white dark:placeholder:text-white/50 dark:focus:bg-white/[0.065]"
                         placeholder="you@example.com"
                       />
                   </label>
@@ -265,7 +274,7 @@ export default function ContactSection() {
                       <select
                         value={projectType}
                         onChange={(event) => setProjectType(event.target.value)}
-                        className="w-full appearance-none rounded-[20px] border border-[color:var(--site-border)] bg-[rgba(5,5,5,0.045)] py-3 pl-4 pr-12 text-[color:var(--site-text)] outline-none transition-colors duration-300 focus:border-accent/60 focus:bg-[rgba(5,5,5,0.1)] dark:rounded-[20px] dark:border-white/10 dark:bg-[rgba(5,5,5,0.045)] dark:text-white dark:focus:bg-[rgba(5,5,5,0.1)]"
+                        className="w-full appearance-none rounded-[20px] border border-[color:var(--site-border)] bg-white/[0.035] py-3 pl-4 pr-12 text-[color:var(--site-text)] outline-none transition-colors duration-300 focus:border-accent/60 focus:bg-white/[0.065] dark:rounded-[20px] dark:border-white/10 dark:bg-white/[0.035] dark:text-white dark:focus:bg-white/[0.065]"
                       >
                         {projectTypes.map((type) => (
                           <option key={type} value={type} className="bg-[#050505] text-white">
@@ -282,7 +291,7 @@ export default function ContactSection() {
                     <input
                       value={budget}
                       onChange={(event) => setBudget(event.target.value)}
-                        className="w-full rounded-[20px] border border-[color:var(--site-border)] bg-[rgba(5,5,5,0.045)] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[#8f8b82] focus:border-accent/60 focus:bg-[rgba(5,5,5,0.1)] dark:rounded-[20px] dark:border-white/10 dark:bg-[rgba(5,5,5,0.045)] dark:text-white dark:placeholder:text-white/50 dark:focus:bg-[rgba(5,5,5,0.1)]"
+                        className="w-full rounded-[20px] border border-[color:var(--site-border)] bg-white/[0.035] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[#8f8b82] focus:border-accent/60 focus:bg-white/[0.065] dark:rounded-[20px] dark:border-white/10 dark:bg-white/[0.035] dark:text-white dark:placeholder:text-white/50 dark:focus:bg-white/[0.065]"
                         placeholder="Optional, even a rough range helps"
                       />
                   </label>
@@ -295,7 +304,7 @@ export default function ContactSection() {
                     onChange={(event) => setMessage(event.target.value)}
                     required
                     rows={7}
-                    className="w-full resize-none rounded-[20px] border border-[color:var(--site-border)] bg-[rgba(5,5,5,0.045)] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[#8f8b82] focus:border-accent/60 focus:bg-[rgba(5,5,5,0.1)] dark:rounded-[20px] dark:border-white/10 dark:bg-[rgba(5,5,5,0.045)] dark:text-white dark:placeholder:text-white/50 dark:focus:bg-[rgba(5,5,5,0.1)]"
+                    className="w-full resize-none rounded-[20px] border border-[color:var(--site-border)] bg-white/[0.035] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[#8f8b82] focus:border-accent/60 focus:bg-white/[0.065] dark:rounded-[20px] dark:border-white/10 dark:bg-white/[0.035] dark:text-white dark:placeholder:text-white/50 dark:focus:bg-white/[0.065]"
                     placeholder="Tell me a bit about what you need."
                   />
                 </label>

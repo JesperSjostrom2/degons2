@@ -85,14 +85,16 @@ export default function BentoProcessBridge({ children }: { children: ReactNode }
     if (source) resizeObserver.observe(source)
     if (target) resizeObserver.observe(target)
 
+    // Deliberately no scroll listener: every value in measureConnector is a
+    // difference between two rects in the same document flow, so it is
+    // scroll-invariant. Recomputing it per frame cost three forced layouts, a
+    // setState and an SVG path rebuild for an identical result.
     window.addEventListener('resize', scheduleMeasurement, { passive: true })
-    window.addEventListener('scroll', scheduleMeasurement, { passive: true })
     scheduleMeasurement()
 
     return () => {
       resizeObserver.disconnect()
       window.removeEventListener('resize', scheduleMeasurement)
-      window.removeEventListener('scroll', scheduleMeasurement)
 
       if (animationFrameRef.current !== null) {
         cancelAnimationFrame(animationFrameRef.current)
