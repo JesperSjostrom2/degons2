@@ -41,10 +41,10 @@ export const Footer = ({
 }: FooterProps) => {
   return (
     <section className={cn("relative w-full overflow-hidden", className)}>
-      {/* Same flat black as every other panel. Safe against the sky at any
-          depth because --sky-abyss floors at #030303, so this always reads as
-          a surface rather than a seam — and it occludes the star field, which
-          transparency did not. */}
+      {/* Same flat black as every other panel. Safe against the sky because
+          --sky is a constant #030303, so this always reads as a surface rather
+          than a seam — and it occludes the star field, which transparency did
+          not. */}
       <footer className="relative overflow-hidden bg-[color:var(--panel-bg)]">
         <div className="footer-top-glow pointer-events-none absolute left-1/2 top-0 z-20 h-px w-[94%] max-w-7xl -translate-x-1/2" />
         <div className="relative mx-auto flex max-w-7xl flex-col px-6 py-9 md:py-12">

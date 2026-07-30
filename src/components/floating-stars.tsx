@@ -18,7 +18,8 @@ interface FloatingStarsProps {
 }
 
 // Sizing/brightness only — parallax travel lives on the wrapping
-// [data-atmosphere] band in page.tsx, which AtmosphereController writes to.
+// [data-atmosphere] band in site-atmosphere.tsx, which AtmosphereController
+// writes to.
 //
 // These must stay in step with the per-band travel: a band that moves faster
 // is nearer the viewer, so it also has to be bigger and brighter or the depth

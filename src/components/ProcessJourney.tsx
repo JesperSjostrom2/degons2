@@ -57,7 +57,7 @@ export default function ProcessJourney() {
 
         <motion.div
           data-process-panel
-          className="journey-panel relative mx-auto grid max-w-7xl overflow-hidden rounded-[28px] border border-white/[0.09] md:grid-cols-3"
+          className="journey-panel relative mx-auto grid max-w-7xl gap-4 md:grid-cols-3"
           variants={cinematicPanel('deep')}
           initial={shouldReduceMotion ? false : 'hidden'}
           whileInView={shouldReduceMotion ? undefined : 'visible'}
@@ -66,7 +66,7 @@ export default function ProcessJourney() {
           {processSteps.map((step, index) => (
             <motion.article
               key={step.number}
-              className="process-step group relative overflow-hidden border-t border-white/[0.07] first:border-t-0 md:border-l md:border-t-0 md:first:border-l-0"
+              className="process-step group relative overflow-hidden rounded-[20px] border border-[color:var(--rim-border)]"
               style={{ '--process-accent': step.accent } as CSSProperties}
               initial={shouldReduceMotion ? false : { opacity: 0, y: 22 }}
               whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}

@@ -2230,10 +2230,6 @@ const MagicBento: React.FC = () => {
             margin: 0 auto;
             padding: 0;
             position: relative;
-            gap: 0;
-            overflow: hidden;
-            border: 1px solid var(--rim-border);
-            border-radius: 28px;
             isolation: isolate;
             background: transparent;
           }
@@ -2241,41 +2237,18 @@ const MagicBento: React.FC = () => {
           .card-responsive .card {
             z-index: 1;
             contain: layout paint style;
-            border-radius: 0;
           }
 
           .card-responsive .premium-glass-surface {
-            border-radius: 0;
-            border: 0;
-            box-shadow: none;
+            border: 1px solid var(--rim-border);
+            box-shadow:
+              inset 0 1px 0 var(--rim-light-soft),
+              inset 0 -1px 0 var(--rim-edge-warm);
             /* Opaque fill below, so the inherited blur can never be seen. */
             backdrop-filter: none;
             -webkit-backdrop-filter: none;
-            /* Tracks the sky as it darkens — always a few points below it, so
-               contrast softens with depth but never inverts. */
+            /* Flat fill, a shade above the sky at every depth. */
             background: var(--panel-bg);
-          }
-
-          .card-responsive .card:not(:nth-child(5)) {
-            border-top: 1px solid rgba(255, 255, 255, 0.07);
-          }
-
-          /* Lit top edge — brightest at centre, where the hero light is. */
-          .card-responsive::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            z-index: 2;
-            pointer-events: none;
-            background: linear-gradient(90deg,
-                transparent 0%,
-                var(--rim-light-soft) 18%,
-                var(--rim-light) 50%,
-                var(--rim-light-soft) 82%,
-                transparent 100%);
           }
 
 
@@ -2439,7 +2412,6 @@ const MagicBento: React.FC = () => {
             .card-responsive {
               grid-template-columns: repeat(6, 1fr);
               grid-template-rows: repeat(4, minmax(0, 1fr));
-              gap: 0;
               height: 1040px;
               min-height: 1040px;
             }
@@ -2467,7 +2439,6 @@ const MagicBento: React.FC = () => {
             .card-responsive .card:nth-child(4) {
               grid-column: 4 / 7;
               grid-row: 3 / 4;
-              border-left: 1px solid rgba(255, 255, 255, 0.07);
             }
 
             .card-responsive .card:nth-child(3) {
@@ -2480,7 +2451,6 @@ const MagicBento: React.FC = () => {
             .card-responsive {
               grid-template-columns: repeat(12, 1fr);
               grid-template-rows: repeat(2, minmax(0, 1fr));
-              gap: 0;
               height: 740px;
               min-height: 740px;
               max-width: 1400px;
@@ -2500,28 +2470,21 @@ const MagicBento: React.FC = () => {
             .card-responsive .card:nth-child(1) {
               grid-column: 8 / 13;
               grid-row: 1 / 2;
-              border-top: 0;
-              border-left: 1px solid rgba(255, 255, 255, 0.07);
             }
 
             .card-responsive .card:nth-child(2) {
               grid-column: 1 / 5;
               grid-row: 2 / 3;
-              border-top: 1px solid rgba(255, 255, 255, 0.07);
             }
 
             .card-responsive .card:nth-child(4) {
               grid-column: 5 / 9;
               grid-row: 2 / 3;
-              border-top: 1px solid rgba(255, 255, 255, 0.07);
-              border-left: 1px solid rgba(255, 255, 255, 0.07);
             }
 
             .card-responsive .card:nth-child(3) {
               grid-column: 9 / 13;
               grid-row: 2 / 3;
-              border-top: 1px solid rgba(255, 255, 255, 0.07);
-              border-left: 1px solid rgba(255, 255, 255, 0.07);
             }
 
             .card-responsive .card:nth-child(1) .end-to-end-svg {
@@ -2880,7 +2843,7 @@ const MagicBento: React.FC = () => {
       </style>
 
       <BentoCardGrid gridRef={gridRef}>
-        <div className="card-responsive grid gap-2">
+        <div className="card-responsive grid gap-4">
           {cardData.map((card, index) => {
             const baseClassName = `card group/bento relative ${index === 2 ? 'min-h-[170px]' : 'min-h-[180px]'} w-full max-w-full rounded-[20px]`;
             const cardInnerClassName = `premium-glass-surface ${card.svgAsset ? 'svg-only-card' : ''} relative flex h-full flex-col justify-between overflow-hidden rounded-[20px] font-light transition-all duration-300 ease-in-out ${index === 2 || index === 3 ? 'p-0' : 'p-8'}`;

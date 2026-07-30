@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState, type CSSProperties, type FormEvent } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowRight, BriefcaseBusiness, CalendarClock, ChevronDown, Github, Linkedin, Loader2, Mail, MessageSquare, UserRound } from 'lucide-react'
+import { ArrowRight, BriefcaseBusiness, CalendarClock, ChevronDown, Github, HelpCircle, Linkedin, Loader2, Mail, MessageSquare, Plus, UserRound } from 'lucide-react'
 import { FiMail } from 'react-icons/fi'
 import { cinematicHeader, cinematicPanel, cinematicViewport } from '@/lib/site-motion'
 
@@ -183,7 +183,10 @@ export default function ContactSection() {
         >
             <div className="contact-panel relative z-10 grid overflow-hidden rounded-[28px] border border-[color:var(--rim-border)] lg:grid-cols-[1fr_1.2fr]">
               <aside className="flex flex-col border-b border-white/[0.07] p-6 md:p-8 lg:border-b-0 lg:border-r">
-                <h3 className="mb-6 text-xl font-bold tracking-[-0.025em] text-[color:var(--site-text)] md:text-2xl">Frequently asked questions</h3>
+                <div className="mb-6 flex items-center gap-2.5 border-b border-white/[0.07] pb-5">
+                  <HelpCircle className="h-5 w-5 shrink-0 text-[color:var(--site-muted)]" />
+                  <h3 className="text-xl font-bold tracking-[-0.025em] text-[color:var(--site-text)] md:text-2xl">Frequently asked questions</h3>
+                </div>
 
                 {/* Hugs its content rather than stretching to the column
                     height — otherwise the rows have to absorb the slack and
@@ -205,17 +208,23 @@ export default function ContactSection() {
                           aria-expanded={isOpen}
                           aria-controls={`faq-answer-${index}`}
                           onClick={() => setOpenQuestion(isOpen ? null : index)}
-                          className="group flex w-full cursor-pointer items-center justify-between gap-4 px-4 py-4 text-left text-sm font-medium"
+                          className="group flex w-full cursor-pointer items-center justify-between gap-4 px-5 py-5 text-left transition-colors duration-300 hover:bg-white/[0.02]"
                         >
-                          <span className="bg-gradient-to-b from-[#dcd7cc] to-[#8f8b82] bg-clip-text text-transparent transition-opacity duration-300 group-hover:opacity-75">
+                          <span
+                            className={`text-base font-semibold tracking-[-0.01em] transition-colors duration-300 ${
+                              isOpen ? 'text-[color:var(--site-text-strong)]' : 'text-[color:var(--site-text)] group-hover:text-[color:var(--site-text-strong)]'
+                            }`}
+                          >
                             {item.question}
                           </span>
                           <motion.span
                             animate={{ rotate: isOpen ? 45 : 0 }}
                             transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                            className="shrink-0 text-lg font-light text-[color:var(--site-muted)]"
+                            className={`flex shrink-0 items-center justify-center transition-colors duration-300 ${
+                              isOpen ? 'text-accent' : 'text-[color:var(--site-muted)] group-hover:text-[color:var(--site-text)]'
+                            }`}
                           >
-                            +
+                            <Plus className="h-5 w-5" />
                           </motion.span>
                         </button>
 
@@ -229,10 +238,12 @@ export default function ContactSection() {
                               transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                               className="overflow-hidden"
                             >
-                              <div className="border-t border-white/[0.06] px-4 py-4">
-                                <p className="text-sm leading-6 text-muted-foreground">
-                                  {item.answer}
-                                </p>
+                              <div className="px-5 pb-5">
+                                <div className="rounded-[14px] bg-black/20 px-4 py-3.5">
+                                  <p className="text-[13px] leading-6 text-[color:var(--site-muted)]">
+                                    {item.answer}
+                                  </p>
+                                </div>
                               </div>
                             </motion.div>
                           ) : null}
