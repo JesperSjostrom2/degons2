@@ -63,6 +63,8 @@ export default function ContactSection() {
   const [projectType, setProjectType] = useState(projectTypes[0])
   const [budget, setBudget] = useState('')
   const [message, setMessage] = useState('')
+  // Honeypot — humans never see the input; the API fakes success when it's filled.
+  const [company, setCompany] = useState('')
   const [openQuestion, setOpenQuestion] = useState<number | null>(null)
   const [activeSocial, setActiveSocial] = useState<string | null>(null)
   const [hoverBounds, setHoverBounds] = useState({
@@ -134,7 +136,7 @@ export default function ContactSection() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name, email, projectType, budget, message }),
+        body: JSON.stringify({ name, email, projectType, budget, message, company }),
       })
 
       const rawResponse = await response.text()
@@ -255,6 +257,18 @@ export default function ContactSection() {
               </aside>
 
               <form onSubmit={handleSubmit} className="p-6 md:p-8">
+                {/* Honeypot: off-screen and inert for humans and assistive tech;
+                    bots that fill every field trip the API's fake-success path. */}
+                <input
+                  type="text"
+                  name="company"
+                  value={company}
+                  onChange={(event) => setCompany(event.target.value)}
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden="true"
+                  style={{ position: 'absolute', left: '-9999px', width: '1px', height: '1px', overflow: 'hidden' }}
+                />
                 <div className="grid gap-4 md:grid-cols-2">
                   <label className="space-y-4 pl-0.5">
                     <span className="flex items-center gap-2 text-base font-semibold text-[color:var(--site-text)]"><UserRound className="h-4 w-4 text-[color:var(--site-muted)]" />Name</span>
@@ -262,6 +276,7 @@ export default function ContactSection() {
                       value={name}
                       onChange={(event) => setName(event.target.value)}
                       required
+                      maxLength={100}
                       className="w-full rounded-[20px] border border-[color:var(--site-border)] bg-white/[0.035] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[#8f8b82] focus:border-accent/60 focus:bg-white/[0.065] dark:rounded-[20px] dark:border-white/10 dark:bg-white/[0.035] dark:text-white dark:placeholder:text-white/50 dark:focus:bg-white/[0.065]"
                         placeholder="Your name"
                       />
@@ -274,6 +289,7 @@ export default function ContactSection() {
                       value={email}
                       onChange={(event) => setEmail(event.target.value)}
                       required
+                      maxLength={254}
                       className="w-full rounded-[20px] border border-[color:var(--site-border)] bg-white/[0.035] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[#8f8b82] focus:border-accent/60 focus:bg-white/[0.065] dark:rounded-[20px] dark:border-white/10 dark:bg-white/[0.035] dark:text-white dark:placeholder:text-white/50 dark:focus:bg-white/[0.065]"
                         placeholder="you@example.com"
                       />
@@ -302,6 +318,7 @@ export default function ContactSection() {
                     <input
                       value={budget}
                       onChange={(event) => setBudget(event.target.value)}
+                      maxLength={100}
                         className="w-full rounded-[20px] border border-[color:var(--site-border)] bg-white/[0.035] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[#8f8b82] focus:border-accent/60 focus:bg-white/[0.065] dark:rounded-[20px] dark:border-white/10 dark:bg-white/[0.035] dark:text-white dark:placeholder:text-white/50 dark:focus:bg-white/[0.065]"
                         placeholder="Optional, even a rough range helps"
                       />
@@ -314,6 +331,7 @@ export default function ContactSection() {
                     value={message}
                     onChange={(event) => setMessage(event.target.value)}
                     required
+                    maxLength={5000}
                     rows={7}
                     className="w-full resize-none rounded-[20px] border border-[color:var(--site-border)] bg-white/[0.035] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[#8f8b82] focus:border-accent/60 focus:bg-white/[0.065] dark:rounded-[20px] dark:border-white/10 dark:bg-white/[0.035] dark:text-white dark:placeholder:text-white/50 dark:focus:bg-white/[0.065]"
                     placeholder="Tell me a bit about what you need."
