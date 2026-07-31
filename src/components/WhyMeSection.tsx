@@ -1,5 +1,12 @@
-import MagicBento from '@/components/MagicBento'
+import dynamic from 'next/dynamic'
+
 import ScrollReveal from '@/components/scroll-reveal'
+
+/* MagicBento is the largest client component in the bundle and sits below the
+   fold. Splitting it here keeps its HTML server-rendered (ssr defaults to
+   true) while its hydration JS loads as its own chunk instead of inside the
+   main bundle. */
+const MagicBento = dynamic(() => import('@/components/MagicBento'))
 
 export default function WhyMeSection() {
   return (

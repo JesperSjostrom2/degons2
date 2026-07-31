@@ -69,7 +69,6 @@ const ProjectShot = ({
           <video
             data-autoplay-preview
             className="project-card__video"
-            src={shot.videoSrc}
             poster={shot.src}
             muted
             loop
@@ -77,7 +76,13 @@ const ProjectShot = ({
             preload="none"
             aria-label={shot.alt}
             onCanPlay={(event) => event.currentTarget.classList.add('is-ready')}
-          />
+          >
+            {/* Every capture ships as VP9 beside the mp4 at roughly half the
+                bytes; a browser that can't play it (or a capture without a
+                .webm sibling) falls through to the mp4. */}
+            <source src={shot.videoSrc.replace(/\.mp4$/, '.webm')} type="video/webm" />
+            <source src={shot.videoSrc} type="video/mp4" />
+          </video>
         ) : null}
       </div>
     </div>

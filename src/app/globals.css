@@ -1855,7 +1855,7 @@
   }
 
   .about-story-portrait::before {
-    background: url('/assets/cursedportrait.png') center 22% / cover no-repeat;
+    background: url('/assets/cursedportrait.webp') center 22% / cover no-repeat;
     filter: grayscale(1) contrast(1.04);
   }
 
@@ -2022,7 +2022,7 @@
     border-radius: inherit;
     background-image:
       linear-gradient(180deg, transparent 55%, rgba(8, 8, 8, 0.24)),
-      url('/assets/cursedportrait.png');
+      url('/assets/cursedportrait.webp');
     background-position: center 24%;
     background-size: cover;
   }
@@ -3993,7 +3993,7 @@
   }
 
   /* ── MacBook with a video in the screen ─────────────────────────────────
-     Measured off macmockup.png (5781x3676): the screen is a transparent hole at
+     Measured off macmockup.webp (5781x3676): the screen is a transparent hole at
      x 756..5024, y 503..3171 with square corners. The video is positioned into
      exactly that rectangle and the frame PNG is laid over it, so the bezel and
      its rounded corners do the masking for free. */

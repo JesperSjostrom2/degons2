@@ -28,7 +28,7 @@
  *
  * VISUAL FORMAT — the standard every project moves to, as built for Andcreative:
  *
- *   01  mac      macmockup.png with a scroll capture playing in the screen cutout
+ *   01  mac      macmockup.webp with a scroll capture playing in the screen cutout
  *   02  phones   three phone plates side by side — landing, a list view, a detail
  *
  * Both frames want assets on a transparent background, exported at the same plate
@@ -71,8 +71,8 @@ export type ProjectVisual =
   /** A flat screenshot, optionally in the browser title bar. */
   | ({ frame: 'browser' } & ProjectShot)
   /**
-   * `macmockup.png` with something playing in the screen cutout. The screen is a genuine
-   * transparent hole in the PNG, so the video is positioned into it and the frame sits on
+   * `macmockup.webp` with something playing in the screen cutout. The screen is a genuine
+   * transparent hole in the plate, so the video is positioned into it and the frame sits on
    * top — no masking, and the bezel's rounded corners come free.
    */
   | { frame: 'mac'; videoSrc: string; posterSrc?: string; alt: string }
@@ -140,8 +140,8 @@ export interface Project {
    *
    * It is also the plate behind the "next project" row at the foot of every project page,
    * where it is asked for on hover rather than on load, so a heavy file shows as a door
-   * opening onto nothing until it arrives. `andcreative1.png` is a 2 MB PNG and is the one
-   * that does this; the other covers are webp under 90 KB.
+   * opening onto nothing until it arrives. Every cover is now webp under 130 KB, so the
+   * door opens onto the picture.
    */
   cover: ProjectShot
   /** The project page's compositions, in order. */
@@ -191,7 +191,7 @@ export const projects: Project[] = [
     // Anchored left so the small remaining crop falls on the site's own nav rather than
     // through the headline.
     cover: {
-      src: '/assets/projects/andcreative/andcreative1.png',
+      src: '/assets/projects/andcreative/andcreative1.webp',
       alt: 'Andcreative homepage',
       objectPosition: 'left top',
       chrome: true,
@@ -208,10 +208,10 @@ export const projects: Project[] = [
       {
         frame: 'phones',
         phones: [
-          { src: '/assets/projects/andcreative/phonehome.png', alt: 'Andcreative homepage on a phone' },
-          { src: '/assets/projects/andcreative/phonefilm.png', alt: 'Andcreative film page on a phone' },
+          { src: '/assets/projects/andcreative/phonehome.webp', alt: 'Andcreative homepage on a phone' },
+          { src: '/assets/projects/andcreative/phonefilm.webp', alt: 'Andcreative film page on a phone' },
           {
-            src: '/assets/projects/andcreative/phoneimage.png',
+            src: '/assets/projects/andcreative/phoneimage.webp',
             alt: 'Andcreative photography page on a phone',
           },
         ],
@@ -290,10 +290,10 @@ export const projects: Project[] = [
       {
         frame: 'phones',
         phones: [
-          { src: '/assets/projects/kerma/kermaphonehome.png', alt: 'Tahkon Kerma homepage on a phone' },
-          { src: '/assets/projects/kerma/kermamenuphone.png', alt: 'The Tahkon Kerma menu on a phone' },
+          { src: '/assets/projects/kerma/kermaphonehome.webp', alt: 'Tahkon Kerma homepage on a phone' },
+          { src: '/assets/projects/kerma/kermamenuphone.webp', alt: 'The Tahkon Kerma menu on a phone' },
           {
-            src: '/assets/projects/kerma/kermamoremenuphone.png',
+            src: '/assets/projects/kerma/kermamoremenuphone.webp',
             alt: 'More of the Tahkon Kerma menu on a phone',
           },
         ],
@@ -378,13 +378,13 @@ export const projects: Project[] = [
       {
         frame: 'phones',
         phones: [
-          { src: '/assets/projects/portfolio-v1/v1phonehome.png', alt: 'Portfolio v1 homepage on a phone' },
+          { src: '/assets/projects/portfolio-v1/v1phonehome.webp', alt: 'Portfolio v1 homepage on a phone' },
           {
-            src: '/assets/projects/portfolio-v1/v1phoneprojects.png',
+            src: '/assets/projects/portfolio-v1/v1phoneprojects.webp',
             alt: 'The Portfolio v1 projects page on a phone',
           },
           {
-            src: '/assets/projects/portfolio-v1/v1phonecontact.png',
+            src: '/assets/projects/portfolio-v1/v1phonecontact.webp',
             alt: 'The Portfolio v1 contact page on a phone',
           },
         ],
