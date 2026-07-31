@@ -3,12 +3,12 @@
 import { useRef, type CSSProperties } from 'react'
 import Image from 'next/image'
 import { Clock3, MapPin } from 'lucide-react'
-import { SiBackbonedotjs, SiCypress, SiCss3, SiFigma, SiGithub, SiGit, SiHtml5, SiJavascript, SiNodedotjs, SiNextdotjs, SiPostman, SiReact, SiTailwindcss, SiTypescript, SiVercel } from 'react-icons/si'
 import { motion, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion'
 
 import SocialLinks from '@/components/social-links'
 import { cinematicEase, cinematicViewport } from '@/lib/site-motion'
 import { skillIconColors } from '@/lib/skill-colors'
+import { techIcons } from '@/lib/tech-icons'
 
 const experience = [
   {
@@ -25,16 +25,7 @@ const experience = [
       { lead: 'Client work.', text: 'Work directly with clients on structure and feedback.' },
       { lead: 'Personal projects.', text: 'Keep improving through new website concepts.' },
     ],
-    tools: [
-      { name: 'Next.js', icon: SiNextdotjs },
-      { name: 'React', icon: SiReact },
-      { name: 'TypeScript', icon: SiTypescript },
-      { name: 'Tailwind CSS', icon: SiTailwindcss },
-      { name: 'JavaScript', icon: SiJavascript },
-      { name: 'Git', icon: SiGit },
-      { name: 'Vercel', icon: SiVercel },
-      { name: 'Figma', icon: SiFigma },
-    ],
+    tools: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'JavaScript', 'Git', 'Vercel', 'Figma'],
   },
   {
     dates: 'Nov 2023 - May 2024',
@@ -50,13 +41,7 @@ const experience = [
       { lead: 'Branding.', text: 'Designed the logo and refined the site with the owner.' },
       { lead: 'Customer experience.', text: 'Made the menu, opening hours, location, and reservation details easy to find on mobile.' },
     ],
-    tools: [
-      { name: 'React', icon: SiReact },
-      { name: 'JavaScript', icon: SiJavascript },
-      { name: 'HTML', icon: SiHtml5 },
-      { name: 'CSS', icon: SiCss3 },
-      { name: 'Git', icon: SiGit },
-    ],
+    tools: ['React', 'JavaScript', 'HTML', 'CSS', 'Git'],
   },
   {
     dates: 'Nov 2022 - Apr 2023',
@@ -72,16 +57,7 @@ const experience = [
       { lead: 'Team work.', text: 'Learned coding practices from senior developers.' },
       { lead: 'Professional experience.', text: 'Built stronger communication and problem solving skills.' },
     ],
-    tools: [
-      { name: 'Backbone.js', icon: SiBackbonedotjs },
-      { name: 'Node.js', icon: SiNodedotjs },
-      { name: 'Postman', icon: SiPostman },
-      { name: 'Cypress', icon: SiCypress },
-      { name: 'GitHub', icon: SiGithub },
-      { name: 'JavaScript', icon: SiJavascript },
-      { name: 'HTML', icon: SiHtml5 },
-      { name: 'CSS', icon: SiCss3 },
-    ],
+    tools: ['Backbone.js', 'Node.js', 'Postman', 'Cypress', 'GitHub', 'JavaScript', 'HTML', 'CSS'],
   },
 ]
 
@@ -234,12 +210,17 @@ export default function AboutSection() {
                   ))}
                 </ul>
                 <div className="about-career-skills" aria-label="Tools used">
-                  {item.tools.map(({ name, icon: ToolIcon }) => (
-                    <span key={name} className="project-skill-chip inline-flex items-center gap-1.5 rounded-[0.7rem] px-3 py-1.5 text-xs text-[color:var(--site-text)] dark:text-white/72">
-                      <ToolIcon aria-hidden="true" className="h-3.5 w-3.5 shrink-0" style={{ color: skillIconColors[name] ?? '#b0aea5' }} />
-                      {name}
-                    </span>
-                  ))}
+                  {item.tools.map((name) => {
+                    const ToolIcon = techIcons[name]
+                    return (
+                      <span key={name} className="project-skill-chip inline-flex items-center gap-1.5 rounded-[0.7rem] px-3 py-1.5 text-xs text-[color:var(--site-text)] dark:text-white/72">
+                        {ToolIcon ? (
+                          <ToolIcon aria-hidden="true" className="h-3.5 w-3.5 shrink-0" style={{ color: skillIconColors[name] ?? '#b0aea5' }} />
+                        ) : null}
+                        {name}
+                      </span>
+                    )
+                  })}
                 </div>
               </div>
             </motion.article>
