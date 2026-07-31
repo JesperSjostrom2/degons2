@@ -15,7 +15,11 @@
       "Bash(mv ogportfolionew.webp v1phonecontact.png v1phonehome.png v1phoneprojects.png v1showcase.mp4 portfolio-v1/)",
       "Bash(mv macmockup.png shared/)",
       "Bash(read p *)",
-      "Bash([ -f \"public$p\" ])"
+      "Bash([ -f \"public$p\" ])",
+      "Bash(grep -E \"9[0-9]{2,}|z-index: *[0-9]{4,}\")",
+      "Bash(curl -s http://localhost:3000/)",
+      "Bash(curl -s http://localhost:3000/work/andcreative)",
+      "Bash(git checkout *)"
     ],
     "deny": [],
     "ask": []

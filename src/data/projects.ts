@@ -128,9 +128,14 @@ export interface Project {
   year: string
   palette: ProjectPaletteColor[]
   /**
-   * The index panel image, and nothing else. Kept separate from `visuals` because the index
-   * wants one flat screenshot in a bordered, browser-chromed tile — a transparent MacBook
-   * dropped in there would not sit with the other panels.
+   * The index panel image. Kept separate from `visuals` because the index wants one flat
+   * screenshot in a bordered, browser-chromed tile — a transparent MacBook dropped in there
+   * would not sit with the other panels.
+   *
+   * It is also the plate behind the "next project" row at the foot of every project page,
+   * where it is asked for on hover rather than on load, so a heavy file shows as a door
+   * opening onto nothing until it arrives. `andcreative1.png` is a 2 MB PNG and is the one
+   * that does this; the other covers are webp under 90 KB.
    */
   cover: ProjectShot
   /** The project page's compositions, in order. */

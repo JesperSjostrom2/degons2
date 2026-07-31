@@ -61,42 +61,46 @@ const ProjectNavbar = () => {
         className="project-nav fixed left-1/2 top-4 z-50 max-w-[95vw] -translate-x-1/2 lg:top-6"
         aria-label="Project navigation"
       >
-        {/* `justify-start`, not centred: a centred flex row that overflows cannot be
-            scrolled back to its first item. The pill is centred by the nav's own
-            translate instead, so it still sits mid-screen at every width. */}
+        {/* The pill and the scrolling row are two elements, not one. The row has to
+            clip its overflow to scroll, and the active marker's glow sits just under
+            the pill's bottom rim — on one element the clip would cut the glow off.
+            The pill is centred by the nav's own translate, so it still sits
+            mid-screen at every width. */}
         <div
-          className="glass-nav project-nav__rail relative flex items-center justify-start"
-          style={{ padding: '0.35rem 1.15rem', gap: '0.35rem' }}
+          className="glass-nav project-nav__pill relative flex items-center"
+          style={{ padding: '0.35rem 1.15rem' }}
         >
-          <Link
-            href="/"
-            onClick={() => requestSectionOnHome('home')}
-            className="project-nav__link project-nav__link--back"
-          >
-            Home
-          </Link>
+          <div className="project-nav__rail">
+            <Link
+              href="/"
+              onClick={() => requestSectionOnHome('home')}
+              className="project-nav__link project-nav__link--back"
+            >
+              Home
+            </Link>
 
-          {projects.map((project) =>
-            project.slug === activeSlug ? (
-              // The page you are already on names itself instead of offering a click
-              // that goes nowhere.
-              <span
-                key={project.slug}
-                className="project-nav__link project-nav__link--active"
-                aria-current="page"
-              >
-                {project.displayName}
-              </span>
-            ) : (
-              <Link
-                key={project.slug}
-                href={`/work/${project.slug}`}
-                className="project-nav__link"
-              >
-                {project.displayName}
-              </Link>
-            ),
-          )}
+            {projects.map((project) =>
+              project.slug === activeSlug ? (
+                // The page you are already on names itself instead of offering a click
+                // that goes nowhere.
+                <span
+                  key={project.slug}
+                  className="project-nav__link project-nav__link--active"
+                  aria-current="page"
+                >
+                  {project.displayName}
+                </span>
+              ) : (
+                <Link
+                  key={project.slug}
+                  href={`/work/${project.slug}`}
+                  className="project-nav__link"
+                >
+                  {project.displayName}
+                </Link>
+              ),
+            )}
+          </div>
         </div>
       </nav>
     </>
