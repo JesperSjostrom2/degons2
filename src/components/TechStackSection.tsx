@@ -174,7 +174,7 @@ export default function TechStackSection() {
                 key={tech.name}
                 href={tech.href}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 onPointerEnter={(event) => moveHoverFill(event.currentTarget, tech.name)}
                 onFocus={(event) => moveHoverFill(event.currentTarget, tech.name)}
                 onBlur={hideHoverFill}

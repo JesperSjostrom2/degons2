@@ -5,6 +5,7 @@ import { Source_Sans_3 } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import SiteShell from "@/components/site-shell";
+import { serializeJsonLd } from "@/lib/json-ld";
 import { SITE_URL, siteSocialLinks } from "@/lib/site-config";
 import "./globals.css";
 
@@ -125,7 +126,7 @@ export default function RootLayout({
       >
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: serializeJsonLd(personJsonLd) }}
         />
         <div className="cinematic-grain-overlay" />
         <SiteShell>{children}</SiteShell>
