@@ -30,7 +30,7 @@ const ProjectCard = ({ project }: { project: Project }) => (
     viewport={cinematicViewport}
   >
     <Link href={`/work/${project.slug}`} className="project-card__link group/panel">
-      <ProjectShot shot={project.cover} liveLabel={project.liveLabel} />
+      <ProjectShot shot={project.cover} liveLabel={project.liveLabel} cursorZone />
 
       <div className="project-card__bar">
         <h3 className="project-card__name">{project.displayName}</h3>

@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { cinematicHeader, cinematicViewport } from '@/lib/site-motion'
 import { projects } from '@/data/projects'
 import ProjectCard from './ProjectCard'
+import ProjectCursorBadge from './ProjectCursorBadge'
 
 /**
  * `#projects` — one bento card per project, stacked.
@@ -29,6 +30,9 @@ const ProjectsSection: React.FC = () => (
           <ProjectCard key={project.slug} project={project} />
         ))}
       </div>
+
+      {/* One badge for every card above; it finds them by data-project-cursor. */}
+      <ProjectCursorBadge />
     </div>
   </section>
 )

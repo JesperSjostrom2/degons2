@@ -20,16 +20,24 @@ const ProjectShot = ({
   liveLabel,
   sizes = '(max-width: 899px) 92vw, 62vw',
   priority = false,
+  cursorZone = false,
 }: {
   shot: Shot
   liveLabel: string
   sizes?: string
   priority?: boolean
+  /** Marks this shot as a hover target for ProjectCursorBadge. Index cards only —
+      the project page has no badge, because there is nothing left to open. */
+  cursorZone?: boolean
 }) => {
   const frameRef = useAutoplayInView<HTMLDivElement>()
 
   return (
-    <div ref={frameRef} className="project-card__tile project-card__shot">
+    <div
+      ref={frameRef}
+      className="project-card__tile project-card__shot"
+      data-project-cursor={cursorZone ? '' : undefined}
+    >
       {shot.chrome ? (
         <div className="project-card__chrome" aria-hidden="true">
           <span className="project-card__dots">
