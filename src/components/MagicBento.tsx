@@ -267,10 +267,29 @@ const MagicBento: React.FC = () => {
 
     window.addEventListener("scroll", pauseAnimationsDuringScroll, { passive: true });
 
+    // The scroll pause above covers frames while the page is moving; this
+    // covers the rest — the grid's ~10 looping card animations otherwise keep
+    // ticking style work while the visitor sits reading a different section.
+    // The generous margin resumes them well before the grid can re-enter view.
+    const offstageObserver = currentGrid
+      ? new IntersectionObserver(
+          ([entry]) => {
+            currentGrid.toggleAttribute("data-offstage", !entry.isIntersecting);
+          },
+          { rootMargin: "60% 0px 60% 0px" },
+        )
+      : null;
+
+    if (currentGrid && offstageObserver) {
+      offstageObserver.observe(currentGrid);
+    }
+
     return () => {
       window.removeEventListener("scroll", pauseAnimationsDuringScroll);
       window.clearTimeout(scrollPauseTimeoutRef.current);
+      offstageObserver?.disconnect();
       currentGrid?.classList.remove("bento-scroll-paused");
+      currentGrid?.removeAttribute("data-offstage");
     };
   }, []);
 
@@ -2269,7 +2288,10 @@ const MagicBento: React.FC = () => {
 
           .bento-scroll-paused *,
           .bento-scroll-paused *::before,
-          .bento-scroll-paused *::after {
+          .bento-scroll-paused *::after,
+          [data-offstage] *,
+          [data-offstage] *::before,
+          [data-offstage] *::after {
             animation-play-state: paused !important;
           }
 

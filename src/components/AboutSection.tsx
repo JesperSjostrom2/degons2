@@ -9,6 +9,7 @@ import SocialLinks from '@/components/social-links'
 import { cinematicEase, cinematicViewport } from '@/lib/site-motion'
 import { skillIconColors } from '@/lib/skill-colors'
 import { techIcons } from '@/lib/tech-icons'
+import { useOffstagePause } from '@/lib/use-offstage-pause'
 
 const experience = [
   {
@@ -78,7 +79,12 @@ const education = [
 
 export default function AboutSection() {
   const timelineRef = useRef<HTMLDivElement>(null)
+  const sectionRef = useRef<HTMLElement>(null)
   const shouldReduceMotion = useReducedMotion()
+
+  // This section stays fully rendered (the timeline needs real geometry), so
+  // its ambient animations would otherwise run even when it is screens away.
+  useOffstagePause(sectionRef)
   const { scrollYProgress } = useScroll({
     target: timelineRef,
     offset: ['start 95%', 'end 5%'],
@@ -91,7 +97,7 @@ export default function AboutSection() {
   const markerTop = useTransform(timelineProgress, [0, 1], ['0%', '100%'])
 
   return (
-    <section id="about" className="about-career-section relative overflow-hidden py-24 md:py-32">
+    <section ref={sectionRef} id="about" className="about-career-section relative overflow-hidden py-24 md:py-32">
       <div className="container relative z-10 mx-auto px-6">
         <div className="about-story-layout mx-auto max-w-6xl">
           <motion.div

@@ -382,21 +382,31 @@
     contain: layout paint style;
   }
 
+  /* The guesses below are measured rendered heights at a desktop viewport, not
+     round numbers: a guess that is short by hundreds of pixels means the
+     document grows by that much the moment the section renders in, and under a
+     Lenis animation that height jump is felt as a hitch — it landed exactly at
+     the bento → process boundary. The `auto` keyword is the load-bearing half:
+     it lets the browser remember the real last-rendered height, so the guess
+     is only ever used once per session. */
   #process {
-    contain-intrinsic-size: 900px;
+    contain-intrinsic-size: 1000px;
+    contain-intrinsic-size: auto 1000px;
   }
 
-  /* Three stacked cards plus the header. The `auto` keyword is the load-bearing half: it lets the
-     browser remember the real last-rendered height, which is what stops the document jumping
-     mid-flight of a Lenis animation. The bare value is only the first-paint guess. */
   #projects {
-    contain-intrinsic-size: 1750px;
-    contain-intrinsic-size: auto 1750px;
+    contain-intrinsic-size: 2700px;
+    contain-intrinsic-size: auto 2700px;
   }
 
-  #skills,
-  #contact {
+  #skills {
     contain-intrinsic-size: 900px;
+    contain-intrinsic-size: auto 900px;
+  }
+
+  #contact {
+    contain-intrinsic-size: 1400px;
+    contain-intrinsic-size: auto 1400px;
   }
 
   @media (min-width: 768px) {
@@ -1725,6 +1735,16 @@
     contain-intrinsic-size: 2400px;
     isolation: isolate;
     background: transparent;
+  }
+
+  /* Set by useOffstagePause while the section is far offscreen — its ambient
+     loops (orb drift, aura, frame breathe, particles) otherwise tick style
+     work forever on a region that is always rendered. JS-driven motion is
+     unaffected; the observer's margin resumes everything before re-entry. */
+  .about-career-section[data-offstage] *,
+  .about-career-section[data-offstage] *::before,
+  .about-career-section[data-offstage] *::after {
+    animation-play-state: paused !important;
   }
 
   section.about-career-section {
