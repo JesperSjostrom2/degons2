@@ -54,7 +54,7 @@ const warmHeroAtmosphere = () => {
      awaited alongside it purely to kick off its frame measurement early and
      cache the result before anything asked; that function no longer measures
      anything, so calling it here would just discard a boolean. */
-  void import('@/components/LightRays').catch(() => undefined)
+  void import('@/components/SideRays').catch(() => undefined)
 }
 
 export const prewarmBelowFoldAssets = () => {

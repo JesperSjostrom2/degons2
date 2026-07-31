@@ -15,13 +15,13 @@ Create `.env.local` from `.env.example` if you want the contact form to send ema
 
 ## Environment Variables
 
-`RESEND_API_KEY` is required for the contact form.
+All three are required for the contact form to send email:
 
-`CONTACT_TO_EMAIL` is optional and controls where contact messages are sent.
+`RESEND_API_KEY` — Resend API key.
 
-`RESEND_FROM_EMAIL` is optional. Use a verified Resend domain sender in production, for example `Portfolio Contact <hello@yourdomain.com>`.
+`CONTACT_TO_EMAIL` — where contact messages are delivered.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+`RESEND_FROM_EMAIL` — the sender address. Use a verified Resend domain sender in production, for example `Portfolio Contact <hello@yourdomain.com>`.
 
 ## Deploy on Vercel
 
