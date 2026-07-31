@@ -3172,6 +3172,13 @@
       transition: none;
       animation: none;
     }
+
+    /* The shell unmounts the loader at hydration for reduced motion; this
+       covers the frames before hydration, so the server-rendered page shows
+       content immediately instead of a flash of curtain. */
+    .site-load-reveal {
+      display: none;
+    }
   }
 
   @keyframes about-hover-sheen {

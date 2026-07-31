@@ -7,7 +7,6 @@ import SiteLoadReveal from '@/components/site-load-reveal'
 import { prewarmBelowFoldAssets } from '@/lib/site-preload'
 
 const LOAD_REVEAL_DURATION_MS = 1940
-const LOAD_CONTENT_PREMOUNT_MS = 860
 const LOAD_REVEAL_EXIT_MS = 320
 
 export default function SiteShell({ children }: { children: ReactNode }) {
@@ -16,7 +15,9 @@ export default function SiteShell({ children }: { children: ReactNode }) {
   // such moment, so those routes skip it entirely.
   const isHome = usePathname() === '/'
 
-  const [shouldMountContent, setShouldMountContent] = useState(!isHome)
+  // Content always renders — the loader is an opaque fixed overlay on top of it, so the
+  // pre-reveal frame is identical while the server HTML carries the full page. Gating the
+  // children on a timer here meant the home page server-rendered nothing but the loader.
   const [showLoader, setShowLoader] = useState(isHome)
   const [isLoaderExiting, setIsLoaderExiting] = useState(false)
   const [canExitLoader, setCanExitLoader] = useState(false)
@@ -25,7 +26,6 @@ export default function SiteShell({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (!isHome) {
-      setShouldMountContent(true)
       setShowLoader(false)
       return
     }
@@ -33,28 +33,22 @@ export default function SiteShell({ children }: { children: ReactNode }) {
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
     if (reduceMotion) {
-      setShouldMountContent(true)
       setCanExitLoader(true)
       setShowLoader(false)
       return
     }
-
-    const contentTimeout = window.setTimeout(() => {
-      setShouldMountContent(true)
-    }, Math.max(0, LOAD_REVEAL_DURATION_MS - LOAD_CONTENT_PREMOUNT_MS))
 
     const loaderExitTimeout = window.setTimeout(() => {
       setCanExitLoader(true)
     }, LOAD_REVEAL_DURATION_MS)
 
     return () => {
-      window.clearTimeout(contentTimeout)
       window.clearTimeout(loaderExitTimeout)
     }
   }, [isHome])
 
   useEffect(() => {
-    if (!shouldMountContent || !showLoader || !canExitLoader) {
+    if (!showLoader || !canExitLoader) {
       return
     }
 
@@ -77,11 +71,11 @@ export default function SiteShell({ children }: { children: ReactNode }) {
       window.cancelAnimationFrame(secondFrame)
       window.clearTimeout(removeLoaderTimeout)
     }
-  }, [canExitLoader, shouldMountContent, showLoader])
+  }, [canExitLoader, showLoader])
 
   return (
     <>
-      {shouldMountContent ? children : null}
+      {children}
       {showLoader ? <SiteLoadReveal isExiting={isLoaderExiting} /> : null}
     </>
   )
