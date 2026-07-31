@@ -1,7 +1,6 @@
 import { MetadataRoute } from 'next';
 import { projectSlugs } from '@/data/projects';
-
-const SITE_URL = 'https://jespersjostrom.com';
+import { SITE_URL } from '@/lib/site-config';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();

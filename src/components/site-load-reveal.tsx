@@ -6,7 +6,7 @@ export default function SiteLoadReveal({ isExiting = false }: { isExiting?: bool
   return (
     <div
       aria-hidden="true"
-      className={`site-load-reveal pointer-events-none fixed inset-0 z-[9999] overflow-hidden bg-[#050505] ${isExiting ? 'site-load-reveal--exit' : ''}`}
+      className={`site-load-reveal pointer-events-none fixed inset-0 z-[9999] overflow-hidden bg-[color:var(--sky)] ${isExiting ? 'site-load-reveal--exit' : ''}`}
     >
       <div className="site-load-reveal__glow absolute inset-[-18%]" />
       <div className="absolute left-1/2 top-1/2 flex w-[min(62vw,22rem)] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-6">

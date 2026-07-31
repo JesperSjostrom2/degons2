@@ -41,11 +41,14 @@ export const Footer = ({
 }: FooterProps) => {
   return (
     <section className={cn("relative w-full overflow-hidden", className)}>
-      {/* Same flat black as every other panel. Safe against the sky because
-          --sky is a constant #030303, so this always reads as a surface rather
-          than a seam — and it occludes the star field, which transparency did
-          not. */}
-      <footer className="relative overflow-hidden bg-[color:var(--panel-bg)]">
+      {/* The sky's own colour, not --panel-bg. A panel here reads as one more
+          card stacked at the bottom of the page; the footer is supposed to be
+          where the page stops, so it takes the background rather than sitting
+          on it, and .footer-top-glow is left to do all the separating on its
+          own. Still an opaque colour rather than `transparent` — that is what
+          occludes the star field, which is the one thing this fill is load
+          bearing for. */}
+      <footer className="relative overflow-hidden bg-[color:var(--sky)]">
         <div className="footer-top-glow pointer-events-none absolute left-1/2 top-0 z-20 h-px w-[94%] max-w-7xl -translate-x-1/2" />
         <div className="relative mx-auto flex max-w-7xl flex-col px-6 pb-10 pt-14 md:pb-14 md:pt-20">
           <div className="flex flex-col items-center text-center">

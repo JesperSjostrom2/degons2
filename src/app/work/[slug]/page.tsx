@@ -14,6 +14,7 @@ import ProjectTech from '@/components/projects/ProjectTech'
 import NextProjectLink from '@/components/projects/NextProjectLink'
 import ProjectNavbar from '@/components/projects/ProjectNavbar'
 import SiteLinkPill from '@/components/site-link-pill'
+import { SITE_URL } from '@/lib/site-config'
 import ScrollToTop from '@/components/scroll-to-top'
 import CustomCursor from '@/components/custom-cursor'
 import SmoothScroll from '@/components/smooth-scroll'
@@ -37,12 +38,12 @@ export const generateMetadata = async ({
   return {
     title: project.name,
     description: project.description,
-    alternates: { canonical: `https://jespersjostrom.com/work/${project.slug}` },
+    alternates: { canonical: `${SITE_URL}/work/${project.slug}` },
     openGraph: {
       type: 'article',
       title: `${project.name} | Jesper Sjöström`,
       description: project.description,
-      url: `https://jespersjostrom.com/work/${project.slug}`,
+      url: `${SITE_URL}/work/${project.slug}`,
       images: [{ url: project.cover.src, alt: project.cover.alt }],
     },
   }

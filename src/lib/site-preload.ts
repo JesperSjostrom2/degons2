@@ -1,7 +1,5 @@
 'use client'
 
-import { shouldUseEnhancedMotion } from '@/lib/client-performance'
-
 const BENTO_STATIC_ASSET_URLS = [
   '/assets/bento-cards/static/end-to-end.svg',
   '/assets/bento-cards/static/fast-delivery.svg',
@@ -52,10 +50,11 @@ const warmHeroAtmosphere = () => {
     return
   }
 
-  void Promise.all([
-    import('@/components/LightRays'),
-    shouldUseEnhancedMotion(),
-  ]).catch(() => undefined)
+  /* Only the chunk needs warming now. `shouldUseEnhancedMotion()` used to be
+     awaited alongside it purely to kick off its frame measurement early and
+     cache the result before anything asked; that function no longer measures
+     anything, so calling it here would just discard a boolean. */
+  void import('@/components/LightRays').catch(() => undefined)
 }
 
 export const prewarmBelowFoldAssets = () => {

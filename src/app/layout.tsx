@@ -5,6 +5,7 @@ import { Source_Sans_3 } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import SiteShell from "@/components/site-shell";
+import { SITE_URL, siteSocialLinks } from "@/lib/site-config";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -27,53 +28,48 @@ const sourceSans3 = Source_Sans_3({
 
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://jespersjostrom.com"),
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: "Jesper Sjöström | Full-Stack Developer",
+    default: "Jesper Sjöström | Frontend Developer",
     template: "%s | Jesper Sjöström",
   },
-  description: "I'm Jesper Sjöström, a proactive full-stack developer from Finland specializing in dynamic, high-performance web experiences using React, Next.js, and Node.js. Available for global remote work.",
+  /* One sentence, in the same voice as the hero and the About section. The
+     previous copy was written for a crawler rather than a person — "proactive",
+     "dynamic, high-performance web experiences", a stack list — and it also
+     described the wrong job: the site says frontend and design-led freelance,
+     not full-stack Node. A link preview is read by a human deciding whether to
+     click, so it says what he does and where. */
+  description: "Freelance frontend developer in Helsinki. I design and build landing pages, portfolios, and websites for people who want a stronger presence online.",
   icons: {
     icon: "/assets/minilogobg.png",
   },
-  keywords: [
-    "Jesper Sjöström",
-    "Jesper Sjostrom",
-    "Full-Stack Developer",
-    "Frontend Developer",
-    "React Developer",
-    "Next.js Developer",
-    "Web Design",
-    "Finland Web Developer",
-    "jespersjostrom.com"
-  ],
-  authors: [{ name: "Jesper Sjöström", url: "https://jespersjostrom.com" }],
+  /* No `keywords`. Google dropped <meta keywords> as a ranking signal in 2009
+     and the other majors followed, so the list here was doing nothing except
+     asserting a job title the rest of the site contradicts. The one part that
+     was pulling weight — "Jesper Sjostrom" without the diacritics, for people
+     who search it that way — is handled properly below, by `authors` and the
+     JSON-LD Person, which search engines do read. */
+  authors: [{ name: "Jesper Sjöström", url: SITE_URL }],
   creator: "Jesper Sjöström",
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://jespersjostrom.com",
-    title: "Jesper Sjöström | Full-Stack Developer",
-    description: "Proactive full-stack developer from Finland specializing in dynamic, high-performance web experiences using React, Next.js, and Node.js.",
-    siteName: "Jesper Sjöström Portfolio",
-    images: [
-      {
-        url: "/assets/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Jesper Sjöström - Full-Stack Developer",
-      },
-    ],
+    url: SITE_URL,
+    title: "Jesper Sjöström — Frontend Developer",
+    description: "Freelance frontend developer in Helsinki. I design and build landing pages, portfolios, and websites for people who want a stronger presence online.",
+    siteName: "Jesper Sjöström",
+    /* No `images` here on purpose — app/opengraph-image.tsx supplies both
+       og:image and twitter:image. An explicit value in this object silently
+       wins over the file convention, so adding one back orphans that route. */
   },
   twitter: {
     card: "summary_large_image",
-    title: "Jesper Sjöström | Full-Stack Developer",
-    description: "Proactive full-stack developer from Finland specializing in dynamic, high-performance web experiences using React, Next.js, and Node.js.",
+    title: "Jesper Sjöström — Frontend Developer",
+    description: "Freelance frontend developer in Helsinki. I design and build landing pages, portfolios, and websites for people who want a stronger presence online.",
     creator: "@jespersjostrom",
-    images: ["/assets/og-image.png"],
   },
   alternates: {
-    canonical: "https://jespersjostrom.com",
+    canonical: SITE_URL,
   },
   robots: {
     index: true,
@@ -88,6 +84,35 @@ export const metadata: Metadata = {
   },
 };
 
+/**
+ * Structured data for the person, which is the part search engines actually
+ * read — unlike the <meta keywords> list this replaces.
+ *
+ * `alternateName` is the load-bearing field: it is how "Jesper Sjostrom"
+ * without the diacritics gets associated with the page, which was the only
+ * genuinely useful entry in the old keyword stuffing. `sameAs` links the
+ * profiles together so the accounts and the site are understood as one
+ * identity rather than three unrelated pages.
+ */
+const personJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Jesper Sjöström',
+  alternateName: 'Jesper Sjostrom',
+  url: SITE_URL,
+  jobTitle: 'Frontend Developer',
+  description:
+    'Freelance frontend developer in Helsinki. I design and build landing pages, portfolios, and websites for people who want a stronger presence online.',
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Helsinki',
+    addressCountry: 'FI',
+  },
+  sameAs: siteSocialLinks
+    .map((link) => link.href)
+    .filter((href) => href.startsWith('http')),
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -98,6 +123,10 @@ export default function RootLayout({
       <body
         className={`${outfit.variable} ${newsreader.variable} ${sourceSans3.variable} font-sans antialiased`}
       >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+        />
         <div className="cinematic-grain-overlay" />
         <SiteShell>{children}</SiteShell>
         <Analytics />

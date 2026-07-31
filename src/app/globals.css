@@ -86,16 +86,25 @@
      No gradient and no scroll-driven cross-fade: a fixed gradient is a shape
      that rides along with the viewport, which is what produced the visible
      seam and the banding this replaced, and a colour that moves with scroll is
-     one more thing to keep on the compositor for no read. */
-  --sky: #030303;
+     one more thing to keep on the compositor for no read.
 
-  /* Panels sit a flat shade above pure black, reusing the site's base charcoal
-     (--background) rather than a new value. Comfortably lighter than --sky, so
-     contrast never inverts against the sky, but no longer the same #000 void
-     it sits on. Driving this from scroll meant a :root custom property write,
-     which invalidates style for the entire document — brutal over the bento,
-     which is the heaviest subtree on the page. */
-  --panel-bg: #10100e;
+     Lifted from #030303 on 2026-07-31. That value only looked right on a screen
+     that raises its own blacks; on an accurate panel it sat at the crush point,
+     where the eye stops reading it as a colour and starts reading it as a dead
+     hole with the panels floating on top. This is still unambiguously black —
+     it just has somewhere to fall to. Nudge here and nowhere else: everything
+     sky-relative below is derived from this, and the planet composites in
+     rgba-black so it stays darker automatically. */
+  --sky: #0b0b0a;
+
+  /* Panels sit a flat shade above the sky. Keep roughly this much separation
+     from --sky if you move either: the gap is what makes a panel read as a
+     raised surface, and it is small enough that closing it flattens the page
+     but large enough that widening it turns panels into grey cards. Driving
+     this from scroll meant a :root custom property write, which invalidates
+     style for the entire document — brutal over the bento, which is the
+     heaviest subtree on the page. */
+  --panel-bg: #1a1a17;
   /* Top-edge highlight on raised surfaces. Deliberately constant: these feed
      a four-stop gradient on .card-responsive::after, so making them
      scroll-dependent re-rastered that layer on every change. The rims still
@@ -352,9 +361,9 @@
     padding-bottom: 5.5rem;
   }
 
-  /* The footer is a solid panel, so the seam below the form is a hard edge
-     rather than a fade. It needs more run-out than a normal section break to
-     stop the form from looking like it is sitting on the footer. Big enough
+  /* The footer opens on a hard divider rather than a fade, so the form needs
+     more run-out than a normal section break to stop it looking like it is
+     sitting on that line. Big enough
      that #contact outgrows its own min-h-screen — otherwise the min-height
      absorbs the padding and tall viewports silently get none of it. */
   #contact {
@@ -755,7 +764,7 @@
   }
 
   .site-load-reveal__glow {
-    background: radial-gradient(circle at 50% 50%, rgba(245, 239, 228, 0.18) 0%, rgba(218, 197, 167, 0.08) 22%, rgba(5, 5, 5, 0.86) 54%, #050505 74%);
+    background: radial-gradient(circle at 50% 50%, rgba(245, 239, 228, 0.18) 0%, rgba(218, 197, 167, 0.08) 22%, rgba(11, 11, 10, 0.86) 54%, var(--sky) 74%);
     animation: site-load-glow 1.42s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
 
@@ -912,11 +921,11 @@
   /* The body has to composite DARKER than the sky or the silhouette inverts:
      the planet reads as a lighter dome and the blackest thing on screen is the
      sky just outside the rim, so the lit edge looks like it sits inside the
-     planet rather than on its edge. At `opacity: 0.88` below, rgba(0,0,0,0.98)
-     lands at rgb(0,0,0) against the sky's rgb(3,3,3). This used to be
-     rgba(5,5,5,·) — which composited to rgb(5,5,5), comfortably darker than
-     the old #0d0d0b hero sky, and only became lighter than its background when
-     the sky flattened to one #030303. */
+     planet rather than on its edge. Composing in rgba-black rather than a
+     literal colour is what keeps that true for free: at `opacity: 0.88` the
+     body lands ~14% of whatever the sky is, so lifting --sky lifts the planet
+     by less and the silhouette only gains contrast. Do not put a fixed hex
+     back here — that is exactly what broke when the sky last moved. */
   .planet-horizon {
     border-radius: 50%;
     background: radial-gradient(circle at 50% 54%, rgba(0, 0, 0, 0.98) 0%, rgba(0, 0, 0, 0.98) 64%, rgba(0, 0, 0, 0.42) 78%, rgba(0, 0, 0, 0.08) 88%, transparent 94%);
@@ -930,10 +939,10 @@
     position: absolute;
     inset: 0;
     border-radius: 50%;
-    border-top: 3px solid rgba(245, 239, 228, 0.65);
+    border-top: 3px solid rgba(245, 239, 228, 0.26);
     box-shadow:
-      0 -1px 8px rgba(255, 248, 235, 0.16),
-      0 -8px 24px rgba(218, 197, 167, 0.12);
+      0 -1px 12px rgba(255, 248, 235, 0.05),
+      0 -12px 34px rgba(218, 197, 167, 0.04);
     mask-image:
       radial-gradient(ellipse at 50% 0%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.98) 14%, rgba(0, 0, 0, 0.7) 24%, rgba(0, 0, 0, 0.18) 34%, rgba(0, 0, 0, 0.02) 40%, rgba(0, 0, 0, 0) 44%),
       linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 18%, rgba(0, 0, 0, 0) 34%);
@@ -954,8 +963,8 @@
     border-radius: 9999px;
     pointer-events: none;
     background:
-      radial-gradient(ellipse at 50% 100%, rgba(255, 252, 246, 0.66) 0%, rgba(255, 252, 246, 0.32) 38%, rgba(218, 197, 167, 0.16) 62%, transparent 84%);
-    filter: blur(16px);
+      radial-gradient(ellipse at 50% 100%, rgba(255, 252, 246, 0.18) 0%, rgba(255, 252, 246, 0.085) 38%, rgba(218, 197, 167, 0.045) 62%, transparent 84%);
+    filter: blur(28px);
     mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.7) 52%, rgba(0, 0, 0, 0.06) 82%, rgba(0, 0, 0, 0) 100%);
     -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.7) 52%, rgba(0, 0, 0, 0.06) 82%, rgba(0, 0, 0, 0) 100%);
   }
@@ -983,24 +992,24 @@
      off around the curve.
 
      Pure gradients, no blur filter — soft stops raster once, and nothing here
-     is animated. The 0.115 peak is the knob: it is the brightness of the air
-     right at the limb. */
+     is animated. The first stop's alpha is the knob: it is the brightness of
+     the air right at the limb, and the stops below it are a decay curve, so
+     move them together or the band develops a visible shoulder. */
   .planet-horizon-halo {
     /* The rim is at 52.63%. The ramp up to full brightness must finish BEFORE
        that and hold a plateau across it, so the glow is already at peak the
        instant it leaves the silhouette. Ramping *outward* from the rim instead
-       leaves a thin ring of bare sky hugging the limb, and since the planet's
-       fill (#050505) is a shade lighter than the flat sky behind it, that ring
-       reads darker than the planet — the black then looks like it carries on
-       past its own lit edge. The whole inner ramp is hidden under the planet,
-       which is opaque out here. */
+       leaves a thin ring of bare sky hugging the limb, and that ring reads
+       against the planet's own fill rather than against the halo — the black
+       then looks like it carries on past its own lit edge. The whole inner
+       ramp is hidden under the planet, which is opaque out here. */
     background: radial-gradient(closest-side at 50% 50%,
         transparent 0 46%,
-        rgba(245, 239, 228, 0.15) 52%,
-        rgba(245, 239, 228, 0.15) 53.6%,
-        rgba(232, 216, 190, 0.082) 61%,
-        rgba(218, 197, 167, 0.036) 72%,
-        rgba(218, 197, 167, 0.012) 84%,
+        rgba(245, 239, 228, 0.055) 52%,
+        rgba(245, 239, 228, 0.055) 53.6%,
+        rgba(232, 216, 190, 0.032) 61%,
+        rgba(218, 197, 167, 0.015) 72%,
+        rgba(218, 197, 167, 0.006) 84%,
         transparent 94%);
     mask-image: radial-gradient(54% 38% at 50% 10%,
         black 0%,
@@ -1014,16 +1023,27 @@
         transparent 93%);
   }
 
+  /* These three values are the hero's entire light budget, and they are the
+     ones to pull first if the crown ever reads hot again.
+
+     Halved on 2026-07-31: on OLED the old numbers were unusable. An emissive
+     panel puts true zero right next to the bloom, so there is no veiling glare
+     to hide behind — the ramp has to cross the full range in a few code values
+     and the eye sees every one of them as a ring. LCD backlight leak was
+     smoothing this over on the panel it was tuned on. Lower peak, wider blur:
+     the same falloff spread over more pixels, which is what stops the
+     banding, and it costs nothing because none of this animates. */
   .dark .planet-horizon::after {
-    border-top-color: rgba(255, 255, 255, 0.72);
+    border-top-color: rgba(255, 255, 255, 0.28);
     box-shadow:
-      0 -1px 10px rgba(255, 255, 255, 0.18),
-      0 -10px 28px rgba(218, 197, 167, 0.14);
+      0 -1px 14px rgba(255, 255, 255, 0.055),
+      0 -14px 38px rgba(218, 197, 167, 0.04);
   }
 
   .dark .planet-horizon::before {
     background:
-      radial-gradient(ellipse at 50% 100%, rgba(255, 255, 255, 0.78) 0%, rgba(255, 255, 255, 0.34) 38%, rgba(218, 197, 167, 0.2) 62%, transparent 84%);
+      radial-gradient(ellipse at 50% 100%, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.09) 38%, rgba(218, 197, 167, 0.05) 62%, transparent 84%);
+    filter: blur(28px);
   }
 
   @media (max-width: 767px) {
@@ -1726,6 +1746,12 @@
     margin-bottom: 2rem;
   }
 
+  /* No box-shadow here. This wrap is a transparent RECTANGLE holding a round
+     planet, so any shadow on it paints a rect-shaped smudge that has nothing
+     to do with the shape on screen. It went unnoticed while the sky was
+     #030303 — black-on-near-black — and became an obvious dark panel the
+     moment the sky was lifted. Drop shadows belong on .about-story-planet and
+     .about-story-portrait, which are actually round. */
   .about-story-portrait-wrap {
     position: relative;
     isolation: isolate;
@@ -1734,7 +1760,6 @@
     justify-self: end;
     padding: 0;
     background: transparent;
-    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
   }
 
   .about-story-planet {
@@ -1761,15 +1786,20 @@
     pointer-events: none;
   }
 
+  /* The same lit-limb treatment as the hero's .planet-horizon::after, so it is
+     tuned to the same level — it kept the old brightness through both hero
+     passes and ended up the hottest edge on the page. Held a little above the
+     hero's alpha on purpose: this arc is a fraction of the length, and a short
+     thin highlight reads dimmer than a long one at equal opacity. */
   .about-story-planet::before {
     content: '';
     position: absolute;
     inset: -0.18rem -0.1rem;
-    border-top: 2px solid rgba(245, 239, 228, 0.7);
+    border-top: 2px solid rgba(245, 239, 228, 0.34);
     border-radius: 50%;
     box-shadow:
-      0 -1px 8px rgba(255, 248, 235, 0.18),
-      0 -6px 20px rgba(218, 197, 167, 0.12);
+      0 -1px 10px rgba(255, 248, 235, 0.07),
+      0 -8px 24px rgba(218, 197, 167, 0.05);
     transform: rotate(-14deg);
   }
 
@@ -1976,9 +2006,13 @@
     transform: translate(-50%, -50%);
     border: 1px solid rgba(255, 255, 255, 0.4);
     border-radius: 9999px;
-    background: #10100f;
+    background: var(--panel-bg);
     will-change: top;
-    box-shadow: 0 0 0 5px rgba(8, 8, 8, 0.9);
+    /* A solid ring in the sky's own colour, not a shadow — its job is to punch
+       the rail out from behind the marker. Both values were hardcoded to the
+       pre-lift palette, which left the ring reading as a dark halo and the
+       face as a grey chip once the sky moved. */
+    box-shadow: 0 0 0 5px var(--sky);
   }
 
   .about-career-marker-portrait {
@@ -2088,9 +2122,12 @@
     background: #f4f4f2;
   }
 
-  /* Black rather than --panel-bg: the plate sits on the sky at #030303, so the
-     charcoal read as a grey chip. Matches the black baked into the freelance
-     logo beside it, so the two tiles look like the same material. */
+  /* Black rather than --panel-bg, which read as a grey chip against the sky.
+     Matches the black baked into the freelance logo PNG beside it, so the two
+     tiles look like the same material — that match is why this stays pure
+     black rather than tracking --sky. Since the sky was lifted these now sit
+     slightly *below* it and read as plates rather than as holes, which is the
+     right way round for a logo tile. */
   .about-career-company-mark-kerma {
     padding: 0.26rem;
     border: 0;
@@ -2156,7 +2193,7 @@
     /* Fake-transparent ring punching a hole in the rail behind it. A fixed
        mid-dark value: at 2px the mismatch against the sky is imperceptible,
        and tracking it would cost a document-wide style invalidation. */
-    border: 2px solid #080808;
+    border: 2px solid var(--sky);
     border-radius: 9999px;
     /* White, like the rail they sit on. These were each entry's own accent,
        which put a brown, a champagne and a green down one column and left the
