@@ -339,7 +339,7 @@ export default function ContactSection() {
                 </label>
 
                 <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                  <p className="min-w-0 flex-1 text-sm text-muted-foreground">
+                  <p role="status" aria-live="polite" className="min-w-0 flex-1 text-sm text-muted-foreground">
                     {status === 'sent'
                       ? 'Message sent. I will get back to you soon.'
                       : status === 'error'

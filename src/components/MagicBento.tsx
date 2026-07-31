@@ -283,10 +283,10 @@ const MagicBento: React.FC = () => {
       <div className="remote-card relative flex h-full flex-col overflow-hidden">
         <div className="bento-dot-grid absolute inset-0" style={{ WebkitMaskImage: "radial-gradient(circle at 50% 100%, black 0 30%, transparent 65%)", maskImage: "radial-gradient(circle at 50% 100%, black 0 30%, transparent 65%)" }} />
         <div className="remote-card-copy relative z-20 flex flex-col p-6 pb-3">
-          <h2 className="bento-card-heading text-white">
+          <h3 className="bento-card-heading text-white">
             Remote-first,<br />
             <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.blue }}>wherever you are.</span>
-          </h2>
+          </h3>
           <p className="bento-card-caption">Easy collaboration across time zones and schedules.</p>
 
         </div>
@@ -326,10 +326,10 @@ const MagicBento: React.FC = () => {
           />
 
           <div className="bento-feature-copy bento-mobile-readable bento-top-card-copy relative z-30 max-w-[20rem] p-6 sm:p-8">
-            <h2 className="bento-card-heading bento-top-card-heading text-white">
+            <h3 className="bento-card-heading bento-top-card-heading text-white">
               Built as a complete<br />
               <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.lavender }}>experience.</span>
-            </h2>
+            </h3>
             <p className="bento-card-caption">Web design, development, SEO, and launch support.</p>
           </div>
         </div>
@@ -345,10 +345,10 @@ const MagicBento: React.FC = () => {
           <div className="bento-dot-grid absolute inset-0" />
 
           <div className="bento-mobile-readable relative z-20 px-6 pb-0 pt-5">
-            <h2 className="bento-card-heading text-[#f5efe4]">
+            <h3 className="bento-card-heading text-[#f5efe4]">
               Clear updates,<br />
               <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.olive }}>smooth progress.</span>
-            </h2>
+            </h3>
             <p className="bento-card-caption hidden sm:block mt-1">No chasing. No guessing. Just steady progress.</p>
           </div>
 
@@ -392,10 +392,10 @@ const MagicBento: React.FC = () => {
       customContent: (
         <div className="group/conversion relative flex h-full flex-col overflow-hidden">
           <div className="contact-card-content conversion-flow-copy bento-mobile-readable relative z-30 max-w-[17.5rem] p-6 sm:p-8">
-            <h2 className="bento-card-heading text-[#f5efe4]">
+            <h3 className="bento-card-heading text-[#f5efe4]">
               Move fast,<br />
               <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.champagne }}>launch clean.</span>
-            </h2>
+            </h3>
             <p className="bento-card-caption">Fast feedback loops without sacrificing quality.</p>
           </div>
 
@@ -420,10 +420,10 @@ const MagicBento: React.FC = () => {
       customContent: (
         <div className="group/selling relative -m-8 flex h-[calc(100%+4rem)] flex-col overflow-hidden">
           <div className="bento-feature-copy bento-mobile-readable bento-top-card-copy relative z-20 max-w-[19rem] p-6 sm:p-8">
-            <h2 className="bento-card-heading bento-top-card-heading text-white">
+            <h3 className="bento-card-heading bento-top-card-heading text-white">
               Premium by<br />
               <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.champagne }}>design.</span>
-            </h2>
+            </h3>
             <p className="bento-card-caption">Clear spacing, smooth interactions, and thoughtful details make the site easy to use.</p>
           </div>
 

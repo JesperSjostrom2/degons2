@@ -122,15 +122,16 @@ export default function Navbar() {
         type="button"
         onClick={() => handleNavClick('home')}
         data-scroll-to="home"
+        aria-label="Jesper Sjöström — back to top"
         className={`hidden lg:block fixed top-6 left-10 z-50 transition-all duration-500 ease-out cursor-pointer ${
-          isHeroHeaderVisible 
-            ? 'opacity-100 translate-y-0 blur-0 pointer-events-auto' 
+          isHeroHeaderVisible
+            ? 'opacity-100 translate-y-0 blur-0 pointer-events-auto'
             : 'opacity-0 -translate-y-2 blur-sm pointer-events-none'
         }`}
       >
-        <Image 
-          src="/assets/logotransparent.png" 
-          alt="Logo" 
+        <Image
+          src="/assets/logotransparent.png"
+          alt=""
           width={240} 
           height={80} 
           className="h-11 w-auto object-contain transition-all duration-700"
@@ -214,11 +215,12 @@ export default function Navbar() {
           type="button"
           onClick={() => handleNavClick('home')}
           data-scroll-to="home"
+          aria-label="Jesper Sjöström — back to top"
           className="absolute left-5 top-1/2 -translate-y-1/2 flex items-center h-full border-none bg-transparent cursor-pointer"
         >
-          <Image 
-            src="/assets/logotransparent.png" 
-            alt="Logo" 
+          <Image
+            src="/assets/logotransparent.png"
+            alt=""
             width={180} 
             height={60} 
             className={`h-10 w-auto object-contain transition-all duration-500 ease-out ${

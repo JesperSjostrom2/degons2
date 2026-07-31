@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Newsreader } from "next/font/google";
 import { Outfit } from "next/font/google";
 import { Source_Sans_3 } from "next/font/google";
@@ -41,9 +41,9 @@ export const metadata: Metadata = {
      not full-stack Node. A link preview is read by a human deciding whether to
      click, so it says what he does and where. */
   description: "Freelance frontend developer in Helsinki. I design and build landing pages, portfolios, and websites for people who want a stronger presence online.",
-  icons: {
-    icon: "/assets/minilogobg.png",
-  },
+  /* No `icons` entry — app/icon.png, apple-icon.png, and favicon.ico file
+     conventions supply the full set; an explicit value here would override
+     them. */
   /* No `keywords`. Google dropped <meta keywords> as a ranking signal in 2009
      and the other majors followed, so the list here was doing nothing except
      asserting a job title the rest of the site contradicts. The one part that
@@ -83,6 +83,10 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#0b0b0a",
 };
 
 /**

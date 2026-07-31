@@ -180,6 +180,7 @@ export default function Hero() {
                   onClick={handleCopyEmail}
                   className="group mx-auto mt-1 inline-flex cursor-pointer items-center justify-start gap-3 pl-6 text-sm font-medium text-[color:var(--site-text)]/90 transition-colors duration-200 hover:text-accent sm:mx-0 sm:mt-0 w-[260px]"
                   title="Copy email address"
+                  aria-label="Copy email address"
                 >
                   <AnimatePresence mode="wait" initial={false}>
                     {copied ? (

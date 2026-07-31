@@ -117,6 +117,12 @@ export interface ProjectFact {
 
 export interface Project {
   slug: string
+  /**
+   * Hand-maintained ISO date for the sitemap's `lastModified`. Bump it when the
+   * page's content genuinely changes — a `new Date()` there would claim every
+   * page changed on every build, which crawlers learn to ignore.
+   */
+  lastUpdated: string
   /** Full name — used for the accessible heading and alt text. */
   name: string
   /** What the logo tile falls back to, and the visible wordmark when there is no logo. */
@@ -169,6 +175,7 @@ export interface Project {
 export const projects: Project[] = [
   {
     slug: 'andcreative',
+    lastUpdated: '2026-07-31',
     name: 'Andcreative',
     displayName: 'Andcreative',
     description:
@@ -252,6 +259,7 @@ export const projects: Project[] = [
   },
   {
     slug: 'kerma',
+    lastUpdated: '2026-07-31',
     name: 'Cafe & Bistro Kerma',
     displayName: 'Tahkon Kerma',
     description:
@@ -339,6 +347,7 @@ export const projects: Project[] = [
   },
   {
     slug: 'portfolio-v1',
+    lastUpdated: '2026-07-31',
     name: 'Portfolio v1',
     displayName: 'Portfolio v1',
     description:

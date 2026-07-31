@@ -1,20 +1,22 @@
 import { MetadataRoute } from 'next';
-import { projectSlugs } from '@/data/projects';
+import { projects } from '@/data/projects';
 import { SITE_URL } from '@/lib/site-config';
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const lastModified = new Date();
+/* Bump when the home page's content genuinely changes — see the note on
+   `Project.lastUpdated` for why this is not `new Date()`. */
+const HOME_LAST_UPDATED = '2026-07-31';
 
+export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
       url: SITE_URL,
-      lastModified,
+      lastModified: new Date(HOME_LAST_UPDATED),
       changeFrequency: 'monthly',
       priority: 1,
     },
-    ...projectSlugs.map((slug) => ({
-      url: `${SITE_URL}/work/${slug}`,
-      lastModified,
+    ...projects.map((project) => ({
+      url: `${SITE_URL}/work/${project.slug}`,
+      lastModified: new Date(project.lastUpdated),
       changeFrequency: 'yearly' as const,
       priority: 0.8,
     })),

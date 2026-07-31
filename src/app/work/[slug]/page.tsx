@@ -14,6 +14,7 @@ import ProjectTech from '@/components/projects/ProjectTech'
 import NextProjectLink from '@/components/projects/NextProjectLink'
 import ProjectNavbar from '@/components/projects/ProjectNavbar'
 import SiteLinkPill from '@/components/site-link-pill'
+import { serializeJsonLd } from '@/lib/json-ld'
 import { SITE_URL } from '@/lib/site-config'
 import ScrollToTop from '@/components/scroll-to-top'
 import CustomCursor from '@/components/custom-cursor'
@@ -46,6 +47,14 @@ export const generateMetadata = async ({
       url: `${SITE_URL}/work/${project.slug}`,
       images: [{ url: project.cover.src, alt: project.cover.alt }],
     },
+    /* Without this, X falls back to the root layout's twitter block and a
+       shared project link shows the generic site card. */
+    twitter: {
+      card: 'summary_large_image',
+      title: `${project.name} | Jesper Sjöström`,
+      description: project.description,
+      images: [project.cover.src],
+    },
   }
 }
 
@@ -69,11 +78,48 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
   const next = getNextProject(project.slug)
 
+  const projectJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'CreativeWork',
+    name: project.name,
+    description: project.description,
+    url: `${SITE_URL}/work/${project.slug}`,
+    image: `${SITE_URL}${project.cover.src}`,
+    dateModified: project.lastUpdated,
+    author: {
+      '@type': 'Person',
+      name: 'Jesper Sjöström',
+      url: SITE_URL,
+    },
+  }
+
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: project.name,
+        item: `${SITE_URL}/work/${project.slug}`,
+      },
+    ],
+  }
+
   return (
     <main
       className="project-page isolate relative min-h-screen"
       style={{ '--project-accent': project.accent } as CSSProperties}
     >
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(projectJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(breadcrumbJsonLd) }}
+      />
       <ScrollToTop />
       <SmoothScroll />
       <CustomCursor />
