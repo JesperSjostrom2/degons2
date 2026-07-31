@@ -95,6 +95,11 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
                     width={project.logo.width * 2}
                     height={project.logo.height * 2}
                     className="project-page__logo"
+                    style={
+                      project.logo.scale
+                        ? ({ '--project-logo-scale': project.logo.scale } as CSSProperties)
+                        : undefined
+                    }
                     priority
                   />
                 ) : (

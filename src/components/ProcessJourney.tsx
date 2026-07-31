@@ -35,7 +35,11 @@ const processSteps = [
     width: 368,
     height: 552,
     artworkClass: 'process-artwork-ship',
-    accent: '#8b7355',
+    // Champagne, not the old bronze #8b7355. The hover rim is the accent at 34% over a
+    // near-black card, so a dark accent produces no visible rim at all — bronze read as
+    // broken next to the bento cards, which never use anything that deep. Matches
+    // BENTO_ACCENTS.champagne in MagicBento.tsx.
+    accent: '#c2a77b',
   },
 ]
 

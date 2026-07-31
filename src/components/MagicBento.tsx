@@ -2242,13 +2242,24 @@ const MagicBento: React.FC = () => {
           .card-responsive .premium-glass-surface {
             border: 1px solid var(--rim-border);
             box-shadow:
-              inset 0 1px 0 var(--rim-light-soft),
+              inset 0 1px 0 var(--rim-light),
               inset 0 -1px 0 var(--rim-edge-warm);
             /* Opaque fill below, so the inherited blur can never be seen. */
             backdrop-filter: none;
             -webkit-backdrop-filter: none;
-            /* Flat fill, a shade above the sky at every depth. */
-            background: var(--panel-bg);
+            /* Lit from above, and carrying 4% of the card's own accent at the
+               top edge. Five identical flat panels read as stickers on a void;
+               this gives each one its own temperature without ever reading as
+               a coloured card. Still opaque, so it occludes the star field. */
+            background: linear-gradient(180deg,
+                color-mix(in srgb, var(--bento-accent, #dac5a7) 4%, #14130f) 0%,
+                #0c0c0b 100%);
+            /* Hover moves the border and the inset bloom; the top wash lives
+               on ::after. Explicit properties rather than the inner div's
+               Tailwind transition-all, which this outranks. */
+            transition:
+              border-color 420ms cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 420ms cubic-bezier(0.22, 1, 0.36, 1);
           }
 
 
@@ -2267,6 +2278,9 @@ const MagicBento: React.FC = () => {
           }
 
 
+          /* The hover wash. Hot core at the top edge, then a long reach down
+             the card — the old single 18% stop ending at 54% was the reason
+             the hover read bland. Fades out faster than it comes in. */
           .premium-glass-surface::after {
             content: '';
             position: absolute;
@@ -2274,8 +2288,11 @@ const MagicBento: React.FC = () => {
             z-index: 1;
             pointer-events: none;
             opacity: 0;
-            background: radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--bento-accent, #dac5a7) 18%, transparent), transparent 54%);
-            transition: opacity 300ms ease;
+            background: radial-gradient(circle at 50% 0%,
+                color-mix(in srgb, var(--bento-accent, #dac5a7) 32%, transparent) 0%,
+                color-mix(in srgb, var(--bento-accent, #dac5a7) 12%, transparent) 34%,
+                transparent 72%);
+            transition: opacity 240ms ease;
           }
 
           .svg-only-card::before {
@@ -2384,8 +2401,24 @@ const MagicBento: React.FC = () => {
             transform: translateY(-0.35rem);
           }
 
-          .card:hover .premium-glass-surface::after {
-            opacity: 1;
+          /* (hover: hover) so a tap on a phone cannot leave a card stuck lit. */
+          @media (hover: hover) {
+            .card:hover .premium-glass-surface::after {
+              opacity: 1;
+              transition: opacity 420ms cubic-bezier(0.22, 1, 0.36, 1);
+            }
+
+            /* The rim response. The border picking up the card's own accent is
+               what makes the hover feel lit rather than merely brighter, and
+               the bloom is inset because .card sets contain: paint — anything
+               reaching outside the box would be clipped anyway. */
+            .card:hover .premium-glass-surface {
+              border-color: color-mix(in srgb, var(--bento-accent, #dac5a7) 34%, transparent);
+              box-shadow:
+                inset 0 1px 0 var(--rim-light),
+                inset 0 -1px 0 var(--rim-edge-warm),
+                inset 0 0 44px -12px color-mix(in srgb, var(--bento-accent, #dac5a7) 30%, transparent);
+            }
           }
 
           .card-responsive .card:nth-child(1) .premium-glass-surface::before {
@@ -2584,6 +2617,10 @@ const MagicBento: React.FC = () => {
               transform: translateY(7%) scale(1.14);
             }
 
+            /* Bento cards do not reach this rule — .card-responsive
+               .premium-glass-surface outranks it, so they keep the tinted
+               gradient on phones too. This is the fallback for every other
+               surface that borrows the class. */
             .premium-glass-surface {
               backdrop-filter: none !important;
               -webkit-backdrop-filter: none !important;

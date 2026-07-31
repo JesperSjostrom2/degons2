@@ -6,7 +6,16 @@
       "Bash(npx tsc *)",
       "Bash(npx next *)",
       "WebFetch(domain:raw.githubusercontent.com)",
-      "PowerShell(npx next lint --dir src)"
+      "PowerShell(npx next lint --dir src)",
+      "mcp__ide__getDiagnostics",
+      "Bash(node -e ' *)",
+      "Bash(mkdir -p andcreative kerma portfolio-v1 shared)",
+      "Bash(mv andcreative1.png andcreative2.png andcreativeproduct.png andcreativeproduct.webp home1610.mp4 homescroll.mp4 phone1.png phonefilm.png phonehome.png phoneimage.png andcreative/)",
+      "Bash(mv kermaipad.png kermaipad.webp kermamenuphone.png kermamoremenuphone.png kermaphonehome.png kermaproduct.png kermashowcase.mp4 kerma/)",
+      "Bash(mv ogportfolionew.webp v1phonecontact.png v1phonehome.png v1phoneprojects.png v1showcase.mp4 portfolio-v1/)",
+      "Bash(mv macmockup.png shared/)",
+      "Bash(read p *)",
+      "Bash([ -f \"public$p\" ])"
     ],
     "deny": [],
     "ask": []

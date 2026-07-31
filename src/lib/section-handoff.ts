@@ -26,12 +26,27 @@ export const requestSectionOnHome = (id: string) => {
   }
 }
 
-export const takeRequestedSection = () => {
+/**
+ * Read the request without spending it.
+ *
+ * Deliberately not a take-and-clear: React runs effects twice in development, so a reader
+ * that removed the id on its first mount would hand the second mount nothing and never
+ * scroll — which is precisely how these links came to look like they did nothing. The id
+ * stays put until someone has actually acted on it.
+ */
+export const peekRequestedSection = () => {
   try {
-    const id = window.sessionStorage.getItem(SECTION_HANDOFF_KEY)
-    if (id) window.sessionStorage.removeItem(SECTION_HANDOFF_KEY)
-    return id
+    return window.sessionStorage.getItem(SECTION_HANDOFF_KEY)
   } catch {
     return null
+  }
+}
+
+/** Call once the handoff has been honoured, abandoned, or overridden by the reader. */
+export const clearRequestedSection = () => {
+  try {
+    window.sessionStorage.removeItem(SECTION_HANDOFF_KEY)
+  } catch {
+    // Same as above — never worth throwing over.
   }
 }

@@ -16,9 +16,9 @@ const BENTO_INTERACTIVE_ASSET_URLS = [
 ]
 
 const BELOW_FOLD_IMAGE_URLS = [
-  '/assets/projects/andcreativeproduct.webp',
-  '/assets/projects/kermaipad.webp',
-  '/assets/projects/ogportfolionew.webp',
+  '/assets/projects/andcreative/andcreativeproduct.webp',
+  '/assets/projects/kerma/kermaipad.webp',
+  '/assets/projects/portfolio-v1/ogportfolionew.webp',
 ]
 
 const scheduleIdleWork = (callback: () => void, timeout = 1200) => {

@@ -1,10 +1,19 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
+import { usePathname, useRouter } from 'next/navigation'
 import Lenis from 'lenis'
 import { shouldUseEnhancedMotion } from '@/lib/client-performance'
+import { requestSectionOnHome } from '@/lib/section-handoff'
 
 export default function SmoothScroll() {
+  const router = useRouter()
+  const pathname = usePathname()
+  // Read inside the listener rather than closed over: the effect runs once, so a
+  // captured `pathname` would still say `/` after a client-side navigation.
+  const routeRef = useRef({ router, pathname })
+  routeRef.current = { router, pathname }
+
   useEffect(() => {
     const useNativeScrollByDefault = window.matchMedia('(pointer: coarse), (max-width: 767px)').matches
     const supportsVisualViewport = typeof window.visualViewport !== 'undefined'
@@ -52,13 +61,34 @@ export default function SmoothScroll() {
       }
 
       const hash = trigger.getAttribute('data-scroll-to') || (trigger as HTMLAnchorElement).hash
-      
+
       if (!hash || hash.length <= 1) {
         return
       }
 
+      const selector = hash.startsWith('#') ? hash : `#${hash}`
+
+      /**
+       * Every one of these targets is a section of the home page, so off the home page
+       * there is nothing to scroll to and the click used to do nothing at all — which is
+       * what made the footer's six links dead on a project page. When the target is not
+       * on this page, hand it off and go home instead; `SectionHandoff` finishes the
+       * scroll once the home page has mounted.
+       */
+      if (!document.querySelector(selector)) {
+        const { router: nextRouter, pathname: currentPath } = routeRef.current
+
+        if (currentPath !== '/') {
+          event.preventDefault()
+          requestSectionOnHome(selector.slice(1))
+          nextRouter.push('/')
+        }
+
+        return
+      }
+
       event.preventDefault()
-      scrollToHash(hash.startsWith('#') ? hash : `#${hash}`)
+      scrollToHash(selector)
     }
 
     document.addEventListener('click', handleAnchorClick)

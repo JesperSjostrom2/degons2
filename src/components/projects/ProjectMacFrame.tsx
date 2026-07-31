@@ -11,10 +11,10 @@ import { useAutoplayInView } from '@/lib/use-autoplay-in-view'
  * corners. So the video is positioned into that rectangle and the frame is laid on top of it.
  * No mask, no clip-path, and the bezel's rounded corners come free from the PNG.
  *
- * The video is scaled to the screen's full width and anchored to the top rather than covering
- * it: the capture is 2.00 wide against a 1.60 screen, so covering would crop about a tenth off
- * each side and clip whatever sits at the edges of the page. The shortfall at the bottom is
- * the screen's own flat dark, which reads as the page continuing below the fold.
+ * Every capture is recorded at 1368x854 — ratio 1.6019 against the screen's 1.5995 — so the
+ * video fills the cutout edge to edge and the 0.15% difference is absorbed as a sub-pixel
+ * trim. Re-exporting a capture at a different ratio is what breaks this: anything wider gets
+ * cropped at the sides, anything narrower leaves a band of bare screen.
  */
 const ProjectMacFrame = ({
   videoSrc,
@@ -43,7 +43,7 @@ const ProjectMacFrame = ({
       </div>
 
       <Image
-        src="/assets/projects/macmockup.png"
+        src="/assets/projects/shared/macmockup.png"
         alt=""
         aria-hidden="true"
         fill

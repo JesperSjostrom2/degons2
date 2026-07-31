@@ -460,14 +460,27 @@
     background: transparent;
   }
 
+  /* Surface and hover are the bento cards' — see .card-responsive
+     .premium-glass-surface in MagicBento.tsx. Lit from above, carrying 4% of
+     the step's own accent at the top edge so the three panels read as one
+     family with faintly different temperatures rather than three identical
+     greys. Keep the two in step: if one changes, so does the other. */
   .process-step {
     isolation: isolate;
-    background: var(--panel-bg);
+    background: linear-gradient(180deg,
+        color-mix(in srgb, var(--process-accent, #dac5a7) 4%, #14130f) 0%,
+        #0c0c0b 100%);
     box-shadow:
-      inset 0 1px 0 var(--rim-light-soft),
+      inset 0 1px 0 var(--rim-light),
       inset 0 -1px 0 var(--rim-edge-warm);
+    transition:
+      border-color 420ms cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 420ms cubic-bezier(0.22, 1, 0.36, 1);
   }
 
+  /* Hot core at the top edge, then a long reach down the card. Sits at z-0, so
+     it washes the surface and passes under the artwork — the bento has no art
+     to pass under. Fades out faster than it comes in. */
   .process-step::after {
     content: '';
     position: absolute;
@@ -475,13 +488,41 @@
     z-index: 0;
     pointer-events: none;
     opacity: 0;
-    background: radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--process-accent, #dac5a7) 18%, transparent), transparent 54%);
-    transition: opacity 300ms ease;
+    background: radial-gradient(circle at 50% 0%,
+        color-mix(in srgb, var(--process-accent, #dac5a7) 32%, transparent) 0%,
+        color-mix(in srgb, var(--process-accent, #dac5a7) 12%, transparent) 34%,
+        transparent 72%);
+    transition: opacity 240ms ease;
   }
 
-  .process-step:hover::after,
+  /* (hover: hover) so a tap on a phone cannot leave a card stuck lit;
+     :focus-within keeps it reachable from the keyboard either way. */
+  @media (hover: hover) {
+    .process-step:hover::after {
+      opacity: 1;
+      transition: opacity 420ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .process-step:hover {
+      border-color: color-mix(in srgb, var(--process-accent, #dac5a7) 34%, transparent);
+      box-shadow:
+        inset 0 1px 0 var(--rim-light),
+        inset 0 -1px 0 var(--rim-edge-warm),
+        inset 0 0 44px -12px color-mix(in srgb, var(--process-accent, #dac5a7) 30%, transparent);
+    }
+  }
+
   .process-step:focus-within::after {
     opacity: 1;
+    transition: opacity 420ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .process-step:focus-within {
+    border-color: color-mix(in srgb, var(--process-accent, #dac5a7) 34%, transparent);
+    box-shadow:
+      inset 0 1px 0 var(--rim-light),
+      inset 0 -1px 0 var(--rim-edge-warm),
+      inset 0 0 44px -12px color-mix(in srgb, var(--process-accent, #dac5a7) 30%, transparent);
   }
 
   .process-visual {
@@ -652,22 +693,25 @@
 
   /* The ray canvas is exactly hero-height, so without a mask the rays are
      still bright where it ends and you get a hard horizontal cut across the
-     whole viewport at the hero's bottom edge. Fade them out well before it. */
+     whole viewport at the hero's bottom edge. The fade has to happen, but it
+     used to start at 42% — the light died halfway down the fold, which is
+     why the rays read short. Hold them full strength to 62% and spend the
+     rest of the height on a long tail instead. */
   .hero-light-rays {
     opacity: 0;
     animation: hero-light-rays-in 180ms ease-out 60ms both;
     mask-image: linear-gradient(to bottom,
         black 0%,
-        black 42%,
-        rgba(0, 0, 0, 0.55) 66%,
-        rgba(0, 0, 0, 0.16) 84%,
-        transparent 96%);
+        black 62%,
+        rgba(0, 0, 0, 0.55) 80%,
+        rgba(0, 0, 0, 0.16) 92%,
+        transparent 100%);
     -webkit-mask-image: linear-gradient(to bottom,
         black 0%,
-        black 42%,
-        rgba(0, 0, 0, 0.55) 66%,
-        rgba(0, 0, 0, 0.16) 84%,
-        transparent 96%);
+        black 62%,
+        rgba(0, 0, 0, 0.55) 80%,
+        rgba(0, 0, 0, 0.16) 92%,
+        transparent 100%);
   }
 
   .site-load-reveal {
@@ -834,9 +878,17 @@
       radial-gradient(ellipse at 50% 100%, rgba(255, 255, 255, 0.42) 0%, rgba(255, 255, 255, 0.2) 32%, rgba(255, 255, 255, 0.08) 58%, transparent 82%);
   }
 
+  /* The body has to composite DARKER than the sky or the silhouette inverts:
+     the planet reads as a lighter dome and the blackest thing on screen is the
+     sky just outside the rim, so the lit edge looks like it sits inside the
+     planet rather than on its edge. At `opacity: 0.88` below, rgba(0,0,0,0.98)
+     lands at rgb(0,0,0) against the sky's rgb(3,3,3). This used to be
+     rgba(5,5,5,·) — which composited to rgb(5,5,5), comfortably darker than
+     the old #0d0d0b hero sky, and only became lighter than its background when
+     the sky flattened to one #030303. */
   .planet-horizon {
     border-radius: 50%;
-    background: radial-gradient(circle at 50% 54%, rgba(5, 5, 5, 0.98) 0%, rgba(5, 5, 5, 0.98) 64%, rgba(5, 5, 5, 0.42) 78%, rgba(5, 5, 5, 0.08) 88%, transparent 94%);
+    background: radial-gradient(circle at 50% 54%, rgba(0, 0, 0, 0.98) 0%, rgba(0, 0, 0, 0.98) 64%, rgba(0, 0, 0, 0.42) 78%, rgba(0, 0, 0, 0.08) 88%, transparent 94%);
     mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.98) 46%, rgba(0, 0, 0, 0.48) 54%, rgba(0, 0, 0, 0.08) 60%, rgba(0, 0, 0, 0) 64%);
     -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.98) 46%, rgba(0, 0, 0, 0.48) 54%, rgba(0, 0, 0, 0.08) 60%, rgba(0, 0, 0, 0) 64%);
     opacity: 0.88;
@@ -877,6 +929,60 @@
     -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.7) 52%, rgba(0, 0, 0, 0.06) 82%, rgba(0, 0, 0, 0) 100%);
   }
 
+  /* The planet's atmosphere: light scattering off the limb itself, brightest
+     where it leaves the rim and decaying outward into space.
+
+     Shape comes from the circle, not from a box. This element is the planet's
+     own ellipse scaled 1.9x about the same centre (see hero.tsx), so in local
+     coordinates the planet's rim sits at exactly 1/1.9 = 52.6% of the radius.
+     The band therefore starts at the rim and only ever grows outward — nothing
+     is painted inside the silhouette, where the planet's own fill has already
+     faded to transparent near its edge and any glow would read as a smudge
+     floating inside the planet.
+
+     A rectangular wash cannot do this. Its straight bottom edge either cuts
+     across the viewport either side of the arc, or has to be masked to zero
+     there — at which point the glow detaches from the planet and floats above
+     the crown, which is what it is meant to be coming from. Both were tried.
+
+     The mask is the .planet-horizon::after trick: a radial fade anchored near
+     the crown, never a straight `to bottom` cut. It keeps the upper arc, dies
+     along the flanks before the ring's lower half can appear, and lands its
+     own falloff only where the band is already dim. Light from above, falling
+     off around the curve.
+
+     Pure gradients, no blur filter — soft stops raster once, and nothing here
+     is animated. The 0.115 peak is the knob: it is the brightness of the air
+     right at the limb. */
+  .planet-horizon-halo {
+    /* The rim is at 52.63%. The ramp up to full brightness must finish BEFORE
+       that and hold a plateau across it, so the glow is already at peak the
+       instant it leaves the silhouette. Ramping *outward* from the rim instead
+       leaves a thin ring of bare sky hugging the limb, and since the planet's
+       fill (#050505) is a shade lighter than the flat sky behind it, that ring
+       reads darker than the planet — the black then looks like it carries on
+       past its own lit edge. The whole inner ramp is hidden under the planet,
+       which is opaque out here. */
+    background: radial-gradient(closest-side at 50% 50%,
+        transparent 0 46%,
+        rgba(245, 239, 228, 0.15) 52%,
+        rgba(245, 239, 228, 0.15) 53.6%,
+        rgba(232, 216, 190, 0.082) 61%,
+        rgba(218, 197, 167, 0.036) 72%,
+        rgba(218, 197, 167, 0.012) 84%,
+        transparent 94%);
+    mask-image: radial-gradient(54% 38% at 50% 10%,
+        black 0%,
+        rgba(0, 0, 0, 0.78) 44%,
+        rgba(0, 0, 0, 0.24) 72%,
+        transparent 93%);
+    -webkit-mask-image: radial-gradient(54% 38% at 50% 10%,
+        black 0%,
+        rgba(0, 0, 0, 0.78) 44%,
+        rgba(0, 0, 0, 0.24) 72%,
+        transparent 93%);
+  }
+
   .dark .planet-horizon::after {
     border-top-color: rgba(255, 255, 255, 0.72);
     box-shadow:
@@ -892,7 +998,7 @@
   @media (max-width: 767px) {
     .planet-horizon {
       background:
-        radial-gradient(circle at 50% 54%, rgba(5, 5, 5, 0.98) 0%, rgba(5, 5, 5, 0.98) 64%, rgba(5, 5, 5, 0.42) 78%, rgba(5, 5, 5, 0.08) 88%, transparent 94%),
+        radial-gradient(circle at 50% 54%, rgba(0, 0, 0, 0.98) 0%, rgba(0, 0, 0, 0.98) 64%, rgba(0, 0, 0, 0.42) 78%, rgba(0, 0, 0, 0.08) 88%, transparent 94%),
         linear-gradient(90deg, transparent 0%, rgba(245, 239, 228, 0.045) 18%, transparent 34%, rgba(126, 160, 190, 0.04) 52%, transparent 68%, rgba(218, 197, 167, 0.04) 84%, transparent 100%);
       background-position: 0 0, 0 0;
       background-size: 100% 100%, 220% 100%;
@@ -3195,6 +3301,124 @@
     border-radius: 22px;
   }
 
+  /* ── The cursor badge over a shot ────────────────────────────────────────
+     OPEN • EXPLORE • DISCOVER orbiting an eye, trailing the pointer. Restored
+     from the old ExperienceSection cards; ProjectCursorBadge.tsx now drives a
+     single instance for the whole index instead of one portal per card.
+
+     Position comes from two custom properties written per frame by the rAF
+     lerp — on this element only, never on :root. It is portalled to <body>, so
+     --project-accent is set explicitly from the hovered card rather than
+     inherited. */
+  .project-preview-badge {
+    position: fixed;
+    left: var(--project-preview-x, 50%);
+    top: var(--project-preview-y, 50%);
+    z-index: 80;
+    display: grid;
+    height: 6.25rem;
+    width: 6.25rem;
+    place-items: center;
+    pointer-events: none;
+    color: #f5efe4;
+    opacity: 0;
+    border-radius: 9999px;
+    background:
+      radial-gradient(circle at 50% 42%, rgba(245, 239, 228, 0.09), transparent 46%),
+      rgba(8, 8, 8, 0.76);
+    border: 1px solid rgba(245, 239, 228, 0.16);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.09),
+      0 18px 54px rgba(0, 0, 0, 0.48),
+      0 0 0 1px rgba(218, 197, 167, 0.06);
+    backdrop-filter: blur(12px) saturate(135%);
+    -webkit-backdrop-filter: blur(12px) saturate(135%);
+    transform: translate3d(-50%, -50%, 0) scale(0.42);
+    transition:
+      opacity 360ms cubic-bezier(0.16, 1, 0.3, 1),
+      transform 560ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .project-preview-badge--active {
+    opacity: 1;
+    transform: translate3d(-50%, -50%, 0) scale(1);
+  }
+
+  .project-preview-badge__glow {
+    position: absolute;
+    inset: -0.45rem;
+    border-radius: 9999px;
+    background: radial-gradient(circle, rgba(218, 197, 167, 0.16), rgba(218, 197, 167, 0.04) 48%, transparent 72%);
+    filter: blur(7px);
+    opacity: 0.72;
+  }
+
+  .project-preview-badge__orbit {
+    position: absolute;
+    inset: -0.16rem;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .project-preview-badge__orbit-line {
+    fill: none;
+    stroke: rgba(245, 239, 228, 0.78);
+    stroke-width: 0.38;
+    stroke-linecap: round;
+    stroke-dasharray: 0 1.28;
+  }
+
+  /* Paused until the badge is active, so the spin costs nothing while the
+     pointer is anywhere else on the page. */
+  .project-preview-badge__ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
+    overflow: visible;
+    animation: project-preview-ring-spin 9s linear infinite;
+    animation-play-state: paused;
+    filter: drop-shadow(0 0 12px rgba(218, 197, 167, 0.16));
+  }
+
+  .project-preview-badge--active .project-preview-badge__ring {
+    animation-play-state: running;
+  }
+
+  .project-preview-badge__ring text {
+    fill: color-mix(in srgb, var(--project-accent, #dac5a7) 72%, #f5efe4);
+    font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .project-preview-badge__center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 1;
+    display: grid;
+    height: 3.4rem;
+    width: 3.4rem;
+    place-items: center;
+    transform: translate3d(-50%, -50%, 0);
+    border-radius: 9999px;
+    color: #161412;
+    border: 1px solid rgba(245, 239, 228, 0.58);
+    background: #f5efe4;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.72),
+      0 16px 48px rgba(0, 0, 0, 0.28),
+      0 0 0 1px rgba(218, 197, 167, 0.28);
+  }
+
+  @keyframes project-preview-ring-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
   /* ── Screenshot ─────────────────────────────────────────────────────── */
 
   .project-card__shot {
@@ -3429,6 +3653,30 @@
     color: var(--site-text);
   }
 
+  /* The bar now carries every project, so on a narrow screen it runs past the pill.
+     It scrolls sideways rather than wrapping to a second line — a two-row pill stops
+     reading as one piece of furniture. The scrollbar is hidden because the overflow
+     is short and the fade at the edges already says there is more. */
+  .project-nav__rail {
+    max-width: 100%;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .project-nav__rail::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Where you are. Named, not linked — so it is a label rather than a dead click. */
+  .project-nav__link--active {
+    color: var(--site-text);
+    background: color-mix(in srgb, var(--site-text) 9%, transparent);
+    cursor: default;
+  }
+
+
   /* Clears the fixed navbar. The homepage gets this from the hero's own height. */
   .project-page__inner {
     padding-top: clamp(7rem, 12vw, 10rem);
@@ -3467,11 +3715,16 @@
   /* Eyebrow scale. It sits directly above a title that spells the same name, so at any
      larger size the two read as the identity stated twice. Small, it reads as the client's
      mark introducing the page and the title carries it. */
+  /* One height cap for every logo made the near-square marks look shrunken next to
+     Andcreative's wide wordmark: at the same height, a 1.18-wide mark carries about half
+     the ink of a 2.31-wide one. `--project-logo-scale` lets a project ask for the height
+     it needs to sit at the same weight as the others. Set it per project in `projects.ts`,
+     not here. */
   .project-page__logo {
     width: auto;
-    max-width: min(8rem, 34vw);
+    max-width: min(11rem, 40vw);
     height: auto;
-    max-height: clamp(1.35rem, 2vw, 1.75rem);
+    max-height: calc(clamp(1.35rem, 2vw, 1.75rem) * var(--project-logo-scale, 1));
     /* Sits on the head rule, then the title clears it properly. */
     margin-bottom: clamp(2.5rem, 5vw, 4rem);
     object-fit: contain;
@@ -3688,6 +3941,41 @@
     max-width: none;
   }
 
+  /* Pointing at one phone quietens the other two and lifts it a little. No rotation and
+     no scaling — a plate that tips or grows reads as a toy. The work here is done by the
+     contrast between the lit plate and the dimmed ones, so the movement itself can stay
+     small enough that you feel it rather than watch it.
+
+     Transform on the plate, not the image: the image is absolutely positioned at 195%
+     width to crop the plate's transparent padding, so moving it would break the crop. */
+  @media (hover: hover) and (pointer: fine) {
+    .project-page__phone {
+      transition:
+        transform 480ms cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 480ms ease,
+        filter 480ms ease;
+    }
+
+    .project-page__phones:hover .project-page__phone {
+      opacity: 0.68;
+    }
+
+    .project-page__phones:hover .project-page__phone:hover {
+      opacity: 1;
+      transform: translateY(-0.5rem);
+      filter: brightness(1.04);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .project-page__phone,
+    .project-page__phones:hover .project-page__phone,
+    .project-page__phones:hover .project-page__phone:hover {
+      transition: none;
+      transform: none;
+    }
+  }
+
   /* ── Typography ─────────────────────────────────────────────────────── */
 
   .project-page__type {
@@ -3745,10 +4033,21 @@
     letter-spacing: -0.02em;
   }
 
+  /* The face's name is information, not a footnote — it carries more than the old
+     0.42, with the weight trailing it a step dimmer so the family still leads. */
   .project-page__typeface-name {
-    color: rgba(245, 239, 228, 0.42);
+    color: rgba(245, 239, 228, 0.62);
     font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
     font-size: 0.95rem;
+  }
+
+  .project-page__typeface-weight {
+    color: rgba(245, 239, 228, 0.38);
+  }
+
+  .project-page__typeface-weight::before {
+    content: '·';
+    margin: 0 0.4rem;
   }
 
   /* ── Colour ─────────────────────────────────────────────────────────── */

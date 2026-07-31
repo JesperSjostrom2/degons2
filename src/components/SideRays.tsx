@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, useState } from "react";
 import { Renderer, Program, Triangle, Mesh } from "ogl";
+import { createWebGLCanvas } from "@/lib/webgl";
 
 /**
  * Adapted from the React Bits SideRays background (OGL).
@@ -167,9 +168,19 @@ const SideRays = ({
 
     const container = containerRef.current;
 
+    // Probed rather than left to OGL, which logs its own uncatchable console.error
+    // before throwing. See lib/webgl.
+    const canvas = createWebGLCanvas({ alpha: true });
+
+    if (!canvas) {
+      webglUnavailableRef.current = true;
+      return;
+    }
+
     let renderer: Renderer;
     try {
       renderer = new Renderer({
+        canvas,
         dpr: Math.min(window.devicePixelRatio, MAX_RENDER_DPR),
         alpha: true,
       });

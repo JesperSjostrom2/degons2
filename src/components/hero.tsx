@@ -101,11 +101,15 @@ export default function Hero() {
               rayColor2="#f5efe4"
               speed={0.7}
               intensity={0.9}
-              spread={1.5}
+              spread={1.7}
               tilt={-4}
               saturation={0.5}
               blend={0.6}
-              falloff={2.4}
+              /* Brightness is intensity / distance^falloff, so a lower exponent
+                 flattens the curve: the corner hot-spot dims a little and the
+                 far field carries much further. This is what lengthens the
+                 rays — the mask in globals.css sets how far they may go. */
+              falloff={1.95}
               opacity={0.5}
               className="h-full w-full"
             />
@@ -222,13 +226,32 @@ export default function Hero() {
       </div>
 
       {shouldAnimateHero === null ? null : (
-        <motion.div
-          className="planet-horizon pointer-events-none absolute bottom-[-10.25rem] left-1/2 z-10 h-[16rem] w-[100vw] max-w-[100vw] md:bottom-[-22rem] md:h-[28rem] md:w-[96vw] md:max-w-[1320px] lg:w-[118vw]"
-          initial={shouldAnimateHero ? { y: 96, scale: 0.84 } : false}
-          animate={shouldAnimateHero ? (shouldRevealHero ? { y: 0, scale: 1 } : { y: 96, scale: 0.84 }) : undefined}
-          transition={{ duration: 2.35, delay: 0.62, ease: [0.12, 0.82, 0.22, 1] }}
-          style={{ x: '-50%', transformOrigin: '50% 60%' }}
-        />
+        <>
+          {/* The planet's atmosphere. Box classes are the planet's own, so the
+              two ellipses share a centre; scale(1.9) then grows it about that
+              centre, which is what puts the rim at a known 52.6% of the halo's
+              radius for the gradient in globals.css. Keep the two boxes in
+              step — if the planet's geometry changes, this changes with it or
+              the glow stops being concentric with the limb.
+
+              A sibling rather than a child, so the planet's 2.35s y/scale
+              entry never re-rasters it; this one only fades in. */}
+          <motion.div
+            className="planet-horizon-halo pointer-events-none absolute bottom-[-10.25rem] left-1/2 z-[9] h-[16rem] w-[100vw] max-w-[100vw] md:bottom-[-22rem] md:h-[28rem] md:w-[96vw] md:max-w-[1320px] lg:w-[118vw]"
+            initial={shouldAnimateHero ? { opacity: 0 } : false}
+            animate={shouldAnimateHero ? (shouldRevealHero ? { opacity: 1 } : { opacity: 0 }) : undefined}
+            transition={{ duration: 1.8, delay: 0.9, ease: cinematicEase }}
+            style={{ transform: 'translateX(-50%) scale(1.9)' }}
+          />
+
+          <motion.div
+            className="planet-horizon pointer-events-none absolute bottom-[-10.25rem] left-1/2 z-10 h-[16rem] w-[100vw] max-w-[100vw] md:bottom-[-22rem] md:h-[28rem] md:w-[96vw] md:max-w-[1320px] lg:w-[118vw]"
+            initial={shouldAnimateHero ? { y: 96, scale: 0.84 } : false}
+            animate={shouldAnimateHero ? (shouldRevealHero ? { y: 0, scale: 1 } : { y: 96, scale: 0.84 }) : undefined}
+            transition={{ duration: 2.35, delay: 0.62, ease: [0.12, 0.82, 0.22, 1] }}
+            style={{ x: '-50%', transformOrigin: '50% 60%' }}
+          />
+        </>
       )}
     </section>
   )
