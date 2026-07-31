@@ -134,7 +134,7 @@ export default function Navbar() {
           width={240} 
           height={80} 
           className="h-11 w-auto object-contain transition-all duration-700"
-          style={{ filter: 'drop-shadow(0 0 12px rgba(218, 197, 167, 0.08)) blur(0.2px)' }}
+          style={{ filter: 'drop-shadow(0 0 12px rgba(255, 255, 255, 0.08)) blur(0.2px)' }}
           priority
         />
       </button>
@@ -182,16 +182,22 @@ export default function Navbar() {
               padding: '0.35rem 0.75rem'
             }}
           >
+            {/* The underline stays — it is the site's mark for "you are here".
+                Only the colour changed: white with a real glow, rather than the
+                accent bar at 0.8 with a 15% cream halo that barely lit. The bar
+                is fixed and rides the whole page, so a brown light on it read as
+                structure at every scroll depth. */}
             {activeSection === item.id && (
               <motion.div
-                className="absolute left-1/2 -translate-x-1/2 rounded-full bg-accent"
+                className="absolute left-1/2 -translate-x-1/2 rounded-full"
                 layoutId="activeGlow"
                 style={{
                   bottom: '-0.38rem',
                   width: '1.8rem',
                   height: '0.125rem',
-                  opacity: 0.8,
-                  boxShadow: '0 0 10px rgba(218, 197, 167, 0.15)'
+                  background: '#ffffff',
+                  opacity: 0.92,
+                  boxShadow: '0 0 8px rgba(255, 255, 255, 0.55), 0 0 18px rgba(255, 255, 255, 0.25)'
                 }}
                 transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
               />
@@ -297,8 +303,8 @@ export default function Navbar() {
                         <div
                           className={`cursor-pointer font-sans text-4xl font-semibold tracking-tight sm:text-5xl ${
                             activeSection === item.id
-                              ? 'text-accent'
-                              : 'text-[#f5efe4]/80 hover:text-[#f5efe4]'
+                              ? 'text-[color:var(--site-text)]'
+                              : 'text-[#f5efe4]/55 hover:text-[#f5efe4]'
                           }`}
                         >
                           {item.label}

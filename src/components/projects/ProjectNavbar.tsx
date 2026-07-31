@@ -42,7 +42,7 @@ const ProjectNavbar = () => {
           width={240}
           height={80}
           className="h-11 w-auto object-contain"
-          style={{ filter: 'drop-shadow(0 0 12px rgba(218, 197, 167, 0.08)) blur(0.2px)' }}
+          style={{ filter: 'drop-shadow(0 0 12px rgba(255, 255, 255, 0.08)) blur(0.2px)' }}
           priority
         />
       </Link>

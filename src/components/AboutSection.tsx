@@ -115,7 +115,7 @@ export default function AboutSection() {
   const markerTop = useTransform(timelineProgress, [0, 1], ['0%', '100%'])
 
   return (
-    <section id="about" className="about-career-section relative overflow-hidden py-20 md:py-28">
+    <section id="about" className="about-career-section relative overflow-hidden py-24 md:py-32">
       <div className="container relative z-10 mx-auto px-6">
         <div className="about-story-layout mx-auto max-w-6xl">
           <motion.div

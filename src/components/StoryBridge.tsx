@@ -1,6 +1,6 @@
 export default function StoryBridge() {
   return (
-    <section className="story-bridge relative -mb-8 -mt-12 bg-transparent py-10 md:-mb-10 md:-mt-16 md:py-14" aria-label="From selected work to my story">
+    <section className="story-bridge relative -mb-4 -mt-6 bg-transparent py-14 md:-mb-6 md:-mt-8 md:py-20" aria-label="From selected work to my story">
       <div className="container relative mx-auto h-16 px-6">
         <svg
           className="story-bridge-route"

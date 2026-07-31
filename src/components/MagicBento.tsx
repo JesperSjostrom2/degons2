@@ -751,16 +751,19 @@ const MagicBento: React.FC = () => {
           }
 
           .card:hover .service-engine-card .execution-svg-hub {
-            stroke: rgba(218, 197, 167, 0.32);
+            stroke: rgba(245, 239, 228, 0.32);
             transform: scale(1.035);
           }
 
+          /* The rails idle in beige, so hover brightens the same ink rather
+             than shifting hue to brown — the diagram lighting up, not
+             changing material. */
           .card:hover .service-engine-card .execution-wall-rail,
           .card:hover .service-engine-card .execution-rail,
           .card:hover .service-engine-card .execution-stub {
-            stroke: rgba(218, 197, 167, 0.34);
+            stroke: rgba(245, 239, 228, 0.34);
             opacity: 0.9;
-            filter: drop-shadow(0 0 6px rgba(218, 197, 167, 0.08));
+            filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.08));
           }
 
           .card:hover .service-engine-card .execution-stub {
@@ -792,7 +795,7 @@ const MagicBento: React.FC = () => {
           }
 
           .card:hover .service-engine-card .execution-hub span {
-            background-color: rgba(218, 197, 167, 0.82);
+            background-color: rgba(245, 239, 228, 0.82);
           }
 
           .card:hover .service-engine-card .execution-hub span:nth-child(2),
@@ -808,7 +811,7 @@ const MagicBento: React.FC = () => {
           }
 
           .card:hover .service-engine-card .execution-svg-nodes circle {
-            stroke: rgba(218, 197, 167, 0.24);
+            stroke: rgba(245, 239, 228, 0.24);
             transform: translateY(-3px);
           }
 
@@ -1575,9 +1578,9 @@ const MagicBento: React.FC = () => {
           .selling-browser {
             position: relative;
             border-radius: 18px;
-            border: 1px solid rgba(218, 197, 167, 0.22);
+            border: 1px solid rgba(255, 255, 255, 0.14);
             background: linear-gradient(180deg, rgba(22, 22, 20, 0.92), rgba(8, 8, 8, 0.9));
-            box-shadow: 0 18px 42px rgba(0, 0, 0, 0.38), 0 0 28px rgba(218, 197, 167, 0.06), inset 0 1px 0 rgba(245, 239, 228, 0.12);
+            box-shadow: 0 18px 42px rgba(0, 0, 0, 0.38), 0 0 28px rgba(255, 255, 255, 0.05), inset 0 1px 0 rgba(245, 239, 228, 0.12);
             overflow: hidden;
             min-height: 21.5rem;
             transition: transform 820ms cubic-bezier(0.22, 1, 0.36, 1), border-color 820ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 820ms cubic-bezier(0.22, 1, 0.36, 1);
@@ -1722,8 +1725,8 @@ const MagicBento: React.FC = () => {
             height: 0.72rem;
             border-radius: 9999px;
             margin-bottom: 0.9rem;
-            background: linear-gradient(90deg, rgba(194, 167, 123, 0.95), rgba(218, 197, 167, 0.95));
-            box-shadow: 0 0 16px rgba(218, 197, 167, 0.12);
+            background: linear-gradient(90deg, rgba(245, 239, 228, 0.88), rgba(245, 239, 228, 0.98));
+            box-shadow: 0 0 16px rgba(255, 255, 255, 0.12);
             transition: transform 760ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 760ms cubic-bezier(0.22, 1, 0.36, 1), filter 760ms cubic-bezier(0.22, 1, 0.36, 1);
           }
 
@@ -1863,8 +1866,8 @@ const MagicBento: React.FC = () => {
           }
 
           .card:hover .group\/selling .selling-browser {
-            border-color: rgba(218, 197, 167, 0.34);
-            box-shadow: 0 22px 48px rgba(0, 0, 0, 0.4), 0 0 34px rgba(218, 197, 167, 0.1), inset 0 1px 0 rgba(245, 239, 228, 0.14);
+            border-color: var(--chrome-rim-hover);
+            box-shadow: 0 22px 48px rgba(0, 0, 0, 0.4), 0 0 34px rgba(255, 255, 255, 0.08), inset 0 1px 0 rgba(245, 239, 228, 0.14);
           }
 
           .card:hover .group\/selling .selling-line-lg,
@@ -2186,11 +2189,11 @@ const MagicBento: React.FC = () => {
             left: 50%;
             top: 50%;
             border-radius: 9999px;
-            border: 1px solid color-mix(in srgb, var(--bento-accent, #a79ac7) 30%, transparent);
-            background: radial-gradient(circle, color-mix(in srgb, var(--bento-accent, #a79ac7) 12%, transparent) 0%, transparent 64%);
+            border: 1px solid color-mix(in srgb, var(--bento-accent, #dac5a7) 30%, transparent);
+            background: radial-gradient(circle, color-mix(in srgb, var(--bento-accent, #dac5a7) 12%, transparent) 0%, transparent 64%);
             box-shadow:
-              inset 0 0 18px color-mix(in srgb, var(--bento-accent, #a79ac7) 12%, transparent),
-              0 0 18px color-mix(in srgb, var(--bento-accent, #a79ac7) 10%, transparent);
+              inset 0 0 18px color-mix(in srgb, var(--bento-accent, #dac5a7) 12%, transparent),
+              0 0 18px color-mix(in srgb, var(--bento-accent, #dac5a7) 10%, transparent);
             pointer-events: none;
             transform: translate(-50%, -50%);
             animation: contact-radial-pulse 3.2s ease-in-out infinite;
@@ -2214,14 +2217,14 @@ const MagicBento: React.FC = () => {
             position: relative;
             z-index: 2;
             box-shadow:
-              0 0 0 1px color-mix(in srgb, var(--bento-accent, #a79ac7) 40%, transparent),
-              0 0 20px color-mix(in srgb, var(--bento-accent, #a79ac7) 42%, transparent),
-              0 0 42px color-mix(in srgb, var(--bento-accent, #a79ac7) 22%, transparent);
+              0 0 0 1px color-mix(in srgb, var(--bento-accent, #dac5a7) 40%, transparent),
+              0 0 20px color-mix(in srgb, var(--bento-accent, #dac5a7) 42%, transparent),
+              0 0 42px color-mix(in srgb, var(--bento-accent, #dac5a7) 22%, transparent);
           }
 
           .contact-card-button {
-            border-color: color-mix(in srgb, var(--bento-accent, #a79ac7) 48%, transparent) !important;
-            box-shadow: 0 0 22px color-mix(in srgb, var(--bento-accent, #a79ac7) 12%, transparent);
+            border-color: color-mix(in srgb, var(--bento-accent, #dac5a7) 48%, transparent) !important;
+            box-shadow: 0 0 22px color-mix(in srgb, var(--bento-accent, #dac5a7) 12%, transparent);
           }
 
           .card-responsive {
@@ -2247,13 +2250,14 @@ const MagicBento: React.FC = () => {
             /* Opaque fill below, so the inherited blur can never be seen. */
             backdrop-filter: none;
             -webkit-backdrop-filter: none;
-            /* Lit from above, and carrying 4% of the card's own accent at the
-               top edge. Five identical flat panels read as stickers on a void;
-               this gives each one its own temperature without ever reading as
-               a coloured card. Still opaque, so it occludes the star field. */
-            background: linear-gradient(180deg,
-                color-mix(in srgb, var(--bento-accent, #dac5a7) 4%, #14130f) 0%,
-                #0c0c0b 100%);
+            /* Flat panel colour, shared by every card. This used to carry 4% of
+               the card's own accent at the top edge to give each one its own
+               temperature — but five faintly different browns sitting next to
+               each other is exactly what made the section blend together
+               instead of separating. The cards are told apart by their artwork
+               and their heading, not by their surface. Still opaque, so it
+               occludes the star field. */
+            background: var(--panel-bg);
             /* Hover moves the border and the inset bloom; the top wash lives
                on ::after. Explicit properties rather than the inner div's
                Tailwind transition-all, which this outranks. */
@@ -2289,8 +2293,8 @@ const MagicBento: React.FC = () => {
             pointer-events: none;
             opacity: 0;
             background: radial-gradient(circle at 50% 0%,
-                color-mix(in srgb, var(--bento-accent, #dac5a7) 32%, transparent) 0%,
-                color-mix(in srgb, var(--bento-accent, #dac5a7) 12%, transparent) 34%,
+                var(--chrome-glow) 0%,
+                var(--chrome-glow-soft) 34%,
                 transparent 72%);
             transition: opacity 240ms ease;
           }
@@ -2408,16 +2412,18 @@ const MagicBento: React.FC = () => {
               transition: opacity 420ms cubic-bezier(0.22, 1, 0.36, 1);
             }
 
-            /* The rim response. The border picking up the card's own accent is
-               what makes the hover feel lit rather than merely brighter, and
-               the bloom is inset because .card sets contain: paint — anything
-               reaching outside the box would be clipped anyway. */
+            /* The rim response — light on an edge, not a colour change. This
+               used to pick up the card's own accent at 34%, which is what put
+               the dark brown on every border in the section; the hover now
+               reads as the card catching the light. The bloom is inset because
+               .card sets contain: paint — anything reaching outside the box
+               would be clipped anyway. */
             .card:hover .premium-glass-surface {
-              border-color: color-mix(in srgb, var(--bento-accent, #dac5a7) 34%, transparent);
+              border-color: var(--chrome-rim-hover);
               box-shadow:
                 inset 0 1px 0 var(--rim-light),
                 inset 0 -1px 0 var(--rim-edge-warm),
-                inset 0 0 44px -12px color-mix(in srgb, var(--bento-accent, #dac5a7) 30%, transparent);
+                inset 0 0 44px -12px var(--chrome-glow);
             }
           }
 

@@ -47,7 +47,7 @@ export const Footer = ({
           not. */}
       <footer className="relative overflow-hidden bg-[color:var(--panel-bg)]">
         <div className="footer-top-glow pointer-events-none absolute left-1/2 top-0 z-20 h-px w-[94%] max-w-7xl -translate-x-1/2" />
-        <div className="relative mx-auto flex max-w-7xl flex-col px-6 py-9 md:py-12">
+        <div className="relative mx-auto flex max-w-7xl flex-col px-6 pb-10 pt-14 md:pb-14 md:pt-20">
           <div className="flex flex-col items-center text-center">
             {statusSlot && <div className="mb-7 md:mb-8">{statusSlot}</div>}
 

@@ -35,10 +35,11 @@ const processSteps = [
     width: 368,
     height: 552,
     artworkClass: 'process-artwork-ship',
-    // Champagne, not the old bronze #8b7355. The hover rim is the accent at 34% over a
-    // near-black card, so a dark accent produces no visible rim at all — bronze read as
-    // broken next to the bento cards, which never use anything that deep. Matches
-    // BENTO_ACCENTS.champagne in MagicBento.tsx.
+    // Champagne, not the old bronze #8b7355 — bronze read as broken next to the bento
+    // cards, which never use anything that deep. Matches BENTO_ACCENTS.champagne in
+    // MagicBento.tsx. The accent no longer reaches the card's rim or hover glow (those
+    // are neutral now); it survives in the artwork, so it only needs to read against
+    // the panel, not against black.
     accent: '#c2a77b',
   },
 ]
@@ -98,7 +99,7 @@ export default function ProcessJourney() {
                   <h3 className="text-[1.65rem] font-semibold tracking-[-0.03em] text-[#f5efe4] md:text-[1.75rem]">
                     {step.title}
                   </h3>
-                  <span className="font-body text-[0.68rem] font-semibold tracking-[0.18em] text-[#dac5a7]/60">
+                  <span className="font-body text-[0.68rem] font-semibold tracking-[0.18em] text-[color:var(--site-dim)]">
                     {step.number}
                   </span>
                 </div>

@@ -372,7 +372,7 @@ export default function ContactSection() {
                   className="relative grid overflow-hidden border-t border-[color:var(--site-border)] sm:grid-cols-3 dark:border-white/10"
                 >
                   <div
-                    className="pointer-events-none absolute left-0 top-0 z-0 bg-[#c2a77b] transition-[transform,width,height,border-radius,opacity] duration-300 ease-out"
+                    className="pointer-events-none absolute left-0 top-0 z-0 bg-[#f5efe4] transition-[transform,width,height,border-radius,opacity] duration-300 ease-out"
                     style={hoverFillStyle}
                   />
                   {socialLinks.map((social, index) => {

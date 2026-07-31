@@ -110,8 +110,8 @@ const ProgressScrollbar: React.FC = () => {
           <div className="relative h-32 w-1 overflow-hidden rounded-full border border-[color:var(--site-border)] bg-[rgba(20,20,19,0.18)] shadow-[0_0_0_1px_rgba(250,249,245,0.36)] dark:border-white/10 dark:bg-white/20 dark:shadow-none">
             <div
               ref={barRef}
-              className="absolute left-0 top-0 h-full w-full origin-top rounded-full bg-accent transition-transform duration-150 ease-out"
-              style={{ transform: 'scaleY(0)', boxShadow: '0 0 8px rgba(139, 115, 85, 0.45)' }}
+              className="absolute left-0 top-0 h-full w-full origin-top rounded-full bg-[color:var(--site-text)] transition-transform duration-150 ease-out"
+              style={{ transform: 'scaleY(0)', boxShadow: '0 0 8px rgba(255, 255, 255, 0.35)' }}
             />
           </div>
         </div>

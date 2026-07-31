@@ -161,7 +161,7 @@ export default function TechStackSection() {
           viewport={cinematicViewport}
         >
           <div
-            className="pointer-events-none absolute left-0 top-0 z-0 bg-[#c2a77b] transition-[transform,width,height,border-radius,opacity] duration-300 ease-out"
+            className="pointer-events-none absolute left-0 top-0 z-0 bg-[#f5efe4] transition-[transform,width,height,border-radius,opacity] duration-300 ease-out"
             style={hoverFillStyle}
           />
 
