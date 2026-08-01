@@ -1,6 +1,6 @@
 'use client'
 
-import type { CSSProperties } from 'react'
+import type { CSSProperties, ReactNode } from 'react'
 import Image from 'next/image'
 import type { ProjectShot as Shot } from '@/data/projects'
 import { useAutoplayInView } from '@/lib/use-autoplay-in-view'
@@ -21,6 +21,7 @@ const ProjectShot = ({
   sizes = '(max-width: 899px) 92vw, 62vw',
   priority = false,
   cursorZone = false,
+  overlay,
 }: {
   shot: Shot
   liveLabel: string
@@ -29,6 +30,12 @@ const ProjectShot = ({
   /** Marks this shot as a hover target for ProjectCursorBadge. Index cards only —
       the project page has no badge, because there is nothing left to open. */
   cursorZone?: boolean
+  /**
+   * Rendered inside the viewport, over the image and clipped by the tile's corners. The index
+   * panel puts its title and its hover preview here; the project page passes nothing, which is
+   * why this is a prop rather than something the shot decides for itself.
+   */
+  overlay?: ReactNode
 }) => {
   const frameRef = useAutoplayInView<HTMLDivElement>()
 
@@ -84,6 +91,8 @@ const ProjectShot = ({
             <source src={shot.videoSrc} type="video/mp4" />
           </video>
         ) : null}
+
+        {overlay}
       </div>
     </div>
   )

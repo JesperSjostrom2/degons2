@@ -1,6 +1,7 @@
 import type { IconType } from 'react-icons'
 import {
   SiBackbonedotjs,
+  SiCloudflare,
   SiCss3,
   SiCypress,
   SiExpress,
@@ -17,6 +18,7 @@ import {
   SiPostgresql,
   SiPostman,
   SiReact,
+  SiReactrouter,
   SiSanity,
   SiShopify,
   SiStripe,
@@ -45,6 +47,7 @@ import {
 export const techIcons: Record<string, IconType> = {
   'Next.js': SiNextdotjs,
   React: SiReact,
+  'React Router': SiReactrouter,
   TypeScript: SiTypescript,
   'Tailwind CSS': SiTailwindcss,
   Tailwind: SiTailwindcss,
@@ -53,6 +56,11 @@ export const techIcons: Record<string, IconType> = {
   MongoDB: SiMongodb,
   PostgreSQL: SiPostgresql,
   Vercel: SiVercel,
+  // The house marks, not the product ones: SiCloudflarepages is a page-with-a-bolt and
+  // SiGithubpages a small lockup, and neither is recognisable at this size or beside the
+  // others. The full name still goes to screen readers through the row's `sr-only` span.
+  'Cloudflare Pages': SiCloudflare,
+  'GitHub Pages': SiGithub,
   Figma: SiFigma,
   GSAP: SiGreensock,
   'Framer Motion': SiFramer,

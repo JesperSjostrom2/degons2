@@ -13,6 +13,10 @@ import { Eye } from 'lucide-react'
  * path id per project; cards now just mark their shot with `data-project-cursor` and
  * this picks them all up. Nothing needs to change here when a project is added.
  *
+ * It rides over the hover preview at full strength rather than fading behind it — it is
+ * the thing that says the panel opens, and the preview does not say that. It is sized to
+ * sit alongside the video instead of over it.
+ *
  * PERFORMANCE — the lerp writes two custom properties on this element only, never on
  * :root (see AtmosphereController for why), and only while the pointer is actually over
  * a shot. The ring's spin is paused in CSS until the badge is active.
@@ -188,7 +192,7 @@ export default function ProjectCursorBadge() {
       </svg>
 
       <span className="project-preview-badge__center">
-        <Eye className="h-6 w-6" strokeWidth={1.75} />
+        <Eye className="h-5 w-5" strokeWidth={1.75} />
       </span>
     </span>,
     document.body,

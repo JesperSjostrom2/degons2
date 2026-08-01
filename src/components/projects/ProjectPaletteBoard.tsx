@@ -3,7 +3,7 @@ import type { ProjectPaletteColor } from '@/data/projects'
 
 /**
  * Relative luminance, so each swatch's own label picks ink or cream and stays legible on top
- * of its colour. Kerma's palette runs #141413 to #f7ead8 in one row, so a single fixed label
+ * of its colour. Kerma's palette runs #000000 to #ffffff in one row, so a single fixed label
  * colour is unreadable on one end or the other whichever way it is set.
  *
  * sRGB coefficients, no gamma correction — the 0.6 threshold is tuned for the palettes in

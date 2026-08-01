@@ -10,17 +10,27 @@
  * page is read by people, not by me; the marker lives in the source instead.
  * Correct them and the marker goes with them.
  *
- *   · `facts`  — year / client / scope on every project
- *   · `role`   — the index panel's scope label
- *   · `tech`   — every project
+ *   · `facts` — Andcreative only. Kerma's are confirmed against the About section's own
+ *     entry for it, and Portfolio v1's against the repo behind the site.
+ *
+ * What is left is one project's year, client and scope. Everything else on this page is
+ * now read rather than assumed.
  *
  * `roleSummary` is written to be read, but it is my account of the work rather
  * than yours. Rewrite freely.
  *
- * `typography` names are read off the live sites with computed styles, not guessed —
- * so they carry no `// unconfirmed` marker. Read by walking every text-bearing leaf
- * node and grouping by family, weight and size: sampling the first handful of nodes
- * only reaches the nav and misses the display weight entirely.
+ * `typography`, `palette` and `tech` are read off the live sites, not guessed — so they
+ * carry no `// unconfirmed` marker.
+ *
+ *   · typography — walk every text-bearing leaf node and group by family, weight and
+ *     size. Sampling the first handful of nodes only reaches the nav and misses the
+ *     display weight entirely.
+ *   · palette    — the site's own declared tokens where it has them (`:root` custom
+ *     properties), otherwise the hex literals its stylesheet actually uses, ranked by
+ *     painted area. Not eyedropped off a screenshot, which reads compression artefacts.
+ *   · tech       — the shipped bundle, matched against each library's own internals, plus
+ *     response headers for the host. A dependency that is declared but tree-shaken out is
+ *     not listed: this row says what the site runs on, not what its package.json contains.
  *
  * `visuals` renders whatever length the array has, so a project with one real
  * asset shows one rather than padding with a duplicate.
@@ -32,8 +42,8 @@
  *   02  phones   three phone plates side by side — landing, a list view, a detail
  *
  * Both frames want assets on a transparent background, exported at the same plate
- * size so they register with each other. Kerma and Portfolio v1 are still on
- * `frame: 'browser'` — the older raw screenshots — until their plates exist.
+ * size so they register with each other. All three projects are on it now; `frame:
+ * 'browser'` stays in the union for a flat screenshot that has no plate yet.
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
@@ -129,9 +139,23 @@ export interface Project {
   displayName: string
   /** One or two lines. The only copy on the index panel. */
   description: string
-  /** The index panel's right-hand label. Short — two or three words. */
-  role: string
-  year: string
+  /**
+   * The scroll capture that plays, centred and half-size, when the index panel is hovered.
+   * Fetched at that moment and never before, so a visitor who scrolls past pays nothing for it.
+   *
+   * Optional by design: a project without one loses the floating preview and keeps every other
+   * part of the panel.
+   */
+  previewVideo?: string
+  /**
+   * The preview frame's shape, when the capture is not the 16/10 the other two are. Written as
+   * the encode's real pixel dimensions, e.g. '1280 / 638'.
+   *
+   * The frame is `object-fit: cover`, so a capture wider than the frame loses its sides rather
+   * than letterboxing — on a website capture that crops the nav and the page margins, which is
+   * the part that makes it read as a site.
+   */
+  previewAspect?: string
   palette: ProjectPaletteColor[]
   /**
    * The index panel image. Kept separate from `visuals` because the index wants one flat
@@ -175,27 +199,42 @@ export interface Project {
 export const projects: Project[] = [
   {
     slug: 'andcreative',
-    lastUpdated: '2026-07-31',
+    lastUpdated: '2026-08-01',
     name: 'Andcreative',
     displayName: 'Andcreative',
     description:
       'A photography and film agency in Stockholm. Built for speed across image-heavy pages, with a clear path from the work to a booking.',
-    role: 'Design + Build', // unconfirmed
-    year: '2024', // unconfirmed
+    /**
+     * The site's own named tokens, read off its stylesheet rather than sampled: it declares
+     * `--background-primary`, `--background-secondary`, `--text-primary`, `--text-secondary`
+     * and `--accent-warm`, which is the whole palette and in the site's own words. The
+     * painted page agrees — #080808 is by far the largest area, and #f4f1ea carries the type.
+     *
+     * The earlier set here (a light cream, a grey, a mist) described a site that is not
+     * there: Andcreative is warm cream on near-black throughout.
+     */
     palette: [
-      { name: 'Cream', value: '#f5efe4' },
-      { name: 'Graphite', value: '#676a70' },
-      { name: 'Mist', value: '#d9d5cb' },
-      { name: 'White', value: '#f3f3f3' },
+      { name: 'Ink', value: '#080808' },
+      { name: 'Charcoal', value: '#11100e' },
+      { name: 'Cream', value: '#f4f1ea' },
+      { name: 'Stone', value: '#a8a39a' },
+      { name: 'Sand', value: '#c7bda7' },
     ],
-    // Anchored left so the small remaining crop falls on the site's own nav rather than
-    // through the headline.
+    // The laptop mockup rather than the raw screenshot it used to be. The other two covers are
+    // both photographs of the site on a device; a flat capture sat outside that set, and it also
+    // repeated what the hover preview already shows. Centred: at 19/10 the 3/2 plate loses a
+    // little top and bottom, which lands on the lamp and the trackpad rather than on the screen.
     cover: {
-      src: '/assets/projects/andcreative/andcreative1.webp',
-      alt: 'Andcreative homepage',
-      objectPosition: 'left top',
+      src: '/assets/projects/andcreative/andcreativelaptop.webp',
+      alt: 'The Andcreative homepage on a laptop',
+      objectPosition: 'center',
       chrome: true,
     },
+    // A wider capture than home1610 (which stays on the project page, where the mac cutout
+    // needs its 1.6). Re-encoded to 1280 wide: the preview frame is ~665 CSS px, so that is
+    // 2x and no more.
+    previewVideo: '/assets/projects/andcreative/homestatic.mp4',
+    previewAspect: '1280 / 638',
     visuals: [
       {
         frame: 'mac',
@@ -218,7 +257,10 @@ export const projects: Project[] = [
       },
     ],
     facts: [
-      { label: 'Year', value: '2024' }, // unconfirmed
+      // The site dates its own case studies 2026 and its footer reads © 2026, so 2024 was
+      // certainly wrong. Still unconfirmed — that is when the work is published, which is
+      // not necessarily when it was done.
+      { label: 'Year', value: '2026' }, // unconfirmed
       { label: 'Client', value: 'Photography & film agency' }, // unconfirmed
       { label: 'Scope', value: 'Design, build, deploy' }, // unconfirmed
     ],
@@ -250,28 +292,46 @@ export const projects: Project[] = [
         cssWeight: 400,
       },
     ],
-    tech: ['Next.js', 'React', 'Tailwind CSS', 'Vercel'], // unconfirmed
+    /**
+     * Read off the shipped bundle. Next.js App Router (`_next/static/chunks/app/*`) as a
+     * static export — `/_next/image` 404s and the images come back through Cloudflare's own
+     * `/cdn-cgi/image/` resizer instead, which is how a Next export is served on Cloudflare
+     * Pages. Tailwind is in the stylesheet (`--tw-*`), framer-motion and Lenis in the chunks.
+     *
+     * Vercel was the wrong host: the responses carry no `x-vercel-id`, and Vercel could not
+     * 404 on `/_next/image`.
+     */
+    tech: ['Next.js', 'React', 'Tailwind CSS', 'Framer Motion', 'Lenis', 'Cloudflare Pages'],
     // 756x361 plate, ink 2.31 wide — the widest of the three, so it sets the baseline height.
     logo: { src: '/assets/andcreativewhite.png', alt: 'Andcreative logo', width: 150, height: 72 },
     liveUrl: 'https://andcreative.se',
     liveLabel: 'andcreative.se',
-    accent: '#f3f3f3',
+    // The cream the site actually sets its type in, rather than the near-white this guessed at.
+    accent: '#f4f1ea',
   },
   {
     slug: 'kerma',
-    lastUpdated: '2026-07-31',
+    lastUpdated: '2026-08-01',
     name: 'Cafe & Bistro Kerma',
     displayName: 'Tahkon Kerma',
     description:
       'A cafe and bistro in Tahko. Logo and identity, plus a site built around the menu, the opening hours and actually being found locally.',
-    role: 'Identity + Build', // unconfirmed
-    year: '2024', // unconfirmed
+    /**
+     * Hex literals from the site's own stylesheet — it declares no custom properties, so the
+     * palette is read from what the rules actually paint with. #d7b154 is the accent and the
+     * most-used colour in the file: the nav underline, the social and arrow hovers, and the
+     * border on the reservation button. #171717 is the sticky header and the dark bands,
+     * #f2f2f2 the page behind the menu.
+     *
+     * The previous set was a plausible cafe palette rather than this one — a cream, a bronze
+     * and an olive that appear nowhere, and a gold two steps off the real one.
+     */
     palette: [
-      { name: 'Ink', value: '#141413' },
-      { name: 'Cream', value: '#f7ead8' },
-      { name: 'Kerma Gold', value: '#d4af37' },
-      { name: 'Bronze', value: '#8b7355' },
-      { name: 'Olive', value: '#8fa58a' },
+      { name: 'Kerma Gold', value: '#d7b154' },
+      { name: 'Ink', value: '#171717' },
+      { name: 'Black', value: '#000000' },
+      { name: 'Paper', value: '#f2f2f2' },
+      { name: 'White', value: '#ffffff' },
     ],
     cover: {
       src: '/assets/projects/kerma/kermaipad.webp',
@@ -279,6 +339,7 @@ export const projects: Project[] = [
       objectPosition: 'center',
       chrome: true,
     },
+    previewVideo: '/assets/projects/kerma/kermashowcase.mp4',
     // Andcreative's format: the scroll capture in the mac, then the phone trio.
     visuals: [
       {
@@ -300,13 +361,26 @@ export const projects: Project[] = [
       },
     ],
     facts: [
-      { label: 'Year', value: '2024' }, // unconfirmed
-      { label: 'Client', value: 'Cafe & bistro, Tahko' }, // unconfirmed
-      { label: 'Scope', value: 'Identity, design, build' }, // unconfirmed
+      // Confirmed against the About section's own entry — Nov 2023 to May 2024, "built it from
+      // scratch" and "designed the logo", which is what these two rows say. The build on the
+      // server was last written 18 July 2025, so it is still being kept up since.
+      { label: 'Year', value: '2024' },
+      { label: 'Client', value: 'Cafe & bistro, Tahko' },
+      { label: 'Scope', value: 'Identity, design, build' },
     ],
     roleSummary:
       'Drew the logo and set the identity, then designed and built the site around it. A seasonal restaurant lives on being found and on answering the same three questions — what is on the menu, when are you open, where are you. Those came first, and everything else was arranged not to get in their way.',
-    // One family, split by weight. `--font-specimen-poppins` is loaded by ProjectTypography.
+    /**
+     * One family across three roles. Poppins comes from Google Fonts in 300, 400, 500 and
+     * 600 — and the headings then ask for 700, which no loaded file provides, so the browser
+     * draws them from SemiBold. Listed at 600 for that reason: it is the face on the screen,
+     * where 700 is only the number in the stylesheet.
+     *
+     * Light 300 exists too, on the menu item descriptions alone. Left off — a fourth row for
+     * one line of small print turns a spec sheet into an inventory.
+     *
+     * `--font-specimen-poppins` is loaded by ProjectTypography.
+     */
     typography: [
       {
         usage: 'Headings',
@@ -316,6 +390,13 @@ export const projects: Project[] = [
         cssWeight: 600,
       },
       {
+        usage: 'Navigation',
+        name: 'Poppins',
+        weight: 'Medium 500',
+        cssFamily: 'var(--font-specimen-poppins)',
+        cssWeight: 500,
+      },
+      {
         usage: 'Body',
         name: 'Poppins',
         weight: 'Regular 400',
@@ -323,7 +404,13 @@ export const projects: Project[] = [
         cssWeight: 400,
       },
     ],
-    tech: ['Next.js', 'React', 'Tailwind CSS', 'Vercel'], // unconfirmed
+    /**
+     * Not a Next.js site: it ships one `static/js/main.<hash>.js` from Create React App,
+     * routed client-side by React Router (`/menu`, `/about`, `/gallery`, `/location`) and
+     * animated on scroll by AOS. The stylesheet is hand-written — no `--tw-*` anywhere — and
+     * pulls Poppins in over `@import`. Served by Apache off ordinary hosting, not Vercel.
+     */
+    tech: ['React', 'React Router', 'AOS', 'JavaScript', 'CSS'],
     /**
      * 1325x1151 plate with no blank room to speak of — the ink already runs edge to edge and
      * fills 98% of the height, so it was never padding making this look small. It is a
@@ -343,23 +430,32 @@ export const projects: Project[] = [
     },
     liveUrl: 'https://tahkonkerma.fi',
     liveLabel: 'tahkonkerma.fi',
-    accent: '#d4af37',
+    // The site's own gold, off its stylesheet — the old #d4af37 was a generic gold beside it.
+    accent: '#d7b154',
   },
   {
     slug: 'portfolio-v1',
-    lastUpdated: '2026-07-31',
+    lastUpdated: '2026-08-01',
     name: 'Portfolio v1',
     displayName: 'Portfolio v1',
     description:
       'My first portfolio, with a backend and an admin area so the content could be edited without touching the code.',
-    role: 'Design + Build', // unconfirmed
-    year: '2023', // unconfirmed
+    /**
+     * Straight off the site's `:root` — this one does declare its colours. `--color-bg-main`
+     * is #000 with `--color-bg-variant` #171717 over most of it, `--color-main` is #f06, and
+     * the site's one gradient runs pink into cyan. Violet is `--accent-color`, which themes
+     * the two pages behind the login — the hub and the CV — rather than the public site.
+     *
+     * Pink was already right. The rest were near-misses: black was a shade off, violet and
+     * blue were a different violet and a blue that is nowhere in the stylesheet, and the
+     * cream belonged to this portfolio rather than that one.
+     */
     palette: [
-      { name: 'Black', value: '#080808' },
+      { name: 'Black', value: '#000000' },
+      { name: 'Ink', value: '#171717' },
       { name: 'Pink', value: '#ff0066' },
-      { name: 'Violet', value: '#7c63a6' },
-      { name: 'Cream', value: '#f5efe4' },
-      { name: 'Blue', value: '#3898ec' },
+      { name: 'Cyan', value: '#33ccff' },
+      { name: 'Violet', value: '#9146ff' },
     ],
     cover: {
       src: '/assets/projects/portfolio-v1/ogportfolionew.webp',
@@ -367,6 +463,7 @@ export const projects: Project[] = [
       objectPosition: 'top',
       chrome: true,
     },
+    previewVideo: '/assets/projects/portfolio-v1/v1showcase.mp4',
     // Andcreative's format: the scroll capture in the mac, then the phone trio.
     visuals: [
       {
@@ -391,17 +488,27 @@ export const projects: Project[] = [
       },
     ],
     facts: [
-      { label: 'Year', value: '2023' }, // unconfirmed
-      { label: 'Client', value: 'Personal' }, // unconfirmed
-      { label: 'Scope', value: 'Design, build, CMS' }, // unconfirmed
+      // Confirmed: the repo behind jespersjostrom2.github.io was created in May 2023.
+      { label: 'Year', value: '2023' },
+      { label: 'Client', value: 'Personal' },
+      // It is an Express and Mongoose service with a login, a signup and an admin area —
+      // "Front end, backend, admin" says that; "CMS" implies something off the shelf.
+      { label: 'Scope', value: 'Front end, backend, admin' },
     ],
     roleSummary:
       'My first full-stack build, made to learn rather than to a brief — which is why there is a real backend and an admin area sitting behind it. Being able to change the content without touching the code was the whole point of it, and that habit has shaped everything I have built since.',
     /**
-     * Poppins is used across a wider range here than the two rows below show — 200, 400, 500,
-     * 600 and 700 all appear live. Bold 700 and Medium 500 are the two that carry the site,
-     * so they are what the specimen names; listing five weights would be a font inventory
-     * rather than a spec sheet. The remaining weights are noted here, not hidden.
+     * Poppins is used across a wider range here than the rows below show — 200, 400, 500, 600
+     * and 700 all appear live. The three named are the ones that carry the site: 700 on every
+     * heading, 500 on the nav and the lead paragraphs, 400 on body copy. Listing all five
+     * would be a font inventory rather than a spec sheet. The rest are noted here, not hidden.
+     *
+     * As on Kerma, the Google Fonts request stops at 600 while the headings ask for 700, so
+     * the browser draws Bold from SemiBold. Named at 700 here because that is the intent the
+     * stylesheet states, and because the two heaviest weights are what separate these rows.
+     *
+     * Noto Sans is imported as well, but only `.hub` and `.cv-page` set it — the two pages
+     * behind the login. Not listed: it is not a face anyone reaching the site will see.
      *
      * (The site also renders one `<button>` in Arial, which is a control that never inherited
      * the family rather than a second face. Not listed, because it was not a choice.)
@@ -415,14 +522,31 @@ export const projects: Project[] = [
         cssWeight: 700,
       },
       {
-        usage: 'Body',
+        usage: 'Navigation & lead',
         name: 'Poppins',
         weight: 'Medium 500',
         cssFamily: 'var(--font-specimen-poppins)',
         cssWeight: 500,
       },
+      {
+        usage: 'Body',
+        name: 'Poppins',
+        weight: 'Regular 400',
+        cssFamily: 'var(--font-specimen-poppins)',
+        cssWeight: 400,
+      },
     ],
-    tech: ['React', 'Node.js', 'Express', 'MongoDB'], // unconfirmed
+    /**
+     * The one project whose source is public, so this is read from its package.json as well
+     * as its bundle. Create React App on the front, deployed to GitHub Pages with `gh-pages`;
+     * `backend/` is Express 4 on Mongoose 7, which is the admin area's half. Spline carries
+     * the 3D — it is what pulls Three.js in, so listing both would be listing it twice — and
+     * AOS does the scroll reveals.
+     *
+     * framer-motion is a dependency here but nothing imports it: no part of the library
+     * reaches the shipped bundle. Left off on purpose, since this row is what the site runs.
+     */
+    tech: ['React', 'React Router', 'AOS', 'Spline', 'Node.js', 'Express', 'MongoDB', 'GitHub Pages'],
     /**
      * 1500x1500 plate, ink 1473x1187 — near-square at 1.24, and unlike Kerma it does carry
      * real padding (91px above, 222px below), so `object-fit: contain` fits the empty plate

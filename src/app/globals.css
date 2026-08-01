@@ -3366,10 +3366,15 @@
   }
 
   /* ══ Project index ═════════════════════════════════════════════════════
-     One full-width panel per project, stacked. The screenshot fills it; a thin
-     bar underneath carries the name, the scope and the arrow. The whole panel
-     is the link to /work/<slug> — everything this card used to hold now lives
-     on the project page.
+     One full-width panel per project, stacked. The screenshot fills it, the
+     name is set large over the foot of the picture, and on hover the site's own
+     scroll capture plays centred at half width while the still recedes behind
+     it. The whole panel is the link to /work/<slug> — everything this card used
+     to hold now lives on the project page.
+
+     The name used to sit in a bar under the tile beside the scope and the year;
+     three columns of small type under a picture that was already doing the work.
+     Nothing is printed outside the tile any more.
 
      Accent discipline (DESIGN.MD §7/§13): --project-accent reaches the hover
      rim and nothing else. It never becomes a background — this section sits
@@ -3441,8 +3446,10 @@
     top: var(--project-preview-y, 50%);
     z-index: 80;
     display: grid;
-    height: 6.25rem;
-    width: 6.25rem;
+    /* Smaller than it was: it now rides over a playing preview rather than over a still, and
+       at 100px it was covering the thing it announces. */
+    height: 5rem;
+    width: 5rem;
     place-items: center;
     pointer-events: none;
     color: #f5efe4;
@@ -3512,7 +3519,7 @@
   .project-preview-badge__ring text {
     fill: color-mix(in srgb, var(--project-accent, #dac5a7) 72%, #f5efe4);
     font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
-    font-size: 0.72rem;
+    font-size: 0.62rem;
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -3524,8 +3531,8 @@
     top: 50%;
     z-index: 1;
     display: grid;
-    height: 3.4rem;
-    width: 3.4rem;
+    height: 2.7rem;
+    width: 2.7rem;
     place-items: center;
     transform: translate3d(-50%, -50%, 0);
     border-radius: 9999px;
@@ -3569,7 +3576,9 @@
 
   .project-card__img {
     object-fit: cover;
-    transition: transform 640ms cubic-bezier(0.16, 1, 0.3, 1);
+    transition:
+      transform 640ms cubic-bezier(0.16, 1, 0.3, 1),
+      filter 520ms ease;
   }
 
   /* The still stays underneath permanently: if the video never loads, never decodes, or is
@@ -3591,6 +3600,15 @@
   @media (hover: hover) and (pointer: fine) {
     .project-card__link:hover .project-card__img {
       transform: scale(1.02);
+    }
+
+    /* The still steps back so the floating capture reads as the thing in front. Keyed off
+       is-previewing — set only when the video has frames — so a panel never blurs itself
+       behind a video that has not arrived. The extra scale covers the soft edge blur leaves
+       where it samples past the image. */
+    .project-card.is-previewing .project-card__img {
+      transform: scale(1.06);
+      filter: blur(4px) saturate(0.86);
     }
   }
 
@@ -3633,56 +3651,129 @@
     white-space: nowrap;
   }
 
-  /* ── Footer bar — the only copy on the index ────────────────────────── */
+  /* ── Floating hover preview ─────────────────────────────────────────────
+     The site's own scroll capture, centred over its screenshot at roughly half
+     the panel's width. It is the whole hover event: the still recedes, this
+     comes forward, and the cursor badge stands down.
 
-  .project-card__bar {
-    display: flex;
-    align-items: baseline;
-    gap: 1.25rem;
-    padding: 1.15rem 0.35rem 0;
-  }
+     Everything here is opacity and transform only, and only one panel can be
+     hovered at a time, so the cost is one composited layer with a video in it.
+  */
 
-  .project-card__name {
-    color: var(--site-text);
-    font-family: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
-    font-size: clamp(1.05rem, 1.7vw, 1.3rem);
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    line-height: 1.2;
-  }
-
-  .project-card__meta {
-    display: flex;
-    align-items: center;
-    gap: 0.85rem;
-    margin-left: auto;
-    color: rgba(245, 239, 228, 0.5);
-    font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
-    font-size: 0.85rem;
-    font-weight: 500;
-  }
-
-  .project-card__year {
-    padding-left: 0.85rem;
-    border-left: 1px solid var(--rim-border);
-  }
-
-  .project-card__arrow {
+  .project-card__preview {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
     display: grid;
-    flex: none;
     place-items: center;
-    width: 1.6rem;
-    height: 1.6rem;
-    color: rgba(245, 239, 228, 0.55);
+    pointer-events: none;
+  }
+
+  /* Darkens the still under the capture. A flat layer rather than a second filter on the
+     image — brightness on a large image repaints it, opacity on this does not. */
+  .project-card__preview-veil {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 50%, rgba(6, 6, 7, 0.58), rgba(6, 6, 7, 0.82) 78%);
+    opacity: 0;
+    transition: opacity 480ms ease;
+  }
+
+  .project-card__preview-frame {
+    position: relative;
+    /* Sized by HEIGHT, not width, so every panel's preview opens the same window regardless of
+       what shape its capture is — a wider capture comes out wider, not shorter. Sizing by width
+       made the 2.0 Andcreative capture a short strip beside the two 1.6 ones.
+
+       62% lands the 16/10 frames on the 624x384 they have always been; the number is measured
+       against that, not derived. */
+    height: 62%;
+    width: auto;
+    /* The frame is the capture's own shape, so nothing inside it is cropped. 16/10 is the
+       1368x854 captures; a project whose capture is another shape sets --preview-aspect. */
+    aspect-ratio: var(--preview-aspect, 16 / 10);
+    overflow: hidden;
+    border-radius: 14px;
+    border: 1px solid rgba(245, 239, 228, 0.14);
+    background: #050506;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 32px 80px -24px rgba(0, 0, 0, 0.9),
+      0 0 0 1px rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    transform: translate3d(0, 1.25rem, 0) scale(0.93);
     transition:
-      color 320ms ease,
-      transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
+      opacity 460ms ease,
+      transform 720ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .project-card__preview-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .project-card.is-previewing .project-card__preview-veil {
+    opacity: 1;
+  }
+
+  .project-card.is-previewing .project-card__preview-frame {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  /* ── Caption — the name, over the foot of the picture ───────────────────
+     The only copy on the index. Sits on its own gradient rather than in a bar,
+     so the panel ends at the image instead of at a strip of small type.
+  */
+
+  .project-card__caption {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 3;
+    padding: clamp(1.15rem, 2.6vw, 2rem);
+    pointer-events: none;
+    transition:
+      opacity 460ms ease,
+      transform 640ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* Tall and soft: a short scrim reads as a band drawn across the picture, where this reads
+     as the light going out towards the bottom edge. */
+  .project-card__caption::before {
+    content: '';
+    position: absolute;
+    inset: -160% 0 0;
+    z-index: -1;
+    background: linear-gradient(
+      to top,
+      rgba(6, 6, 7, 0.88) 0%,
+      rgba(6, 6, 7, 0.66) 26%,
+      rgba(6, 6, 7, 0.24) 58%,
+      transparent 100%
+    );
+    pointer-events: none;
+  }
+
+  /* Card Heading Large (DESIGN.MD §3) — the panel's own title, not a label under a picture. */
+  .project-card__title {
+    color: #f7f2e8;
+    font-family: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    text-shadow: 0 2px 24px rgba(0, 0, 0, 0.55);
   }
 
   @media (hover: hover) and (pointer: fine) {
-    .project-card__link:hover .project-card__arrow {
-      color: #f5efe4;
-      transform: translate(0.2rem, -0.2rem);
+    /* Settles back a little while the capture plays, so the two are not both shouting. */
+    .project-card.is-previewing .project-card__caption {
+      opacity: 0.82;
+      transform: translate3d(0, 0.35rem, 0);
     }
   }
 
@@ -3697,25 +3788,12 @@
   }
 
   @media (max-width: 599px) {
-    .project-card__bar {
-      flex-wrap: wrap;
-      gap: 0.5rem 0.85rem;
-      padding: 0.95rem 1.1rem;
+    .project-card__caption {
+      padding: 1.1rem 1.15rem;
     }
 
-    .project-card__name {
-      flex: 1 1 100%;
-    }
-
-    .project-card__meta {
-      margin-left: 0;
-      font-size: 0.8rem;
-    }
-
-    .project-card__arrow {
-      margin-left: auto;
-      width: 2rem;
-      height: 2rem;
+    .project-card__title {
+      font-size: 1.45rem;
     }
   }
 
@@ -3723,7 +3801,9 @@
 
     .project-card__img,
     .project-card__video,
-    .project-card__arrow,
+    .project-card__caption,
+    .project-card__preview-veil,
+    .project-card__preview-frame,
     .project-card__link {
       transition: none;
     }

@@ -1,6 +1,7 @@
 export const skillIconColors: Record<string, string> = {
   'Next.js': '#f5efe4',
   React: '#61dafb',
+  'React Router': '#f44250',
   'Tailwind CSS': '#38bdf8',
   'Framer Motion': '#0055ff',
   'motion.dev': '#f5efe4',
@@ -11,6 +12,8 @@ export const skillIconColors: Record<string, string> = {
   TypeScript: '#3178c6',
   GSAP: '#88ce02',
   Vercel: '#f5efe4',
+  'Cloudflare Pages': '#f6821f',
+  'GitHub Pages': '#f5efe4',
   Figma: '#f24e1e',
   Illustrator: '#ff9a00',
   MongoDB: '#47a248',
