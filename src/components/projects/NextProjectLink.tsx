@@ -2,7 +2,6 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowUpRight } from 'lucide-react'
 import { useCallback, useEffect, useRef, type CSSProperties, type MouseEvent } from 'react'
 import type { Project } from '@/data/projects'
 
@@ -113,6 +112,12 @@ const NextProjectLink = ({ project }: { project: Project }) => {
           />
         </span>
         <span className="project-page__next-portal-veil" />
+        {/* The type's own backing, kept apart from the veil above because the two answer to
+            different things: the veil is the plate's atmosphere and lifts the longer you
+            stay, where this has to hold still — every cover here is a screenshot of a site
+            that leads with its own white headline, and it lands in exactly the band the
+            name sits in. */}
+        <span className="project-page__next-portal-scrim" />
       </span>
 
       <span className="project-page__next-thumb">
@@ -128,10 +133,6 @@ const NextProjectLink = ({ project }: { project: Project }) => {
       <span className="project-page__next-text">
         <span className="project-page__next-label">Next project</span>
         <span className="project-page__next-name">{project.displayName}</span>
-      </span>
-
-      <span className="project-page__next-arrow" aria-hidden="true">
-        <ArrowUpRight className="h-5 w-5" />
       </span>
     </Link>
   )
