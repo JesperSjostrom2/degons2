@@ -41,9 +41,6 @@ const createBentoCardReveal = (index: number): Variants => {
       opacity: 1,
       x: 0,
       y: 0,
-      rotateX: 0,
-      rotateZ: 0,
-      scale: 1,
       transition: {
         duration: 0.7,
         delay: Math.min(visualOrder * 0.045, 0.18),

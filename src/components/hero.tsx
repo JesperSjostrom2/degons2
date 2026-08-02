@@ -8,6 +8,7 @@ import { ArrowRight, Copy } from 'lucide-react'
 import { useEnhancedVisuals } from '@/lib/use-enhanced-visuals'
 import { cinematicEase, curtainEase } from '@/lib/site-motion'
 import { useRouteTransition } from '@/components/transition/route-transition-provider'
+import MaskedRise from '@/components/masked-rise'
 
 const SideRays = dynamic(() => import('@/components/SideRays'), {
   ssr: false,
@@ -23,34 +24,19 @@ const SideRays = dynamic(() => import('@/components/SideRays'), {
  * events. Everything below now lands inside ~1.6s, which is close enough to the curtain's own
  * pace that the lift and the arrival read as one move.
  */
-const heroTextReveal = {
-  hidden: {
-    opacity: 0,
-    y: 42,
-    scale: 0.975,
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: {
-      duration: 0.72,
-      delay: 0.1,
-      ease: cinematicEase,
-    },
-  },
-}
+/** Each headline line gets the curtain's own gesture — the mask it revealed its own route
+ *  label through, staggered the same way rather than fading up as a block. Support copy is
+ *  not text alone (it carries the CTA buttons too), so it keeps a plain rise instead of a mask. */
+const HERO_LINE_DELAYS = [0.08, 0.17, 0.26]
 
 const heroSupportReveal = {
   hidden: {
     opacity: 0,
     y: 26,
-    scale: 0.99,
   },
   visible: {
     opacity: 1,
     y: 0,
-    scale: 1,
     transition: {
       duration: 0.62,
       delay: 0.34,
@@ -145,29 +131,30 @@ export default function Hero() {
         <div className="relative mx-auto flex w-full max-w-7xl -translate-y-6 flex-col items-center text-center md:-translate-y-8">
           <div className="mobile-no-load-animation relative w-full max-w-6xl hero-cinematic-reveal">
 
-            <motion.h1
-              className="mx-auto max-w-[1080px] text-balance text-[clamp(2.45rem,5.6vw,5.1rem)] font-semibold leading-[1.02] tracking-[-0.055em] drop-shadow-[0_18px_60px_rgba(0,0,0,0.18)] will-change-[transform,opacity] dark:drop-shadow-[0_18px_60px_rgba(0,0,0,0.38)]"
-              variants={heroTextReveal}
-              initial={shouldAnimateHero === true ? 'hidden' : false}
-              animate={shouldAnimateHero === true ? (shouldRevealHero ? 'visible' : 'hidden') : undefined}
-            >
+            <h1 className="mx-auto max-w-[1080px] text-balance text-[clamp(2.45rem,5.6vw,5.1rem)] font-semibold leading-[1.02] tracking-[-0.055em] drop-shadow-[0_18px_60px_rgba(0,0,0,0.18)] dark:drop-shadow-[0_18px_60px_rgba(0,0,0,0.38)]">
               <span className="block">
-                <span className="text-gradient-ivory">Hi, I&apos;m</span> <span className="text-gradient-jesper">Jesper.</span>
+                <MaskedRise active={shouldRevealHero} delay={HERO_LINE_DELAYS[0]}>
+                  <span className="text-gradient-ivory">Hi, I&apos;m</span> <span className="text-gradient-jesper">Jesper.</span>
+                </MaskedRise>
               </span>
               <span className="block">
-                <span className="text-gradient-ivory">I build</span>{' '}
-                <span className="space-micro-planet-inline" />{' '}
-                <span className="relative inline-block text-gradient-ivory">
-                  websites
-                </span>
+                <MaskedRise active={shouldRevealHero} delay={HERO_LINE_DELAYS[1]}>
+                  <span className="text-gradient-ivory">I build</span>{' '}
+                  <span className="space-micro-planet-inline" />{' '}
+                  <span className="relative inline-block text-gradient-ivory">
+                    websites
+                  </span>
+                </MaskedRise>
               </span>
               <span className="block">
-                <span className="text-gradient-ivory">from idea to</span>{' '}
-                <span className="inline-block text-gradient-ivory">
-                  launch.
-                </span>
+                <MaskedRise active={shouldRevealHero} delay={HERO_LINE_DELAYS[2]}>
+                  <span className="text-gradient-ivory">from idea to</span>{' '}
+                  <span className="inline-block text-gradient-ivory">
+                    launch.
+                  </span>
+                </MaskedRise>
               </span>
-            </motion.h1>
+            </h1>
           </div>
 
           <div className="relative z-20 mt-8 md:mt-10">

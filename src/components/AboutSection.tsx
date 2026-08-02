@@ -130,8 +130,8 @@ export default function AboutSection() {
 
           <motion.div
             className="about-story-portrait-wrap"
-            initial={shouldReduceMotion ? false : { opacity: 0, y: 24, scale: 0.98 }}
-            whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0, scale: 1 }}
+            initial={shouldReduceMotion ? false : { opacity: 0, y: 24 }}
+            whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
             viewport={cinematicViewport}
             transition={{ duration: 0.8, delay: 0.16, ease: cinematicEase }}
           >

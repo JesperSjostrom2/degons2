@@ -150,7 +150,7 @@ export default function TechStackSection() {
             <MaskedRise delay={0.12}>My tech stack</MaskedRise>
           </h2>
           <p className="section-description">
-            The technologies I enjoy using right now. Always open to better tools for the job.
+            <MaskedRise delay={0.2}>The technologies I enjoy using right now. Always open to better tools for the job.</MaskedRise>
           </p>
         </motion.div>
 

@@ -22,16 +22,22 @@ export const cinematicViewport = {
   margin: '0px 0px -16% 0px',
 } as const
 
+/**
+ * Every reveal below is a pure translate, on purpose: the curtain never scales or tilts
+ * anything, only clips and moves it, so neither does the content that follows it. A scaled-up
+ * entrance is the one trait that would have given these away as a stock reveal rather than the
+ * same gesture as the transition — it was there before and read as a different animation
+ * wearing the same easing.
+ */
+
 export const cinematicHeader: Variants = {
   hidden: {
     opacity: 0,
     y: 24,
-    scale: 0.992,
   },
   visible: {
     opacity: 1,
     y: 0,
-    scale: 1,
     transition: {
       duration: 0.84,
       ease: cinematicEase,
@@ -41,26 +47,21 @@ export const cinematicHeader: Variants = {
 
 export const cinematicPanel = (direction: 'up' | 'left' | 'right' | 'deep' = 'up'): Variants => {
   const offset = {
-    up: { x: 0, y: 58, rotateX: 0, rotateZ: 0 },
-    left: { x: -46, y: 38, rotateX: 0, rotateZ: -0.8 },
-    right: { x: 46, y: 38, rotateX: 0, rotateZ: 0.8 },
-    deep: { x: 0, y: 72, rotateX: 7, rotateZ: 0 },
+    up: { x: 0, y: 58 },
+    left: { x: -46, y: 38 },
+    right: { x: 46, y: 38 },
+    deep: { x: 0, y: 72 },
   }[direction]
 
   return {
     hidden: {
       opacity: 0,
       ...offset,
-      scale: 0.985,
-      transformPerspective: 1200,
     },
     visible: {
       opacity: 1,
       x: 0,
       y: 0,
-      rotateX: 0,
-      rotateZ: 0,
-      scale: 1,
       transition: {
         duration: 0.78,
         ease: cinematicEase,
@@ -73,12 +74,10 @@ export const cinematicItem = (delay = 0): Variants => ({
   hidden: {
     opacity: 0,
     y: 18,
-    scale: 0.994,
   },
   visible: {
     opacity: 1,
     y: 0,
-    scale: 1,
     transition: {
       duration: 0.72,
       delay,

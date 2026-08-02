@@ -175,7 +175,7 @@ export default function ContactSection() {
             <MaskedRise delay={0.12}>Let&apos;s talk about your site</MaskedRise>
           </h2>
           <p className="section-description">
-            Tell me what you&apos;re building, where it stands, and what you want next.
+            <MaskedRise delay={0.2}>Tell me what you&apos;re building, where it stands, and what you want next.</MaskedRise>
           </p>
         </motion.div>
 
