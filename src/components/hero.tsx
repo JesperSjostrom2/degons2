@@ -7,7 +7,7 @@ import { ArrowRight, Copy } from 'lucide-react'
 
 import { useEnhancedVisuals } from '@/lib/use-enhanced-visuals'
 import { cinematicEase } from '@/lib/site-motion'
-import { CURTAIN_REVEAL_EVENT } from '@/lib/route-transition'
+import { useRouteTransition } from '@/components/transition/route-transition-provider'
 
 const SideRays = dynamic(() => import('@/components/SideRays'), {
   ssr: false,
@@ -55,29 +55,35 @@ export default function Hero() {
   const [shouldRevealHero, setShouldRevealHero] = useState(false)
   const [shouldAnimateHero, setShouldAnimateHero] = useState<boolean | null>(null)
   const showLightRays = useEnhancedVisuals()
+  const { phase: curtainPhase } = useRouteTransition()
 
   useEffect(() => {
-    const revealHero = () => setShouldRevealHero(true)
     const canAnimateHero = window.matchMedia('(min-width: 768px)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
     setShouldAnimateHero(canAnimateHero)
 
     if (!canAnimateHero) {
       setShouldRevealHero(true)
-      return
     }
-
-    // Arrived without a curtain in front of us — a soft navigation, or reduced motion, which
-    // unmounts it before this ever runs. Nothing to wait for.
-    if (!document.querySelector('.route-curtain')) {
-      const frame = window.requestAnimationFrame(revealHero)
-      return () => window.cancelAnimationFrame(frame)
-    }
-
-    window.addEventListener(CURTAIN_REVEAL_EVENT, revealHero, { once: true })
-
-    return () => window.removeEventListener(CURTAIN_REVEAL_EVENT, revealHero)
   }, [])
+
+  /**
+   * The hero waits for the curtain to start lifting, then comes up behind it.
+   *
+   * This reads the phase rather than listening for a one-shot event, because the event could
+   * fire before this component existed. When a route took longer to land than the curtain's
+   * safety timeout, the curtain lifted on its own, the event went out to nobody, and the home
+   * page then mounted *during* the lift — finding a curtain still in the DOM, subscribing, and
+   * waiting for something that had already happened. The hero never appeared.
+   *
+   * A phase cannot be missed the way an event can: arriving late simply reads `revealing` or
+   * `idle` and shows itself at once.
+   */
+  useEffect(() => {
+    if (curtainPhase === 'revealing' || curtainPhase === 'idle') {
+      setShouldRevealHero(true)
+    }
+  }, [curtainPhase])
 
   const handleCopyEmail = async () => {
     try {

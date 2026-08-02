@@ -13,7 +13,6 @@ import { usePathname, useRouter } from 'next/navigation'
 
 import {
   COVER_MS,
-  CURTAIN_REVEAL_EVENT,
   REDUCED_FADE_MS,
   REVEAL_MS,
   SWAP_TIMEOUT_MS,
@@ -50,9 +49,9 @@ interface RouteTransitionValue {
   tokens: RouteToken[]
   reducedMotion: boolean
   isFirstLoad: boolean
-  /** Arriving at the site introduces it; moving through it says where you are going. Only the
-   *  very first sight of the home page gets the wordmark — a deep link to a project still names
-   *  that project, which is the whole reason those intros exist. */
+  /** Home is the site itself, so it is named by the wordmark rather than by a route — arriving
+   *  there, whether by refresh or by clicking the logo, shows whose site this is. Every other
+   *  destination is somewhere *within* it and says so with its path. */
   showWordmark: boolean
   /** Returns true when it has taken the navigation, so the caller knows to preventDefault. */
   navigate: (href: string) => boolean
@@ -81,9 +80,10 @@ export default function RouteTransitionProvider({ children }: { children: ReactN
   const [tokens, setTokens] = useState<RouteToken[]>(() => resolveRouteTokens(pathname ?? '/'))
   const [reducedMotion, setReducedMotion] = useState(false)
   const [isFirstLoad, setIsFirstLoad] = useState(true)
-  // Captured once. `pathname` moves the instant a navigation commits, and the wordmark must not
-  // follow it.
-  const [landedOn] = useState(pathname)
+  // Set from the *destination* when a navigation starts, not derived from `pathname` — that
+  // moves the instant the route commits, which would swap the wordmark for a path halfway
+  // through the curtain.
+  const [showWordmark, setShowWordmark] = useState(() => (pathname ?? '/') === '/')
 
   const phaseRef = useRef<TransitionPhase>('covering')
   phaseRef.current = phase
@@ -111,8 +111,6 @@ export default function RouteTransitionProvider({ children }: { children: ReactN
 
   const beginReveal = useCallback(() => {
     setPhase('revealing')
-    // The hero waits on this before revealing itself — the same contract the old loader had.
-    window.dispatchEvent(new Event(CURTAIN_REVEAL_EVENT))
     // Released at the *start* of the lift, not the end: the page underneath is already on
     // screen and being scrollable is part of it feeling arrived at rather than presented.
     window.dispatchEvent(new Event(TRANSITION_UNLOCK_EVENT))
@@ -162,7 +160,6 @@ export default function RouteTransitionProvider({ children }: { children: ReactN
   useEffect(() => {
     pathnameRef.current = pathname
 
-    if (phaseRef.current !== 'swapping') return
     if (pendingRef.current === null) return
     if (pathname !== pendingRef.current) return
 
@@ -170,17 +167,23 @@ export default function RouteTransitionProvider({ children }: { children: ReactN
 
     pendingRef.current = null
     pendingHrefRef.current = null
-    // Kills the stranded-curtain safety net below, which has now done its job by not firing.
-    clearTimers()
 
-    // Under an opaque curtain, so it is never seen. Skipped whenever the destination asked to
-    // land somewhere specific — a pending section, or a hash in the href — because both scroll
-    // while the curtain is still down, so it lifts already on the right part of the page
-    // instead of scrolling visibly after arrival.
+    // Normally under an opaque curtain, so it is never seen. Skipped whenever the destination
+    // asked to land somewhere specific — a pending section, or a hash in the href — because
+    // both scroll while the curtain is still down, so it lifts already on the right part of the
+    // page instead of scrolling visibly after arrival.
     if (!landedWithHash && !hasPendingSection()) {
       window.scrollTo(0, 0)
     }
 
+    // The safety net below may already have given up waiting and lifted the curtain, in which
+    // case the page is arriving in the open and there is nothing left to schedule. Checked
+    // after the scroll reset, not before: landing late is exactly when being dumped halfway
+    // down the previous page is most obvious.
+    if (phaseRef.current !== 'swapping') return
+
+    // Kills the safety net, which has now done its job by not firing.
+    clearTimers()
     after(reducedRef.current ? 0 : coveredHoldMs(tokenCountRef.current), beginReveal)
   }, [pathname, after, beginReveal, clearTimers])
 
@@ -206,8 +209,9 @@ export default function RouteTransitionProvider({ children }: { children: ReactN
       pendingRef.current = target
       pendingHrefRef.current = href
       setTokens(resolveRouteTokens(target))
-      // Clicking away during the opening lift ends the first load then and there, so the
-      // wordmark cannot bleed into a curtain that is now going somewhere.
+      setShowWordmark(target === '/')
+      // Clicking away during the opening lift ends the first load then and there, so its
+      // backdrop cannot reappear behind a curtain that is now going somewhere.
       setIsFirstLoad(false)
       setPhase('covering')
       window.dispatchEvent(new Event(TRANSITION_LOCK_EVENT))
@@ -216,11 +220,11 @@ export default function RouteTransitionProvider({ children }: { children: ReactN
         setPhase('swapping')
         router.push(href)
 
-        // A stranded curtain is a broken site; lifting early is only an ugly one.
+        // A stranded curtain is a broken site; lifting early is only an ugly one. `pendingRef`
+        // is deliberately left set, so if the route does eventually land the effect above can
+        // still reset the scroll — it just will not try to lift a curtain that has already gone.
         after(SWAP_TIMEOUT_MS, () => {
           if (phaseRef.current !== 'swapping') return
-          pendingRef.current = null
-          pendingHrefRef.current = null
           beginReveal()
         })
       })
@@ -239,7 +243,7 @@ export default function RouteTransitionProvider({ children }: { children: ReactN
         tokens,
         reducedMotion,
         isFirstLoad,
-        showWordmark: isFirstLoad && landedOn === '/',
+        showWordmark,
         navigate,
       }}
     >

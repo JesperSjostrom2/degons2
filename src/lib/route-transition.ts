@@ -170,10 +170,14 @@ export const resolveRouteTokens = (pathname: string): RouteToken[] => {
 
 /* --- Events ---------------------------------------------------------------------------------- */
 
-/** Fired as the curtain starts to lift. `hero.tsx` waits on this before revealing itself, the
- *  same contract the old loader had. */
-export const CURTAIN_REVEAL_EVENT = 'route-curtain-reveal'
-/** `smooth-scroll.tsx` listens for these and stops/starts Lenis. An event rather than a shared
- *  instance because Lenis is created per page and has no handle to reach for. */
+/**
+ * `smooth-scroll.tsx` listens for these and stops/starts Lenis. An event rather than a shared
+ * instance because Lenis is created per page and has no handle to reach for.
+ *
+ * Note these are fire-and-forget on purpose: both are safe to miss, because a Lenis that was
+ * never stopped does not need starting. Anything that must *not* miss the moment should read
+ * `phase` from the provider instead — `hero.tsx` used to listen for a reveal event here and
+ * could mount after it had already fired, leaving the hero invisible for good.
+ */
 export const TRANSITION_LOCK_EVENT = 'route-transition-lock'
 export const TRANSITION_UNLOCK_EVENT = 'route-transition-unlock'
