@@ -15,10 +15,10 @@ export default function StoryBridge() {
           <image
             className="story-bridge-rocket"
             href="/assets/rocket-icon.svg"
-            x="132"
-            y="136.5"
-            width="28"
-            height="34.65"
+            x="136.64"
+            y="142.75"
+            width="18"
+            height="22.28"
             transform="rotate(170 145 154)"
           />
         </svg>

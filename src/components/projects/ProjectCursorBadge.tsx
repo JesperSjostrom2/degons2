@@ -30,6 +30,9 @@ export default function ProjectCursorBadge() {
   const targetRef = useRef({ x: 0, y: 0 })
   const currentRef = useRef({ x: 0, y: 0 })
   const frameRef = useRef(0)
+  // False until the badge has ever been placed for real. Lets the very first hover of a
+  // session snap straight to the pointer instead of sliding in from the coordinate origin.
+  const hasPositionedRef = useRef(false)
   const [hasMounted, setHasMounted] = useState(false)
   const [isActive, setIsActive] = useState(false)
 
@@ -76,8 +79,17 @@ export default function ProjectCursorBadge() {
       }
 
       targetRef.current = { x: event.clientX, y: event.clientY }
-      currentRef.current = { x: event.clientX, y: event.clientY }
-      place(event.clientX, event.clientY)
+
+      // First hover ever, or reduced motion: snap straight there. Otherwise leave `current`
+      // where it was when the pointer left the last card, so crossing the gap between two
+      // cards slides the badge over rather than teleporting it — the same lerp that trails
+      // the pointer inside a card carries it between them too.
+      if (!hasPositionedRef.current || reducedMotion.matches) {
+        currentRef.current = { x: event.clientX, y: event.clientY }
+        place(event.clientX, event.clientY)
+      }
+
+      hasPositionedRef.current = true
       setIsActive(true)
     }
 
