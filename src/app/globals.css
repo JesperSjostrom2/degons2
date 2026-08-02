@@ -206,6 +206,25 @@
     font-family: var(--font-body), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   }
 
+  /**
+   * The site draws its own scroll indicator, so the native bar is never the thing you read
+   * position from — and against the route curtain it is worse than redundant: the sheet is
+   * full-bleed but a fixed element stops at the scrollbar gutter, so the bar sits as a strip of
+   * OS chrome down the edge of it.
+   *
+   * Site-wide rather than per page. This used to live in a styled-jsx block inside
+   * `ProgressScrollbar`, which only ever mounts on the home page, so every project page kept
+   * its bar and nobody had decided that — it was just where the rule happened to be written.
+   */
+  html {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
   /* Optimize for Lenis smooth scrolling */
   html.lenis {
     height: auto;
@@ -764,39 +783,114 @@
         transparent 100%);
   }
 
-  .site-load-reveal {
-    opacity: 1;
-    transition: opacity 320ms cubic-bezier(0.16, 1, 0.3, 1);
+  /* Route curtain. All motion is framer-motion's — what is here is the box and the type.
+     See `lib/route-transition.ts` for the geometry and every duration.
+
+     What a first load's sheet rises over, one z-index below it. */
+  .route-curtain-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 9998;
+    background: var(--sky);
   }
 
-  .site-load-reveal--exit {
-    opacity: 0;
+  .route-curtain {
+    /* Must match CURTAIN_INSET_PX in lib/route-transition.ts: how far the sheet overhangs so
+       the belly always has somewhere to bulge into. */
+    --curtain-inset: 260px;
+
+    /* Light on a dark site. Pulled back from --site-text so a full-bleed sheet is a warm
+       plane rather than a white flash, and warm enough to belong to the same room as
+       --primary. The ink is the site's own near-black. */
+    --curtain-bg: #e8e2d6;
+    --curtain-ink: #16150f;
+
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Deliberately no `overflow: hidden`. The sheet has to overhang the panel for the curve to
+       lead ahead of it, and clipping here would cut off the one thing that makes this shape
+       read as a peel rather than a slab. Nothing past the viewport gets painted anyway. */
+    overscroll-behavior: contain;
+    will-change: transform;
   }
 
-  .site-load-reveal__glow {
-    background: radial-gradient(circle at 50% 50%, rgba(245, 239, 228, 0.18) 0%, rgba(218, 197, 167, 0.08) 22%, rgba(11, 11, 10, 0.86) 54%, var(--sky) 74%);
-    animation: site-load-glow 1.42s cubic-bezier(0.16, 1, 0.3, 1) both;
-  }
-
-  .site-load-reveal__logo {
-    opacity: 0;
-    transform: translateY(12px) scale(0.955);
-    animation: site-load-logo 1.08s cubic-bezier(0.16, 1, 0.3, 1) 0.8s both;
-  }
-
-  .site-load-reveal__rail {
-    animation: site-load-rail-out 0.42s cubic-bezier(0.16, 1, 0.3, 1) 1.1s both;
-  }
-
-  .site-load-reveal__line {
-    transform: scaleX(0);
-    animation: site-load-line 0.76s cubic-bezier(0.62, 0, 0.13, 1) 0.08s both;
-  }
-
-  .site-load-reveal__scanner {
+  .route-curtain__sheet {
+    position: absolute;
     left: 0;
-    opacity: 0;
-    animation: site-load-scanner 0.78s cubic-bezier(0.62, 0, 0.13, 1) 0.06s both;
+    top: calc(-1 * var(--curtain-inset));
+    display: block;
+    width: 100%;
+    height: calc(100% + var(--curtain-inset) * 2);
+  }
+
+  /* The route, shown as the route. No kicker, no rule, no underline — the only thing on the
+     sheet is where you are going, and it writes itself from the pathname. */
+  .route-curtain__route {
+    position: relative;
+    display: flex;
+    max-width: 94vw;
+    align-items: baseline;
+    justify-content: center;
+    /* Outfit, like every heading on the site. This was a system mono stack, which read as a
+       URL but belonged to no part of the type system — on Windows it resolved to Consolas and
+       looked borrowed. The slashes and the domain carry the "this is a route" idea on their
+       own; the typeface does not have to say it too. */
+    font-family: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+    font-size: clamp(1.15rem, 3.8vw, 2.9rem);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    white-space: nowrap;
+  }
+
+  /* Each segment — and the wordmark — rises out of its own mask. */
+  .route-curtain__clip {
+    display: inline-block;
+    overflow: hidden;
+  }
+
+  /* Scoped to the type: the padding/margin pair gives descenders somewhere to live, without it
+     `overflow: hidden` shears the tail off the j and the p. The wordmark is a cropped image
+     with no descenders to rescue, and inheriting this would just push it off centre. */
+  .route-curtain__route .route-curtain__clip {
+    padding-bottom: 0.14em;
+    margin-bottom: -0.14em;
+  }
+
+  .route-curtain__seg {
+    display: inline-block;
+    color: var(--curtain-ink);
+  }
+
+  /* Structure — the domain and the separators — sits back so the segments read first. */
+  .route-curtain__seg--muted {
+    color: color-mix(in srgb, var(--curtain-ink) 42%, transparent);
+  }
+
+  /**
+   * The wordmark, for the one moment a visitor has not gone anywhere yet.
+   *
+   * The file is 1751×898 but the letterforms only occupy the middle 448px — a quarter of the
+   * height is transparent above and below. Cropping to that ink band with `cover` means the
+   * rise starts on the type instead of spending its first hundred milliseconds travelling
+   * through empty alpha.
+   */
+  .route-curtain__mark {
+    position: relative;
+    display: block;
+    width: min(62vw, 24rem);
+    aspect-ratio: 1751 / 448;
+  }
+
+  /* Flat cream artwork, so knocking it back to ink is one filter rather than a second asset.
+     The slight transparency lands it on the sheet's warm near-black instead of a hard #000. */
+  .route-curtain__mark img {
+    opacity: 0.92;
+    filter: brightness(0);
   }
 
   @keyframes cinematic-card-sheen {
@@ -822,82 +916,6 @@
 
     to {
       opacity: 1;
-    }
-  }
-
-  @keyframes site-load-glow {
-    0% {
-      opacity: 0.78;
-      transform: scale(0.88);
-    }
-
-    100% {
-      opacity: 0.12;
-      transform: scale(1.14);
-    }
-  }
-
-  @keyframes site-load-logo {
-    0% {
-      opacity: 0;
-      transform: translateY(12px) scale(0.955);
-    }
-
-    34% {
-      opacity: 1;
-      transform: translateY(0) scale(1.008);
-    }
-
-    78% {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-
-    100% {
-      opacity: 0;
-      transform: translateY(-5px) scale(0.992);
-    }
-  }
-
-  @keyframes site-load-rail-out {
-    0%, 46% {
-      opacity: 1;
-    }
-
-    100% {
-      opacity: 0;
-    }
-  }
-
-  @keyframes site-load-line {
-    0% {
-      transform: scaleX(0);
-    }
-
-    100% {
-      transform: scaleX(1);
-    }
-  }
-
-  @keyframes site-load-scanner {
-    0% {
-      left: 0.35rem;
-      opacity: 0;
-    }
-
-    16% {
-      left: 0.75rem;
-      opacity: 0.62;
-    }
-
-    72% {
-      left: calc(100% - 2rem);
-      opacity: 0.5;
-    }
-
-    100% {
-      left: calc(100% - 1.6rem);
-      opacity: 0;
     }
   }
 
@@ -3183,20 +3201,18 @@
     .about-portrait-hover-sheen,
     .about-light-orb,
     .cinematic-reveal-card::after,
-    .hero-cinematic-reveal::before,
-    .site-load-reveal,
-    .site-load-reveal__glow,
-    .site-load-reveal__logo,
-    .site-load-reveal__line,
-    .site-load-reveal__scanner {
+    .hero-cinematic-reveal::before {
       transition: none;
       animation: none;
     }
 
-    /* The shell unmounts the loader at hydration for reduced motion; this
-       covers the frames before hydration, so the server-rendered page shows
-       content immediately instead of a flash of curtain. */
-    .site-load-reveal {
+    /* The provider unmounts the first-load curtain at hydration for reduced motion; this covers
+       the frames before that, so the server-rendered page shows content immediately instead of
+       a blank field. Scoped to the first load on purpose — a curtain raised by an actual
+       navigation still crossfades, because the risk in this pattern is the large directional
+       travel, not the transition existing. */
+    .route-curtain[data-first-load='true'],
+    .route-curtain-backdrop {
       display: none;
     }
   }

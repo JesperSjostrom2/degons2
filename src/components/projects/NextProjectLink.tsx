@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import Link from 'next/link'
+import TransitionLink from '@/components/transition/transition-link'
 import { useCallback, useEffect, useRef, type CSSProperties, type MouseEvent } from 'react'
 import type { Project } from '@/data/projects'
 
@@ -82,7 +82,7 @@ const NextProjectLink = ({ project }: { project: Project }) => {
   )
 
   return (
-    <Link
+    <TransitionLink
       ref={rowRef}
       href={`/work/${project.slug}`}
       className="project-page__next group/next"
@@ -134,7 +134,7 @@ const NextProjectLink = ({ project }: { project: Project }) => {
         <span className="project-page__next-label">Next project</span>
         <span className="project-page__next-name">{project.displayName}</span>
       </span>
-    </Link>
+    </TransitionLink>
   )
 }
 

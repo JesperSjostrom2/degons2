@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import Link from 'next/link'
+import TransitionLink from '@/components/transition/transition-link'
 import { usePathname } from 'next/navigation'
 import { requestSectionOnHome } from '@/lib/section-handoff'
 import { projects } from '@/data/projects'
@@ -21,9 +21,13 @@ import { projects } from '@/data/projects'
  * the bottom stays — it is a recommendation to keep going, which is a different job from
  * navigation.
  *
- * `Home` uses the sessionStorage handoff in `lib/section-handoff` rather than the site's
- * usual `data-scroll-to`, because the home page's content is still behind the loader on
- * arrival and the target does not exist yet. See that file for the full reasoning.
+ * `Home` uses the sessionStorage handoff in `lib/section-handoff` rather than the site's usual
+ * `data-scroll-to`, because `data-scroll-to` only ever looks at the current page and the
+ * target is on a different one. See that file for the full reasoning.
+ *
+ * Every link here is a `TransitionLink`, so leaving runs the route curtain — including the
+ * wordmark. The navbar itself still does not animate: it is the one thing that persists
+ * between project pages, and the curtain passing over it is the transition, not a redraw.
  */
 const ProjectNavbar = () => {
   const pathname = usePathname()
@@ -31,7 +35,7 @@ const ProjectNavbar = () => {
 
   return (
     <>
-      <Link
+      <TransitionLink
         href="/"
         className="fixed left-10 top-6 z-50 hidden lg:block"
         aria-label="Jesper Sjöström — home"
@@ -45,7 +49,7 @@ const ProjectNavbar = () => {
           style={{ filter: 'drop-shadow(0 0 12px rgba(255, 255, 255, 0.08)) blur(0.2px)' }}
           priority
         />
-      </Link>
+      </TransitionLink>
 
       <div
         className="fixed right-10 top-6 z-50 hidden lg:block text-[0.68rem] font-medium uppercase tracking-[0.18em] text-[#f5efe4]/62"
@@ -71,13 +75,13 @@ const ProjectNavbar = () => {
           style={{ padding: '0.35rem 1.15rem' }}
         >
           <div className="project-nav__rail">
-            <Link
+            <TransitionLink
               href="/"
               onClick={() => requestSectionOnHome('home')}
               className="project-nav__link project-nav__link--back"
             >
               Home
-            </Link>
+            </TransitionLink>
 
             {projects.map((project) =>
               project.slug === activeSlug ? (
@@ -91,13 +95,13 @@ const ProjectNavbar = () => {
                   {project.displayName}
                 </span>
               ) : (
-                <Link
+                <TransitionLink
                   key={project.slug}
                   href={`/work/${project.slug}`}
                   className="project-nav__link"
                 >
                   {project.displayName}
-                </Link>
+                </TransitionLink>
               ),
             )}
           </div>

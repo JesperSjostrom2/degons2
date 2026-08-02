@@ -4,15 +4,18 @@ import { useEffect, useRef } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import Lenis from 'lenis'
 import { shouldUseEnhancedMotion } from '@/lib/client-performance'
-import { requestSectionOnHome } from '@/lib/section-handoff'
+import { hasPendingSection, requestSectionOnHome } from '@/lib/section-handoff'
+import { TRANSITION_LOCK_EVENT, TRANSITION_UNLOCK_EVENT } from '@/lib/route-transition'
+import { useRouteTransition } from '@/components/transition/route-transition-provider'
 
 export default function SmoothScroll() {
   const router = useRouter()
   const pathname = usePathname()
+  const { navigate } = useRouteTransition()
   // Read inside the listener rather than closed over: the effect runs once, so a
   // captured `pathname` would still say `/` after a client-side navigation.
-  const routeRef = useRef({ router, pathname })
-  routeRef.current = { router, pathname }
+  const routeRef = useRef({ router, pathname, navigate })
+  routeRef.current = { router, pathname, navigate }
 
   useEffect(() => {
     const useNativeScrollByDefault = window.matchMedia('(pointer: coarse), (max-width: 767px)').matches
@@ -76,12 +79,18 @@ export default function SmoothScroll() {
        * scroll once the home page has mounted.
        */
       if (!document.querySelector(selector)) {
-        const { router: nextRouter, pathname: currentPath } = routeRef.current
+        const { router: nextRouter, pathname: currentPath, navigate: runTransition } = routeRef.current
 
         if (currentPath !== '/') {
           event.preventDefault()
           requestSectionOnHome(selector.slice(1))
-          nextRouter.push('/')
+
+          // Through the curtain, so a footer link reads like every other way of leaving this
+          // page. It falls back to a plain push only if the curtain declines outright, which
+          // it does for a destination it considers the current page.
+          if (!runTransition('/')) {
+            nextRouter.push('/')
+          }
         }
 
         return
@@ -91,7 +100,33 @@ export default function SmoothScroll() {
       scrollToHash(selector)
     }
 
+    /**
+     * Lenis is created per page and never handed out, so the curtain cannot reach it directly —
+     * it shouts instead. Without this, momentum from the page you are leaving carries on behind
+     * an opaque overlay and lands you somewhere you did not ask to be.
+     */
+    const handleTransitionLock = () => {
+      lenis?.stop()
+    }
+
+    const handleTransitionUnlock = () => {
+      lenis?.start()
+
+      // This instance was constructed during the route swap, against the *outgoing* page's
+      // scroll position, and the curtain has moved the document since. Without a resync the
+      // first wheel tick yanks the new page back to wherever the old one was parked.
+      //
+      // Except when a section handoff is pending: `SectionHandoff` is about to scroll the page
+      // itself, and an explicit target set here would fight its every attempt until the budget
+      // ran out. It re-asserts on its own poll, so leaving Lenis untargeted lets it win.
+      if (!hasPendingSection()) {
+        lenis?.scrollTo(window.scrollY, { immediate: true, force: true })
+      }
+    }
+
     document.addEventListener('click', handleAnchorClick)
+    window.addEventListener(TRANSITION_LOCK_EVENT, handleTransitionLock)
+    window.addEventListener(TRANSITION_UNLOCK_EVENT, handleTransitionUnlock)
 
     if (supportsVisualViewport && useNativeScrollByDefault) {
       updateZoomState()
@@ -159,6 +194,8 @@ export default function SmoothScroll() {
     return () => {
       isActive = false
       document.removeEventListener('click', handleAnchorClick)
+      window.removeEventListener(TRANSITION_LOCK_EVENT, handleTransitionLock)
+      window.removeEventListener(TRANSITION_UNLOCK_EVENT, handleTransitionUnlock)
       window.visualViewport?.removeEventListener('resize', updateZoomState)
       document.documentElement.classList.remove('mobile-zoomed')
       cleanupLenisVisibility?.()

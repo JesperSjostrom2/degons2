@@ -132,11 +132,12 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: serializeJsonLd(personJsonLd) }}
         />
-        {/* Without JS the loader can never exit, so it must never appear:
-            crawlers that don't execute scripts and JS-disabled visitors get
-            the full page instead of a permanent curtain. */}
+        {/* Without JS the curtain can never lift and the backdrop can never be
+            thrown away, so neither may appear: crawlers that don't execute
+            scripts and JS-disabled visitors get the full page instead of a
+            permanent blank field. */}
         <noscript>
-          <style>{`.site-load-reveal{display:none}`}</style>
+          <style>{`.route-curtain,.route-curtain-backdrop{display:none}`}</style>
         </noscript>
         <div className="cinematic-grain-overlay" />
         <SiteShell>{children}</SiteShell>

@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import TransitionLink from '@/components/transition/transition-link'
 import type { CSSProperties } from 'react'
 import { motion } from 'framer-motion'
 import { cinematicPanel, cinematicViewport } from '@/lib/site-motion'
@@ -43,7 +43,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
       whileInView="visible"
       viewport={cinematicViewport}
     >
-      <Link href={`/work/${project.slug}`} className="project-card__link group/panel" {...hoverProps}>
+      <TransitionLink href={`/work/${project.slug}`} className="project-card__link group/panel" {...hoverProps}>
         <ProjectShot
           shot={project.cover}
           liveLabel={project.liveLabel}
@@ -78,7 +78,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
             </>
           }
         />
-      </Link>
+      </TransitionLink>
     </motion.article>
   )
 }

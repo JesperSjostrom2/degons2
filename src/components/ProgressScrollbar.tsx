@@ -91,20 +91,10 @@ const ProgressScrollbar: React.FC = () => {
     }
   }, [isEnabled])
 
+  // Hiding the native scrollbar moved to `globals.css`. It was global styling declared inside a
+  // component that only mounts on the home page, so project pages never got it.
   return (
     <>
-      <style jsx global>{`
-        /* Hide default scrollbar */
-        ::-webkit-scrollbar {
-          display: none;
-        }
-
-        html {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-      `}</style>
-
       {isEnabled ? (
         <div className="fixed right-16 top-1/2 z-50 hidden -translate-y-1/2 xl:block">
           <div className="relative h-32 w-1 overflow-hidden rounded-full border border-[color:var(--site-border)] bg-[rgba(20,20,19,0.18)] shadow-[0_0_0_1px_rgba(250,249,245,0.36)] dark:border-white/10 dark:bg-white/20 dark:shadow-none">

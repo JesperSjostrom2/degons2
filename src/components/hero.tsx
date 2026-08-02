@@ -7,6 +7,7 @@ import { ArrowRight, Copy } from 'lucide-react'
 
 import { useEnhancedVisuals } from '@/lib/use-enhanced-visuals'
 import { cinematicEase } from '@/lib/site-motion'
+import { CURTAIN_REVEAL_EVENT } from '@/lib/route-transition'
 
 const SideRays = dynamic(() => import('@/components/SideRays'), {
   ssr: false,
@@ -66,14 +67,16 @@ export default function Hero() {
       return
     }
 
-    if (!document.querySelector('.site-load-reveal')) {
+    // Arrived without a curtain in front of us — a soft navigation, or reduced motion, which
+    // unmounts it before this ever runs. Nothing to wait for.
+    if (!document.querySelector('.route-curtain')) {
       const frame = window.requestAnimationFrame(revealHero)
       return () => window.cancelAnimationFrame(frame)
     }
 
-    window.addEventListener('site-loader-exit', revealHero, { once: true })
+    window.addEventListener(CURTAIN_REVEAL_EVENT, revealHero, { once: true })
 
-    return () => window.removeEventListener('site-loader-exit', revealHero)
+    return () => window.removeEventListener(CURTAIN_REVEAL_EVENT, revealHero)
   }, [])
 
   const handleCopyEmail = async () => {

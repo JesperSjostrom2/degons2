@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import TransitionLink from '@/components/transition/transition-link'
 import SiteAtmosphere from '@/components/site-atmosphere'
 
 export default function ProjectNotFound() {
@@ -13,9 +13,9 @@ export default function ProjectNotFound() {
           That link does not point at anything. The rest of the work is still where you left it.
         </p>
 
-        <Link href="/#projects" className="project-page__back mt-8 inline-flex">
+        <TransitionLink href="/#projects" className="project-page__back mt-8 inline-flex">
           All projects
-        </Link>
+        </TransitionLink>
       </div>
     </main>
   )
