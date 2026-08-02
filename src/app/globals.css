@@ -4151,6 +4151,11 @@
     width: 100%;
   }
 
+  /* Stays square and opaque, because the hole in the frame PNG is square: this is the only
+     thing standing between the cutout and the page behind it. The rounded corners belong to
+     the video inside, and the triangles they cut away land on this black rather than on the
+     background — which is what a real panel does anyway, its corners sitting against the
+     black of the display glass. It also shows before the video decodes. */
   .project-page__mac-screen {
     position: absolute;
     left: 13.0773%;
@@ -4158,19 +4163,34 @@
     width: 73.8454%;
     height: 72.6061%;
     overflow: hidden;
-    /* Shows before the video decodes, and fills the strip the video cannot reach. */
-    background: #0b0b0b;
+    /* Pure black, and it has to stay pure black. The old #0b0b0b sat one point away from
+       --sky (#0b0b0a), so the corners the radius cut away matched the page behind them
+       exactly and read as holes rather than as screen. Nothing here is transparent — this
+       is the darkest thing on the page, which is what sells it as switched-on glass. */
+    background: #000;
+    /* Not decoration — a bleed. The percentages above resolve to fractional pixels while the
+       frame PNG scales on its own, so the two edges miss each other by a sub-pixel and let a
+       hairline of page through. Invisible while this fill matched --sky; a gray rim the moment
+       it went pure black. The spread pushes black a few pixels past the hole on every side,
+       where the opaque bezel (z-index 1) covers it. Spread, not a border, so the video's box
+       and its corner radius are untouched. */
+    box-shadow: 0 0 0 3px #000;
   }
 
   /* The capture is recorded at the screen's own ratio (1.6019 against 1.5995), so `cover`
      fills it edge to edge and the 0.15% difference is absorbed as a sub-pixel trim rather
      than a visible crop. `cover` rather than `contain` so rounding can never leave a
-     hairline of bare screen along an edge. */
+     hairline of bare screen along an edge.
+
+     Two radii because one percentage would resolve against each axis separately and give an
+     elliptical corner on a 1.5995 box; the vertical figure is the horizontal one times that
+     ratio, which makes the corner circular and keeps it circular at every width. */
   .project-page__mac-screen video {
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center top;
+    border-radius: 1.25% / 2%;
   }
 
   .project-page__mac-frame {

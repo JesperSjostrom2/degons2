@@ -11,6 +11,10 @@ import { useAutoplayInView } from '@/lib/use-autoplay-in-view'
  * corners. So the video is positioned into that rectangle and the frame is laid on top of it.
  * No mask, no clip-path, and the bezel's rounded corners come free from the PNG.
  *
+ * The screen's own inner corners are rounded in CSS instead, on the video rather than on the
+ * div holding it: that div is the only opaque thing over a square hole, so rounding it would
+ * open four gaps onto the page background.
+ *
  * Every capture is recorded at 1368x854 — ratio 1.6019 against the screen's 1.5995 — so the
  * video fills the cutout edge to edge and the 0.15% difference is absorbed as a sub-pixel
  * trim. Re-exporting a capture at a different ratio is what breaks this: anything wider gets
