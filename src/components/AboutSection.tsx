@@ -6,6 +6,7 @@ import { Clock3, MapPin } from 'lucide-react'
 import { motion, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion'
 
 import SocialLinks from '@/components/social-links'
+import MaskedRise from '@/components/masked-rise'
 import { cinematicEase, cinematicViewport } from '@/lib/site-motion'
 import { skillIconColors } from '@/lib/skill-colors'
 import { techIcons } from '@/lib/tech-icons'
@@ -107,7 +108,9 @@ export default function AboutSection() {
             viewport={cinematicViewport}
             transition={{ duration: 0.7, delay: 0.08, ease: cinematicEase }}
           >
-            <h2 className="section-title">My story</h2>
+            <h2 className="section-title">
+              <MaskedRise delay={0.12}>My story</MaskedRise>
+            </h2>
             <p className="about-career-copy">
               I&apos;m Jesper. I&apos;m from Sweden and now live in Helsinki, Finland. I first got exposed to Java in school in 2016, and that was the start of me getting into development.
             </p>
@@ -149,8 +152,9 @@ export default function AboutSection() {
           viewport={cinematicViewport}
           transition={{ duration: 0.7, ease: cinematicEase }}
         >
-          <h2 className="section-title">Experience</h2>
-          <p className="about-experience-subtitle">Follow me through my journey as a frontend developer.</p>
+          <h2 className="section-title">
+            <MaskedRise delay={0.12}>Experience</MaskedRise>
+          </h2>
         </motion.div>
 
         <div ref={timelineRef} className="about-career-timeline mx-auto max-w-7xl">

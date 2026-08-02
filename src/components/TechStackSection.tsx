@@ -14,6 +14,7 @@ import {
 } from 'react-icons/si'
 import { type IconType } from 'react-icons'
 import { cinematicHeader, cinematicPanel, cinematicViewport } from '@/lib/site-motion'
+import MaskedRise from '@/components/masked-rise'
 
 interface TechItem {
   name: string
@@ -145,7 +146,9 @@ export default function TechStackSection() {
           whileInView="visible"
           viewport={cinematicViewport}
         >
-          <h2 className="section-title">My tech stack</h2>
+          <h2 className="section-title">
+            <MaskedRise delay={0.12}>My tech stack</MaskedRise>
+          </h2>
           <p className="section-description">
             The technologies I enjoy using right now. Always open to better tools for the job.
           </p>

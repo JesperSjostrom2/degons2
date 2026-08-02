@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowRight, BriefcaseBusiness, CalendarClock, ChevronDown, Github, HelpCircle, Linkedin, Loader2, Mail, MessageSquare, Plus, UserRound } from 'lucide-react'
 import { FiMail } from 'react-icons/fi'
 import { cinematicHeader, cinematicPanel, cinematicViewport } from '@/lib/site-motion'
+import MaskedRise from '@/components/masked-rise'
 
 const projectTypes = ['Landing page', 'SaaS', 'SEO improvements', 'Redesign', 'Branding']
 
@@ -170,7 +171,9 @@ export default function ContactSection() {
           whileInView="visible"
           viewport={cinematicViewport}
         >
-          <h2 className="section-title">Let&apos;s talk about your site</h2>
+          <h2 className="section-title">
+            <MaskedRise delay={0.12}>Let&apos;s talk about your site</MaskedRise>
+          </h2>
           <p className="section-description">
             Tell me what you&apos;re building, where it stands, and what you want next.
           </p>

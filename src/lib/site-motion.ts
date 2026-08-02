@@ -13,11 +13,14 @@ export const cinematicEase = [0.16, 1, 0.3, 1] as const
  */
 export const curtainEase = [0.76, 0, 0.24, 1] as const
 
+/* `as const` so `margin` keeps its literal type. framer types it as a template literal
+   (`${number}px | %` groups), and a widened `string` is rejected by `useInView` — which
+   `masked-rise.tsx` passes this to, so the one shared viewport definition can stay shared. */
 export const cinematicViewport = {
   once: true,
   amount: 0.12,
   margin: '0px 0px -16% 0px',
-}
+} as const
 
 export const cinematicHeader: Variants = {
   hidden: {

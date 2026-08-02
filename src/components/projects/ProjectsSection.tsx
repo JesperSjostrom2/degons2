@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import { cinematicHeader, cinematicViewport } from '@/lib/site-motion'
 import { projects } from '@/data/projects'
+import MaskedRise from '@/components/masked-rise'
 import ProjectCard from './ProjectCard'
 import ProjectCursorBadge from './ProjectCursorBadge'
 
@@ -22,7 +23,9 @@ const ProjectsSection: React.FC = () => (
         whileInView="visible"
         viewport={cinematicViewport}
       >
-        <h2 className="section-title">Past projects</h2>
+        <h2 className="section-title">
+          <MaskedRise delay={0.12}>Past projects</MaskedRise>
+        </h2>
       </motion.div>
 
       <div className="project-cards">

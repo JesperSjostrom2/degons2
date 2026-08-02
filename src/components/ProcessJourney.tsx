@@ -5,6 +5,7 @@ import { motion, useReducedMotion } from 'framer-motion'
 import type { CSSProperties } from 'react'
 
 import { cinematicEase, cinematicPanel, cinematicViewport } from '@/lib/site-motion'
+import MaskedRise from '@/components/masked-rise'
 
 const processSteps = [
   {
@@ -57,7 +58,9 @@ export default function ProcessJourney() {
           viewport={cinematicViewport}
           transition={{ duration: 0.76, ease: cinematicEase }}
         >
-          <h2 className="section-title">How it works.</h2>
+          <h2 className="section-title">
+            <MaskedRise delay={0.12}>How it works</MaskedRise>
+          </h2>
         </motion.div>
 
         <motion.div

@@ -15,6 +15,7 @@ import NextProjectLink from '@/components/projects/NextProjectLink'
 import ProjectNavbar from '@/components/projects/ProjectNavbar'
 import SiteLinkPill from '@/components/site-link-pill'
 import { serializeJsonLd } from '@/lib/json-ld'
+import { notFoundMetadata } from '@/lib/not-found-metadata'
 import { SITE_URL } from '@/lib/site-config'
 import ScrollToTop from '@/components/scroll-to-top'
 import CustomCursor from '@/components/custom-cursor'
@@ -32,8 +33,11 @@ export const generateMetadata = async ({
   const { slug } = await params
   const project = getProjectBySlug(slug)
 
+  /* An unknown slug renders the site's one 404 (`app/not-found.tsx`) — but this route's
+     `generateMetadata` still owns the `<head>`, so the title has to come from the same place
+     that page's does or the tab disagrees with the screen. */
   if (!project) {
-    return { title: 'Project not found' }
+    return notFoundMetadata
   }
 
   return {

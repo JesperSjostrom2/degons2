@@ -333,22 +333,19 @@
     -webkit-text-fill-color: transparent;
   }
 
+  /* The site's one display accent, and the only coloured word in the hero.
+     Two stops, not three: the old recipe ran down to #8b7355, the darkest
+     value in the palette, so on a #0b0b0a sky the bottom third of every
+     letterform died into the background — which is what made the name read
+     muddier than the word below it. Bright at the cap line, gold at the
+     baseline, so the type is lit from above like everything else here. */
   .text-gradient-jesper {
-    background: linear-gradient(180deg, #b0aea5 0%, #dac5a7 55%, #8b7355 100%);
+    background: linear-gradient(180deg, #f5efe4 0%, #dac5a7 100%);
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
     -webkit-text-fill-color: transparent;
     filter: drop-shadow(0 0 10px rgba(218, 197, 167, 0.12));
-  }
-
-  .text-gradient-trust {
-    background: linear-gradient(180deg, #ffffff 0%, #f5efe4 40%, #dac5a7 100%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    color: transparent;
-    -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 0 18px rgba(218, 197, 167, 0.25));
   }
 
   .hero-orbital-sphere {
@@ -447,16 +444,13 @@
     text-align: center;
   }
 
-  .section-label {
-    margin-bottom: 0.75rem;
-    font-size: 0.875rem;
-    font-weight: 600;
-    line-height: 1.4;
-    letter-spacing: 0.28em;
-    text-transform: uppercase;
-    color: color-mix(in srgb, var(--accent) 74%, var(--site-muted));
-  }
-
+  /* No section overline here on purpose, and no dead class waiting to be used
+     again. Home-page sections all have an h2 that already names them, so a
+     kicker above one could only ever restate it — "PROCESS" over "How it
+     works" — and a label that carries nothing is what makes a page look
+     generated. `.project-page__label` is a different job and stays: on /work it
+     titles content that has no heading of its own, so TYPOGRAPHY over two font
+     specimens is the only thing telling you what you are looking at. */
   .section-title {
     color: var(--site-text);
     font-size: clamp(2.2rem, 5.2vw, 3.25rem);
@@ -470,6 +464,38 @@
     color: var(--site-muted);
     font-size: 1.125rem;
     line-height: 1.75rem;
+  }
+
+  /* The box for components/masked-rise.tsx. All motion is framer's; this is the
+     mask and the parked position.
+
+     The padding/margin pair is the same descender rescue as
+     `.route-curtain__route .route-curtain__clip` — without it `overflow: hidden`
+     shears the tail off the y and the g in "A smoother way to get your website
+     online". Sized in em so it tracks whatever heading it wraps. */
+  .masked-rise {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.14em;
+    margin-bottom: -0.14em;
+  }
+
+  /* Parked here rather than in framer's `initial` so the pre-hydration markup and
+     the mounted component agree on where the text starts. See the note in
+     masked-rise.tsx. */
+  .masked-rise__inner {
+    display: block;
+    transform: translateY(110%);
+    will-change: transform;
+  }
+
+  /* The two cases masked-rise.tsx refuses to animate in. It renders a plain span
+     for both, so nothing ever sets an inline transform and this is what wins. */
+  @media (max-width: 767px), (prefers-reduced-motion: reduce) {
+    .masked-rise__inner {
+      transform: none;
+      will-change: auto;
+    }
   }
 
   .cinematic-section-header {
@@ -1304,6 +1330,16 @@
       0.12em 0.28em 0 -0.04em rgba(20, 20, 19, 0.16);
   }
 
+  /* The hero's small planet, lit from directly above so it agrees with
+     .planet-horizon::after on the same screen. It used to take its light from
+     the top-LEFT — a highlight at 32% 24% over a 135deg ramp — and then
+     rotate(-13deg) swung even that off-axis, so the two planets in one
+     viewport were lit from two different places. Everything here is on the
+     vertical now; the only rotation left is none.
+
+     No blur either. At 0.40em a sub-pixel blur does not soften an edge, it
+     just stops the sphere resolving, which is what made it read as a smudge
+     between two words rather than an object. */
   .space-micro-planet-inline {
     display: inline-flex;
     position: relative;
@@ -1312,18 +1348,17 @@
     border-radius: 50%;
     border: 1px solid rgba(218, 197, 167, 0.18);
     background:
-      radial-gradient(circle at 32% 24%, rgba(255, 255, 255, 0.52), transparent 22%),
-      radial-gradient(circle at 72% 78%, color-mix(in srgb, var(--accent) 32%, transparent), transparent 42%),
-      linear-gradient(135deg, #c2a77b 0%, #8b7355 46%, #3a332b 100%);
+      radial-gradient(circle at 50% 18%, rgba(255, 255, 255, 0.52), transparent 24%),
+      radial-gradient(circle at 50% 82%, color-mix(in srgb, var(--accent) 32%, transparent), transparent 42%),
+      linear-gradient(180deg, #c2a77b 0%, #8b7355 46%, #3a332b 100%);
     box-shadow:
-      inset -0.1em -0.1em 0.22em rgba(0, 0, 0, 0.4),
-      inset 0.05em 0.05em 0.12em rgba(255, 255, 255, 0.2),
+      inset 0 -0.12em 0.22em rgba(0, 0, 0, 0.4),
+      inset 0 0.06em 0.12em rgba(255, 255, 255, 0.2),
       0 0 15px rgba(234, 225, 211, 0.1);
     vertical-align: middle;
-    transform: translateY(-0.06em) rotate(-13deg);
+    transform: translateY(-0.06em);
     margin: 0 0.1em;
     opacity: 0.94;
-    filter: blur(0.35px);
   }
 
   .space-micro-planet-inline::after {
@@ -1332,8 +1367,8 @@
     inset: 0;
     border-radius: inherit;
     background:
-      radial-gradient(70% 68% at 34% 28%, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0) 75%),
-      linear-gradient(110deg, transparent 0 48%, rgba(255, 255, 255, 0.06) 49%, transparent 58%);
+      radial-gradient(70% 68% at 50% 24%, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0) 75%),
+      linear-gradient(180deg, transparent 0 48%, rgba(255, 255, 255, 0.06) 49%, transparent 58%);
     pointer-events: none;
   }
 
@@ -1346,18 +1381,19 @@
     height: 14%;
     border-radius: 9999px;
     background: rgba(245, 239, 228, 0.15);
+    /* Surface specks. Their offsets are a shadow direction like any other, so
+       they fall straight down with the rest of the sphere's light. */
     box-shadow:
-      0.22em 0.12em 0 -0.02em rgba(245, 239, 228, 0.08),
-      0.12em 0.28em 0 -0.04em rgba(20, 20, 19, 0.12);
+      0.18em 0.16em 0 -0.02em rgba(245, 239, 228, 0.08),
+      0.04em 0.30em 0 -0.04em rgba(20, 20, 19, 0.12);
   }
 
   @media (max-width: 767px) {
     .space-micro-planet-inline {
       margin: 0 0.08em;
-      filter: none;
       box-shadow:
-        inset -0.08em -0.08em 0.18em rgba(0, 0, 0, 0.34),
-        inset 0.04em 0.04em 0.1em rgba(255, 255, 255, 0.22),
+        inset 0 -0.1em 0.18em rgba(0, 0, 0, 0.34),
+        inset 0 0.05em 0.1em rgba(255, 255, 255, 0.22),
         0 0 10px rgba(234, 225, 211, 0.1);
     }
   }
@@ -1978,14 +2014,6 @@
     font-weight: 650;
     letter-spacing: -0.035em;
     line-height: 1.2;
-  }
-
-  .about-experience-subtitle {
-    max-width: 32rem;
-    margin-top: 0.8rem;
-    color: #8f8d86;
-    font-size: 1.05rem;
-    line-height: 1.6;
   }
 
   .about-career-timeline {
@@ -4795,6 +4823,175 @@
     .project-page__next:hover .project-page__next-label {
       letter-spacing: 0.26em;
     }
+  }
+
+  /* ══ 404 ════════════════════════════════════════════════════════════════
+     One screen, centred, on the site's own backdrop — the flat --sky, the
+     meteors and the star bands, all shared through `SiteAtmosphere`. Nothing
+     here scrolls: a page whose whole message is "this is not a page" should
+     not ask to be explored.
+
+     Nothing in this block introduces a colour, a font or a radius that is not
+     already somewhere else on the site. The only new thing is the scale of the
+     numerals. */
+
+  .notfound {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100svh;
+    /* Weighted to the bottom, which is what centres it. Optically a display composition wants
+       to sit a little above the middle of the screen, and flex centring inside uneven padding
+       is how it gets there without a transform to undo at every breakpoint. */
+    padding: 6rem 1.5rem 7.5rem;
+  }
+
+  /* The light above. Same premise as the hero's rays — one source, overhead,
+     and everything below falling away from it — at a fraction of the strength,
+     because here it is lighting three characters rather than a whole fold.
+     Centred a little above the numerals so their top edge is the brightest
+     part of the screen. */
+  .notfound__glow {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: min(130vw, 72rem);
+    aspect-ratio: 1.55 / 1;
+    transform: translate(-50%, -64%);
+    background: radial-gradient(
+      closest-side,
+      rgba(245, 239, 228, 0.085),
+      rgba(245, 239, 228, 0.028) 46%,
+      transparent 72%
+    );
+  }
+
+  .notfound__body {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 40rem;
+    text-align: center;
+  }
+
+  /* ── The numerals ────────────────────────────────────────────────────── */
+
+  .notfound__figure {
+    font-family: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+    font-size: clamp(6.5rem, 26vw, 19rem);
+    font-weight: 700;
+    /* Hero tracking. Negative tracking on centred text pulls it left by the
+       trailing space it removes, so the indent puts it back. */
+    letter-spacing: -0.055em;
+    text-indent: 0.055em;
+    line-height: 1;
+  }
+
+  /* `.masked-rise` clips to the content box, and at line-height 1 a glyph's own
+     ascent can sit fractionally above it — 1% of 19rem is a visibly shaved
+     digit. Padding buys headroom; the matching negative margin means the type
+     still sits exactly where it would have. The bottom pair is the base rule's,
+     restated because it is being overridden alongside the top. */
+  .notfound__figure .masked-rise {
+    padding-top: 0.12em;
+    margin-top: -0.12em;
+    padding-bottom: 0.16em;
+    margin-bottom: -0.16em;
+  }
+
+  /* ── Below the fold line ─────────────────────────────────────────────── */
+
+  .notfound__support {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-top: clamp(1.75rem, 4vw, 2.5rem);
+  }
+
+  /* The full column, not a shorter accent. At 28rem it came out 27px narrower than the numerals
+     above it — near enough to look like a failed attempt to match them rather than a deliberate
+     width. Taking the whole column puts the numerals clearly inside it at every size. */
+  .notfound__rule {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--rim-border) 20%,
+      var(--rim-border) 80%,
+      transparent
+    );
+  }
+
+  /* The row keeps its height whether or not the chip is in it. The address can
+     only be read from the browser after mount, and a page that grows a row
+     under the numerals a frame late is a page that flinches. */
+  .notfound__address {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2rem;
+    margin-top: clamp(1.5rem, 3vw, 2rem);
+  }
+
+  /* The address that missed, set the way the route curtain sets it: domain and
+     separators muted, the segment you actually asked for carrying the weight.
+     Same object, same notation — the transition you just watched named this
+     page, and this is that name held still. */
+  .notfound__path {
+    display: inline-flex;
+    align-items: center;
+    /* A deep path on a narrow screen wraps inside the chip rather than being cut off by it.
+       The stadium radius survives the second line; a truncated address does not survive being
+       the one piece of information on the page. */
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 0.2rem;
+    border: 1px solid var(--rim-border);
+    border-radius: 9999px;
+    background: var(--site-surface);
+    padding: 0.4rem 0.95rem;
+    font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    line-height: 1;
+    backdrop-filter: blur(10px);
+    max-width: 100%;
+  }
+
+  .notfound__path-part {
+    color: var(--site-text);
+    white-space: nowrap;
+  }
+
+  .notfound__path-part.is-muted {
+    color: var(--site-dim);
+  }
+
+  .notfound__lede {
+    max-width: 30rem;
+    margin-top: clamp(1.25rem, 2.5vw, 1.6rem);
+    color: rgba(245, 239, 228, 0.7);
+    font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+    font-size: 1rem;
+    line-height: 1.7;
+    text-wrap: balance;
+  }
+
+  /* ── The way out ─────────────────────────────────────────────────────── */
+
+  /* One child, so this is only here to centre it and set the distance from the
+     copy above. It stays a flex row rather than collapsing into the pill's own
+     margin because the gap is the composition's, not the button's. */
+  .notfound__actions {
+    display: flex;
+    justify-content: center;
+    margin-top: clamp(2.25rem, 5vw, 3rem);
   }
 
 }

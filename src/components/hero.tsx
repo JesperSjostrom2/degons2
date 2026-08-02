@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowRight, Copy } from 'lucide-react'
 
 import { useEnhancedVisuals } from '@/lib/use-enhanced-visuals'
-import { cinematicEase } from '@/lib/site-motion'
+import { cinematicEase, curtainEase } from '@/lib/site-motion'
 import { useRouteTransition } from '@/components/transition/route-transition-provider'
 
 const SideRays = dynamic(() => import('@/components/SideRays'), {
@@ -14,6 +14,15 @@ const SideRays = dynamic(() => import('@/components/SideRays'), {
   loading: () => null,
 })
 
+/**
+ * The hero's arrival, timed against the curtain that hands off to it.
+ *
+ * The curtain is gone 400ms after it starts lifting (`REVEAL_MS`). This chain used to still be
+ * running at ~2.97s — the planet alone was 2.35s on a 0.62s delay — so a brisk, weighted
+ * transition handed the page to something four times slower and the two read as unrelated
+ * events. Everything below now lands inside ~1.6s, which is close enough to the curtain's own
+ * pace that the lift and the arrival read as one move.
+ */
 const heroTextReveal = {
   hidden: {
     opacity: 0,
@@ -25,8 +34,8 @@ const heroTextReveal = {
     y: 0,
     scale: 1,
     transition: {
-      duration: 0.95,
-      delay: 0.18,
+      duration: 0.72,
+      delay: 0.1,
       ease: cinematicEase,
     },
   },
@@ -43,8 +52,8 @@ const heroSupportReveal = {
     y: 0,
     scale: 1,
     transition: {
-      duration: 0.78,
-      delay: 0.52,
+      duration: 0.62,
+      delay: 0.34,
       ease: cinematicEase,
     },
   },
@@ -154,7 +163,7 @@ export default function Hero() {
               </span>
               <span className="block">
                 <span className="text-gradient-ivory">from idea to</span>{' '}
-                <span className="inline-block text-gradient-trust">
+                <span className="inline-block text-gradient-ivory">
                   launch.
                 </span>
               </span>
@@ -250,7 +259,7 @@ export default function Hero() {
             className="planet-horizon-halo pointer-events-none absolute bottom-[-10.25rem] left-1/2 z-[9] h-[16rem] w-[100vw] max-w-[100vw] md:bottom-[-22rem] md:h-[28rem] md:w-[96vw] md:max-w-[1320px] lg:w-[118vw]"
             initial={shouldAnimateHero ? { opacity: 0 } : false}
             animate={shouldAnimateHero ? (shouldRevealHero ? { opacity: 1 } : { opacity: 0 }) : undefined}
-            transition={{ duration: 1.8, delay: 0.9, ease: cinematicEase }}
+            transition={{ duration: 1.0, delay: 0.55, ease: cinematicEase }}
             style={{ transform: 'translateX(-50%) scale(1.9)' }}
           />
 
@@ -258,7 +267,11 @@ export default function Hero() {
             className="planet-horizon pointer-events-none absolute bottom-[-10.25rem] left-1/2 z-10 h-[16rem] w-[100vw] max-w-[100vw] md:bottom-[-22rem] md:h-[28rem] md:w-[96vw] md:max-w-[1320px] lg:w-[118vw]"
             initial={shouldAnimateHero ? { y: 96, scale: 0.84 } : false}
             animate={shouldAnimateHero ? (shouldRevealHero ? { y: 0, scale: 1 } : { y: 96, scale: 0.84 }) : undefined}
-            transition={{ duration: 2.35, delay: 0.62, ease: [0.12, 0.82, 0.22, 1] }}
+            /* `curtainEase` rather than a bespoke curve: this is a large mass travelling and
+               then stopping, which is exactly what that easing was written for (see
+               site-motion.ts), and it is the curve the curtain that just lifted was using. The
+               planet arriving is the last beat of the transition, not a separate animation. */
+            transition={{ duration: 1.3, delay: 0.3, ease: curtainEase }}
             style={{ x: '-50%', transformOrigin: '50% 60%' }}
           />
         </>

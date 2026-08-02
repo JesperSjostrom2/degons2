@@ -1,6 +1,7 @@
 import dynamic from 'next/dynamic'
 
 import ScrollReveal from '@/components/scroll-reveal'
+import MaskedRise from '@/components/masked-rise'
 
 /* MagicBento is the largest client component in the bundle and sits below the
    fold. Splitting it here keeps its HTML server-rendered (ssr defaults to
@@ -14,7 +15,9 @@ export default function WhyMeSection() {
       <div className="relative z-20 mx-auto flex w-full max-w-[1320px] flex-col items-center px-6">
         <div className="section-header relative z-30">
           <ScrollReveal delay={0.08} blur>
-            <h2 className="section-title">A smoother way to get your website online</h2>
+            <h2 className="section-title">
+              <MaskedRise delay={0.12}>A smoother way to get your website online</MaskedRise>
+            </h2>
           </ScrollReveal>
         </div>
         <MagicBento />
