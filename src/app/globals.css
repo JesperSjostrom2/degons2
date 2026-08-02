@@ -3444,6 +3444,12 @@
     box-shadow:
       inset 0 1px 0 var(--rim-light-soft),
       inset 0 -1px 0 var(--rim-edge-warm);
+    /* A standing layer, not one hover creates and destroys. The hover lift below adds a
+       translateY to this same transform rather than introducing one from nothing — going from
+       "no transform" to "has one" is what was letting some frames composite the still (blurred
+       and scaled once .is-previewing) against this box's rounded clip before the layer for the
+       lift existed, leaving a square sliver of it showing at the corners. */
+    transform: translateZ(0);
   }
 
   /* The screenshot is the card; the bar underneath is just type on the page.
@@ -3456,16 +3462,21 @@
   .project-card__link > .project-card__shot {
     transition:
       border-color 420ms ease,
-      box-shadow 420ms ease;
+      box-shadow 420ms ease,
+      transform 420ms cubic-bezier(0.76, 0, 0.24, 1);
   }
 
   @media (hover: hover) and (pointer: fine) {
+    /* One accent for every card's hover rim, not each project's own — #dac5a7 is the site's
+       own warm neutral (see --rim-edge-warm), already the fallback everywhere --project-accent
+       is read, so this is what a card looks like with no per-project override at all. */
     .project-card__link:hover > .project-card__shot {
-      border-color: color-mix(in srgb, var(--project-accent, #dac5a7) 26%, var(--rim-border));
+      transform: translateY(-8px) translateZ(0);
+      border-color: color-mix(in srgb, #dac5a7 26%, var(--rim-border));
       box-shadow:
         inset 0 1px 0 var(--rim-light),
         inset 0 -1px 0 var(--rim-edge-warm),
-        0 0 3rem -1.1rem color-mix(in srgb, var(--project-accent, #dac5a7) 40%, transparent);
+        0 0 3rem -1.1rem color-mix(in srgb, #dac5a7 40%, transparent);
     }
   }
 
@@ -3627,6 +3638,12 @@
     flex: none;
     aspect-ratio: var(--shot-aspect, 19 / 10);
     overflow: hidden;
+    /* Stays square: it is the opaque thing sitting over the tile's own rounded clip, same
+       reasoning as ProjectMacFrame's screen div. Rounding it too would open a gap between its
+       own corner and the tile's, right where the still (blurred and scaled once
+       .is-previewing) needs a clean edge to be clipped against. */
+    isolation: isolate;
+    transform: translateZ(0);
   }
 
   .project-card__img {
@@ -3822,14 +3839,6 @@
     letter-spacing: -0.03em;
     line-height: 1.1;
     text-shadow: 0 2px 24px rgba(0, 0, 0, 0.55);
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    /* Settles back a little while the capture plays, so the two are not both shouting. */
-    .project-card.is-previewing .project-card__caption {
-      opacity: 0.82;
-      transform: translate3d(0, 0.35rem, 0);
-    }
   }
 
   /* ── Responsive ─────────────────────────────────────────────────────── */
