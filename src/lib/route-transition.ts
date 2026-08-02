@@ -48,6 +48,21 @@ export const LABEL_SETTLED_MS = 100
 export const LABEL_OUT_MS = 200
 export const REVEAL_MS = 400
 
+/**
+ * The belly is a swell, not a state.
+ *
+ * Both of these are fractions of the run they belong to — where the curve is at its deepest, and
+ * (on the way out) when it is flat again. It has to grow out of the screen edge rather than
+ * appear at full depth on the sheet's first frame, and it has to be gone by the time the sheet's
+ * trailing edge crosses the opposite edge, or the curve is still bulging into the viewport at
+ * the moment the curtain unmounts and the shape reads as vanishing rather than leaving.
+ */
+export const COVER_BELLY_PEAK = 0.28
+export const REVEAL_BELLY_PEAK = 0.4
+/** Tuned against `CURTAIN_CLEARANCE_PX` and `curtainEase` below: about where the sheet's bottom
+ *  edge reaches the top of the screen. */
+export const REVEAL_BELLY_GONE = 0.74
+
 /** Floor on the covered stretch, for the degenerate case of a route with nothing to say. */
 const COVERED_HOLD_MIN_MS = 60
 
@@ -95,6 +110,21 @@ export const REDUCED_FADE_MS = 120
  *  bulge into. Fixed rather than derived, so the SVG's box never has to resize. */
 export const CURTAIN_INSET_PX = 260
 const BELLY_RATIO = 0.28
+
+/**
+ * How far past the top of the screen the sheet keeps going on the way out.
+ *
+ * `translateY(-100%)` moves the panel by exactly its own height, which parks its bottom edge on
+ * the top of the viewport — and `curtainEase` spends its last hundred milliseconds crawling
+ * through the final few pixels of that. The overshoot puts the end of the travel, and that
+ * crawl, off-screen: what you see is an edge leaving at speed.
+ */
+export const CURTAIN_CLEARANCE_PX = 72
+
+/** The overshoot as a percentage of viewport height, since the sheet's travel is expressed in
+ *  percentages of itself and the two have to be the same unit to animate together. */
+export const curtainExitPercent = (height: number) =>
+  100 + (CURTAIN_CLEARANCE_PX / Math.max(height, 1)) * 100
 
 /** Depth of the bulge for a given viewport width. Narrow screens get a shallower curve out of
  *  the ratio rather than out of a breakpoint. */

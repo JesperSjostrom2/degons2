@@ -7,14 +7,18 @@ import { useEffect, useRef, useState } from 'react'
 import { cinematicEase, curtainEase } from '@/lib/site-motion'
 import {
   COVER_BELLY_LAG_MS,
+  COVER_BELLY_PEAK,
   COVER_MS,
   CURTAIN_INSET_PX,
   LABEL_IN_MS,
   LABEL_LAST_IN_MS,
   LABEL_OUT_MS,
   REDUCED_FADE_MS,
+  REVEAL_BELLY_GONE,
+  REVEAL_BELLY_PEAK,
   REVEAL_MS,
   buildCurtainPath,
+  curtainExitPercent,
   resolveBelly,
   tokenDelayMs,
   type RouteToken,
@@ -27,8 +31,15 @@ import { useRouteTransition } from './route-transition-provider'
  * seats and bows again as it leaves.
  *
  * The whole shape is one animated number — `belly`, the depth of the bulge. The sheet's travel
- * is a separate transform, and the two are offset by `COVER_BELLY_LAG_MS` so the curve trails
- * the sheet instead of arriving welded to it.
+ * is a separate transform, and the curve lags it so the two read as one surface under tension
+ * rather than a rigid shape being slid around.
+ *
+ * The belly is a swell in both directions: zero at the edge of the screen, deepest while the
+ * sheet is crossing it, zero again once it is through. It used to be flat only at the seated
+ * end, which meant the curve appeared at full depth on the sheet's first frame and was still at
+ * full depth on its last — and since the curtain unmounts the moment the lift ends, that last
+ * frame was a bulge sitting on the top of the screen, blinking out. The travel overshoots by
+ * `CURTAIN_CLEARANCE_PX` for the same reason: the end of the move belongs off-screen.
  *
  * It is light on a dark site rather than dark on dark, which is the only reason any of the
  * shape is legible; the first version matched `--sky` and the curve may as well not have been
@@ -129,34 +140,52 @@ function Curtain({
       return
     }
 
-    const depth = resolveBelly(viewBox.width)
+    // From the motion value rather than the mirrored state: the measuring effect above is
+    // declared first, so by the time this runs on mount it holds the real viewport, while
+    // `viewBox` is still a render behind on its SSR default. On a phone that was the difference
+    // between the shallow curve the width asks for and the full 260px one.
+    const depth = resolveBelly(viewportWidth.get())
 
     if (phase === 'covering') {
-      // Arriving from off-screen, the curve starts at full depth and flattens as it seats.
-      // Coming back down over a curtain that was already lifting keeps the curve it had, so
-      // reversing mid-flight does not pop.
-      if (cameFrom === null) belly.set(depth)
-
-      const controls = animate(belly, 0, {
-        duration: COVER_MS / 1000,
-        delay: COVER_BELLY_LAG_MS / 1000,
-        ease: curtainEase,
-      })
+      // The curve swells out of the bottom edge as the sheet arrives and is flat again by the
+      // time it has seated. Starting it at full depth instead put the entire bulge on screen on
+      // the sheet's first frame, before anything had moved — the same defect as the exit, just
+      // at the other end of the transition.
+      //
+      // Coming back down over a curtain that was already lifting skips the swell and just
+      // flattens whatever curve it had, so reversing mid-flight does not pop.
+      const controls =
+        cameFrom === null
+          ? animate(belly, [0, depth, 0], {
+              duration: (COVER_MS + COVER_BELLY_LAG_MS) / 1000,
+              times: [0, COVER_BELLY_PEAK, 1],
+              ease: [cinematicEase, curtainEase],
+            })
+          : animate(belly, 0, {
+              duration: COVER_MS / 1000,
+              delay: COVER_BELLY_LAG_MS / 1000,
+              ease: curtainEase,
+            })
 
       return () => controls.stop()
     }
 
     if (phase === 'revealing') {
-      const controls = animate(belly, depth, {
+      // The mirror of the rise: the trailing edge sags as the sheet is pulled up, then the sag
+      // is drawn out through the top of the screen. It reaching full depth at the exact frame
+      // the curtain unmounted is what made the shape look like it blinked out instead of
+      // leaving — the curve was still there, and then it was not.
+      const controls = animate(belly, [belly.get(), depth, 0], {
         duration: REVEAL_MS / 1000,
-        ease: curtainEase,
+        times: [0, REVEAL_BELLY_PEAK, REVEAL_BELLY_GONE],
+        ease: [cinematicEase, curtainEase],
       })
 
       return () => controls.stop()
     }
 
     belly.set(0)
-  }, [phase, viewBox.width, reducedMotion, belly])
+  }, [phase, viewBox.width, reducedMotion, belly, viewportWidth])
 
   const isLeaving = phase === 'revealing'
 
@@ -171,7 +200,7 @@ function Curtain({
       }
     : {
         initial: { y: '100%' },
-        animate: { y: isLeaving ? '-100%' : '0%' },
+        animate: { y: isLeaving ? `-${curtainExitPercent(viewBox.height)}%` : '0%' },
         transition: { duration: (isLeaving ? REVEAL_MS : COVER_MS) / 1000, ease: curtainEase },
       }
 
