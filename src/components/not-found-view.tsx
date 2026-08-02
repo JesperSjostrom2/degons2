@@ -80,10 +80,6 @@ export default function NotFoundView() {
 
   return (
     <div className="notfound">
-      {/* The site's one light source, doing here what the rays do in the hero: sitting above
-          the thing it lights. Everything below falls away from it. */}
-      <div className="notfound__glow pointer-events-none" aria-hidden="true" />
-
       <div className="notfound__body">
         <h1 className="notfound__figure">
           {/* The gradient rides the mask's own span rather than a child of it — see the note on
@@ -100,8 +96,6 @@ export default function NotFoundView() {
           initial={initial}
           animate={animate}
         >
-          <div className="notfound__rule" aria-hidden="true" />
-
           {/* Height is held whether or not there is a chip in it — see the effect above. */}
           <div className="notfound__address">
             {tokens ? (
