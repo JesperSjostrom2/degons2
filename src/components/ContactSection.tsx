@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState, type CSSProperties, type Form
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowRight, BriefcaseBusiness, CalendarClock, ChevronDown, Github, HelpCircle, Linkedin, Loader2, Mail, MessageSquare, Plus, UserRound } from 'lucide-react'
 import { FiMail } from 'react-icons/fi'
-import { cinematicHeader, cinematicPanel, cinematicViewport } from '@/lib/site-motion'
+import { cinematicHeader, cinematicHeaderCompact, cinematicPanel, cinematicPanelCompact, cinematicViewport, useCompactMotion } from '@/lib/site-motion'
 import MaskedRise from '@/components/masked-rise'
 
 const projectTypes = ['Landing page', 'SaaS', 'SEO improvements', 'Redesign', 'Branding']
@@ -161,12 +161,14 @@ export default function ContactSection() {
     }
   }
 
+  const isCompact = useCompactMotion()
+
   return (
     <section id="contact" className="site-section relative isolate min-h-screen">
       <div className="container relative mx-auto px-6">
         <motion.div
-          className="mobile-no-load-animation section-header cinematic-section-header"
-          variants={cinematicHeader}
+          className="section-header cinematic-section-header"
+          variants={isCompact ? cinematicHeaderCompact : cinematicHeader}
           initial="hidden"
           whileInView="visible"
           viewport={cinematicViewport}
@@ -180,14 +182,14 @@ export default function ContactSection() {
         </motion.div>
 
         <motion.div
-          className="mobile-no-load-animation cinematic-reveal-card mx-auto max-w-7xl"
-          variants={cinematicPanel('deep')}
+          className="cinematic-reveal-card mx-auto max-w-7xl"
+          variants={isCompact ? cinematicPanelCompact() : cinematicPanel('deep')}
           initial="hidden"
           whileInView="visible"
           viewport={cinematicViewport}
         >
             <div className="contact-panel relative z-10 grid overflow-hidden rounded-[28px] border border-[color:var(--rim-border)] lg:grid-cols-[1fr_1.2fr]">
-              <aside className="flex flex-col border-b border-white/[0.07] p-6 md:p-8 lg:border-b-0 lg:border-r">
+              <aside className="flex flex-col border-b border-white/[0.12] bg-white/[0.015] p-6 md:p-8 lg:border-b-0 lg:border-r lg:border-white/[0.07] lg:bg-transparent">
                 <div className="mb-6 flex items-center gap-2.5 border-b border-white/[0.07] pb-5">
                   <HelpCircle className="h-5 w-5 shrink-0 text-[color:var(--site-muted)]" />
                   <h3 className="text-xl font-bold tracking-[-0.025em] text-[color:var(--site-text)] md:text-2xl">Frequently asked questions</h3>
@@ -260,6 +262,11 @@ export default function ContactSection() {
               </aside>
 
               <form onSubmit={handleSubmit} className="p-6 md:p-8">
+                <div className="mb-6 flex items-center gap-2.5 border-b border-white/[0.07] pb-5">
+                  <MessageSquare className="h-5 w-5 shrink-0 text-[color:var(--site-muted)]" />
+                  <h3 className="text-xl font-bold tracking-[-0.025em] text-[color:var(--site-text)] md:text-2xl">Send a message</h3>
+                </div>
+
                 {/* Honeypot: off-screen and inert for humans and assistive tech;
                     bots that fill every field trip the API's fake-success path. */}
                 <input

@@ -129,7 +129,7 @@ export default function Hero() {
 
       <div className="container relative z-10 mx-auto flex min-h-screen items-center px-6 pb-12 pt-24 md:pb-16 md:pt-32">
         <div className="relative mx-auto flex w-full max-w-7xl -translate-y-6 flex-col items-center text-center md:-translate-y-8">
-          <div className="mobile-no-load-animation relative w-full max-w-6xl hero-cinematic-reveal">
+          <div className="relative w-full max-w-6xl hero-cinematic-reveal">
 
             <h1 className="mx-auto max-w-[1080px] text-balance text-[clamp(2.45rem,5.6vw,5.1rem)] font-semibold leading-[1.02] tracking-[-0.055em] drop-shadow-[0_18px_60px_rgba(0,0,0,0.18)] dark:drop-shadow-[0_18px_60px_rgba(0,0,0,0.38)]">
               <span className="block">
@@ -162,7 +162,7 @@ export default function Hero() {
               variants={heroSupportReveal}
               initial={shouldAnimateHero === true ? 'hidden' : false}
               animate={shouldAnimateHero === true ? (shouldRevealHero ? 'visible' : 'hidden') : undefined}
-              className="mobile-no-load-animation flex max-w-3xl flex-col items-center gap-6 will-change-[transform,opacity]"
+              className="flex max-w-3xl flex-col items-center gap-6 will-change-[transform,opacity]"
             >
               <p className="max-w-2xl text-balance text-base leading-7 md:text-lg text-gradient-muted">
                 A frontend developer in Helsinki building landing pages, portfolios, and polished websites for people who need a stronger presence online.
@@ -243,7 +243,7 @@ export default function Hero() {
               A sibling rather than a child, so the planet's 2.35s y/scale
               entry never re-rasters it; this one only fades in. */}
           <motion.div
-            className="planet-horizon-halo pointer-events-none absolute bottom-[-10.25rem] left-1/2 z-[9] h-[16rem] w-[100vw] max-w-[100vw] md:bottom-[-22rem] md:h-[28rem] md:w-[96vw] md:max-w-[1320px] lg:w-[118vw]"
+            className="planet-horizon-halo pointer-events-none absolute bottom-[-10.25rem] left-1/2 z-[9] h-[16rem] w-[52.7vw] max-w-[52.7vw] md:bottom-[-22rem] md:h-[28rem] md:w-[96vw] md:max-w-[1320px] lg:w-[118vw]"
             initial={shouldAnimateHero ? { opacity: 0 } : false}
             animate={shouldAnimateHero ? (shouldRevealHero ? { opacity: 1 } : { opacity: 0 }) : undefined}
             transition={{ duration: 1.0, delay: 0.55, ease: cinematicEase }}

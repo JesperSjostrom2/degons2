@@ -7,7 +7,7 @@ import { motion, useReducedMotion, useScroll, useSpring, useTransform } from 'fr
 
 import SocialLinks from '@/components/social-links'
 import MaskedRise from '@/components/masked-rise'
-import { cinematicEase, cinematicViewport } from '@/lib/site-motion'
+import { cinematicEase, cinematicViewport, useCompactMotion } from '@/lib/site-motion'
 import { skillIconColors } from '@/lib/skill-colors'
 import { techIcons } from '@/lib/tech-icons'
 import { useOffstagePause } from '@/lib/use-offstage-pause'
@@ -82,6 +82,7 @@ export default function AboutSection() {
   const timelineRef = useRef<HTMLDivElement>(null)
   const sectionRef = useRef<HTMLElement>(null)
   const shouldReduceMotion = useReducedMotion()
+  const isCompact = useCompactMotion()
 
   // This section stays fully rendered (the timeline needs real geometry), so
   // its ambient animations would otherwise run even when it is screens away.
@@ -103,10 +104,10 @@ export default function AboutSection() {
         <div className="about-story-layout mx-auto max-w-6xl">
           <motion.div
             className="about-story-copy"
-            initial={shouldReduceMotion ? false : { opacity: 0, y: 18 }}
+            initial={shouldReduceMotion ? false : { opacity: 0, y: isCompact ? 10 : 18 }}
             whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
             viewport={cinematicViewport}
-            transition={{ duration: 0.7, delay: 0.08, ease: cinematicEase }}
+            transition={{ duration: isCompact ? 0.4 : 0.7, delay: isCompact ? 0 : 0.08, ease: cinematicEase }}
           >
             <h2 className="section-title">
               <MaskedRise delay={0.12}>My story</MaskedRise>
@@ -130,10 +131,10 @@ export default function AboutSection() {
 
           <motion.div
             className="about-story-portrait-wrap"
-            initial={shouldReduceMotion ? false : { opacity: 0, y: 24 }}
+            initial={shouldReduceMotion ? false : { opacity: 0, y: isCompact ? 10 : 24 }}
             whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
             viewport={cinematicViewport}
-            transition={{ duration: 0.8, delay: 0.16, ease: cinematicEase }}
+            transition={{ duration: isCompact ? 0.4 : 0.8, delay: isCompact ? 0 : 0.16, ease: cinematicEase }}
           >
             <div className="about-story-planet">
               <span className="about-story-planet-light" aria-hidden="true" />
@@ -146,11 +147,11 @@ export default function AboutSection() {
         </div>
 
         <motion.div
-          className="mobile-no-load-animation section-header cinematic-section-header about-experience-heading"
-          initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
+          className="section-header cinematic-section-header about-experience-heading"
+          initial={shouldReduceMotion ? false : { opacity: 0, y: isCompact ? 10 : 20 }}
           whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
           viewport={cinematicViewport}
-          transition={{ duration: 0.7, ease: cinematicEase }}
+          transition={{ duration: isCompact ? 0.42 : 0.7, ease: cinematicEase }}
         >
           <h2 className="section-title">
             <MaskedRise delay={0.12}>Experience</MaskedRise>
@@ -177,10 +178,10 @@ export default function AboutSection() {
               key={`${item.company}-${item.role}`}
               className="about-career-entry"
               style={{ '--career-accent': item.accent } as CSSProperties}
-              initial={shouldReduceMotion ? false : { opacity: 0, y: 32 }}
+              initial={shouldReduceMotion ? false : { opacity: 0, y: isCompact ? 10 : 32 }}
               whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.22, margin: '0px 0px -10% 0px' }}
-              transition={{ duration: 0.72, delay: index * 0.08, ease: cinematicEase }}
+              transition={{ duration: isCompact ? 0.4 : 0.72, delay: isCompact ? Math.min(index * 0.04, 0.08) : index * 0.08, ease: cinematicEase }}
             >
               <div className="about-career-meta">
                 <p className="about-career-dates">{item.dates}</p>
@@ -199,7 +200,7 @@ export default function AboutSection() {
                   </p>
                   <p className="about-career-location">
                     <Clock3 aria-hidden="true" />
-                    Full time · {item.workplace}
+                    {item.company === 'Freelance' ? item.workplace : `Full time · ${item.workplace}`}
                   </p>
                 </div>
               </div>
@@ -239,10 +240,10 @@ export default function AboutSection() {
 
         <motion.div
           className="about-education mx-auto mt-16 max-w-7xl md:mt-20"
-          initial={shouldReduceMotion ? false : { opacity: 0, y: 24 }}
+          initial={shouldReduceMotion ? false : { opacity: 0, y: isCompact ? 10 : 24 }}
           whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
           viewport={cinematicViewport}
-          transition={{ duration: 0.72, ease: cinematicEase }}
+          transition={{ duration: isCompact ? 0.4 : 0.72, ease: cinematicEase }}
         >
           <div className="about-education-heading">
             <h3>Education</h3>

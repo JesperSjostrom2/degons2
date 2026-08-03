@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { cinematicHeader, cinematicViewport } from '@/lib/site-motion'
+import { cinematicHeader, cinematicHeaderCompact, cinematicViewport, useCompactMotion } from '@/lib/site-motion'
 import { projects } from '@/data/projects'
 import MaskedRise from '@/components/masked-rise'
 import ProjectCard from './ProjectCard'
@@ -13,12 +13,15 @@ import ProjectCursorBadge from './ProjectCursorBadge'
  * The id is load-bearing: the navbar's IntersectionObserver keys off it for the active nav state,
  * and globals.css sets containment on it.
  */
-const ProjectsSection: React.FC = () => (
+const ProjectsSection: React.FC = () => {
+  const isCompact = useCompactMotion()
+
+  return (
   <section id="projects" className="site-section relative isolate">
     <div className="container mx-auto px-6">
       <motion.div
-        className="mobile-no-load-animation section-header cinematic-section-header"
-        variants={cinematicHeader}
+        className="section-header cinematic-section-header"
+        variants={isCompact ? cinematicHeaderCompact : cinematicHeader}
         initial="hidden"
         whileInView="visible"
         viewport={cinematicViewport}
@@ -38,6 +41,7 @@ const ProjectsSection: React.FC = () => (
       <ProjectCursorBadge />
     </div>
   </section>
-)
+  )
+}
 
 export default ProjectsSection

@@ -2,9 +2,9 @@
 
 import React, { useEffect, useRef } from "react";
 import Image from "next/image";
-import { User, Search, FileText, Send, Braces, Gift, ScanLine } from "lucide-react";
+import { Send } from "lucide-react";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
-import { cinematicEase, cinematicPanel, cinematicViewport } from "@/lib/site-motion";
+import { cinematicEase, cinematicPanel, cinematicViewport, useCompactMotion } from "@/lib/site-motion";
 
 const BENTO_ACCENTS = {
   brass: "#a88c62",
@@ -20,160 +20,25 @@ const BENTO_ACCENTS = {
 const CHAT_CLIENT_MESSAGE = "Can we simplify this section a bit?";
 const CHAT_JESPER_MESSAGE = "Yes. I’ll clean it up and share a preview.";
 
-const WORKFLOW_ITEMS = [
-  { key: "structure", title: "Structure", icon: Braces, color: "#dac5a7", position: "left-top" },
-  { key: "frontend", title: "Frontend", icon: FileText, color: "#8fa58a", position: "left-middle" },
-  { key: "launch", title: "Launch", icon: ScanLine, color: "#a79ac7", position: "left-bottom" },
-  { key: "seo", title: "SEO", icon: Gift, color: "#7fa7c8", position: "right-top" },
-  { key: "refine", title: "Refine", icon: Search, color: "#b0aea5", position: "right-middle" },
-  { key: "ready", title: "Ready", icon: User, color: "#dac5a7", position: "right-bottom" },
-];
-
 const BENTO_CARD_VISUAL_ORDER = [1, 2, 4, 3, 0];
 
-const createBentoCardReveal = (index: number): Variants => {
+const createBentoCardReveal = (index: number, isCompact = false): Variants => {
   const basePanel = cinematicPanel("up");
   const visualOrder = BENTO_CARD_VISUAL_ORDER[index] ?? index;
 
   return {
-    hidden: basePanel.hidden,
+    hidden: isCompact ? { opacity: 0, y: 10 } : basePanel.hidden,
     visible: {
       opacity: 1,
       x: 0,
       y: 0,
       transition: {
-        duration: 0.7,
-        delay: Math.min(visualOrder * 0.045, 0.18),
+        duration: isCompact ? 0.4 : 0.7,
+        delay: isCompact ? Math.min(visualOrder * 0.025, 0.08) : Math.min(visualOrder * 0.045, 0.18),
         ease: cinematicEase,
       },
     },
   };
-};
-
-export const ExecutionWorkflowMap = () => {
-  return (
-    <div className="execution-map pointer-events-none relative h-full min-h-[14rem] w-full" aria-hidden="true">
-      <svg className="execution-graphic" viewBox="0 0 520 260" preserveAspectRatio="none">
-        <defs>
-          <radialGradient id="executionBgGlow" cx="50%" cy="47%" r="58%">
-            <stop offset="0%" stopColor="#dac5a7" stopOpacity="0.14" />
-            <stop offset="42%" stopColor="#f5efe4" stopOpacity="0.035" />
-            <stop offset="100%" stopColor="#000000" stopOpacity="0" />
-          </radialGradient>
-          <radialGradient id="executionHubGradient" cx="48%" cy="18%" r="78%">
-            <stop offset="0%" stopColor="#8b8a84" stopOpacity="0.72" />
-            <stop offset="46%" stopColor="#3c3c39" stopOpacity="0.96" />
-            <stop offset="100%" stopColor="#171716" stopOpacity="1" />
-          </radialGradient>
-          <radialGradient id="executionNodeGradient" cx="42%" cy="18%" r="80%">
-            <stop offset="0%" stopColor="#8f8e88" stopOpacity="0.68" />
-            <stop offset="48%" stopColor="#4a4a46" stopOpacity="0.96" />
-            <stop offset="100%" stopColor="#242421" stopOpacity="1" />
-          </radialGradient>
-          <filter id="executionHubShadow" x="-45%" y="-45%" width="190%" height="190%">
-            <feDropShadow dx="0" dy="12" stdDeviation="9" floodColor="#000000" floodOpacity="0.45" />
-            <feDropShadow dx="0" dy="0" stdDeviation="8" floodColor="#dac5a7" floodOpacity="0.08" />
-          </filter>
-          <filter id="executionNodeShadow" x="-60%" y="-60%" width="220%" height="220%">
-            <feDropShadow dx="0" dy="8" stdDeviation="7" floodColor="#000000" floodOpacity="0.38" />
-            <feDropShadow dx="0" dy="0" stdDeviation="4" floodColor="#f5efe4" floodOpacity="0.06" />
-          </filter>
-          <pattern id="executionDots" width="18" height="18" patternUnits="userSpaceOnUse">
-            <circle cx="9" cy="9" r="1.1" fill="#f5efe4" opacity="0.16" />
-          </pattern>
-          <mask id="executionDotFade">
-            <rect width="520" height="260" fill="black" />
-            <ellipse cx="260" cy="124" rx="210" ry="118" fill="white" />
-          </mask>
-        </defs>
-
-        <rect width="520" height="260" fill="url(#executionBgGlow)" />
-        <rect x="36" y="0" width="448" height="240" fill="url(#executionDots)" mask="url(#executionDotFade)" />
-        <ellipse className="execution-side-arc" cx="-28" cy="132" rx="142" ry="128" />
-        <ellipse className="execution-side-arc" cx="548" cy="132" rx="142" ry="128" />
-
-        <g className="execution-rails">
-          <path className="execution-wall-rail" d="M0 130 C20 130 31 72 50 72" />
-          <path className="execution-wall-rail" d="M0 130 C20 130 31 188 50 188" />
-          <path className="execution-wall-rail" d="M520 130 C500 130 489 72 470 72" />
-          <path className="execution-wall-rail" d="M520 130 C500 130 489 188 470 188" />
-          <path className="execution-rail" d="M226 130 H178 C154 130 154 72 126 72 H58" />
-          <path className="execution-rail" d="M226 130 H158 C142 130 136 130 116 130 H90" />
-          <path className="execution-rail" d="M226 130 H178 C154 130 154 188 126 188 H58" />
-          <path className="execution-rail" d="M294 130 H342 C366 130 366 72 394 72 H462" />
-          <path className="execution-rail" d="M294 130 H362 C378 130 384 130 404 130 H430" />
-          <path className="execution-rail" d="M294 130 H342 C366 130 366 188 394 188 H462" />
-          <path className="execution-rail execution-rail-soft" d="M88 72 C116 104 113 154 88 188" />
-          <path className="execution-rail execution-rail-soft" d="M432 72 C404 104 407 154 432 188" />
-          <path className="execution-stub" d="M58 72 H82" />
-          <path className="execution-stub" d="M82 130 H106" />
-          <path className="execution-stub" d="M58 188 H82" />
-          <path className="execution-stub" d="M438 72 H462" />
-          <path className="execution-stub" d="M414 130 H438" />
-          <path className="execution-stub" d="M438 188 H462" />
-        </g>
-
-        <g className="execution-flows">
-          <path className="execution-flow-path execution-flow-a" d="M58 72 H126 C154 72 154 130 178 130 H226" />
-          <path className="execution-flow-path execution-flow-b" d="M90 130 H226" />
-          <path className="execution-flow-path execution-flow-c" d="M58 188 H126 C154 188 154 130 178 130 H226" />
-          <path className="execution-flow-path execution-flow-d" d="M294 130 H342 C366 130 366 72 394 72 H462" />
-          <path className="execution-flow-path execution-flow-e" d="M294 130 H430" />
-          <path className="execution-flow-path execution-flow-f" d="M294 130 H342 C366 130 366 188 394 188 H462" />
-        </g>
-
-        <g className="execution-svg-nodes">
-          <circle cx="58" cy="72" r="28" />
-          <circle cx="90" cy="130" r="28" />
-          <circle cx="58" cy="188" r="28" />
-          <circle cx="462" cy="72" r="28" />
-          <circle cx="430" cy="130" r="28" />
-          <circle cx="462" cy="188" r="28" />
-        </g>
-
-        <rect className="execution-svg-hub" x="225" y="95" width="70" height="70" rx="17" />
-        <g className="execution-svg-dots">
-          <circle cx="249" cy="121" r="2.45" />
-          <circle cx="260" cy="121" r="2.45" />
-          <circle cx="271" cy="121" r="2.45" />
-          <circle cx="249" cy="130" r="2.45" />
-          <circle cx="260" cy="130" r="2.45" />
-          <circle cx="271" cy="130" r="2.45" />
-          <circle cx="249" cy="139" r="2.45" />
-          <circle cx="260" cy="139" r="2.45" />
-          <circle cx="271" cy="139" r="2.45" />
-        </g>
-        <circle className="execution-corner-dot-svg" cx="28" cy="130" r="4" />
-        <circle className="execution-corner-dot-svg" cx="492" cy="130" r="4" />
-      </svg>
-
-      <div className="execution-hub">
-        <span />
-        <span />
-        <span />
-        <span />
-        <span />
-        <span />
-        <span />
-        <span />
-        <span />
-      </div>
-
-      {WORKFLOW_ITEMS.map((item) => {
-        const Icon = item.icon;
-        return (
-          <div
-            key={item.key}
-            className={`execution-node execution-node-${item.position}`}
-            style={{ '--service-color': item.color } as React.CSSProperties}
-          >
-            <Icon className="h-4 w-4" strokeWidth={1.85} />
-            <span>{item.title}</span>
-          </div>
-        );
-      })}
-    </div>
-  );
 };
 
 const BentoCardGrid: React.FC<{
@@ -190,9 +55,9 @@ const BentoCardGrid: React.FC<{
 );
 
 const BENTO_STATIC_SVG_PATHS = {
-  endToEnd: "/assets/bento-cards/static/end-to-end.svg",
-  fastDelivery: "/assets/bento-cards/static/fast-delivery.svg",
-  firstImpression: "/assets/bento-cards/first-impression/Wishlist.svg",
+  endToEnd: "/assets/Smart Recommendations.png",
+  fastDelivery: "/assets/Special Dicount.png",
+  firstImpression: "/assets/Wishlist.png",
 };
 
 type BentoSvgAsset = keyof typeof BENTO_STATIC_SVG_PATHS;
@@ -233,7 +98,6 @@ const BentoAssetImage = ({
         height={height}
         loading="eager"
         draggable={false}
-        unoptimized
       />
     </div>
   );
@@ -244,6 +108,7 @@ const MagicBento: React.FC = () => {
   const scrollPauseTimeoutRef = useRef<number>(0);
   const shouldReduceMotion = useReducedMotion();
   const revealMotionDisabled = shouldReduceMotion === true;
+  const isCompactMotion = useCompactMotion();
 
   useEffect(() => {
     const currentGrid = gridRef.current;
@@ -311,13 +176,12 @@ const MagicBento: React.FC = () => {
           <div className="remote-card-shipping-position absolute inset-x-0 bottom-[-72%] h-[168%] flex items-center justify-center">
             <Image
               className="remote-card-shipping relative z-10 h-auto w-full max-w-[520px] scale-[0.95]"
-              src="/assets/bento-cards/avaibility-globe/International Shipping.svg"
+              src="/assets/International Shipping.png"
               alt=""
               aria-hidden="true"
               width={386}
               height={368}
               draggable={false}
-              unoptimized
             />
           </div>
         </div>
@@ -336,9 +200,9 @@ const MagicBento: React.FC = () => {
         <div className="group/engine service-engine-card relative -m-8 flex h-[calc(100%+4rem)] flex-col overflow-hidden">
           <BentoAssetImage
             asset="endToEnd"
-            className="end-to-end-svg pointer-events-none absolute inset-0 z-10 h-full w-full"
+            className="end-to-end-svg pointer-events-none absolute inset-6 z-10 h-[calc(100%-3rem)] w-[calc(100%-3rem)]"
             width={520}
-            height={260}
+            height={324}
           />
 
           <div className="bento-feature-copy bento-mobile-readable bento-top-card-copy relative z-30 max-w-[20rem] p-6 sm:p-8">
@@ -401,26 +265,26 @@ const MagicBento: React.FC = () => {
     },
     {
       color: BENTO_ACCENTS.champagne,
-      title: "Move fast, launch clean.",
-      description: "Fast feedback loops without sacrificing quality.",
-      label: "FAST DELIVERY",
+      title: "Freelance rates, not agency rates.",
+      description: "Lower overhead, passed straight on to you.",
+      label: "AFFORDABLE",
       svgAsset: "fastDelivery",
       customContent: (
         <div className="group/conversion relative flex h-full flex-col overflow-hidden">
           <div className="contact-card-content conversion-flow-copy bento-mobile-readable relative z-30 max-w-[17.5rem] p-6 sm:p-8">
             <h3 className="bento-card-heading text-[#f5efe4]">
-              Move fast,<br />
-              <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.champagne }}>launch clean.</span>
+              Freelance rates,<br />
+              <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.champagne }}>not agency rates.</span>
             </h3>
-            <p className="bento-card-caption">Fast feedback loops without sacrificing quality.</p>
+            <p className="bento-card-caption">Lower overhead, passed straight on to you.</p>
           </div>
 
-          <div className="conversion-phone-wrap pointer-events-none absolute inset-0 z-20 flex items-center justify-center overflow-visible">
+          <div className="conversion-phone-wrap pointer-events-none absolute inset-0 z-20 flex items-end justify-center overflow-visible">
             <BentoAssetImage
               asset="fastDelivery"
               className="conversion-phone-svg conversion-flow-svg"
               width={360}
-              height={360}
+              height={241}
             />
           </div>
         </div>
@@ -448,7 +312,7 @@ const MagicBento: React.FC = () => {
               asset="firstImpression"
               className="first-impression-svg"
               width={520}
-              height={360}
+              height={425}
             />
           </div>
         </div>
@@ -498,903 +362,18 @@ const MagicBento: React.FC = () => {
             display: block;
             opacity: 1;
             transform-origin: center center;
-            transform: translate3d(-1%, 3%, 0) scale(0.96);
+            transform: translate3d(-1%, 3%, 0) scale(1.1);
             transition: opacity 760ms var(--services-ease), transform 900ms var(--services-ease), filter 900ms var(--services-ease);
           }
 
           .card:hover .service-engine-card .end-to-end-svg {
-            transform: translate3d(-1%, 3%, 0) scale(0.985);
-          }
-
-          .end-to-end-svg svg {
-            width: 100%;
-            height: 100%;
-            display: block;
-            object-fit: cover;
+            transform: translate3d(-1%, 3%, 0) scale(1.125);
           }
 
           .end-to-end-svg .bento-asset-image-content {
             width: 100%;
             height: 100%;
-          }
-
-          .end-to-end-svg .workflow-flow {
-            animation: none;
-            opacity: 0;
-          }
-
-          .end-to-end-svg .workflow-icon,
-          .end-to-end-svg .workflow-icon-glyph {
-            transform-box: fill-box;
-            transform-origin: center;
-            transition: transform 760ms var(--services-ease), filter 760ms var(--services-ease);
-          }
-
-          .end-to-end-svg .workflow-center-dot {
-            transform-box: fill-box;
-            transform-origin: center;
-            transition: fill-opacity 240ms var(--services-ease), transform 240ms var(--services-ease), filter 240ms var(--services-ease);
-          }
-
-          .card:hover .service-engine-card .end-to-end-svg {
-            opacity: 1;
-          }
-
-          .card:hover .service-engine-card .end-to-end-svg .workflow-icon,
-          .card:hover .service-engine-card .end-to-end-svg .workflow-icon-glyph {
-            transform: scale(1.16);
-            filter: drop-shadow(0 0 10px rgba(248, 248, 248, 0.18));
-          }
-
-          .card:hover .service-engine-card .end-to-end-svg .workflow-flow {
-            animation: workflow-flow-inward 1.25s cubic-bezier(0.22, 1, 0.36, 1) infinite;
-          }
-
-          .card:hover .service-engine-card .end-to-end-svg .workflow-center-dot {
-            animation: workflow-center-dot-scan 1.35s steps(1, end) infinite;
-          }
-
-          .card:hover .service-engine-card .end-to-end-svg .workflow-center-dot-2 {
-            animation-delay: 150ms;
-          }
-
-          .card:hover .service-engine-card .end-to-end-svg .workflow-center-dot-3 {
-            animation-delay: 300ms;
-          }
-
-          .card:hover .service-engine-card .end-to-end-svg .workflow-center-dot-4 {
-            animation-delay: 450ms;
-          }
-
-          .card:hover .service-engine-card .end-to-end-svg .workflow-center-dot-5 {
-            animation-delay: 600ms;
-          }
-
-          .card:hover .service-engine-card .end-to-end-svg .workflow-flow-middle {
-            animation-delay: 90ms;
-          }
-
-          .card:hover .service-engine-card .end-to-end-svg .workflow-flow-bottom {
-            animation-delay: 180ms;
-          }
-
-          @keyframes workflow-flow-inward {
-            0% { opacity: 0; stroke-dashoffset: 150; }
-            38% { opacity: 0.78; }
-            100% { opacity: 0; stroke-dashoffset: -60; }
-          }
-
-          @keyframes workflow-center-dot-scan {
-            0%, 100% { fill-opacity: 0.5; transform: scale(1); filter: none; }
-            35% { fill-opacity: 1; transform: scale(1.38); filter: drop-shadow(0 0 7px rgba(248, 248, 248, 0.32)); }
-            70% { fill-opacity: 0.5; transform: scale(1); filter: none; }
-          }
-
-          .execution-map {
-            isolation: isolate;
-            aspect-ratio: 2 / 1;
-            width: 100%;
-            height: auto;
-            min-height: 0;
-            max-height: 15rem;
-            margin: 0;
-          }
-
-          .execution-map::before,
-          .execution-map::after {
-            display: none;
-          }
-
-          .execution-graphic {
-            position: absolute;
-            inset: 0;
-            z-index: 0;
-            width: 100%;
-            height: 100%;
-            overflow: visible;
-          }
-
-          .execution-side-arc {
-            fill: none;
-            stroke: rgba(245, 239, 228, 0.045);
-            stroke-width: 1;
-          }
-
-          .execution-wall-rail,
-          .execution-rail,
-          .execution-stub {
-            fill: none;
-            stroke: rgba(245, 239, 228, 0.16);
-            stroke-linecap: round;
-            stroke-linejoin: round;
-            stroke-width: 1.35;
-            vector-effect: non-scaling-stroke;
-            transition: stroke 760ms var(--services-ease), opacity 760ms var(--services-ease), filter 760ms var(--services-ease);
-          }
-
-          .execution-wall-rail {
-            stroke: rgba(245, 239, 228, 0.055);
-            stroke-width: 1;
-          }
-
-          .execution-rail-soft {
-            opacity: 0.44;
-          }
-
-          .execution-stub {
-            stroke: rgba(245, 239, 228, 0.58);
-            stroke-width: 1.55;
-          }
-
-          .execution-flow-path {
-            fill: none;
-            stroke: rgba(218, 197, 167, 0.9);
-            stroke-dasharray: 42 220;
-            stroke-dashoffset: 180;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-            stroke-width: 1.8;
-            opacity: 0;
-            vector-effect: non-scaling-stroke;
-            filter: drop-shadow(0 0 5px rgba(218, 197, 167, 0.18));
-          }
-
-          .execution-svg-nodes circle {
-            fill: url(#executionNodeGradient);
-            stroke: rgba(245, 239, 228, 0.14);
-            stroke-width: 1.2;
-            filter: url(#executionNodeShadow);
-            transition: stroke 760ms var(--services-ease), filter 760ms var(--services-ease), transform 760ms var(--services-ease);
-            transform-box: fill-box;
-            transform-origin: center;
-          }
-
-          .execution-svg-hub {
-            fill: url(#executionHubGradient);
-            stroke: rgba(245, 239, 228, 0.18);
-            stroke-width: 1.2;
-            filter: url(#executionHubShadow);
-            transition: stroke 760ms var(--services-ease), filter 760ms var(--services-ease), transform 760ms var(--services-ease);
-            transform-box: fill-box;
-            transform-origin: center;
-          }
-
-          .execution-svg-dots circle {
-            fill: rgba(245, 239, 228, 0.48);
-            transition: fill 760ms var(--services-ease), opacity 760ms var(--services-ease), transform 760ms var(--services-ease);
-            transform-box: fill-box;
-            transform-origin: center;
-          }
-
-          .execution-corner-dot-svg {
-            fill: rgba(245, 239, 228, 0.16);
-            filter: drop-shadow(0 0 8px rgba(245, 239, 228, 0.08));
-          }
-
-          .execution-hub {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            z-index: 4;
-            display: grid;
-            width: 5.35rem;
-            height: 5.35rem;
-            grid-template-columns: repeat(3, 0.34rem);
-            grid-template-rows: repeat(3, 0.34rem);
-            place-content: center;
-            gap: 0.34rem;
-            border-radius: 1.15rem;
-            border: 0;
-            background: transparent;
-            box-shadow: none;
-            transform: translate(-50%, -50%);
-            transition: border-color 760ms var(--services-ease), box-shadow 760ms var(--services-ease), transform 760ms var(--services-ease);
-          }
-
-          .execution-hub span {
-            width: 0.34rem;
-            height: 0.34rem;
-            border-radius: 999px;
-            background: rgba(245, 239, 228, 0.38);
-            transition: background-color 760ms var(--services-ease), transform 760ms var(--services-ease), opacity 760ms var(--services-ease);
-          }
-
-          .execution-node {
-            position: absolute;
-            z-index: 3;
-            display: flex;
-            width: clamp(2.65rem, 10.8%, 3.42rem);
-            height: clamp(2.65rem, 21.6%, 3.42rem);
-            align-items: center;
-            justify-content: center;
-            border-radius: 999px;
-            border: 0;
-            background: transparent;
-            box-shadow: none;
-            color: rgba(245, 239, 228, 0.74);
-            transform: translate(-50%, -50%);
-            transition: transform 760ms var(--services-ease), border-color 760ms var(--services-ease), box-shadow 760ms var(--services-ease), color 760ms var(--services-ease), background 760ms var(--services-ease);
-          }
-
-          .execution-node span {
-            position: absolute;
-            top: calc(100% + 0.42rem);
-            left: 50%;
-            padding: 0.18rem 0.42rem;
-            border-radius: 999px;
-            background: rgba(8, 8, 8, 0.46);
-            color: rgba(245, 239, 228, 0.66);
-            font-size: 0.55rem;
-            font-weight: 800;
-            letter-spacing: 0.12em;
-            line-height: 1;
-            text-transform: uppercase;
-            opacity: 0;
-            transform: translateX(-50%) translateY(-0.24rem);
-            transition: opacity 560ms var(--services-ease), transform 560ms var(--services-ease);
-            white-space: nowrap;
-          }
-
-          .execution-node-left-top { left: 11.15%; top: 27.7%; }
-          .execution-node-left-middle { left: 17.3%; top: 50%; }
-          .execution-node-left-bottom { left: 11.15%; top: 72.3%; }
-          .execution-node-right-top { left: 88.85%; top: 27.7%; }
-          .execution-node-right-middle { left: 82.7%; top: 50%; }
-          .execution-node-right-bottom { left: 88.85%; top: 72.3%; }
-
-          .card:hover .service-engine-card .execution-graphic {
-            transform: scale(1.01);
-          }
-
-          .card:hover .service-engine-card .execution-svg-hub {
-            stroke: rgba(245, 239, 228, 0.32);
-            transform: scale(1.035);
-          }
-
-          /* The rails idle in beige, so hover brightens the same ink rather
-             than shifting hue to brown — the diagram lighting up, not
-             changing material. */
-          .card:hover .service-engine-card .execution-wall-rail,
-          .card:hover .service-engine-card .execution-rail,
-          .card:hover .service-engine-card .execution-stub {
-            stroke: rgba(245, 239, 228, 0.34);
-            opacity: 0.9;
-            filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.08));
-          }
-
-          .card:hover .service-engine-card .execution-stub {
-            stroke: rgba(245, 239, 228, 0.72);
-          }
-
-          .card:hover .service-engine-card .execution-flow-path {
-            animation: execution-flow-run 1.7s var(--services-ease) infinite;
-          }
-
-          .card:hover .service-engine-card .execution-flow-d,
-          .card:hover .service-engine-card .execution-flow-e,
-          .card:hover .service-engine-card .execution-flow-f {
-            animation-name: execution-flow-run-reverse;
-          }
-
-          .card:hover .service-engine-card .execution-flow-b,
-          .card:hover .service-engine-card .execution-flow-e {
-            animation-delay: 120ms;
-          }
-
-          .card:hover .service-engine-card .execution-flow-c,
-          .card:hover .service-engine-card .execution-flow-f {
-            animation-delay: 240ms;
-          }
-
-          .card:hover .service-engine-card .execution-hub {
-            transform: translate(-50%, -50%) scale(1.04);
-          }
-
-          .card:hover .service-engine-card .execution-hub span {
-            background-color: rgba(245, 239, 228, 0.82);
-          }
-
-          .card:hover .service-engine-card .execution-hub span:nth-child(2),
-          .card:hover .service-engine-card .execution-hub span:nth-child(4),
-          .card:hover .service-engine-card .execution-hub span:nth-child(6),
-          .card:hover .service-engine-card .execution-hub span:nth-child(8) {
-            transform: scale(1.28);
-          }
-
-          .card:hover .service-engine-card .execution-node {
-            color: color-mix(in srgb, var(--service-color) 72%, white 18%);
-            transform: translate(-50%, -50%) translateY(-3px);
-          }
-
-          .card:hover .service-engine-card .execution-svg-nodes circle {
-            stroke: rgba(245, 239, 228, 0.24);
-            transform: translateY(-3px);
-          }
-
-          .card:hover .service-engine-card .execution-node span {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-          }
-
-          .card:hover .service-engine-card .execution-node-left-middle,
-          .card:hover .service-engine-card .execution-node-right-middle {
-            transform: translate(-50%, -50%) translateY(-5px);
-          }
-
-          @keyframes execution-flow-run {
-            0% { opacity: 0; stroke-dashoffset: 220; }
-            34% { opacity: 0.82; }
-            100% { opacity: 0; stroke-dashoffset: -80; }
-          }
-
-          @keyframes execution-flow-run-reverse {
-            0% { opacity: 0; stroke-dashoffset: -80; }
-            34% { opacity: 0.82; }
-            100% { opacity: 0; stroke-dashoffset: 220; }
-          }
-
-          @media (max-width: 639px) {
-            .execution-map {
-              min-height: 16rem;
-            }
-
-            .execution-hub {
-              width: 4rem;
-              height: 4rem;
-              border-radius: 1rem;
-            }
-
-            .execution-node {
-              width: 2.65rem;
-              height: 2.65rem;
-            }
-
-            .execution-node span {
-              display: none;
-            }
-
-            .execution-node-left-top { left: 11.15%; top: 27.7%; }
-            .execution-node-left-middle { left: 17.3%; top: 50%; }
-            .execution-node-left-bottom { left: 11.15%; top: 72.3%; }
-            .execution-node-right-top { left: 88.85%; top: 27.7%; }
-            .execution-node-right-middle { left: 82.7%; top: 50%; }
-            .execution-node-right-bottom { left: 88.85%; top: 72.3%; }
-          }
-
-          .services-system {
-            isolation: isolate;
-          }
-
-          .services-system-grid {
-            position: absolute;
-            inset: 0;
-            z-index: 0;
-            border-radius: 1.35rem;
-            background:
-              linear-gradient(90deg, rgba(245, 239, 228, 0.03) 1px, transparent 1px),
-              linear-gradient(180deg, rgba(245, 239, 228, 0.03) 1px, transparent 1px),
-              linear-gradient(155deg, rgba(245, 239, 228, 0.03), rgba(245, 239, 228, 0.01));
-            background-size: 4rem 3rem, 4rem 3rem, 100% 100%;
-            opacity: 0.22;
-            transition: opacity 760ms var(--services-ease);
-            -webkit-mask-image: radial-gradient(circle at 58% 50%, black 0 56%, transparent 78%);
-            mask-image: radial-gradient(circle at 58% 50%, black 0 56%, transparent 78%);
-          }
-
-          .services-system-grid::after {
-            content: "";
-            position: absolute;
-            inset: 0.65rem;
-            border-radius: 1.1rem;
-            background-image:
-              radial-gradient(closest-side, rgba(245, 239, 228, 0.055), transparent 72%),
-              linear-gradient(155deg, rgba(245, 239, 228, 0.03), transparent 68%);
-            background-size: 4rem 3rem, 100% 100%;
-            opacity: 0.24;
-          }
-
-          .services-system-canvas {
-            position: absolute;
-            left: 54%;
-            top: 50%;
-            z-index: 2;
-            display: flex;
-            width: 8.8rem;
-            min-height: 4.9rem;
-            flex-direction: column;
-            justify-content: center;
-            gap: 0.42rem;
-            border-radius: 1rem;
-            border: 1px solid rgba(218, 197, 167, 0.16);
-            background: linear-gradient(155deg, rgba(245, 239, 228, 0.035), rgba(8, 8, 8, 0.08));
-            box-shadow: inset 0 1px 0 rgba(245, 239, 228, 0.08), inset 0 0 0 1px rgba(218, 197, 167, 0.06);
-            padding: 0.72rem 0.78rem;
-            transition: border-color 760ms var(--services-ease), box-shadow 760ms var(--services-ease), background-color 760ms var(--services-ease);
-            transform: translate(-50%, -50%);
-          }
-
-          .services-system-canvas::before {
-            content: "";
-            position: absolute;
-            inset: -1.6rem;
-            z-index: -1;
-            border-radius: 999px;
-            background: radial-gradient(circle, rgba(218, 197, 167, 0.1), transparent 66%);
-            opacity: 0.58;
-            transition: opacity 760ms var(--services-ease);
-          }
-
-          .services-system-canvas-kicker {
-            font-size: 0.52rem;
-            font-weight: 800;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: rgba(218, 197, 167, 0.66);
-          }
-
-          .services-system-canvas-line {
-            display: block;
-            width: 4.2rem;
-            height: 1px;
-            border-radius: 999px;
-            background: linear-gradient(90deg, rgba(218, 197, 167, 0.68), rgba(245, 239, 228, 0.08));
-          }
-
-          .services-system-canvas-line.short {
-            width: 3rem;
-            opacity: 0.68;
-          }
-
-          .services-system-ambient {
-            position: absolute;
-            inset: 18% 13% 10% 13%;
-            z-index: 0;
-            border-radius: 999px;
-            background:
-              radial-gradient(circle at 53% 48%, rgba(218, 197, 167, 0.16), transparent 33%),
-              radial-gradient(circle at 22% 26%, rgba(127, 167, 200, 0.1), transparent 33%),
-              radial-gradient(circle at 82% 72%, rgba(167, 154, 199, 0.1), transparent 34%);
-            filter: blur(28px);
-            opacity: 0.85;
-          }
-
-          .services-system-lines {
-            position: absolute;
-            inset: 0;
-            z-index: 1;
-          }
-
-          .services-system-line,
-          .services-system-line::after {
-            position: absolute;
-            display: block;
-            border-radius: 999px;
-            background: color-mix(in srgb, var(--line-color) 38%, transparent);
-            opacity: 0.42;
-            transition: opacity 760ms var(--services-ease), box-shadow 760ms var(--services-ease), background-color 760ms var(--services-ease);
-          }
-
-          .services-system-flow {
-            position: absolute;
-            z-index: 2;
-            height: 2px;
-            border-radius: 999px;
-            background: linear-gradient(90deg, color-mix(in srgb, var(--flow-color) 88%, white 12%), transparent 82%);
-            opacity: 0;
-            transform: scaleX(0.1);
-            transform-origin: left center;
-          }
-
-          .services-system-flow-seo {
-            --flow-color: #7fa7c8;
-            left: 31%;
-            top: 33%;
-            width: 22%;
-          }
-
-          .services-system-flow-development {
-            --flow-color: #8fa58a;
-            left: 31%;
-            bottom: 32%;
-            width: 22%;
-          }
-
-          .services-system-flow-hosting {
-            --flow-color: #a79ac7;
-            right: 25%;
-            top: 33%;
-            width: 18%;
-            transform-origin: right center;
-          }
-
-          .services-system-flow-design {
-            --flow-color: #dac5a7;
-            right: 25%;
-            bottom: 32%;
-            width: 18%;
-            transform-origin: right center;
-          }
-
-          .services-system-line::after {
-            content: "";
-          }
-
-          .services-system-line-seo {
-            --line-color: #7fa7c8;
-            left: 30%;
-            top: 33%;
-            width: 23%;
-            height: 1px;
-          }
-
-          .services-system-line-seo::after {
-            right: 0;
-            top: 0;
-            width: 1px;
-            height: 17%;
-          }
-
-          .services-system-line-hosting {
-            --line-color: #a79ac7;
-            right: 24%;
-            top: 33%;
-            width: 19%;
-            height: 1px;
-          }
-
-          .services-system-line-hosting::after {
-            left: 0;
-            top: 0;
-            width: 1px;
-            height: 17%;
-          }
-
-          .services-system-line-development {
-            --line-color: #8fa58a;
-            left: 30%;
-            bottom: 32%;
-            width: 23%;
-            height: 1px;
-          }
-
-          .services-system-line-development::after {
-            right: 0;
-            bottom: 0;
-            width: 1px;
-            height: 18%;
-          }
-
-          .services-system-line-design {
-            --line-color: #dac5a7;
-            right: 24%;
-            bottom: 32%;
-            width: 19%;
-            height: 1px;
-          }
-
-          .services-system-line-design::after {
-            left: 0;
-            bottom: 0;
-            width: 1px;
-            height: 18%;
-          }
-
-          .services-system-node {
-            position: absolute;
-            z-index: 2;
-            width: 0.34rem;
-            height: 0.34rem;
-            border-radius: 999px;
-            background: var(--node-color);
-            opacity: 0.62;
-            box-shadow: 0 0 10px color-mix(in srgb, var(--node-color) 34%, transparent);
-            transition: opacity 760ms var(--services-ease), box-shadow 760ms var(--services-ease), transform 760ms var(--services-ease);
-          }
-
-          .services-system-node-seo { --node-color: #7fa7c8; left: 52.8%; top: 32.4%; }
-          .services-system-node-hosting { --node-color: #a79ac7; right: 42.5%; top: 32.4%; }
-          .services-system-node-development { --node-color: #8fa58a; left: 52.8%; bottom: 31.4%; }
-          .services-system-node-design { --node-color: #dac5a7; right: 42.5%; bottom: 31.4%; }
-
-          .services-system-copy span {
-            font-size: 0.56rem;
-            font-weight: 800;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-          }
-
-          .services-system-card {
-            position: absolute;
-            z-index: 3;
-            display: flex;
-            width: 11.8rem;
-            min-height: 5.35rem;
-            gap: 0.68rem;
-            border-radius: 1.1rem;
-            border: 1px solid color-mix(in srgb, var(--service-color) 38%, transparent);
-            background: linear-gradient(165deg, color-mix(in srgb, var(--service-color) 23%, transparent), rgba(20, 20, 19, 0.34));
-            box-shadow: inset 0 1px 0 color-mix(in srgb, var(--service-color) 20%, transparent), 0 8px 16px rgba(0, 0, 0, 0.2);
-            padding: 0.78rem;
-            transition: transform 760ms var(--services-ease), border-color 760ms var(--services-ease), box-shadow 760ms var(--services-ease), background 760ms var(--services-ease);
-          }
-
-          .services-system-card-seo { left: 4%; top: 6%; }
-          .services-system-card-hosting { right: 2%; top: 10%; }
-          .services-system-card-development { left: 2%; bottom: 8%; }
-          .services-system-card-design { right: 4%; bottom: 6%; }
-
-          .services-system-icon {
-            display: flex;
-            width: 2.1rem;
-            height: 2.1rem;
-            flex-shrink: 0;
-            align-items: center;
-            justify-content: center;
-            border-radius: 999px;
-            border: 1px solid color-mix(in srgb, var(--service-color) 46%, transparent);
-            background: color-mix(in srgb, var(--service-color) 20%, transparent);
-            color: var(--service-color);
-            box-shadow: inset 0 1px 0 color-mix(in srgb, var(--service-color) 24%, transparent), 0 0 16px color-mix(in srgb, var(--service-color) 13%, transparent);
-          }
-
-          .services-system-copy {
-            min-width: 0;
-          }
-
-          .services-system-copy span {
-            color: color-mix(in srgb, var(--service-color) 78%, white 10%);
-          }
-
-          .services-system-copy strong {
-            display: block;
-            margin-top: 0.22rem;
-            font-size: 0.9rem;
-            font-weight: 800;
-            line-height: 1.08;
-            color: rgba(245, 239, 228, 0.92);
-          }
-
-          .services-system-copy p {
-            margin-top: 0.36rem;
-            font-size: 0.68rem;
-            line-height: 1.35;
-            color: rgba(176, 174, 165, 0.68);
-          }
-
-          .services-system-copy-micro {
-            display: grid;
-            grid-template-columns: 1fr 0.65fr;
-            gap: 0.28rem;
-            margin-top: 0.44rem;
-          }
-
-          .services-system-copy-micro span {
-            height: 0.22rem;
-            border-radius: 999px;
-            background: color-mix(in srgb, var(--service-color) 34%, rgba(245, 239, 228, 0.18));
-            opacity: 0.72;
-          }
-
-          .card:hover .service-engine-card .services-system-grid {
-            opacity: 0.34;
-          }
-
-          .card:hover .service-engine-card .services-system-grid::after {
-            opacity: 0.42;
-          }
-
-          .card:hover .service-engine-card .services-system-line,
-          .card:hover .service-engine-card .services-system-line::after {
-            opacity: 0.72;
-            box-shadow: 0 0 12px color-mix(in srgb, var(--line-color) 18%, transparent);
-          }
-
-          .card:hover .service-engine-card .services-system-node {
-            opacity: 0.9;
-            transform: scale(1.24);
-            animation: services-system-node-pulse 1.8s var(--services-ease) infinite;
-          }
-
-          .card:hover .service-engine-card .services-system-flow {
-            opacity: 0.95;
-            animation: services-system-flow-run 1.2s var(--services-ease) both;
-          }
-
-          .card:hover .service-engine-card .services-system-flow-development {
-            animation-delay: 100ms;
-          }
-
-          .card:hover .service-engine-card .services-system-flow-hosting {
-            animation-delay: 220ms;
-          }
-
-          .card:hover .service-engine-card .services-system-flow-design {
-            animation-delay: 340ms;
-          }
-
-          .card:hover .service-engine-card .services-system-canvas {
-            border-color: rgba(218, 197, 167, 0.3);
-            box-shadow: inset 0 1px 0 rgba(245, 239, 228, 0.12), inset 0 0 0 1px rgba(218, 197, 167, 0.1), 0 0 24px rgba(218, 197, 167, 0.08);
-            background: linear-gradient(155deg, rgba(245, 239, 228, 0.05), rgba(8, 8, 8, 0.12));
-          }
-
-          .card:hover .service-engine-card .services-system-canvas::before {
-            opacity: 0.9;
-          }
-
-          .card:hover .service-engine-card .services-system-card {
-            border-color: color-mix(in srgb, var(--service-color) 56%, transparent);
-            background: linear-gradient(165deg, color-mix(in srgb, var(--service-color) 29%, transparent), rgba(20, 20, 19, 0.4));
-            box-shadow: inset 0 1px 0 color-mix(in srgb, var(--service-color) 24%, transparent), 0 12px 20px rgba(0, 0, 0, 0.22), 0 0 22px color-mix(in srgb, var(--service-color) 12%, transparent);
-            transform: translateY(-3px);
-          }
-
-          .card:hover .service-engine-card .services-system-card-seo {
-            animation: services-system-card-focus 1.1s var(--services-ease) 0ms both;
-          }
-
-          .card:hover .service-engine-card .services-system-card-development {
-            animation: services-system-card-focus 1.1s var(--services-ease) 120ms both;
-          }
-
-          .card:hover .service-engine-card .services-system-card-hosting {
-            animation: services-system-card-focus 1.1s var(--services-ease) 240ms both;
-          }
-
-          .card:hover .service-engine-card .services-system-card-design {
-            animation: services-system-card-focus 1.1s var(--services-ease) 360ms both;
-          }
-
-          @keyframes services-system-node-pulse {
-            0%, 100% { filter: brightness(1); }
-            50% { filter: brightness(1.34); }
-          }
-
-          @keyframes services-system-flow-run {
-            0% { opacity: 0; transform: scaleX(0.1); }
-            36% { opacity: 0.9; transform: scaleX(1); }
-            100% { opacity: 0.25; transform: scaleX(1); }
-          }
-
-          @keyframes services-system-card-focus {
-            0% { transform: translateY(0); }
-            42% { transform: translateY(-4px); }
-            100% { transform: translateY(-3px); }
-          }
-
-          @media (max-width: 639px) {
-            .service-engine-card .bento-mobile-readable h2 {
-              font-size: 1.18rem;
-              line-height: 1.12;
-            }
-
-            .service-engine-card .bento-mobile-readable p:last-child {
-              max-width: 12rem;
-              font-size: 0.72rem;
-              line-height: 1.4;
-            }
-
-            .services-system {
-              min-height: 16.2rem;
-            }
-
-            .services-system-canvas {
-              left: 50%;
-              width: 6.6rem;
-              min-height: 4rem;
-              padding: 0.55rem 0.58rem;
-            }
-
-            .services-system-canvas-kicker {
-              font-size: 0.4rem;
-              letter-spacing: 0.16em;
-            }
-
-            .services-system-canvas-line {
-              width: 2.6rem;
-            }
-
-            .services-system-canvas-line.short {
-              width: 1.8rem;
-            }
-
-            .services-system-copy span {
-              font-size: 0.43rem;
-              letter-spacing: 0.16em;
-            }
-
-            .services-system-card {
-              width: 8.25rem;
-              min-height: 4.65rem;
-              gap: 0.45rem;
-              border-radius: 0.85rem;
-              padding: 0.52rem;
-            }
-
-            .services-system-card-seo,
-            .services-system-card-development {
-              left: 0;
-            }
-
-            .services-system-card-hosting,
-            .services-system-card-design {
-              right: 0;
-            }
-
-            .services-system-icon {
-              width: 1.55rem;
-              height: 1.55rem;
-            }
-
-            .services-system-icon svg {
-              width: 0.82rem;
-              height: 0.82rem;
-            }
-
-            .services-system-copy strong {
-              font-size: 0.68rem;
-            }
-
-            .services-system-copy p {
-              font-size: 0.52rem;
-              line-height: 1.22;
-            }
-
-            .services-system-line-seo,
-            .services-system-line-development {
-              left: 30%;
-              width: 21%;
-            }
-
-            .services-system-line-hosting,
-            .services-system-line-design {
-              right: 30%;
-              width: 17%;
-            }
-
-            .services-system-flow-seo,
-            .services-system-flow-development {
-              left: 31%;
-              width: 20%;
-            }
-
-            .services-system-flow-hosting,
-            .services-system-flow-design {
-              right: 31%;
-              width: 16%;
-            }
-          }
-
-          @media (min-width: 640px) and (max-width: 767px) {
-            .services-system {
-              min-height: 18rem;
-            }
-
-            .services-system-card {
-              width: 10.3rem;
-              min-height: 4.95rem;
-            }
-
+            object-fit: contain;
           }
 
           .chat-showcase-messages {
@@ -1996,7 +975,7 @@ const MagicBento: React.FC = () => {
           }
 
           .conversion-phone-svg {
-            width: min(100%, 20rem);
+            width: min(78%, 20rem);
             height: auto;
             overflow: visible;
             filter: none;
@@ -2016,7 +995,7 @@ const MagicBento: React.FC = () => {
           }
 
           .first-impression-svg {
-            width: min(62%, 20rem);
+            width: min(80%, 25rem);
             transform: translate3d(45%, 1.1rem, 0);
             pointer-events: none;
             transition: transform 760ms cubic-bezier(0.22, 1, 0.36, 1), filter 760ms cubic-bezier(0.22, 1, 0.36, 1);
@@ -2045,13 +1024,14 @@ const MagicBento: React.FC = () => {
           }
 
           .conversion-flow-svg {
-            width: min(88%, 18rem);
-            transform: translateY(2.6rem);
+            width: min(100%, 27rem);
+            transform: translateY(0);
             transition: transform 800ms cubic-bezier(0.22, 1, 0.36, 1), filter 800ms cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: transform;
           }
 
           .card:hover .group\/conversion .conversion-flow-svg {
-            transform: translateY(2.2rem) scale(1.025);
+            transform: scale(1.025);
             filter: none;
           }
 
@@ -2300,6 +1280,19 @@ const MagicBento: React.FC = () => {
             contain: layout paint style;
           }
 
+          /* Paint containment forces the browser to rasterize these SVGs (which carry
+             internal feGaussianBlur filters) into an off-screen buffer independent of
+             the real device pixel ratio, which is visibly blocky on small high-DPR
+             screens. Paint clipping isn't needed here anyway once hover is unreachable. */
+          @media (max-width: 767px) {
+            .end-to-end-svg,
+            .conversion-flow-svg,
+            .first-impression-svg,
+            .remote-card-shipping-shell {
+              contain: layout style;
+            }
+          }
+
 
           /* The hover wash. Hot core at the top edge, then a long reach down
              the card — the old single 18% stop ending at 54% was the reason
@@ -2503,8 +1496,13 @@ const MagicBento: React.FC = () => {
               grid-column: 1 / 7;
               grid-row: 4 / 5;
             }
+
+            .card-responsive .card:nth-child(3) .conversion-phone-svg,
+            .card-responsive .card:nth-child(3) .conversion-flow-svg {
+              width: min(58%, 15rem);
+            }
           }
-          
+
           @media (min-width: 1024px) {
             .card-responsive {
               grid-template-columns: repeat(12, 1fr);
@@ -2546,7 +1544,7 @@ const MagicBento: React.FC = () => {
             }
 
             .card-responsive .card:nth-child(1) .end-to-end-svg {
-              transform: translate3d(-1%, 3%, 0) scale(0.96);
+              transform: translate3d(-1%, 3%, 0) scale(1.1);
             }
 
             .card-responsive .card:nth-child(2) .chat-showcase-messages {
@@ -2554,12 +1552,8 @@ const MagicBento: React.FC = () => {
               padding-bottom: 0;
             }
 
-            .card-responsive .card:nth-child(3) .conversion-phone-wrap {
-              bottom: 0;
-            }
-
             .card-responsive .card:nth-child(3) .conversion-phone-svg {
-              width: min(88%, 18rem);
+              width: min(93%, 23.75rem);
             }
 
             .card-responsive .card:nth-child(4) .remote-card-shipping-shell {
@@ -2601,19 +1595,11 @@ const MagicBento: React.FC = () => {
             .card:hover .group\/selling .selling-hero-visual,
             .card:hover .group\/selling .selling-preview-window,
             .card:hover .group\/selling .selling-preview-strip span,
-            .card:hover .group\/selling .selling-cta,
-            .card:hover .service-engine-card .execution-graphic,
-            .card:hover .service-engine-card .execution-svg-hub,
-            .card:hover .service-engine-card .execution-hub,
-            .card:hover .service-engine-card .execution-node,
-            .card:hover .service-engine-card .execution-svg-nodes circle {
+            .card:hover .group\/selling .selling-cta {
               transform: none !important;
             }
 
-            .card:hover .group\/selling .selling-soundwaves span,
-            .card:hover .service-engine-card .execution-flow-path,
-            .card:hover .service-engine-card .workflow-flow-path,
-            .card:hover .service-engine-card .workflow-center-dot {
+            .card:hover .group\/selling .selling-soundwaves span {
               animation: none !important;
             }
 
@@ -2727,13 +1713,13 @@ const MagicBento: React.FC = () => {
             }
 
             .card-responsive .bento-mobile-readable {
-              max-width: 11rem;
+              max-width: 14.5rem;
               padding: 0.95rem 0.95rem 0;
             }
 
             .card-responsive .card:nth-child(5) {
               order: 1;
-              min-height: 228px;
+              min-height: 225px;
             }
 
             .card-responsive .card:nth-child(5) .bento-mobile-readable {
@@ -2755,8 +1741,12 @@ const MagicBento: React.FC = () => {
               min-height: 225px;
             }
 
+            .card-responsive .card:nth-child(1) .bento-mobile-readable {
+              max-width: 15.5rem;
+            }
+
             .card-responsive .card:nth-child(1) .end-to-end-svg {
-              transform: translate3d(8%, 8%, 0) scale(0.9);
+              transform: translate3d(10%, 8%, 0) scale(1);
             }
 
             .card-responsive .card:nth-child(2) {
@@ -2766,18 +1756,33 @@ const MagicBento: React.FC = () => {
 
             .card-responsive .card:nth-child(4) {
               order: 4;
-              min-height: 215px;
+              min-height: 225px;
             }
 
             .card-responsive .card:nth-child(3) {
               order: 5;
-              min-height: 205px;
+              min-height: 320px;
+            }
+
+            .card-responsive .card:nth-child(3) .bento-mobile-readable {
+              max-width: 15.5rem;
+            }
+
+            .card-responsive .card:nth-child(3) .conversion-phone-wrap {
+              align-items: center;
+              justify-content: center;
             }
 
             .card-responsive .card:nth-child(3) .conversion-flow-svg,
             .card-responsive .card:nth-child(3) .conversion-phone-svg {
-              width: min(84%, 16.5rem);
-              transform: translate3d(8%, 1.8rem, 0);
+              width: min(84%, 18rem);
+              --freelance-mobile-shift-y: 3rem;
+              transform: translateY(var(--freelance-mobile-shift-y));
+            }
+
+            .card-responsive .card:hover:nth-child(3) .conversion-flow-svg,
+            .card-responsive .card:hover:nth-child(3) .conversion-phone-svg {
+              transform: translateY(var(--freelance-mobile-shift-y)) !important;
             }
 
             .card-responsive .card:nth-child(3) .contact-card-content {
@@ -2843,12 +1848,12 @@ const MagicBento: React.FC = () => {
             }
 
             .card-responsive .card:nth-child(5) .first-impression-svg {
-              width: min(62%, 18rem);
-              transform: translate3d(44%, 2.35rem, 0);
+              width: min(54%, 15rem);
+              transform: translate3d(50%, 0.3rem, 0);
             }
 
             .card:hover .group\/selling .first-impression-svg {
-              transform: translate3d(44%, 2.35rem, 0) scale(1.025);
+              transform: translate3d(50%, 0.3rem, 0) scale(1.025);
             }
           }
 
@@ -2867,11 +1872,11 @@ const MagicBento: React.FC = () => {
           }
 
           .card-responsive .card:hover:nth-child(1) .end-to-end-svg {
-            transform: translate3d(-1%, 3%, 0) scale(0.985);
+            transform: translate3d(-1%, 3%, 0) scale(1.125);
           }
 
           .card-responsive .card:hover:nth-child(3) .conversion-flow-svg {
-            transform: translateY(2.2rem) scale(1.025);
+            transform: scale(1.025);
           }
 
           .card-responsive .card:hover:nth-child(4) .remote-card-shipping {
@@ -2890,7 +1895,7 @@ const MagicBento: React.FC = () => {
             }
 
             .card-responsive .card:hover:nth-child(3) .conversion-flow-svg {
-              transform: translate3d(8%, 1.8rem, 0) scale(1.025);
+              transform: scale(1.025);
             }
 
             .card-responsive .card:hover:nth-child(4) .remote-card-shipping {
@@ -2941,8 +1946,8 @@ const MagicBento: React.FC = () => {
               <motion.div
                 key={card.label}
                 data-bento-card={card.svgAsset}
-                className={`mobile-no-load-animation cinematic-reveal-card ${baseClassName} transform-gpu will-change-[transform,opacity]`}
-                variants={createBentoCardReveal(index)}
+                className={`cinematic-reveal-card ${baseClassName} transform-gpu will-change-[transform,opacity]`}
+                variants={createBentoCardReveal(index, isCompactMotion)}
                 initial={revealMotionDisabled ? false : "hidden"}
                 whileInView={revealMotionDisabled ? undefined : "visible"}
                 viewport={cinematicViewport}

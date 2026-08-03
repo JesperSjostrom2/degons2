@@ -110,8 +110,9 @@ function Curtain({
 
     const measure = () => {
       frame = 0
-      const width = window.innerWidth
-      const height = window.innerHeight
+      const vv = window.visualViewport
+      const width = vv?.width ?? window.innerWidth
+      const height = vv?.height ?? window.innerHeight
 
       viewportWidth.set(width)
       viewportHeight.set(height)
@@ -124,9 +125,15 @@ function Curtain({
 
     measure()
     window.addEventListener('resize', queue)
+    window.addEventListener('orientationchange', queue)
+    window.visualViewport?.addEventListener('resize', queue)
+    window.visualViewport?.addEventListener('scroll', queue)
 
     return () => {
       window.removeEventListener('resize', queue)
+      window.removeEventListener('orientationchange', queue)
+      window.visualViewport?.removeEventListener('resize', queue)
+      window.visualViewport?.removeEventListener('scroll', queue)
       if (frame) window.cancelAnimationFrame(frame)
     }
   }, [viewportWidth, viewportHeight])

@@ -27,7 +27,7 @@ export const portfolioSocialLinks = siteSocialLinks.map((link) => ({
 
 export default function SocialLinks() {
   return (
-    <div className="mt-8 flex gap-2">
+    <div className="mt-8 flex gap-3">
       {portfolioSocialLinks.map((link) => (
         <SocialIconLink key={link.label} {...link} />
       ))}

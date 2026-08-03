@@ -1,16 +1,10 @@
 'use client'
 
 const BENTO_STATIC_ASSET_URLS = [
-  '/assets/bento-cards/static/end-to-end.svg',
-  '/assets/bento-cards/static/fast-delivery.svg',
-  '/assets/bento-cards/first-impression/Wishlist.svg',
-  '/assets/bento-cards/avaibility-globe/International Shipping.svg',
-]
-
-const BENTO_INTERACTIVE_ASSET_URLS = [
-  '/assets/bento-cards/end-to-end-delivery/path.svg',
-  '/assets/bento-cards/visitor-flow/time.svg',
-  '/assets/bento-cards/first-impression/Wishlist.svg',
+  '/assets/Smart Recommendations.png',
+  '/assets/Special Dicount.png',
+  '/assets/Wishlist.png',
+  '/assets/International Shipping.png',
 ]
 
 const BELOW_FOLD_IMAGE_URLS = [
@@ -32,10 +26,6 @@ const scheduleIdleWork = (callback: () => void, timeout = 1200) => {
   const timeoutId = window.setTimeout(callback, Math.min(timeout, 180))
 
   return () => window.clearTimeout(timeoutId)
-}
-
-const warmFetchCache = (url: string) => {
-  void fetch(url, { cache: 'force-cache' }).catch(() => undefined)
 }
 
 const warmImageCache = (url: string) => {
@@ -68,10 +58,6 @@ export const prewarmBelowFoldAssets = () => {
     BENTO_STATIC_ASSET_URLS.forEach(warmImageCache)
   }, 520)
 
-  const cancelBentoInteractivePreload = scheduleIdleWork(() => {
-    BENTO_INTERACTIVE_ASSET_URLS.forEach(warmFetchCache)
-  }, 2400)
-
   const cancelImagePreload = scheduleIdleWork(() => {
     BELOW_FOLD_IMAGE_URLS.forEach(warmImageCache)
   }, 1600)
@@ -79,7 +65,6 @@ export const prewarmBelowFoldAssets = () => {
   return () => {
     cancelHeroAtmospherePreload()
     cancelBentoStaticPreload()
-    cancelBentoInteractivePreload()
     cancelImagePreload()
   }
 }

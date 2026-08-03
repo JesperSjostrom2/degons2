@@ -13,7 +13,7 @@ import {
   SiVercel,
 } from 'react-icons/si'
 import { type IconType } from 'react-icons'
-import { cinematicHeader, cinematicPanel, cinematicViewport } from '@/lib/site-motion'
+import { cinematicHeader, cinematicHeaderCompact, cinematicPanel, cinematicPanelCompact, cinematicViewport, useCompactMotion } from '@/lib/site-motion'
 import MaskedRise from '@/components/masked-rise'
 
 interface TechItem {
@@ -136,12 +136,14 @@ export default function TechStackSection() {
     borderRadius: hoverBounds.borderRadius,
   } as CSSProperties
 
+  const isCompact = useCompactMotion()
+
   return (
     <section id="skills" className="site-section">
       <div className="container mx-auto px-6">
         <motion.div
-          className="mobile-no-load-animation section-header cinematic-section-header"
-          variants={cinematicHeader}
+          className="section-header cinematic-section-header"
+          variants={isCompact ? cinematicHeaderCompact : cinematicHeader}
           initial="hidden"
           whileInView="visible"
           viewport={cinematicViewport}
@@ -157,8 +159,8 @@ export default function TechStackSection() {
         <motion.div
           ref={gridRef}
           onPointerLeave={hideHoverFill}
-          className="tech-stack-grid mobile-no-load-animation cinematic-reveal-card relative mx-auto flex max-w-7xl flex-wrap overflow-hidden rounded-[22px] border border-[color:var(--rim-border)] md:grid md:grid-cols-3 md:rounded-[28px] lg:grid-cols-6"
-          variants={cinematicPanel('deep')}
+          className="tech-stack-grid cinematic-reveal-card relative mx-auto flex max-w-7xl flex-wrap overflow-hidden rounded-[22px] border border-[color:var(--rim-border)] md:grid md:grid-cols-3 md:rounded-[28px] lg:grid-cols-6"
+          variants={isCompact ? cinematicPanelCompact() : cinematicPanel('deep')}
           initial="hidden"
           whileInView="visible"
           viewport={cinematicViewport}

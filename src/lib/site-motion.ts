@@ -1,6 +1,77 @@
+'use client'
+
+import { useEffect, useState } from 'react'
 import type { Variants } from 'framer-motion'
 
 export const cinematicEase = [0.16, 1, 0.3, 1] as const
+
+/**
+ * Same reveals, scaled down for mobile — shorter travel, shorter duration, no stagger — instead
+ * of the flat "skip the animation entirely" the site used to fall back to below 768px. Width
+ * only, checked live via matchMedia; nothing here probes the device or its frame timing.
+ */
+export function useCompactMotion() {
+  const [isCompact, setIsCompact] = useState(false)
+
+  useEffect(() => {
+    const query = window.matchMedia('(max-width: 767px)')
+    const sync = () => setIsCompact(query.matches)
+
+    sync()
+    query.addEventListener('change', sync)
+
+    return () => query.removeEventListener('change', sync)
+  }, [])
+
+  return isCompact
+}
+
+export const cinematicHeaderCompact: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 10,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.42,
+      ease: cinematicEase,
+    },
+  },
+}
+
+export const cinematicPanelCompact = (): Variants => ({
+  hidden: {
+    opacity: 0,
+    y: 14,
+  },
+  visible: {
+    opacity: 1,
+    x: 0,
+    y: 0,
+    transition: {
+      duration: 0.46,
+      ease: cinematicEase,
+    },
+  },
+})
+
+export const cinematicItemCompact = (delay = 0): Variants => ({
+  hidden: {
+    opacity: 0,
+    y: 10,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.4,
+      delay: Math.min(delay, 0.1),
+      ease: cinematicEase,
+    },
+  },
+})
 
 /**
  * For things that travel across the screen and have to both start and stop — currently the
