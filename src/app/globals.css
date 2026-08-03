@@ -4862,6 +4862,14 @@
       gap: 10%;
     }
 
+    /* The gap above is 14vw of the visuals band, floored at 7rem — a floor that stays
+       in effect up to about 800px wide, so every width this breakpoint covers is stuck
+       at a flat 112px between the mac and the phones below it. Raised for these widths
+       specifically rather than by moving the base floor, which desktop doesn't need. */
+    .project-page__visuals {
+      gap: clamp(12rem, 30vw, 16rem);
+    }
+
     /* No hover on these widths, so the plate can never open — and `display: none` is
        what keeps its full-width image from being fetched for a door that will not be
        used. */
