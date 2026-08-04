@@ -13,7 +13,7 @@ import ProjectPaletteBoard from '@/components/projects/ProjectPaletteBoard'
 import ProjectTech from '@/components/projects/ProjectTech'
 import NextProjectLink from '@/components/projects/NextProjectLink'
 import ProjectNavbar from '@/components/projects/ProjectNavbar'
-import SiteLinkPill from '@/components/site-link-pill'
+import ProjectVisitLink from '@/components/projects/ProjectVisitLink'
 import { serializeJsonLd } from '@/lib/json-ld'
 import { notFoundMetadata } from '@/lib/not-found-metadata'
 import { SITE_URL } from '@/lib/site-config'
@@ -159,7 +159,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
                 <h1 className="project-page__title">{project.name}</h1>
 
-                <SiteLinkPill href={project.liveUrl} label={`Visit ${project.liveLabel}`} external />
+                <ProjectVisitLink href={project.liveUrl} label={`Visit ${project.liveLabel}`} />
               </div>
             </section>
           </div>

@@ -4137,9 +4137,98 @@
     text-transform: uppercase;
   }
 
-  /* The visit button has no rules of its own — it is the site's CTA pill from the hero,
-     shared via `site-link-pill.tsx` and styled entirely in Tailwind there. A bespoke
-     button here was the reason it did not look like it belonged to the site. */
+  /* ── The way in ─────────────────────────────────────────────────────
+     This page's own button — see `ProjectVisitLink.tsx` for why it is not the hero's
+     pill. Same shared surface as `project-card__tile`: hairline border, panel fill,
+     the soft inset seam top and bottom that every raised panel on the site carries. */
+  .project-page__visit {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    height: 48px;
+    padding: 0 1.5rem;
+    border: 1px solid var(--rim-border);
+    border-radius: 999px;
+    background: var(--panel-bg);
+    box-shadow:
+      inset 0 1px 0 var(--rim-light-soft),
+      inset 0 -1px 0 var(--rim-edge-warm);
+    color: rgba(245, 239, 228, 0.88);
+    font-family: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    transition:
+      border-color 320ms ease,
+      box-shadow 320ms ease,
+      transform 320ms ease;
+  }
+
+  .project-page__visit-label {
+    margin-right: 1rem;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .project-page__visit:hover {
+      transform: translateY(-2px);
+      border-color: color-mix(in srgb, var(--project-accent, #dac5a7) 40%, var(--rim-border));
+      box-shadow:
+        inset 0 1px 0 var(--rim-light),
+        inset 0 -1px 0 var(--rim-edge-warm),
+        0 0 2.5rem -1rem color-mix(in srgb, var(--project-accent, #dac5a7) 55%, transparent);
+    }
+
+    .project-page__visit:hover .project-page__arrow {
+      color: color-mix(in srgb, var(--project-accent, #dac5a7) 70%, #f5efe4);
+    }
+  }
+
+  .project-page__visit:active {
+    transform: scale(0.98);
+  }
+
+  /* ── Arrow swap ─────────────────────────────────────────────────────
+     Shared by the visit button above and the next-project row below — see
+     `ArrowSwap.tsx`. Bare icon, no ring: whatever wraps it owns the surface. */
+  .project-page__arrow {
+    position: relative;
+    display: inline-flex;
+    flex: none;
+    width: 16px;
+    height: 16px;
+    overflow: hidden;
+    color: rgba(245, 239, 228, 0.7);
+    transition: color 320ms ease;
+  }
+
+  .project-page__arrow svg {
+    position: absolute;
+    inset: 0;
+    width: 16px;
+    height: 16px;
+    transition:
+      transform 460ms cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 460ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .project-page__arrow svg:last-child {
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .project-page__visit:hover .project-page__arrow svg:first-child,
+    .project-page__next:hover .project-page__arrow svg:first-child {
+      transform: translateX(20px);
+      opacity: 0;
+    }
+
+    .project-page__visit:hover .project-page__arrow svg:last-child,
+    .project-page__next:hover .project-page__arrow svg:last-child {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
 
   .project-page__title {
     color: var(--site-text);
@@ -4787,6 +4876,15 @@
       text-shadow 520ms ease;
   }
 
+  /* Pushed to the row's far edge by the flex gap above rather than centred with the
+     name — it answers the label/name pair as a whole, not either line of it. */
+  .project-page__next-arrow {
+    position: relative;
+    z-index: 1;
+    margin-left: auto;
+    flex: none;
+  }
+
   @media (hover: hover) and (pointer: fine) {
     /* The target is the door, not the row of type that sits in it. Once the plate is the
        thing you are aiming at, a hit box the size of the closed row means the picture
@@ -4839,6 +4937,10 @@
     .project-page__next:hover .project-page__next-name {
       color: #ffffff;
       text-shadow: 0 2px 24px rgba(6, 6, 5, 0.55);
+    }
+
+    .project-page__next:hover .project-page__next-arrow .project-page__arrow {
+      color: color-mix(in srgb, var(--project-accent, #dac5a7) 60%, #f5efe4);
     }
   }
 

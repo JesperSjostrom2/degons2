@@ -4,6 +4,7 @@ import Image from 'next/image'
 import TransitionLink from '@/components/transition/transition-link'
 import { useCallback, useEffect, useRef, type CSSProperties, type MouseEvent } from 'react'
 import type { Project } from '@/data/projects'
+import ArrowSwap from './ArrowSwap'
 
 /** How far the picture may travel from centre, in px, between the ends of the row. Read
  *  against a plate over a thousand px wide, so it is a drift, not a slide. */
@@ -133,6 +134,10 @@ const NextProjectLink = ({ project }: { project: Project }) => {
       <span className="project-page__next-text">
         <span className="project-page__next-label">Next project</span>
         <span className="project-page__next-name">{project.displayName}</span>
+      </span>
+
+      <span className="project-page__next-arrow">
+        <ArrowSwap />
       </span>
     </TransitionLink>
   )
