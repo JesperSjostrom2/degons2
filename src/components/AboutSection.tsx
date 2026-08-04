@@ -122,7 +122,7 @@ export default function AboutSection() {
               Design quickly became the part I enjoyed most, so I decided to go freelance and focus on the kind of websites I actually want to build while helping people get a stronger online presence.
             </p>
             <p className="about-story-closing">
-              When I&apos;m not working, you can usually find me gaming, working out, working on websites or other things I&apos;m into.
+              A lot of small businesses still don&apos;t have a website that represents them well. Some don&apos;t have one at all. I think every one of them deserves better, and that&apos;s the work I actually want to be doing.
             </p>
             <div className="about-story-socials">
               <SocialLinks />

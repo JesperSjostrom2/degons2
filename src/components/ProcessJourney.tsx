@@ -10,8 +10,8 @@ import MaskedRise from '@/components/masked-rise'
 const processSteps = [
   {
     number: '01',
-    title: 'Find your angle',
-    description: 'We narrow the idea until the site has a clear point of view.',
+    title: 'Start with a plan',
+    description: 'A short conversation about your goals turns into a clear scope and price before any work starts.',
     asset: '/assets/Message.png',
     width: 374,
     height: 368,
@@ -20,8 +20,8 @@ const processSteps = [
   },
   {
     number: '02',
-    title: 'Build it',
-    description: 'Design and development move together, with feedback while it still matters.',
+    title: 'Build in the open',
+    description: 'Design and code move together, with real feedback rounds, so nothing surprises you at the end.',
     asset: '/assets/Shopping card (2).png',
     width: 342,
     height: 336,
@@ -30,8 +30,8 @@ const processSteps = [
   },
   {
     number: '03',
-    title: 'Ship it',
-    description: 'Final checks, a clean launch, and no mystery about where things stand.',
+    title: 'Launch and support',
+    description: "Final testing, a clean launch, and I'm still around after. I don't disappear once the invoice is paid.",
     asset: '/assets/Realtime tracking.png',
     width: 434,
     height: 308,

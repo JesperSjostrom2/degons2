@@ -192,8 +192,8 @@ const MagicBento: React.FC = () => {
   const cardData: BentoCardData[] = [
     {
       color: BENTO_ACCENTS.lavender,
-      title: "One workflow, handled together.",
-      description: "From concept to launch, every detail stays aligned.",
+      title: "Everything you need, one workflow.",
+      description: "Web design, development, SEO, and launch support, all from the same person, start to finish.",
       label: "END-TO-END DELIVERY",
       svgAsset: "endToEnd",
       customContent: (
@@ -207,18 +207,18 @@ const MagicBento: React.FC = () => {
 
           <div className="bento-feature-copy bento-mobile-readable bento-top-card-copy relative z-30 max-w-[20rem] p-6 sm:p-8">
             <h3 className="bento-card-heading bento-top-card-heading text-white">
-              Built as a complete<br />
-              <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.lavender }}>experience.</span>
+              Everything you need,<br />
+              <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.lavender }}>one workflow.</span>
             </h3>
-            <p className="bento-card-caption">Web design, development, SEO, and launch support.</p>
+            <p className="bento-card-caption">Web design, development, SEO, and launch support, all from the same person, start to finish.</p>
           </div>
         </div>
       ),
     },
     {
       color: BENTO_ACCENTS.olive,
-      title: "Clear updates, smooth progress.",
-      description: "No chasing. No guessing. Just steady progress.",
+      title: "You'll hear from me, not a team.",
+      description: "No account managers, no relays. You talk straight to me.",
       label: "CLEAR COMMUNICATION",
       customContent: (
         <div className="group/attention attention-chat-card relative -m-8 flex h-[calc(100%+4rem)] flex-col overflow-hidden">
@@ -226,10 +226,10 @@ const MagicBento: React.FC = () => {
 
           <div className="bento-mobile-readable relative z-20 px-6 pb-0 pt-5">
             <h3 className="bento-card-heading text-[#f5efe4]">
-              Clear updates,<br />
-              <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.olive }}>smooth progress.</span>
+              You&apos;ll hear from<br />
+              <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.olive }}>me, not a team.</span>
             </h3>
-            <p className="bento-card-caption hidden sm:block mt-1">No chasing. No guessing. Just steady progress.</p>
+            <p className="bento-card-caption hidden sm:block mt-1">No account managers, no relays. You talk straight to me.</p>
           </div>
 
           <div className="chat-showcase-messages relative z-30 mt-5 flex flex-1 flex-col gap-1 px-6 pb-0">
@@ -266,7 +266,7 @@ const MagicBento: React.FC = () => {
     {
       color: BENTO_ACCENTS.champagne,
       title: "Freelance rates, not agency rates.",
-      description: "Lower overhead, passed straight on to you.",
+      description: "No middlemen, no office overhead. Just the work, priced fairly.",
       label: "AFFORDABLE",
       svgAsset: "fastDelivery",
       customContent: (
@@ -276,7 +276,7 @@ const MagicBento: React.FC = () => {
               Freelance rates,<br />
               <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.champagne }}>not agency rates.</span>
             </h3>
-            <p className="bento-card-caption">Lower overhead, passed straight on to you.</p>
+            <p className="bento-card-caption">No middlemen, no office overhead. Just the work, priced fairly.</p>
           </div>
 
           <div className="conversion-phone-wrap pointer-events-none absolute inset-0 z-20 flex items-end justify-center overflow-visible">
@@ -293,18 +293,18 @@ const MagicBento: React.FC = () => {
     getRemoteWorkCard(),
     {
       color: BENTO_ACCENTS.champagne,
-      title: "A site that feels effortless.",
-      description: "Clear, polished, and built to make the next step obvious.",
+      title: "Looks the part, works the part.",
+      description: "Clean layout, fast load, and details that make people take the business behind it seriously.",
       label: "FIRST IMPRESSION",
       svgAsset: "firstImpression",
       customContent: (
         <div className="group/selling relative -m-8 flex h-[calc(100%+4rem)] flex-col overflow-hidden">
           <div className="bento-feature-copy bento-mobile-readable bento-top-card-copy relative z-20 max-w-[19rem] p-6 sm:p-8">
             <h3 className="bento-card-heading bento-top-card-heading text-white">
-              Premium by<br />
-              <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.champagne }}>design.</span>
+              Looks the part,<br />
+              <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.champagne }}>works the part.</span>
             </h3>
-            <p className="bento-card-caption">Clear spacing, smooth interactions, and thoughtful details make the site easy to use.</p>
+            <p className="bento-card-caption">Clean layout, fast load, and details that make people take the business behind it seriously.</p>
           </div>
 
           <div className="first-impression-svg-wrap absolute inset-0 z-10 flex items-center justify-center">
