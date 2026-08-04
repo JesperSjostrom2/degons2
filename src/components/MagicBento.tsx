@@ -1366,13 +1366,21 @@ const MagicBento: React.FC = () => {
 
           .bento-top-card-copy .bento-card-caption {
             max-width: 21rem;
-            font-size: 0.94rem;
+            /* 0.94rem before. There is no reason for the feature cards to run a
+               size of their own 0.04rem off everything else — see the note on
+               .bento-card-caption. */
+            font-size: 0.98rem;
             line-height: 1.48;
           }
 
+          /* One caption size for the whole grid: 0.98rem, which is what cards
+             2-4 already used and what ProcessJourney sets on its own body copy.
+             This base was 0.8rem, and between it, 0.94rem on the feature cards
+             and 0.98rem on the middle three, the same paragraph came in three
+             sizes depending on which card it landed in. */
           .bento-card-caption {
             max-width: 14.75rem;
-            font-size: 0.8rem;
+            font-size: 0.98rem;
             font-weight: 450;
             line-height: 1.38;
             background: linear-gradient(180deg, #dcd7cc 0%, #b0aea5 100%);
@@ -1750,9 +1758,39 @@ const MagicBento: React.FC = () => {
               line-height: 1.12;
             }
 
+            /* This is the rule that made the captions unreadable on a phone: it
+               flattened all five cards to 0.8rem (12.8px) regardless of what
+               they were set to above, so the smallest screen got the smallest
+               type. Now the same 0.98rem as everywhere else.
+
+               Still !important, and still here rather than deleted: the
+               nth-child(2-4) selector above outweighs this one on specificity,
+               so without the flag those three cards would keep a 1.75rem line
+               height, which is far too airy for a copy column this narrow.
+               1.55 is the phone value. */
             .card-responsive .bento-card-caption {
-              font-size: 0.8rem !important;
-              line-height: 1.4 !important;
+              font-size: 0.98rem !important;
+              line-height: 1.55 !important;
+            }
+
+            /* Card 5 is the one exception, and only on a phone. Its caption is
+               123 characters — roughly twice the next longest — and it runs in
+               the narrowest copy column on the grid (12rem, because the artwork
+               is centred and then pushed 50% of its own width to the right, so
+               the text has to clear it). At the shared 0.98rem that wraps to six
+               lines and the last word lands 1px off the bottom of the card.
+
+               0.92rem takes it to five lines and gives the card its bottom back.
+               Widening the column instead would have kept the shared size, but
+               the artwork's position is a percentage of the card while a rem is
+               not, so the width that clears it at 449px overlaps it at 390px.
+               Shrinking the type is the part that holds at every phone width.
+
+               Higher specificity than the rule above, so it wins despite both
+               carrying !important. */
+            .card-responsive .card:nth-child(5) .bento-card-caption {
+              font-size: 0.92rem !important;
+              line-height: 1.5 !important;
             }
 
             .card-responsive .card:nth-child(1) {

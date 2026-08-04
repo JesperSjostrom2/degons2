@@ -133,6 +133,16 @@ export interface Project {
   name: string
   /** What the logo tile falls back to, and the visible wordmark when there is no logo. */
   displayName: string
+  /**
+   * A shorter label for the project navbar, where every project sits in one row inside a
+   * fixed-width pill and a long name pushes the others toward the scroll.
+   *
+   * Only set it when the full `displayName` genuinely does not fit — the navbar falls back to
+   * `displayName`, and two names for the same project is a cost worth paying only for the ones
+   * that need it. It is scoped to the navbar on purpose: the index card and the next-project
+   * link have room for the full name and should keep saying it.
+   */
+  navName?: string
   /** One or two lines. The only copy on the index panel. */
   description: string
   /**
@@ -308,6 +318,9 @@ export const projects: Project[] = [
     lastUpdated: '2026-08-01',
     name: 'Cafe & Bistro Kerma',
     displayName: 'Tahkon Kerma',
+    /* The longest of the three, and the only one that needed shortening: "Tahkon" is the
+       village, so dropping it costs nothing a visitor already on the page needs. */
+    navName: 'Kerma',
     description:
       'A cafe and bistro in Tahko. Logo and identity, plus a site built around the menu, the opening hours and actually being found locally.',
     /**

@@ -28,6 +28,11 @@ import { projects } from '@/data/projects'
  * Every link here is a `TransitionLink`, so leaving runs the route curtain — including the
  * wordmark. The navbar itself still does not animate: it is the one thing that persists
  * between project pages, and the curtain passing over it is the transition, not a redraw.
+ *
+ * Labels come from `navName` where a project sets one, falling back to `displayName`. This is
+ * the only place that shortening applies: every project shares one fixed-width pill here, so a
+ * long name spends room the others need, while the index card and the next-project link each
+ * have a line to themselves and keep the full name.
  */
 const ProjectNavbar = () => {
   const pathname = usePathname()
@@ -92,7 +97,7 @@ const ProjectNavbar = () => {
                   className="project-nav__link project-nav__link--active"
                   aria-current="page"
                 >
-                  {project.displayName}
+                  {project.navName ?? project.displayName}
                 </span>
               ) : (
                 <TransitionLink
@@ -100,7 +105,7 @@ const ProjectNavbar = () => {
                   href={`/work/${project.slug}`}
                   className="project-nav__link"
                 >
-                  {project.displayName}
+                  {project.navName ?? project.displayName}
                 </TransitionLink>
               ),
             )}
