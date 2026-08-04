@@ -552,7 +552,7 @@ export const projects: Project[] = [
       alt: 'Portfolio v1 logo',
       width: 150,
       height: 150,
-      scale: 1.5,
+      scale: 1.15,
     },
     liveUrl: 'https://jespersjostrom2.github.io',
     liveLabel: 'jespersjostrom2.github.io',
