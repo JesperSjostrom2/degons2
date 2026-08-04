@@ -14,7 +14,6 @@ interface FooterLink {
 
 interface SocialLink {
   icon: ReactNode
-  hoverIcon?: ReactNode
   href: string
   label: string
 }

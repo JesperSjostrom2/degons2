@@ -7,15 +7,13 @@ type SocialIconLinkProps = {
   href: string
   label: string
   icon: ReactNode
-  hoverIcon?: ReactNode
 }
 
-export function SocialIconLink({ href, label, icon, hoverIcon }: SocialIconLinkProps) {
+export function SocialIconLink({ href, label, icon }: SocialIconLinkProps) {
   const content = (
     <>
       <span className="social-icon-link-fill" aria-hidden="true" />
       <span className="social-icon-link-glyph">{icon}</span>
-      {hoverIcon ? <span className="social-icon-link-glyph social-icon-link-glyph-hover">{hoverIcon}</span> : null}
       <span className="sr-only">{label}</span>
     </>
   )

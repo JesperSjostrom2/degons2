@@ -2060,24 +2060,6 @@
       opacity 220ms ease;
   }
 
-  .social-icon-link-glyph-hover {
-    position: absolute;
-    transform: scale(0.7);
-    opacity: 0;
-  }
-
-  .social-icon-link:hover .social-icon-link-glyph:not(.social-icon-link-glyph-hover),
-  .social-icon-link:focus-visible .social-icon-link-glyph:not(.social-icon-link-glyph-hover) {
-    transform: scale(0.7);
-    opacity: 0;
-  }
-
-  .social-icon-link:hover .social-icon-link-glyph-hover,
-  .social-icon-link:focus-visible .social-icon-link-glyph-hover {
-    transform: scale(1);
-    opacity: 1;
-  }
-
   @media (prefers-reduced-motion: reduce) {
     .social-icon-link,
     .social-icon-link-fill,
