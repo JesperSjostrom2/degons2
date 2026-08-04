@@ -1603,6 +1603,20 @@ const MagicBento: React.FC = () => {
               animation: none !important;
             }
 
+            .card:hover .attention-chat-card .chat-line-in,
+            .card:active .attention-chat-card .chat-line-in,
+            .card:hover .attention-chat-card .chat-line-outgoing,
+            .card:active .attention-chat-card .chat-line-outgoing {
+              opacity: 1 !important;
+              transform: translateY(0) !important;
+              animation: none !important;
+            }
+
+            .card-responsive .card:hover:nth-child(4) .remote-card-shipping {
+              transform: translateY(7%) scale(1.14) !important;
+              filter: none !important;
+            }
+
             .selling-stat-bar {
               animation: none !important;
               transform: scaleX(0.86);
@@ -1749,6 +1763,14 @@ const MagicBento: React.FC = () => {
               transform: translate3d(10%, 8%, 0) scale(1);
             }
 
+            /* Hover is disabled below 768px (see the max-width:600-767px
+               block further down) — this pin stops a higher-specificity
+               rule from the max-width:767px block from still snapping this
+               to the 600-1023px tablet position/scale on tap. */
+            .card-responsive .card:hover:nth-child(1) .end-to-end-svg {
+              transform: translate3d(10%, 8%, 0) scale(1) !important;
+            }
+
             .card-responsive .card:nth-child(2) {
               order: 3;
               min-height: 225px;
@@ -1852,8 +1874,64 @@ const MagicBento: React.FC = () => {
               transform: translate3d(50%, 0.3rem, 0);
             }
 
-            .card:hover .group\/selling .first-impression-svg {
-              transform: translate3d(50%, 0.3rem, 0) scale(1.025);
+            /* Hover is disabled below 768px (see the max-width:600-767px
+               block further down) — this pin stops a higher-specificity
+               rule from the max-width:767px block from still snapping this
+               to the 600-1023px tablet position/scale on tap. */
+            .card-responsive .card:hover:nth-child(5) .first-impression-svg {
+              transform: translate3d(50%, 0.3rem, 0) !important;
+            }
+          }
+
+          /* Cards 1, 3 and 5 fall back to their plain (non-nth-child) base
+             transform for the whole 600-1023px tablet layout (portrait and
+             landscape) — the max-width:767px block below only covers part
+             of that range and still carries hover values meant for a
+             different breakpoint, so hover is pinned back to the real base
+             here to keep it fully inert on touch, matching the <600px pins
+             above. */
+          @media (min-width: 600px) and (max-width: 1023px) {
+            .card-responsive .card:hover:nth-child(1) .end-to-end-svg {
+              transform: translate3d(-1%, 3%, 0) scale(1.1) !important;
+            }
+
+            .card-responsive .card:hover:nth-child(3) .conversion-flow-svg {
+              transform: translateY(0) !important;
+            }
+
+            .card-responsive .card:hover:nth-child(5) .first-impression-svg {
+              transform: translate3d(45%, 1.1rem, 0) !important;
+            }
+          }
+
+          /* The generic text-lift, the chat replay animation, and card 4's
+             hover growth are only neutralised up to 767px above — this
+             closes the same gap for the rest of the touch-driven tablet
+             layout (768-1023px, e.g. iPad portrait or a phone rotated to
+             landscape). Card 4's resting transform here is the scale-[0.95]
+             Tailwind class on the image itself (no CSS override exists for
+             this range), so the hover pin matches that. */
+          @media (min-width: 768px) and (max-width: 1023px) {
+            .card:hover .bento-mobile-readable,
+            .card:hover .remote-card-copy,
+            .card:hover .contact-card-content,
+            .card:hover .card__header,
+            .card:hover .card__content {
+              transform: none !important;
+            }
+
+            .card:hover .attention-chat-card .chat-line-in,
+            .card:active .attention-chat-card .chat-line-in,
+            .card:hover .attention-chat-card .chat-line-outgoing,
+            .card:active .attention-chat-card .chat-line-outgoing {
+              opacity: 1 !important;
+              transform: translateY(0) !important;
+              animation: none !important;
+            }
+
+            .card-responsive .card:hover:nth-child(4) .remote-card-shipping {
+              transform: scale(0.95) !important;
+              filter: none !important;
             }
           }
 
