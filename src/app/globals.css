@@ -104,7 +104,7 @@
      this from scroll meant a :root custom property write, which invalidates
      style for the entire document — brutal over the bento, which is the
      heaviest subtree on the page. */
-  --panel-bg: #1a1a17;
+  --panel-bg: #1a1a1b;
   /* Top-edge highlight on raised surfaces. Deliberately constant: these feed
      a four-stop gradient on .card-responsive::after, so making them
      scroll-dependent re-rastered that layer on every change. The rims still
