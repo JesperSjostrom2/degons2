@@ -2277,6 +2277,7 @@
     padding: 0.2rem;
     border: 0;
     background: #f4f4f2;
+    overflow: hidden;
   }
 
   /* Black rather than --panel-bg, which read as a grey chip against the sky.
