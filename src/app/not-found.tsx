@@ -27,7 +27,7 @@ export const metadata: Metadata = notFoundMetadata
 
 export default function NotFound() {
   return (
-    <main className="isolate relative min-h-screen bg-[color:var(--sky)]">
+    <main id="main" className="isolate relative min-h-screen bg-[color:var(--sky)]">
       <CustomCursor />
       <SiteAtmosphere />
 

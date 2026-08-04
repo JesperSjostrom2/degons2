@@ -5,22 +5,18 @@
  * without pulling component code into the RSC graph.
  *
  * ─────────────────────────────────────────────────────────────────────────────
- * UNCONFIRMED VALUES — anything with an `// unconfirmed` comment is my assumption,
- * not something read off the sites. It is written as finished copy because the
- * page is read by people, not by me; the marker lives in the source instead.
- * Correct them and the marker goes with them.
+ * Every `facts` row is now confirmed: Kerma's against the About section's own entry for
+ * it, Portfolio v1's against the repo behind the site, and Andcreative's by you on
+ * 2026-08-04. Nothing on these pages is an assumption any more.
  *
- *   · `facts` — Andcreative only. Kerma's are confirmed against the About section's own
- *     entry for it, and Portfolio v1's against the repo behind the site.
- *
- * What is left is one project's year, client and scope. Everything else on this page is
- * now read rather than assumed.
+ * If a value ever goes back to being a guess, write it as finished copy anyway — the page
+ * is read by people, not by you — and mark it `// unconfirmed` in the source so the debt
+ * is visible here rather than on screen.
  *
  * `roleSummary` is written to be read, but it is my account of the work rather
  * than yours. Rewrite freely.
  *
- * `typography`, `palette` and `tech` are read off the live sites, not guessed — so they
- * carry no `// unconfirmed` marker.
+ * `typography`, `palette` and `tech` are read off the live sites, not guessed.
  *
  *   · typography — walk every text-bearing leaf node and group by family, weight and
  *     size. Sampling the first handful of nodes only reaches the nav and misses the
@@ -259,8 +255,8 @@ export const projects: Project[] = [
     facts: [
       // Work started in 2025 and is ongoing; 2026 is the confirmed publish year.
       { label: 'Year', value: '2026' },
-      { label: 'Client', value: 'Photography & film agency' }, // unconfirmed
-      { label: 'Scope', value: 'Design, build, deploy' }, // unconfirmed
+      { label: 'Client', value: 'Photography & film agency' },
+      { label: 'Scope', value: 'Design, build, deploy' },
     ],
     roleSummary:
       'Designed and built the site end to end — layout, front end and deployment. It is a portfolio for people whose work is photographs and film, so the images had to stay large without the pages becoming slow to open on a phone. Most of the effort went into the media pipeline, and into keeping the route from a piece of work to an enquiry as short as it could be.',

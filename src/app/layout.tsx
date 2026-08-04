@@ -128,6 +128,11 @@ export default function RootLayout({
       <body
         className={`${outfit.variable} ${newsreader.variable} ${sourceSans3.variable} font-sans antialiased`}
       >
+        {/* First stop in the tab order, on every route. Parked off-screen by
+            `.skip-link` and slides in only on :focus-visible. */}
+        <a href="#main" className="skip-link">
+          Skip to content
+        </a>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: serializeJsonLd(personJsonLd) }}

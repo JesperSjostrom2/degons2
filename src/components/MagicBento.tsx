@@ -54,10 +54,15 @@ const BentoCardGrid: React.FC<{
   </div>
 );
 
+/* WebP, and named for the card each one illustrates. These arrived as stock PNGs and kept
+   their shop names — "Smart Recommendations", "Special Dicount" (sic), "Wishlist" — which
+   said nothing about where they are used and put spaces and a typo in a public URL. They
+   were also full-resolution: 2.8MB of PNG across the seven, for artwork that never renders
+   above 520px. */
 const BENTO_STATIC_SVG_PATHS = {
-  endToEnd: "/assets/Smart Recommendations.png",
-  fastDelivery: "/assets/Special Dicount.png",
-  firstImpression: "/assets/Wishlist.png",
+  endToEnd: "/assets/bento-workflow-graph.webp",
+  fastDelivery: "/assets/bento-rate-tag.webp",
+  firstImpression: "/assets/bento-custom-layout.webp",
 };
 
 type BentoSvgAsset = keyof typeof BENTO_STATIC_SVG_PATHS;
@@ -176,7 +181,7 @@ const MagicBento: React.FC = () => {
           <div className="remote-card-shipping-position absolute inset-x-0 bottom-[-72%] h-[168%] flex items-center justify-center">
             <Image
               className="remote-card-shipping relative z-10 h-auto w-full max-w-[520px] scale-[0.95]"
-              src="/assets/International Shipping.png"
+              src="/assets/bento-remote-globe.webp"
               alt=""
               aria-hidden="true"
               width={386}

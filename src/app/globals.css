@@ -249,6 +249,44 @@
 }
 
 @layer utilities {
+  /* First thing in the tab order, invisible until it is focused.
+     Off-screen rather than display:none, because a hidden element is not
+     focusable and this one has to be reachable by the first Tab press. The
+     home page has ~48 tabbable elements and the nav sits in front of all of
+     them; without this, reaching the contact form by keyboard means tabbing
+     the entire site. */
+  .skip-link {
+    position: fixed;
+    top: 0.75rem;
+    left: 50%;
+    /* Above .route-curtain (9999). A visitor who tabs while the curtain is
+       still down must still see where focus went. */
+    z-index: 10000;
+    transform: translate(-50%, calc(-100% - 1rem));
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(14, 14, 13, 0.92);
+    backdrop-filter: blur(18px);
+    padding: 0.6rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--site-text);
+    text-decoration: none;
+    transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .skip-link:focus-visible {
+    transform: translate(-50%, 0);
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .skip-link {
+      transition: none;
+    }
+  }
+
   .glass {
     backdrop-filter: blur(10px);
     background: var(--site-surface);
@@ -1933,14 +1971,32 @@
     inset: 0;
   }
 
+  /* Mirrored: the source shot has him facing frame-right, which points him out
+     of the layout. Flipped, he looks back across the circle toward the copy. */
   .about-story-portrait::before {
-    background: url('/assets/cursedportrait.webp') center 22% / cover no-repeat;
-    filter: grayscale(1) contrast(1.04);
+    /* Sized under `cover` on purpose, to pull back off his face. That leaves a
+       sliver of bare box down each side, so the base colour is the same #080808
+       the vignette below lands on — the gaps read as more vignette, not panel. */
+    background: url('/assets/oldportrait.webp') center 34% / 88% auto no-repeat #080808;
+    filter: grayscale(1) contrast(1.12) brightness(0.95);
+    transform: scaleX(-1);
   }
 
+  /* Two passes. The radial is the one doing the work: this frame has a lit
+     cabin behind him, and without it the bright background runs straight into
+     the rim and the circle reads as a photo pasted on the planet instead of a
+     face emerging from it. The linear keeps the original weight under the jaw. */
   .about-story-portrait::after {
     z-index: 1;
-    background: linear-gradient(180deg, rgba(8, 8, 8, 0.02) 35%, rgba(8, 8, 8, 0.68) 100%);
+    background:
+      radial-gradient(
+        circle closest-side at 50% 50%,
+        rgba(8, 8, 8, 0) 40%,
+        rgba(8, 8, 8, 0.4) 66%,
+        rgba(8, 8, 8, 0.85) 87%,
+        rgba(8, 8, 8, 0.98) 100%
+      ),
+      linear-gradient(180deg, rgba(8, 8, 8, 0.02) 35%, rgba(8, 8, 8, 0.68) 100%);
   }
 
   .about-story-portrait-corner {
@@ -2166,9 +2222,15 @@
     width: 1.9rem;
     height: 1.9rem;
     border-radius: inherit;
+    /* 96px wide, for a marker that renders at 1.9rem (1.5rem on mobile). The
+       full-size portrait this is cut from is 1023x1537 — 122KB to fill a 30px
+       circle, and a CSS background on an element that is always in the DOM, so
+       it downloaded on every page load whether or not anyone reached the
+       Experience list. Regenerate from the original in git history if this
+       marker ever gets bigger. */
     background-image:
       linear-gradient(180deg, transparent 55%, rgba(8, 8, 8, 0.24)),
-      url('/assets/cursedportrait.webp');
+      url('/assets/cursedportrait-marker.webp');
     background-position: center 24%;
     background-size: cover;
   }

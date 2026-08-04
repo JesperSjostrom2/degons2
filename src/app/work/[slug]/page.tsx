@@ -113,6 +113,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
   return (
     <main
+      id="main"
       className="project-page isolate relative min-h-screen"
       style={{ '--project-accent': project.accent } as CSSProperties}
     >

@@ -17,7 +17,7 @@ import SectionHandoff from '@/components/section-handoff'
 
 export default function Home() {
   return (
-    <main className="isolate relative min-h-screen bg-[color:var(--sky)]">
+    <main id="main" className="isolate relative min-h-screen bg-[color:var(--sky)]">
       <SmoothScroll />
       <SectionHandoff />
       <CustomCursor />

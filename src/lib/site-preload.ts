@@ -1,18 +1,5 @@
 'use client'
 
-const BENTO_STATIC_ASSET_URLS = [
-  '/assets/Smart Recommendations.png',
-  '/assets/Special Dicount.png',
-  '/assets/Wishlist.png',
-  '/assets/International Shipping.png',
-]
-
-const BELOW_FOLD_IMAGE_URLS = [
-  '/assets/projects/andcreative/andcreativeproduct.webp',
-  '/assets/projects/kerma/kermaipad.webp',
-  '/assets/projects/portfolio-v1/ogportfolionew.webp',
-]
-
 const scheduleIdleWork = (callback: () => void, timeout = 1200) => {
   const requestIdleCallback = window.requestIdleCallback?.bind(window)
   const cancelIdleCallback = window.cancelIdleCallback?.bind(window)
@@ -28,13 +15,6 @@ const scheduleIdleWork = (callback: () => void, timeout = 1200) => {
   return () => window.clearTimeout(timeoutId)
 }
 
-const warmImageCache = (url: string) => {
-  const image = new Image()
-  image.decoding = 'async'
-  image.loading = 'eager'
-  image.src = url
-}
-
 const warmHeroAtmosphere = () => {
   if (!window.matchMedia('(min-width: 768px)').matches) {
     return
@@ -47,24 +27,28 @@ const warmHeroAtmosphere = () => {
   void import('@/components/SideRays').catch(() => undefined)
 }
 
-export const prewarmBelowFoldAssets = () => {
+/**
+ * Warms the one thing that is actually fetched by the URL we can name: the SideRays chunk.
+ *
+ * This used to also `new Image()` the bento illustrations and three project covers, on the
+ * theory that having them in the HTTP cache made the sections below the fold snap in. It did
+ * the opposite. Every one of those files is rendered through `next/image`, which requests
+ * `/_next/image?url=…&w=…&q=…` — a different URL from the raw `/assets/…` path being warmed.
+ * The browser cache is keyed on the URL, so the two never met: the page downloaded ~1.6MB of
+ * PNG that nothing ever read, then downloaded the optimised variants it actually renders.
+ *
+ * Warming the optimised URL instead is possible but not worth it — it means hardcoding the `w`
+ * and `q` next/image will pick, which silently rots the moment a `sizes` attribute changes.
+ * `next/image` already starts these fetches as they approach the viewport, which is what this
+ * was reaching for.
+ *
+ * A module path has no such problem: `import()` resolves to the same chunk URL webpack will ask
+ * for later, so this one genuinely warms.
+ */
+export const prewarmHeroAtmosphere = () => {
   if (typeof window === 'undefined') {
     return () => undefined
   }
 
-  const cancelHeroAtmospherePreload = scheduleIdleWork(warmHeroAtmosphere, 420)
-
-  const cancelBentoStaticPreload = scheduleIdleWork(() => {
-    BENTO_STATIC_ASSET_URLS.forEach(warmImageCache)
-  }, 520)
-
-  const cancelImagePreload = scheduleIdleWork(() => {
-    BELOW_FOLD_IMAGE_URLS.forEach(warmImageCache)
-  }, 1600)
-
-  return () => {
-    cancelHeroAtmospherePreload()
-    cancelBentoStaticPreload()
-    cancelImagePreload()
-  }
+  return scheduleIdleWork(warmHeroAtmosphere, 420)
 }

@@ -4,7 +4,7 @@ import { useEffect, type ReactNode } from 'react'
 
 import RouteTransitionProvider from '@/components/transition/route-transition-provider'
 import RouteCurtain from '@/components/transition/route-curtain'
-import { prewarmBelowFoldAssets } from '@/lib/site-preload'
+import { prewarmHeroAtmosphere } from '@/lib/site-preload'
 
 /**
  * The one client component above `children`, and so where the curtain lives.
@@ -19,7 +19,7 @@ import { prewarmBelowFoldAssets } from '@/lib/site-preload'
  * server HTML carries the whole page and nothing is gated on a timer.
  */
 export default function SiteShell({ children }: { children: ReactNode }) {
-  useEffect(() => prewarmBelowFoldAssets(), [])
+  useEffect(() => prewarmHeroAtmosphere(), [])
 
   return (
     <RouteTransitionProvider>

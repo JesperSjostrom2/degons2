@@ -48,6 +48,25 @@ const nextConfig: NextConfig = {
         source: '/(.*)',
         headers: securityHeaders,
       },
+      {
+        /* /public is served with `max-age=0` by default, so all 44MB of it
+           revalidated on every visit. These are the only files here big enough
+           for that to matter — the scroll captures alone are 36MB.
+
+           Not `immutable`: these filenames aren't content-hashed the way
+           /_next/static's are, so a replaced video under `immutable` would
+           never reach anyone who had already loaded the old one. Thirty days
+           fresh plus a week of stale-while-revalidate gets the repeat-visit
+           win without that trap; replace a file and it propagates within the
+           month. Rename the file if you need it out sooner. */
+        source: '/assets/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=2592000, stale-while-revalidate=86400',
+          },
+        ],
+      },
     ]
   },
 };
