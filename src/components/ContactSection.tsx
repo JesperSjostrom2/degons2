@@ -246,11 +246,9 @@ export default function ContactSection() {
                               className="overflow-hidden"
                             >
                               <div className="px-5 pb-5">
-                                <div className="rounded-[14px] bg-black/20 px-4 py-3.5">
-                                  <p className="text-[13px] leading-6 text-[color:var(--site-muted)]">
-                                    {item.answer}
-                                  </p>
-                                </div>
+                                <p className="text-[14px] leading-[1.7] text-[color:var(--site-muted)]">
+                                  {item.answer}
+                                </p>
                               </div>
                             </motion.div>
                           ) : null}
