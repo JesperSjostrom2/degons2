@@ -257,10 +257,8 @@ export const projects: Project[] = [
       },
     ],
     facts: [
-      // The site dates its own case studies 2026 and its footer reads © 2026, so 2024 was
-      // certainly wrong. Still unconfirmed — that is when the work is published, which is
-      // not necessarily when it was done.
-      { label: 'Year', value: '2026' }, // unconfirmed
+      // Work started in 2025 and is ongoing; 2026 is the confirmed publish year.
+      { label: 'Year', value: '2026' },
       { label: 'Client', value: 'Photography & film agency' }, // unconfirmed
       { label: 'Scope', value: 'Design, build, deploy' }, // unconfirmed
     ],

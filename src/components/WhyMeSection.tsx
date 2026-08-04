@@ -16,10 +16,7 @@ export default function WhyMeSection() {
         <div className="section-header relative z-30">
           <ScrollReveal delay={0.08} blur>
             <h2 className="section-title">
-              <MaskedRise delay={0.12}>
-                What working with me<br />
-                <span className="font-accent-strong" style={{ color: '#c2a77b' }}>looks like.</span>
-              </MaskedRise>
+              <MaskedRise delay={0.12}>What working with me looks like</MaskedRise>
             </h2>
           </ScrollReveal>
         </div>

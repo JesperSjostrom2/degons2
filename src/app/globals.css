@@ -462,7 +462,14 @@
 
   .section-description {
     margin-top: 1.25rem;
-    color: var(--site-muted);
+    /* Same recipe as .text-gradient-muted (the hero subtext) — kept as its own
+       declaration rather than composed via @apply so this class stays a plain
+       CSS selector JSX can hand to any <p>. */
+    background: linear-gradient(180deg, #dcd7cc 0%, #b0aea5 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
     font-size: 1.125rem;
     line-height: 1.75rem;
   }
