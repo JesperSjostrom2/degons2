@@ -101,6 +101,24 @@ export default function Navbar() {
     setIsMobileMenuOpen(false)
   }
 
+  /* Escape closes it. The menu covers the whole viewport and its only other way
+     out is a hamburger that has turned into an X, so without this a keyboard is
+     trapped behind an opaque panel with no visible exit. */
+  useEffect(() => {
+    if (!isMobileMenuOpen) {
+      return
+    }
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsMobileMenuOpen(false)
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [isMobileMenuOpen])
+
   // Prevent scrolling when mobile menu is open
   useEffect(() => {
     if (isMobileMenuOpen) {
@@ -238,6 +256,7 @@ export default function Navbar() {
           className="absolute right-4 top-3 z-[70] flex h-11 w-11 items-center justify-center border-none bg-transparent p-0 text-[color:var(--site-text)] transition-all duration-300 active:scale-95 hover:opacity-80"
           aria-label="Toggle navigation menu"
           aria-expanded={isMobileMenuOpen}
+          aria-controls="mobile-menu"
         >
           <span className="relative block h-4 w-5" aria-hidden="true">
             <motion.span
@@ -266,6 +285,7 @@ export default function Navbar() {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
+            id="mobile-menu"
             className="fixed inset-0 h-[100dvh] w-auto max-w-[100dvw] overflow-hidden [contain:layout_paint_style] lg:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

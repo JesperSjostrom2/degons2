@@ -4,7 +4,7 @@ import { SITE_URL } from '@/lib/site-config';
 
 /* Bump when the home page's content genuinely changes — see the note on
    `Project.lastUpdated` for why this is not `new Date()`. */
-const HOME_LAST_UPDATED = '2026-07-31';
+const HOME_LAST_UPDATED = '2026-08-05';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [

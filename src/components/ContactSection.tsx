@@ -154,6 +154,10 @@ export default function ContactSection() {
       setProjectType(projectTypes[0])
       setBudget('')
       setMessage('')
+      // Cleared with the rest of the form: a password manager or an over-eager
+      // autofill can put a value in the honeypot once, and leaving it there
+      // silently turns every later send into the API's fake-success path.
+      setCompany('')
     } catch (error) {
       console.error('[ContactSection] mail failed to send', error)
       setStatus('error')
@@ -284,6 +288,7 @@ export default function ContactSection() {
                       value={name}
                       onChange={(event) => setName(event.target.value)}
                       required
+                      autoComplete="name"
                       maxLength={100}
                       className="w-full rounded-[20px] border border-[color:var(--site-border)] bg-white/[0.035] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[#8f8b82] focus:border-accent/60 focus:bg-white/[0.065] dark:rounded-[20px] dark:border-white/10 dark:bg-white/[0.035] dark:text-white dark:placeholder:text-white/50 dark:focus:bg-white/[0.065]"
                         placeholder="Your name"
@@ -297,6 +302,7 @@ export default function ContactSection() {
                       value={email}
                       onChange={(event) => setEmail(event.target.value)}
                       required
+                      autoComplete="email"
                       maxLength={254}
                       className="w-full rounded-[20px] border border-[color:var(--site-border)] bg-white/[0.035] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[#8f8b82] focus:border-accent/60 focus:bg-white/[0.065] dark:rounded-[20px] dark:border-white/10 dark:bg-white/[0.035] dark:text-white dark:placeholder:text-white/50 dark:focus:bg-white/[0.065]"
                         placeholder="you@example.com"
