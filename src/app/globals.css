@@ -1971,32 +1971,26 @@
     inset: 0;
   }
 
-  /* Mirrored: the source shot has him facing frame-right, which points him out
-     of the layout. Flipped, he looks back across the circle toward the copy. */
+  /* Source is pre-cropped square (see portrait-crop.jpg), already shot in
+     black and white and facing camera straight-on — no mirroring, and only a
+     light touch here since the photo doesn't need re-grading, just a nudge
+     toward the planet's tone. */
   .about-story-portrait::before {
-    /* Sized under `cover` on purpose, to pull back off his face. That leaves a
-       sliver of bare box down each side, so the base colour is the same #080808
-       the vignette below lands on — the gaps read as more vignette, not panel. */
-    background: url('/assets/oldportrait.webp') center 34% / 88% auto no-repeat #080808;
-    filter: grayscale(1) contrast(1.12) brightness(0.95);
-    transform: scaleX(-1);
+    background: url('/assets/portrait-crop.jpg') center / cover no-repeat #080808;
+    filter: contrast(1.02) brightness(1.04);
   }
 
-  /* Two passes. The radial is the one doing the work: this frame has a lit
-     cabin behind him, and without it the bright background runs straight into
-     the rim and the circle reads as a photo pasted on the planet instead of a
-     face emerging from it. The linear keeps the original weight under the jaw. */
+  /* Just a rim fade so the photo's edge doesn't run straight into the frame
+     border — stays transparent well past the face, no shadowing over the
+     photo itself. */
   .about-story-portrait::after {
     z-index: 1;
-    background:
-      radial-gradient(
-        circle closest-side at 50% 50%,
-        rgba(8, 8, 8, 0) 40%,
-        rgba(8, 8, 8, 0.4) 66%,
-        rgba(8, 8, 8, 0.85) 87%,
-        rgba(8, 8, 8, 0.98) 100%
-      ),
-      linear-gradient(180deg, rgba(8, 8, 8, 0.02) 35%, rgba(8, 8, 8, 0.68) 100%);
+    background: radial-gradient(
+      circle closest-side at 50% 50%,
+      rgba(8, 8, 8, 0) 78%,
+      rgba(8, 8, 8, 0.45) 94%,
+      rgba(8, 8, 8, 0.8) 100%
+    );
   }
 
   .about-story-portrait-corner {
