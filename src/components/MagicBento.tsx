@@ -293,7 +293,7 @@ const MagicBento: React.FC = () => {
     getRemoteWorkCard(),
     {
       color: BENTO_ACCENTS.champagne,
-      title: "Looks the part, works the part.",
+      title: "Built custom, not templated.",
       description: "Clean layout, fast load, and details that make people take the business behind it seriously.",
       label: "FIRST IMPRESSION",
       svgAsset: "firstImpression",
@@ -301,8 +301,8 @@ const MagicBento: React.FC = () => {
         <div className="group/selling relative -m-8 flex h-[calc(100%+4rem)] flex-col overflow-hidden">
           <div className="bento-feature-copy bento-mobile-readable bento-top-card-copy relative z-20 max-w-[19rem] p-6 sm:p-8">
             <h3 className="bento-card-heading bento-top-card-heading text-white">
-              Looks the part,<br />
-              <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.champagne }}>works the part.</span>
+              Built custom,<br />
+              <span className="font-accent-strong" style={{ color: BENTO_ACCENTS.champagne }}>not templated.</span>
             </h3>
             <p className="bento-card-caption">Clean layout, fast load, and details that make people take the business behind it seriously.</p>
           </div>
