@@ -149,7 +149,7 @@ export default function TechStackSection() {
           viewport={cinematicViewport}
         >
           <h2 className="section-title">
-            <MaskedRise delay={0.12}>My tech stack</MaskedRise>
+            <MaskedRise delay={0.12}>My skills</MaskedRise>
           </h2>
           <p className="section-description">
             <MaskedRise delay={0.2}>The technologies I enjoy using right now. Always open to better tools for the job.</MaskedRise>
