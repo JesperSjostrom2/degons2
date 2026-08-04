@@ -135,9 +135,9 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       <div className="relative z-10">
         <div className="container mx-auto px-6">
           <div className="project-page__inner">
-            {/* ── Head. Title and the way in on the left, the facts on the right, and
-                nothing else — the description lives on the index card, so the page does
-                not repeat it, and the role reads better below the work than above it. ── */}
+            {/* ── Head. Mark, title, and the way in on the left, the facts on the right,
+                and nothing else — the description lives on the index card, so the page
+                does not repeat it, and the role reads better below the work than above it. ── */}
             <section className="project-page__head">
               <div className="project-page__head-main">
                 {project.logo ? (

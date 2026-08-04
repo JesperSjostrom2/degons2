@@ -4145,24 +4145,23 @@
     padding-top: clamp(2.25rem, 4vw, 3rem);
   }
 
-  /* Eyebrow scale. It sits directly above a title that spells the same name, so at any
-     larger size the two read as the identity stated twice. Small, it reads as the client's
-     mark introducing the page and the title carries it. */
-  /* One height cap for every logo made the near-square marks look shrunken next to
+  /* Sized to read as a real mark introducing the title, not a caption above it — big
+     enough to hold its own ink without competing with a title that spells the same name.
+     One height cap for every logo made the near-square marks look shrunken next to
      Andcreative's wide wordmark: at the same height, a 1.18-wide mark carries about half
      the ink of a 2.31-wide one. `--project-logo-scale` lets a project ask for the height
      it needs to sit at the same weight as the others. Set it per project in `projects.ts`,
      not here. */
   .project-page__logo {
     width: auto;
-    max-width: min(11rem, 40vw);
+    max-width: min(16rem, 55vw);
     height: auto;
-    max-height: calc(clamp(1.35rem, 2vw, 1.75rem) * var(--project-logo-scale, 1));
+    max-height: calc(clamp(2.5rem, 4.5vw, 3.5rem) * var(--project-logo-scale, 1));
     /* Sits on the head rule, then the title clears it properly. */
     margin-bottom: clamp(2.5rem, 5vw, 4rem);
     object-fit: contain;
     object-position: left center;
-    opacity: 0.85;
+    opacity: 0.92;
   }
 
   /* Title and button are one unit — the way in belongs to the thing it opens, so they
