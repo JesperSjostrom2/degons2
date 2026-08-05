@@ -127,6 +127,20 @@
      and the contact form — and a colour that draws every border cannot also
      mark what matters. Neutral now, so the per-card accent is free to mean
      "this word", not "this is a card". */
+  /* --- Form feedback ---
+     The two colours on the site that are allowed to be loud. Both are lifted
+     off their pure hues so they read as lit surfaces against --panel-bg rather
+     than as system alerts pasted onto it, and both are light enough to clear
+     contrast on a dark field. The bg/ring/border variants are the same hue at
+     low alpha, so a field can turn without its text losing legibility. */
+  --form-error: #ff7a70;
+  --form-error-border: rgba(255, 122, 112, 0.55);
+  --form-error-bg: rgba(255, 122, 112, 0.07);
+  --form-error-ring: rgba(255, 122, 112, 0.12);
+  --form-success: #6ee7a8;
+  --form-success-border: rgba(110, 231, 168, 0.5);
+  --form-success-bg: rgba(110, 231, 168, 0.1);
+
   --chrome-rim-hover: rgba(255, 255, 255, 0.18);
   --chrome-glow: rgba(255, 255, 255, 0.14);
   --chrome-glow-soft: rgba(255, 255, 255, 0.05);

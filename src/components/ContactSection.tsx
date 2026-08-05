@@ -1,8 +1,8 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState, type CSSProperties, type FormEvent } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowRight, BriefcaseBusiness, CalendarClock, ChevronDown, Github, HelpCircle, Linkedin, Loader2, Mail, MessageSquare, Plus, UserRound } from 'lucide-react'
+import { AnimatePresence, motion, useAnimationControls, useReducedMotion } from 'framer-motion'
+import { AlertCircle, ArrowRight, BriefcaseBusiness, CalendarClock, Check, ChevronDown, Github, HelpCircle, Linkedin, Loader2, Mail, MessageSquare, Plus, UserRound } from 'lucide-react'
 import { FiMail } from 'react-icons/fi'
 import { cinematicHeader, cinematicHeaderCompact, cinematicPanel, cinematicPanelCompact, cinematicViewport, useCompactMotion } from '@/lib/site-motion'
 import MaskedRise from '@/components/masked-rise'
@@ -35,6 +35,56 @@ const frequentlyAskedQuestions = [
     answer: 'Yes. I can refine the design, improve usability, rebuild weak sections, or give the whole site a clearer direction.',
   },
 ]
+
+/* Same shape check the API runs — kept deliberately loose so the client never
+   rejects an address the server would have accepted. */
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+type FieldName = 'name' | 'email' | 'message'
+type FieldErrors = Partial<Record<FieldName, string>>
+
+/* Shared field chrome. The invalid state has to survive focus — a red border
+   that disappears the moment you click into the field is exactly the subtlety
+   we're replacing. */
+/* The background lives in the variants, never in the base: two competing
+   background utilities on one element resolve by stylesheet order, not by the
+   order they're concatenated here. */
+const fieldBase =
+  'w-full rounded-[20px] border px-4 py-3 text-[color:var(--site-text)] outline-none transition-[color,background-color,border-color,box-shadow] duration-300 placeholder:text-[#8f8b82]'
+const fieldValid =
+  'border-[color:var(--site-border)] bg-white/[0.035] focus:border-accent/60 focus:bg-white/[0.065]'
+const fieldInvalid =
+  'border-[color:var(--form-error-border)] bg-[color:var(--form-error-bg)] shadow-[0_0_0_3px_var(--form-error-ring)] focus:border-[color:var(--form-error)]'
+
+const fieldClass = (isInvalid: boolean) => `${fieldBase} ${isInvalid ? fieldInvalid : fieldValid}`
+
+/* The label turns with the field: colour on the border alone is easy to miss
+   on a dark panel, and it is the one cue colour-blind users can't rely on. */
+const labelClass = (isInvalid: boolean) =>
+  `flex items-center gap-2 text-base font-semibold transition-colors duration-300 ${
+    isInvalid ? 'text-[color:var(--form-error)]' : 'text-[color:var(--site-text)]'
+  }`
+
+function FieldError({ id, message }: { id: string; message?: string }) {
+  return (
+    <AnimatePresence initial={false}>
+      {message ? (
+        <motion.p
+          id={id}
+          key={message}
+          initial={{ opacity: 0, height: 0, y: -4 }}
+          animate={{ opacity: 1, height: 'auto', y: 0 }}
+          exit={{ opacity: 0, height: 0, y: -4 }}
+          transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
+          className="flex items-start gap-1.5 overflow-hidden text-[13px] font-medium text-[color:var(--form-error)]"
+        >
+          <AlertCircle className="mt-[9px] h-3.5 w-3.5 shrink-0" />
+          <span className="pt-2">{message}</span>
+        </motion.p>
+      ) : null}
+    </AnimatePresence>
+  )
+}
 
 const socialLinks = [
   {
@@ -78,6 +128,42 @@ export default function ContactSection() {
   })
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
   const [errorMessage, setErrorMessage] = useState('')
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({})
+
+  const nameRef = useRef<HTMLInputElement>(null)
+  const emailRef = useRef<HTMLInputElement>(null)
+  const messageRef = useRef<HTMLTextAreaElement>(null)
+
+  const shakeControls = useAnimationControls()
+  const prefersReducedMotion = useReducedMotion()
+
+  const shake = useCallback(() => {
+    if (prefersReducedMotion) {
+      return
+    }
+
+    shakeControls.start({
+      x: [0, -11, 9, -7, 5, -3, 0],
+      transition: { duration: 0.5, ease: 'easeInOut' },
+    })
+  }, [prefersReducedMotion, shakeControls])
+
+  /* Errors clear as soon as the field they belong to changes, so the red never
+     outlives the mistake. The banner goes with them — leaving "please fix the
+     highlighted fields" up while nothing is highlighted reads as a stuck form. */
+  const clearFieldError = useCallback((field: FieldName) => {
+    setFieldErrors((current) => {
+      if (!current[field]) {
+        return current
+      }
+
+      const next = { ...current }
+      delete next[field]
+      return next
+    })
+
+    setStatus((current) => (current === 'error' ? 'idle' : current))
+  }, [])
 
   const moveSocialFill = useCallback((element: HTMLElement, socialName: string) => {
     const grid = socialGridRef.current
@@ -120,7 +206,7 @@ export default function ContactSection() {
 
   useEffect(() => {
     if (status === 'sent') {
-      const timer = setTimeout(() => setStatus('idle'), 3000)
+      const timer = setTimeout(() => setStatus('idle'), 5000)
       return () => clearTimeout(timer)
     }
   }, [status])
@@ -128,6 +214,50 @@ export default function ContactSection() {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
+    /* The form carries noValidate, so this runs instead of the browser's own
+       bubble — which pointed at one field at a time and vanished on the next
+       click. */
+    const errors: FieldErrors = {}
+
+    if (!name.trim()) {
+      errors.name = 'Please add your name.'
+    }
+
+    const trimmedEmail = email.trim()
+
+    /* Split into the two ways an address can fail, because one string covering
+       both told people with a valid @ that they were missing one. Same rule the
+       API enforces — loosening it here only moves the rejection server-side. */
+    if (!trimmedEmail) {
+      errors.email = 'Please add an email address so I can reply.'
+    } else if (!/^[^\s@]+@[^\s@]+$/.test(trimmedEmail)) {
+      errors.email = 'That should look like name@domain — one @, no spaces.'
+    } else if (!EMAIL_PATTERN.test(trimmedEmail)) {
+      errors.email = 'The domain needs a dot in it, like example.com.'
+    }
+
+    if (!message.trim()) {
+      errors.message = 'Tell me a little about what you need.'
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors)
+      setStatus('error')
+      setErrorMessage(
+        Object.keys(errors).length === 1
+          ? 'One field still needs your attention.'
+          : `${Object.keys(errors).length} fields still need your attention.`,
+      )
+      shake()
+
+      const firstInvalid = errors.name ? nameRef.current : errors.email ? emailRef.current : messageRef.current
+      firstInvalid?.focus({ preventScroll: true })
+      firstInvalid?.scrollIntoView({ block: 'center', behavior: prefersReducedMotion ? 'auto' : 'smooth' })
+
+      return
+    }
+
+    setFieldErrors({})
     setStatus('sending')
     setErrorMessage('')
 
@@ -162,6 +292,7 @@ export default function ContactSection() {
       console.error('[ContactSection] mail failed to send', error)
       setStatus('error')
       setErrorMessage(error instanceof Error ? error.message : 'Could not send message.')
+      shake()
     }
   }
 
@@ -263,7 +394,7 @@ export default function ContactSection() {
                 </div>
               </aside>
 
-              <form onSubmit={handleSubmit} className="p-6 md:p-8">
+              <motion.form onSubmit={handleSubmit} noValidate animate={shakeControls} className="p-6 md:p-8">
                 <div className="mb-6 flex items-center gap-2.5 border-b border-white/[0.07] pb-5">
                   <MessageSquare className="h-5 w-5 shrink-0 text-[color:var(--site-muted)]" />
                   <h3 className="text-xl font-bold tracking-[-0.025em] text-[color:var(--site-text)] md:text-2xl">Send a message</h3>
@@ -283,30 +414,48 @@ export default function ContactSection() {
                 />
                 <div className="grid gap-4 md:grid-cols-2">
                   <label className="space-y-4 pl-0.5">
-                    <span className="flex items-center gap-2 text-base font-semibold text-[color:var(--site-text)]"><UserRound className="h-4 w-4 text-[color:var(--site-muted)]" />Name</span>
-                    <input
-                      value={name}
-                      onChange={(event) => setName(event.target.value)}
-                      required
-                      autoComplete="name"
-                      maxLength={100}
-                      className="w-full rounded-[20px] border border-[color:var(--site-border)] bg-white/[0.035] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[#8f8b82] focus:border-accent/60 focus:bg-white/[0.065] dark:rounded-[20px] dark:border-white/10 dark:bg-white/[0.035] dark:text-white dark:placeholder:text-white/50 dark:focus:bg-white/[0.065]"
+                    <span className={labelClass(Boolean(fieldErrors.name))}><UserRound className="h-4 w-4 text-[color:var(--site-muted)]" />Name</span>
+                    <div>
+                      <input
+                        ref={nameRef}
+                        value={name}
+                        onChange={(event) => {
+                          setName(event.target.value)
+                          clearFieldError('name')
+                        }}
+                        required
+                        autoComplete="name"
+                        maxLength={100}
+                        aria-invalid={Boolean(fieldErrors.name)}
+                        aria-describedby={fieldErrors.name ? 'contact-name-error' : undefined}
+                        className={fieldClass(Boolean(fieldErrors.name))}
                         placeholder="Your name"
                       />
+                      <FieldError id="contact-name-error" message={fieldErrors.name} />
+                    </div>
                   </label>
 
                   <label className="space-y-4 pl-0.5">
-                    <span className="flex items-center gap-2 text-base font-semibold text-[color:var(--site-text)]"><Mail className="h-4 w-4 text-[color:var(--site-muted)]" />Email</span>
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={(event) => setEmail(event.target.value)}
-                      required
-                      autoComplete="email"
-                      maxLength={254}
-                      className="w-full rounded-[20px] border border-[color:var(--site-border)] bg-white/[0.035] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[#8f8b82] focus:border-accent/60 focus:bg-white/[0.065] dark:rounded-[20px] dark:border-white/10 dark:bg-white/[0.035] dark:text-white dark:placeholder:text-white/50 dark:focus:bg-white/[0.065]"
+                    <span className={labelClass(Boolean(fieldErrors.email))}><Mail className="h-4 w-4 text-[color:var(--site-muted)]" />Email</span>
+                    <div>
+                      <input
+                        ref={emailRef}
+                        type="email"
+                        value={email}
+                        onChange={(event) => {
+                          setEmail(event.target.value)
+                          clearFieldError('email')
+                        }}
+                        required
+                        autoComplete="email"
+                        maxLength={254}
+                        aria-invalid={Boolean(fieldErrors.email)}
+                        aria-describedby={fieldErrors.email ? 'contact-email-error' : undefined}
+                        className={fieldClass(Boolean(fieldErrors.email))}
                         placeholder="you@example.com"
                       />
+                      <FieldError id="contact-email-error" message={fieldErrors.email} />
+                    </div>
                   </label>
 
                   <label className="space-y-4 pl-0.5">
@@ -340,31 +489,77 @@ export default function ContactSection() {
                 </div>
 
                 <label className="mt-4 block space-y-4 pl-0.5">
-                  <span className="flex items-center gap-2 text-base font-semibold text-[color:var(--site-text)]"><MessageSquare className="h-4 w-4 text-[color:var(--site-muted)]" />Message</span>
-                  <textarea
-                    value={message}
-                    onChange={(event) => setMessage(event.target.value)}
-                    required
-                    maxLength={5000}
-                    rows={7}
-                    className="w-full resize-none rounded-[20px] border border-[color:var(--site-border)] bg-white/[0.035] px-4 py-3 text-[color:var(--site-text)] outline-none transition-colors duration-300 placeholder:text-[#8f8b82] focus:border-accent/60 focus:bg-white/[0.065] dark:rounded-[20px] dark:border-white/10 dark:bg-white/[0.035] dark:text-white dark:placeholder:text-white/50 dark:focus:bg-white/[0.065]"
-                    placeholder="Tell me a bit about what you need."
-                  />
+                  <span className={labelClass(Boolean(fieldErrors.message))}><MessageSquare className="h-4 w-4 text-[color:var(--site-muted)]" />Message</span>
+                  <div>
+                    <textarea
+                      ref={messageRef}
+                      value={message}
+                      onChange={(event) => {
+                        setMessage(event.target.value)
+                        clearFieldError('message')
+                      }}
+                      required
+                      maxLength={5000}
+                      rows={7}
+                      aria-invalid={Boolean(fieldErrors.message)}
+                      aria-describedby={fieldErrors.message ? 'contact-message-error' : undefined}
+                      className={`${fieldClass(Boolean(fieldErrors.message))} resize-none`}
+                      placeholder="Tell me a bit about what you need."
+                    />
+                    <FieldError id="contact-message-error" message={fieldErrors.message} />
+                  </div>
                 </label>
 
                 <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                  <p role="status" aria-live="polite" className="min-w-0 flex-1 text-sm text-muted-foreground">
-                    {status === 'sent'
-                      ? 'Message sent. I will get back to you soon.'
-                      : status === 'error'
-                        ? errorMessage
-                        : 'Usually replies within one to two business days.'}
-                  </p>
+                  {/* assertive, not polite: an error announced after the user has
+                      already moved on is an error they hear about too late. */}
+                  <div
+                    role="status"
+                    aria-live={status === 'error' ? 'assertive' : 'polite'}
+                    className="min-w-0 flex-1"
+                  >
+                    <AnimatePresence mode="wait" initial={false}>
+                      <motion.p
+                        key={status === 'sent' ? 'sent' : status === 'error' ? `error-${errorMessage}` : 'idle'}
+                        initial={{ opacity: 0, y: 6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -6 }}
+                        transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+                        className={`flex items-center gap-2 text-sm ${
+                          status === 'sent'
+                            ? 'font-medium text-[color:var(--form-success)]'
+                            : status === 'error'
+                              ? 'font-medium text-[color:var(--form-error)]'
+                              : 'text-muted-foreground'
+                        }`}
+                      >
+                        {status === 'sent' ? (
+                          <>
+                            <Check className="h-4 w-4 shrink-0" />
+                            Message sent — I&apos;ll get back to you soon.
+                          </>
+                        ) : status === 'error' ? (
+                          <>
+                            <AlertCircle className="h-4 w-4 shrink-0" />
+                            {errorMessage}
+                          </>
+                        ) : (
+                          'Usually replies within one to two business days.'
+                        )}
+                      </motion.p>
+                    </AnimatePresence>
+                  </div>
                   <div className="relative shrink-0">
                     <button
                       type="submit"
                       disabled={status === 'sending' || status === 'sent'}
-                      className="group/contact-cta relative flex h-[48px] min-w-max cursor-pointer items-center overflow-hidden rounded-full border border-[#dac5a7]/20 bg-[#141413]/40 pl-7 pr-1.5 text-base font-medium text-[#f5efe4] shadow-[inset_0_1px_1px_rgba(255,255,255,0.08),0_4px_20px_rgba(0,0,0,0.3)] backdrop-blur-md transition-all duration-300 hover:scale-[1.02] hover:border-[#f5efe4]/70 disabled:pointer-events-none disabled:opacity-70"
+                      className={`group/contact-cta relative flex h-[48px] min-w-max cursor-pointer items-center overflow-hidden rounded-full border pl-7 pr-1.5 text-base font-medium shadow-[inset_0_1px_1px_rgba(255,255,255,0.08),0_4px_20px_rgba(0,0,0,0.3)] backdrop-blur-md transition-all duration-300 hover:scale-[1.02] disabled:pointer-events-none ${
+                        status === 'sent'
+                          ? 'border-[color:var(--form-success-border)] bg-[color:var(--form-success-bg)] text-[color:var(--form-success)] disabled:opacity-100'
+                          : status === 'error'
+                            ? 'border-[color:var(--form-error-border)] bg-[color:var(--form-error-bg)] text-[#f5efe4] hover:border-[color:var(--form-error)]'
+                            : 'border-[#dac5a7]/20 bg-[#141413]/40 text-[#f5efe4] hover:border-[#f5efe4]/70 disabled:opacity-70'
+                      }`}
                     >
                       {status === 'sending' ? (
                         <>
@@ -375,10 +570,15 @@ export default function ContactSection() {
                         </>
                       ) : status === 'sent' ? (
                         <>
-                          <span className="relative z-10 mr-5 whitespace-nowrap">Sent!</span>
-                          <span className="relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#f5efe4] text-[#141413]">
-                            <ArrowRight className="h-4 w-4" />
-                          </span>
+                          <span className="relative z-10 mr-5 whitespace-nowrap">Message sent</span>
+                          <motion.span
+                            initial={prefersReducedMotion ? false : { scale: 0.4, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            transition={{ type: 'spring', stiffness: 520, damping: 18 }}
+                            className="relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[color:var(--form-success)] text-[#0b0b0a]"
+                          >
+                            <Check className="h-4 w-4" strokeWidth={3} />
+                          </motion.span>
                         </>
                       ) : (
                         <>
@@ -394,7 +594,7 @@ export default function ContactSection() {
                   </div>
                 </div>
 
-              </form>
+              </motion.form>
 
               <div className="border-t border-[color:var(--site-border)] lg:col-span-2 dark:border-white/10">
                 <p className="px-6 pb-4 pt-5 text-sm text-muted-foreground">You can also reach me here.</p>
