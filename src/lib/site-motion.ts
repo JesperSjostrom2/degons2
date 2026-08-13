@@ -1,9 +1,68 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import type { Variants } from 'framer-motion'
+import { useCallback, useEffect, useState } from 'react'
+import { useReducedMotion, type Transition, type Variants } from 'framer-motion'
 
 export const cinematicEase = [0.16, 1, 0.3, 1] as const
+
+/**
+ * Reduced motion changes the *duration*, never the states.
+ *
+ * The obvious-looking way to honour the preference is to drop the animation out of the render
+ * entirely — `initial={shouldReduceMotion ? false : { opacity: 0 }}`. Every reveal on this site
+ * used to do that, and it left reduced-motion visitors staring at a page where most sections
+ * never appeared at all. The reason is a three-way interaction:
+ *
+ *   1. framer's `useReducedMotion()` returns `null` on the server, so SSR always takes the
+ *      animated branch and serialises `initial` into the markup as `style="opacity:0;…"`.
+ *   2. On the client's *first* render the hook already returns `true`, so the component renders
+ *      `initial={false}` / `whileInView={undefined}` — no animation is ever scheduled and no
+ *      target opacity is ever written.
+ *   3. React does not patch mismatched `style` attributes during hydration, and framer's DOM
+ *      writer only assigns keys it actually computed. With no opacity key in play, nothing ever
+ *      clears the server's `opacity: 0`.
+ *
+ * So the branch that meant "don't animate" really meant "never become visible". Keeping the
+ * states identical for everyone and collapsing only the duration removes the mismatch at its
+ * root: the server's hidden state is always the same one the client drives to visible, and a
+ * reduced-motion visitor simply gets there in zero seconds.
+ */
+const INSTANT: Transition = { duration: 0 }
+
+export function useRevealTransition() {
+  const shouldReduceMotion = useReducedMotion()
+
+  return useCallback(
+    (transition: Transition): Transition => (shouldReduceMotion ? INSTANT : transition),
+    [shouldReduceMotion],
+  )
+}
+
+/**
+ * The same rule for the `variants` reveals, which cannot use `useRevealTransition`.
+ *
+ * A `transition` prop on the element is only a default — a `transition` declared inside a
+ * variant outranks it, and every variant below carries its own. So the duration has to be
+ * replaced on the variant itself rather than passed alongside it.
+ */
+export function useRevealVariants() {
+  const shouldReduceMotion = useReducedMotion()
+
+  return useCallback(
+    (variants: Variants): Variants => {
+      const visible = variants.visible
+
+      // A resolver decides its own target per-custom-value; there is no static object to
+      // rewrite, and nothing on this site uses that form for a reveal.
+      if (!shouldReduceMotion || typeof visible === 'function') {
+        return variants
+      }
+
+      return { ...variants, visible: { ...visible, transition: INSTANT } }
+    },
+    [shouldReduceMotion],
+  )
+}
 
 /**
  * Same reveals, scaled down for mobile — shorter travel, shorter duration, no stagger — instead

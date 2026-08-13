@@ -3,7 +3,13 @@
 import TransitionLink from '@/components/transition/transition-link'
 import type { CSSProperties } from 'react'
 import { motion } from 'framer-motion'
-import { cinematicPanel, cinematicPanelCompact, cinematicViewport, useCompactMotion } from '@/lib/site-motion'
+import {
+  cinematicPanel,
+  cinematicPanelCompact,
+  cinematicViewport,
+  useCompactMotion,
+  useRevealVariants,
+} from '@/lib/site-motion'
 import type { Project } from '@/data/projects'
 import { useHoverPreview } from '@/lib/use-hover-preview'
 import ProjectShot from './ProjectShot'
@@ -29,6 +35,7 @@ import ProjectShot from './ProjectShot'
 const ProjectCard = ({ project }: { project: Project }) => {
   const { ready, hoverProps, videoProps } = useHoverPreview(project.previewVideo)
   const isCompact = useCompactMotion()
+  const revealVariants = useRevealVariants()
 
   return (
     <motion.article
@@ -39,7 +46,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
           ...(project.previewAspect ? { '--preview-aspect': project.previewAspect } : {}),
         } as CSSProperties
       }
-      variants={isCompact ? cinematicPanelCompact() : cinematicPanel('deep')}
+      variants={revealVariants(isCompact ? cinematicPanelCompact() : cinematicPanel('deep'))}
       initial="hidden"
       whileInView="visible"
       viewport={cinematicViewport}

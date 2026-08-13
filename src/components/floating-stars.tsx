@@ -92,15 +92,34 @@ export default function FloatingStars({
     return () => mediaQuery.removeEventListener('change', updateStars)
   }, [count, mobileCount, layer])
 
+  /**
+   * The far band draws no cross-sparkle.
+   *
+   * Its stars are scaled to 0.6, which puts them between 0.3px and 0.9px across — the sparkle
+   * arms on something that size land under a single device pixel and are not visible at any
+   * viewport. They were, however, two more elements and two more infinite animations per star,
+   * on the most numerous band of the three. Dropping them removes roughly half the animated
+   * elements in the sky and changes nothing anyone can see.
+   */
+  const drawsSparkle = layer !== 'far'
+
   return (
     <div className={className}>
       {stars.map((star) => (
-        <div key={star.id} className="floating-star absolute will-change-transform" style={star.style}>
+        /* No `will-change` here. These elements animate `transform` continuously, so the
+           compositor promotes them for the duration of the animation on its own; declaring it as
+           well only pinned a layer per star permanently — including while `useOffstagePause` had
+           the band's animations paused, which is exactly when the layer should be released. */
+        <div key={star.id} className="floating-star absolute" style={star.style}>
           <div className="floating-star-inner relative">
             <div className="floating-star-glow absolute rounded-full blur-sm" />
             <div className="floating-star-core absolute rounded-full" />
-            <div className="floating-star-sparkle-x absolute" />
-            <div className="floating-star-sparkle-y absolute" />
+            {drawsSparkle ? (
+              <>
+                <div className="floating-star-sparkle-x absolute" />
+                <div className="floating-star-sparkle-y absolute" />
+              </>
+            ) : null}
           </div>
         </div>
       ))}

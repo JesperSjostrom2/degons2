@@ -4,7 +4,15 @@ import { useCallback, useEffect, useRef, useState, type CSSProperties, type Form
 import { AnimatePresence, motion, useAnimationControls, useReducedMotion } from 'framer-motion'
 import { AlertCircle, ArrowRight, BriefcaseBusiness, CalendarClock, Check, ChevronDown, Github, HelpCircle, Linkedin, Loader2, Mail, MessageSquare, Plus, UserRound } from 'lucide-react'
 import { FiMail } from 'react-icons/fi'
-import { cinematicHeader, cinematicHeaderCompact, cinematicPanel, cinematicPanelCompact, cinematicViewport, useCompactMotion } from '@/lib/site-motion'
+import {
+  cinematicHeader,
+  cinematicHeaderCompact,
+  cinematicPanel,
+  cinematicPanelCompact,
+  cinematicViewport,
+  useCompactMotion,
+  useRevealVariants,
+} from '@/lib/site-motion'
 import MaskedRise from '@/components/masked-rise'
 
 const projectTypes = ['Landing page', 'SaaS', 'SEO improvements', 'Redesign', 'Branding']
@@ -297,13 +305,14 @@ export default function ContactSection() {
   }
 
   const isCompact = useCompactMotion()
+  const revealVariants = useRevealVariants()
 
   return (
     <section id="contact" className="site-section relative isolate min-h-screen">
       <div className="container relative mx-auto px-6">
         <motion.div
           className="section-header cinematic-section-header"
-          variants={isCompact ? cinematicHeaderCompact : cinematicHeader}
+          variants={revealVariants(isCompact ? cinematicHeaderCompact : cinematicHeader)}
           initial="hidden"
           whileInView="visible"
           viewport={cinematicViewport}
@@ -318,7 +327,7 @@ export default function ContactSection() {
 
         <motion.div
           className="cinematic-reveal-card mx-auto max-w-7xl"
-          variants={isCompact ? cinematicPanelCompact() : cinematicPanel('deep')}
+          variants={revealVariants(isCompact ? cinematicPanelCompact() : cinematicPanel('deep'))}
           initial="hidden"
           whileInView="visible"
           viewport={cinematicViewport}

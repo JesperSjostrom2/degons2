@@ -339,11 +339,22 @@
     --hero-grain-intensity: 0.052;
   }
 
+  /* This layer is `mix-blend-mode: soft-light`, which means the compositor reads back everything
+     painted beneath it and blends it per pixel — and because it also animates forever, it pays
+     that cost on every frame of every route, scrolling or not. The blend is proportional to the
+     layer's area, so the area is the thing worth minimising.
+
+     It used to be 300% x 300% — nine viewports, ~4300 x 2700px of per-frame blending on a
+     1440x900 MacBook. Nothing needed that: the drift below never exceeds 2% of the element, so
+     all the size was ever buying was margin for a 6%-of-viewport travel. 120% x 120% covers the
+     same travel with room to spare and blends 1.44 viewports instead of 9, a little over 6x less
+     work per frame for a pixel-identical result. The keyframe percentages are restated against
+     the new box so the drift itself is unchanged in absolute terms. */
   .cinematic-grain-overlay {
     position: fixed;
-    inset: -100%;
-    width: 300%;
-    height: 300%;
+    inset: -10%;
+    width: 120%;
+    height: 120%;
     z-index: 1;
     pointer-events: none;
     opacity: var(--grain-opacity);
@@ -352,6 +363,16 @@
     /* Smooth continuous drift */
     will-change: transform;
     mix-blend-mode: soft-light;
+  }
+
+  /* Ambient motion with no informational content — the first thing that should stop when a
+     visitor asks for less of it. The grain itself stays; only the drift goes, and with the
+     animation gone the layer no longer needs its own compositor layer either. */
+  @media (prefers-reduced-motion: reduce) {
+    .cinematic-grain-overlay {
+      animation: none;
+      will-change: auto;
+    }
   }
 
   .hero-grain-density {
@@ -365,16 +386,18 @@
       transform: translate3d(0, 0, 0);
     }
 
+    /* Restated against a 120% box: -5% here travels the same 6% of the viewport that -2% of the
+       old 300% box did. */
     25% {
-      transform: translate3d(-2%, -1%, 0);
+      transform: translate3d(-5%, -2.5%, 0);
     }
 
     50% {
-      transform: translate3d(-1%, -2%, 0);
+      transform: translate3d(-2.5%, -5%, 0);
     }
 
     75% {
-      transform: translate3d(-2%, -2%, 0);
+      transform: translate3d(-5%, -5%, 0);
     }
   }
 
@@ -439,14 +462,31 @@
     padding-bottom: 10rem;
   }
 
+  /* `content-visibility: auto` buys a cheaper first paint by not rendering a section until it
+     nears the viewport — and then charges for it all at once, laying out and painting the whole
+     subtree inside a single frame. That bill arrives on the exact frame the section's reveal
+     animation starts, so the animation drops its first frames and the section appears to stutter
+     into place. It is the "lag spike when a section loads in".
+
+     #projects is the worst case by a wide margin: ~2700px of cards, covers and video elements
+     resolved in one go. #contact is second, with the form, the icon set and the glass panel. Both
+     sit far enough down the page that skipping them was never buying much — the first paint is
+     the hero — so they now render with the rest of the document and only keep `contain`, which
+     still walls their layout and paint off from everything else without deferring the work.
+
+     #process and #skills keep it: they are small enough that the burst fits in a frame, and
+     #process in particular sits right after the bento, where the extra work is worth avoiding. */
   #projects,
   #process,
   #skills,
   #contact {
     content-visibility: auto;
-    contain: layout paint style;
   }
 
+  #projects,
+  #process,
+  #skills,
+  #contact,
   #why-me {
     contain: layout paint style;
   }
@@ -2205,8 +2245,29 @@
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
   }
 
+  /* The marker used to travel by animating `top` from 0% to 100%, driven by a scroll-linked
+     spring. `top` is a layout property: every frame of that spring forced a layout pass inside a
+     ~2400px section, and the spring keeps emitting frames for a few hundred ms after the scroll
+     itself has stopped — precisely when the rest of the page is trying to settle. The
+     `will-change: top` beside it did nothing at all, because a layout property cannot be
+     promoted ahead of time; it only ever advertised the problem.
+
+     A percentage `translateY` would not work on the marker directly — percentage transforms
+     resolve against the element's own 2.5rem box, not the rail. So the travel moves to this
+     track, which is the full height of the rail: translating it by 100% of itself moves it
+     exactly one rail-height, which is what `top: 100%` meant. The marker rides at the track's
+     top edge and keeps its own centring transform. Compositor-only, no layout. */
+  .about-career-marker-track {
+    position: absolute;
+    inset: 0;
+    display: block;
+    pointer-events: none;
+    will-change: transform;
+  }
+
   .about-career-marker {
     position: absolute;
+    top: 0;
     left: 50%;
     z-index: 5;
     display: grid;
@@ -2217,7 +2278,6 @@
     border: 1px solid rgba(255, 255, 255, 0.4);
     border-radius: 9999px;
     background: var(--panel-bg);
-    will-change: top;
     /* A solid ring in the sky's own colour, not a shadow — its job is to punch
        the rail out from behind the marker. Both values were hardcoded to the
        pre-lift palette, which left the ring reading as a dark halo and the
@@ -2877,12 +2937,10 @@
     0%,
     100% {
       opacity: 0.42;
-      transform: scale(0.92);
     }
 
     50% {
       opacity: 0.75;
-      transform: scale(1.04);
     }
   }
 
@@ -2900,15 +2958,25 @@
     }
   }
 
+  /* The `scale` components are gone from the three animations below, and only from those three,
+     because each one is applied to an element carrying a large `filter: blur()` — 30px on the
+     orbs, 42px on the aura, 5px on the portrait light. Translating a blurred layer is free: it
+     is rasterized once and the compositor moves the result. Scaling it is not — the blur has to
+     be recomputed at the new size on every frame it changes, which is the most expensive thing
+     in this section and it runs forever.
+
+     What was lost is a 2-5% size breath on a shape that is, by construction, a soft glow at
+     0.28-0.34 opacity with no edge to read the size against. The opacity pulse those animations
+     also carry is the half that was ever visible, and it is untouched. */
   @keyframes about-orb-drift {
 
     0%,
     100% {
-      transform: translate3d(0, 0, 0) scale(1);
+      transform: translate3d(0, 0, 0);
     }
 
     50% {
-      transform: translate3d(10px, -6px, 0) scale(1.05);
+      transform: translate3d(10px, -6px, 0);
     }
   }
 
@@ -2917,12 +2985,10 @@
     0%,
     100% {
       opacity: 0.42;
-      transform: scale(0.98);
     }
 
     50% {
       opacity: 0.56;
-      transform: scale(1.02);
     }
   }
 

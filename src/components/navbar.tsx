@@ -73,11 +73,18 @@ export default function Navbar() {
       threshold: 0
     }
 
+    /* Guarded like the other two above it. This fires on every intersection change of six
+       sections while scrolling, and an unguarded `setActiveSection` re-rendered the whole nav
+       each time — which is not a cheap render: it drives an `AnimatePresence`, the
+       `layoutId="activeGlow"` shared-layout element (a FLIP, so it measures with
+       `getBoundingClientRect`), two `next/image` logos, and the blur transitions below. React
+       would bail on an identical value anyway, but only after re-running the component; refusing
+       the state update outright keeps the whole thing off the scroll path. */
     const observerCallback = (entries: IntersectionObserverEntry[]) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           const sectionId = entry.target.id
-          setActiveSection(sectionId)
+          setActiveSection((current) => (current === sectionId ? current : sectionId))
         }
       })
     }
@@ -141,7 +148,7 @@ export default function Navbar() {
         onClick={() => handleNavClick('home')}
         data-scroll-to="home"
         aria-label="Jesper Sjöström — back to top"
-        className={`hidden lg:block fixed top-6 left-10 z-50 transition-all duration-500 ease-out cursor-pointer ${
+        className={`hidden lg:block fixed top-6 left-10 z-50 transition-[opacity,transform,filter] duration-500 ease-out cursor-pointer ${
           isHeroHeaderVisible
             ? 'opacity-100 translate-y-0 blur-0 pointer-events-auto'
             : 'opacity-0 -translate-y-2 blur-sm pointer-events-none'
@@ -152,13 +159,13 @@ export default function Navbar() {
           alt=""
           width={240} 
           height={80} 
-          className="h-11 w-auto object-contain transition-all duration-700"
+          className="h-11 w-auto object-contain transition-[opacity,transform] duration-700"
           style={{ filter: 'drop-shadow(0 0 12px rgba(255, 255, 255, 0.08)) blur(0.2px)' }}
           priority
         />
       </button>
       <div
-        className={`fixed top-6 right-10 z-50 hidden lg:block transition-all duration-500 ease-out ${
+        className={`fixed top-6 right-10 z-50 hidden lg:block transition-[opacity,transform,filter] duration-500 ease-out ${
           isHeroHeaderVisible
             ? 'opacity-100 translate-y-0 blur-0 pointer-events-auto'
             : 'opacity-0 -translate-y-2 blur-sm pointer-events-none'
@@ -241,7 +248,7 @@ export default function Navbar() {
             alt=""
             width={180} 
             height={60} 
-            className={`h-10 w-auto object-contain transition-all duration-500 ease-out ${
+            className={`h-10 w-auto object-contain transition-[opacity,transform,filter] duration-500 ease-out ${
               isMobileBrandVisible 
                 ? 'opacity-100 translate-y-0 blur-0' 
                 : 'opacity-0 -translate-y-2 blur-sm'
@@ -253,7 +260,7 @@ export default function Navbar() {
         <button
           type="button"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="absolute right-4 top-3 z-[70] flex h-11 w-11 items-center justify-center border-none bg-transparent p-0 text-[color:var(--site-text)] transition-all duration-300 active:scale-95 hover:opacity-80"
+          className="absolute right-4 top-3 z-[70] flex h-11 w-11 items-center justify-center border-none bg-transparent p-0 text-[color:var(--site-text)] transition-[opacity,transform,color,background-color] duration-300 active:scale-95 hover:opacity-80"
           aria-label="Toggle navigation menu"
           aria-expanded={isMobileMenuOpen}
           aria-controls="mobile-menu"

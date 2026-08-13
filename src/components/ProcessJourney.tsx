@@ -1,10 +1,17 @@
 'use client'
 
 import Image from 'next/image'
-import { motion, useReducedMotion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import type { CSSProperties } from 'react'
 
-import { cinematicEase, cinematicPanel, cinematicViewport, useCompactMotion } from '@/lib/site-motion'
+import {
+  cinematicEase,
+  cinematicPanel,
+  cinematicViewport,
+  useCompactMotion,
+  useRevealTransition,
+  useRevealVariants,
+} from '@/lib/site-motion'
 import MaskedRise from '@/components/masked-rise'
 
 const processSteps = [
@@ -46,18 +53,19 @@ const processSteps = [
 ]
 
 export default function ProcessJourney() {
-  const shouldReduceMotion = useReducedMotion()
   const isCompact = useCompactMotion()
+  const revealTransition = useRevealTransition()
+  const revealVariants = useRevealVariants()
 
   return (
     <section id="process" className="journey-section relative -mb-10 -mt-12 overflow-hidden pb-14 pt-0 md:-mb-14 md:-mt-16 md:pb-20">
       <div className="container relative z-10 mx-auto px-6">
         <motion.div
           className="process-heading mx-auto mb-9 max-w-3xl text-center md:mb-12"
-          initial={shouldReduceMotion ? false : { opacity: 0, y: isCompact ? 10 : 20 }}
-          whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: isCompact ? 10 : 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={cinematicViewport}
-          transition={{ duration: isCompact ? 0.42 : 0.76, ease: cinematicEase }}
+          transition={revealTransition({ duration: isCompact ? 0.42 : 0.76, ease: cinematicEase })}
         >
           <h2 className="section-title">
             <MaskedRise delay={0.12}>How it works</MaskedRise>
@@ -67,9 +75,9 @@ export default function ProcessJourney() {
         <motion.div
           data-process-panel
           className="journey-panel relative mx-auto grid max-w-7xl gap-4 md:grid-cols-3"
-          variants={isCompact ? cinematicPanel('up') : cinematicPanel('deep')}
-          initial={shouldReduceMotion ? false : 'hidden'}
-          whileInView={shouldReduceMotion ? undefined : 'visible'}
+          variants={revealVariants(isCompact ? cinematicPanel('up') : cinematicPanel('deep'))}
+          initial="hidden"
+          whileInView="visible"
           viewport={cinematicViewport}
         >
           {processSteps.map((step, index) => (
@@ -77,10 +85,10 @@ export default function ProcessJourney() {
               key={step.number}
               className="process-step group relative overflow-hidden rounded-[20px] border border-[color:var(--rim-border)]"
               style={{ '--process-accent': step.accent } as CSSProperties}
-              initial={shouldReduceMotion ? false : { opacity: 0, y: isCompact ? 10 : 22 }}
-              whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: isCompact ? 10 : 22 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={cinematicViewport}
-              transition={{ duration: isCompact ? 0.4 : 0.68, delay: isCompact ? Math.min(0.05 * index, 0.1) : 0.16 + index * 0.12, ease: cinematicEase }}
+              transition={revealTransition({ duration: isCompact ? 0.4 : 0.68, delay: isCompact ? Math.min(0.05 * index, 0.1) : 0.16 + index * 0.12, ease: cinematicEase })}
             >
               <div className="process-visual relative flex h-[18rem] items-center justify-center overflow-hidden md:h-[20rem]">
                 <div className="process-artwork-motion absolute inset-0 flex items-center justify-center">
@@ -114,10 +122,10 @@ export default function ProcessJourney() {
 
         <motion.div
           className="process-to-work mx-auto mt-11 flex max-w-xl flex-col items-center text-center md:mt-14"
-          initial={shouldReduceMotion ? false : { opacity: 0, y: isCompact ? 8 : 12 }}
-          whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: isCompact ? 8 : 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={cinematicViewport}
-          transition={{ duration: isCompact ? 0.4 : 0.7, ease: cinematicEase }}
+          transition={revealTransition({ duration: isCompact ? 0.4 : 0.7, ease: cinematicEase })}
         >
           <p className="font-editorial text-xl italic text-[#dcd7cc] md:text-2xl">See it in practice.</p>
           <svg className="process-to-work-arrow mt-4" viewBox="0 0 32 104" aria-hidden="true" focusable="false">

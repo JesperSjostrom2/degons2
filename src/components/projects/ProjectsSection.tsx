@@ -1,7 +1,13 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { cinematicHeader, cinematicHeaderCompact, cinematicViewport, useCompactMotion } from '@/lib/site-motion'
+import {
+  cinematicHeader,
+  cinematicHeaderCompact,
+  cinematicViewport,
+  useCompactMotion,
+  useRevealVariants,
+} from '@/lib/site-motion'
 import { projects } from '@/data/projects'
 import MaskedRise from '@/components/masked-rise'
 import ProjectCard from './ProjectCard'
@@ -15,13 +21,14 @@ import ProjectCursorBadge from './ProjectCursorBadge'
  */
 const ProjectsSection: React.FC = () => {
   const isCompact = useCompactMotion()
+  const revealVariants = useRevealVariants()
 
   return (
   <section id="projects" className="site-section relative isolate">
     <div className="container mx-auto px-6">
       <motion.div
         className="section-header cinematic-section-header"
-        variants={isCompact ? cinematicHeaderCompact : cinematicHeader}
+        variants={revealVariants(isCompact ? cinematicHeaderCompact : cinematicHeader)}
         initial="hidden"
         whileInView="visible"
         viewport={cinematicViewport}

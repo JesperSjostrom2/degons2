@@ -13,7 +13,15 @@ import {
   SiVercel,
 } from 'react-icons/si'
 import { type IconType } from 'react-icons'
-import { cinematicHeader, cinematicHeaderCompact, cinematicPanel, cinematicPanelCompact, cinematicViewport, useCompactMotion } from '@/lib/site-motion'
+import {
+  cinematicHeader,
+  cinematicHeaderCompact,
+  cinematicPanel,
+  cinematicPanelCompact,
+  cinematicViewport,
+  useCompactMotion,
+  useRevealVariants,
+} from '@/lib/site-motion'
 import MaskedRise from '@/components/masked-rise'
 
 interface TechItem {
@@ -137,13 +145,14 @@ export default function TechStackSection() {
   } as CSSProperties
 
   const isCompact = useCompactMotion()
+  const revealVariants = useRevealVariants()
 
   return (
     <section id="skills" className="site-section">
       <div className="container mx-auto px-6">
         <motion.div
           className="section-header cinematic-section-header"
-          variants={isCompact ? cinematicHeaderCompact : cinematicHeader}
+          variants={revealVariants(isCompact ? cinematicHeaderCompact : cinematicHeader)}
           initial="hidden"
           whileInView="visible"
           viewport={cinematicViewport}
@@ -160,7 +169,7 @@ export default function TechStackSection() {
           ref={gridRef}
           onPointerLeave={hideHoverFill}
           className="tech-stack-grid cinematic-reveal-card relative mx-auto flex max-w-7xl flex-wrap overflow-hidden rounded-[22px] border border-[color:var(--rim-border)] md:grid md:grid-cols-3 md:rounded-[28px] lg:grid-cols-6"
-          variants={isCompact ? cinematicPanelCompact() : cinematicPanel('deep')}
+          variants={revealVariants(isCompact ? cinematicPanelCompact() : cinematicPanel('deep'))}
           initial="hidden"
           whileInView="visible"
           viewport={cinematicViewport}

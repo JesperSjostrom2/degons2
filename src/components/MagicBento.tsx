@@ -3,8 +3,14 @@
 import React, { useEffect, useRef } from "react";
 import Image from "next/image";
 import { Send } from "lucide-react";
-import { motion, useReducedMotion, type Variants } from "framer-motion";
-import { cinematicEase, cinematicPanel, cinematicViewport, useCompactMotion } from "@/lib/site-motion";
+import { motion, type Variants } from "framer-motion";
+import {
+  cinematicEase,
+  cinematicPanel,
+  cinematicViewport,
+  useCompactMotion,
+  useRevealVariants,
+} from "@/lib/site-motion";
 
 const BENTO_ACCENTS = {
   brass: "#a88c62",
@@ -111,12 +117,31 @@ const BentoAssetImage = ({
 const MagicBento: React.FC = () => {
   const gridRef = useRef<HTMLDivElement>(null);
   const scrollPauseTimeoutRef = useRef<number>(0);
-  const shouldReduceMotion = useReducedMotion();
-  const revealMotionDisabled = shouldReduceMotion === true;
   const isCompactMotion = useCompactMotion();
+  const revealVariants = useRevealVariants();
+
+  /* These cards carry no `will-change`. They used to declare it twice — a Tailwind class and an
+     inline style — and never dropped either, so all five held a compositor layer for the life of
+     the page. Framer animates their transform and opacity, which the browser promotes on its own
+     for exactly as long as the animation runs, so the declaration was buying nothing and keeping
+     the layers alive forever. Releasing it from React state instead would have been worse still:
+     it would re-render this component, all ~2000 lines of it, once per card, in the middle of
+     the very reveal the change is meant to smooth. */
 
   useEffect(() => {
     const currentGrid = gridRef.current;
+
+    /* Adding the class is idempotent, but it still invalidates style across the whole grid, and
+       this used to run on the raw scroll event — which, with Lenis driving scroll, means once
+       per frame for the entire duration of a scroll. The class only needs to go on once at the
+       start of a scroll and come off 140ms after the end, so the work is now gated behind a
+       boolean and the per-event cost is a timer reset. */
+    let isPaused = false;
+
+    const resumeAnimations = () => {
+      isPaused = false;
+      gridRef.current?.classList.remove("bento-scroll-paused");
+    };
 
     const pauseAnimationsDuringScroll = () => {
       const grid = gridRef.current;
@@ -125,11 +150,13 @@ const MagicBento: React.FC = () => {
         return;
       }
 
-      grid.classList.add("bento-scroll-paused");
+      if (!isPaused) {
+        isPaused = true;
+        grid.classList.add("bento-scroll-paused");
+      }
+
       window.clearTimeout(scrollPauseTimeoutRef.current);
-      scrollPauseTimeoutRef.current = window.setTimeout(() => {
-        grid.classList.remove("bento-scroll-paused");
-      }, 140);
+      scrollPauseTimeoutRef.current = window.setTimeout(resumeAnimations, 140);
     };
 
     window.addEventListener("scroll", pauseAnimationsDuringScroll, { passive: true });
@@ -2067,12 +2094,11 @@ const MagicBento: React.FC = () => {
               <motion.div
                 key={card.label}
                 data-bento-card={card.svgAsset}
-                className={`cinematic-reveal-card ${baseClassName} transform-gpu will-change-[transform,opacity]`}
-                variants={createBentoCardReveal(index, isCompactMotion)}
-                initial={revealMotionDisabled ? false : "hidden"}
-                whileInView={revealMotionDisabled ? undefined : "visible"}
+                className={`cinematic-reveal-card ${baseClassName} transform-gpu`}
+                variants={revealVariants(createBentoCardReveal(index, isCompactMotion))}
+                initial="hidden"
+                whileInView="visible"
                 viewport={cinematicViewport}
-                style={{ willChange: revealMotionDisabled ? "auto" : "transform, opacity" }}
               >
                 <div className={cardInnerClassName} style={cardStyle}>
                   {content}
