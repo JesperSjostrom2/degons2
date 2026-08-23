@@ -61,7 +61,7 @@ const ProjectMacFrame = ({
         alt=""
         aria-hidden="true"
         fill
-        sizes="(max-width: 899px) 16px, 112rem"
+        sizes="(max-width: 899px) 16px, 93rem"
         className="project-page__mac-frame"
         priority
       />

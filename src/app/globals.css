@@ -4832,15 +4832,17 @@
   /* Fills the whole 96rem band. print1.png sits its laptop at 52.5% of the plate, but
      that reference is a presentation slide — here the laptop is the centrepiece, so it
      takes the full width and the phones below stay small enough to read as a footnote
-     to it rather than a second act. */
-  /* Wider than the band it sits in. The gutter belongs to the prose, not to the device, so
-     the frame takes it back and keeps going — the plate spends a quarter of its width on
-     bezel and base, so a laptop sized to the text column reads far smaller than the space it
-     occupies. `align-items: center` on the band centres the overflow evenly on both sides. */
+     to it rather than a second act.
+
+     Stays inside the band rather than breaking out of it. Sized against the viewport it
+     went to 1792px on a 2560px screen, which is not a centrepiece — it is a laptop with the
+     page arranged around it, and the composition loses the margin that made it read as one
+     thing among several. Narrow viewports get their size back a different way: below 900px
+     the frame comes off entirely, which is worth more than any width. */
   .project-page__mac {
     position: relative;
     aspect-ratio: 5781 / 3676;
-    width: min(112rem, 100vw - 3rem);
+    width: 100%;
   }
 
   /* Stays square and opaque, because the hole in the frame PNG is square: this is the only
