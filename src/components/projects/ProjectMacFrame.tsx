@@ -22,10 +22,12 @@ import { useAutoplayInView } from '@/lib/use-autoplay-in-view'
  */
 const ProjectMacFrame = ({
   videoSrc,
+  videoWebmSrc,
   posterSrc,
   alt,
 }: {
   videoSrc: string
+  videoWebmSrc?: string
   posterSrc?: string
   alt: string
 }) => {
@@ -43,10 +45,9 @@ const ProjectMacFrame = ({
           preload="none"
           aria-label={alt}
         >
-          {/* Every capture ships as VP9 beside the mp4 at roughly half the
-              bytes; a browser that can't play it (or a capture without a
-              .webm sibling) falls through to the mp4. */}
-          <source src={videoSrc.replace(/\.mp4$/, '.webm')} type="video/webm" />
+          {/* Prefer VP9 when this capture has an explicit encode, otherwise go straight to the
+              MP4 without first issuing a guaranteed-to-fail request. */}
+          {videoWebmSrc ? <source src={videoWebmSrc} type="video/webm" /> : null}
           <source src={videoSrc} type="video/mp4" />
         </video>
       </div>

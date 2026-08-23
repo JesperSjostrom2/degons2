@@ -71,9 +71,12 @@ const ProjectCard = ({ project }: { project: Project }) => {
                       playsInline
                       preload="none"
                     >
-                      {/* VP9 beside the mp4 at roughly half the bytes; a browser that cannot
-                          play it falls through. Same pair the project page uses. */}
-                      <source src={project.previewVideo.replace(/\.mp4$/, '.webm')} type="video/webm" />
+                      {/* Prefer the smaller VP9 encode when the project explicitly provides
+                          one. Keeping it explicit avoids a failed request for projects that
+                          currently ship only an MP4. */}
+                      {project.previewVideoWebm ? (
+                        <source src={project.previewVideoWebm} type="video/webm" />
+                      ) : null}
                       <source src={project.previewVideo} type="video/mp4" />
                     </video>
                   </span>

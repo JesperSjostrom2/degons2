@@ -13,9 +13,9 @@ import { usePathname, useRouter } from 'next/navigation'
 
 import {
   COVER_MS,
+  ROUTE_FALLBACK_MS,
   REDUCED_FADE_MS,
   REVEAL_MS,
-  SWAP_TIMEOUT_MS,
   coveredHoldMs,
   TRANSITION_LOCK_EVENT,
   TRANSITION_UNLOCK_EVENT,
@@ -98,6 +98,9 @@ export default function RouteTransitionProvider({ children }: { children: ReactN
   /** The raw href, hash and all — the pathname alone cannot tell us whether the destination
    *  asked to land somewhere other than the top. */
   const pendingHrefRef = useRef<string | null>(null)
+  /** Used to avoid replaying the label's full covered hold after a slow route has already kept
+   *  it on screen for longer than that. */
+  const navigationStartedAtRef = useRef(0)
   const timersRef = useRef<number[]>([])
 
   const clearTimers = useCallback(() => {
@@ -110,12 +113,14 @@ export default function RouteTransitionProvider({ children }: { children: ReactN
   }, [])
 
   const beginReveal = useCallback(() => {
+    phaseRef.current = 'revealing'
     setPhase('revealing')
     // Released at the *start* of the lift, not the end: the page underneath is already on
     // screen and being scrollable is part of it feeling arrived at rather than presented.
     window.dispatchEvent(new Event(TRANSITION_UNLOCK_EVENT))
 
     after(reducedRef.current ? REDUCED_FADE_MS : REVEAL_MS, () => {
+      phaseRef.current = 'idle'
       setPhase('idle')
       setIsFirstLoad(false)
     })
@@ -139,6 +144,7 @@ export default function RouteTransitionProvider({ children }: { children: ReactN
   /* First load: the same cover-hold-lift as a navigation, with nothing to navigate to. */
   useEffect(() => {
     if (reducedRef.current) {
+      phaseRef.current = 'idle'
       setPhase('idle')
       setIsFirstLoad(false)
       return
@@ -147,6 +153,7 @@ export default function RouteTransitionProvider({ children }: { children: ReactN
     after(COVER_MS, () => {
       // The screen is fully covered now, so the backdrop this rose over can go without ever
       // being seen leaving. What the curtain lifts off is the real page.
+      phaseRef.current = 'swapping'
       setPhase('swapping')
       // The same derived hold a navigation uses, so the two really are one animation.
       after(coveredHoldMs(tokenCountRef.current), beginReveal)
@@ -176,15 +183,19 @@ export default function RouteTransitionProvider({ children }: { children: ReactN
       window.scrollTo(0, 0)
     }
 
-    // The safety net below may already have given up waiting and lifted the curtain, in which
-    // case the page is arriving in the open and there is nothing left to schedule. Checked
-    // after the scroll reset, not before: landing late is exactly when being dumped halfway
-    // down the previous page is most obvious.
+    // Kills the hard-navigation fallback, which has now done its job by not firing.
+    clearTimers()
+
     if (phaseRef.current !== 'swapping') return
 
-    // Kills the safety net, which has now done its job by not firing.
-    clearTimers()
-    after(reducedRef.current ? 0 : coveredHoldMs(tokenCountRef.current), beginReveal)
+    // The label's hold is measured from the click, not from the eventual route commit. On a
+    // slow route it has already had more than enough time to settle, so reveal immediately
+    // instead of adding another half-second to an unavoidable wait.
+    const minimumCoveredMs = reducedRef.current
+      ? REDUCED_FADE_MS
+      : COVER_MS + coveredHoldMs(tokenCountRef.current)
+    const elapsedMs = performance.now() - navigationStartedAtRef.current
+    after(Math.max(0, minimumCoveredMs - elapsedMs), beginReveal)
   }, [pathname, after, beginReveal, clearTimers])
 
   const navigate = useCallback(
@@ -208,30 +219,38 @@ export default function RouteTransitionProvider({ children }: { children: ReactN
       clearTimers()
       pendingRef.current = target
       pendingHrefRef.current = href
+      navigationStartedAtRef.current = performance.now()
       setTokens(resolveRouteTokens(target))
       setShowWordmark(target === '/')
       // Clicking away during the opening lift ends the first load then and there, so its
       // backdrop cannot reappear behind a curtain that is now going somewhere.
       setIsFirstLoad(false)
+      // Update synchronously as well as through React. This closes the double-click window and
+      // ensures an already-prefetched route cannot commit before the landing effect sees the
+      // swapping phase.
+      phaseRef.current = 'covering'
       setPhase('covering')
       window.dispatchEvent(new Event(TRANSITION_LOCK_EVENT))
 
       after(reducedRef.current ? REDUCED_FADE_MS : COVER_MS, () => {
+        phaseRef.current = 'swapping'
         setPhase('swapping')
         router.push(href)
 
-        // A stranded curtain is a broken site; lifting early is only an ugly one. `pendingRef`
-        // is deliberately left set, so if the route does eventually land the effect above can
-        // still reset the scroll — it just will not try to lift a curtain that has already gone.
-        after(SWAP_TIMEOUT_MS, () => {
+        // If the client router genuinely stalls, keep the page covered and use the anchor's
+        // normal browser-navigation semantics as the recovery path. Lifting here used to show
+        // the old page again after 900ms, which made a slow-but-valid navigation look like the
+        // click had done nothing before it finally committed in the open.
+        after(ROUTE_FALLBACK_MS, () => {
           if (phaseRef.current !== 'swapping') return
-          beginReveal()
+          if (pendingRef.current !== target) return
+          window.location.assign(href)
         })
       })
 
       return true
     },
-    [after, beginReveal, clearTimers, router],
+    [after, clearTimers, router],
   )
 
   useEffect(() => clearTimers, [clearTimers])

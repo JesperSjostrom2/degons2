@@ -84,10 +84,7 @@ const ProjectShot = ({
             aria-label={shot.alt}
             onCanPlay={(event) => event.currentTarget.classList.add('is-ready')}
           >
-            {/* Every capture ships as VP9 beside the mp4 at roughly half the
-                bytes; a browser that can't play it (or a capture without a
-                .webm sibling) falls through to the mp4. */}
-            <source src={shot.videoSrc.replace(/\.mp4$/, '.webm')} type="video/webm" />
+            {shot.videoWebmSrc ? <source src={shot.videoWebmSrc} type="video/webm" /> : null}
             <source src={shot.videoSrc} type="video/mp4" />
           </video>
         ) : null}

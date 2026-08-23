@@ -47,6 +47,8 @@ export interface ProjectShot {
   src: string
   /** Optional enhancement. Its absence must never change the layout. */
   videoSrc?: string
+  /** Optional WebM encode. Explicit so a missing inferred sibling never creates a 404. */
+  videoWebmSrc?: string
   alt: string
   objectPosition?: string
   /**
@@ -80,7 +82,7 @@ export type ProjectVisual =
    * transparent hole in the plate, so the video is positioned into it and the frame sits on
    * top — no masking, and the bezel's rounded corners come free.
    */
-  | { frame: 'mac'; videoSrc: string; posterSrc?: string; alt: string }
+  | { frame: 'mac'; videoSrc: string; videoWebmSrc?: string; posterSrc?: string; alt: string }
   /** Three phone plates side by side, print3.png style. */
   | { frame: 'phones'; phones: { src: string; alt: string }[] }
   /** Mobile product recordings presented in their actual iOS/PWA context. */
@@ -186,6 +188,8 @@ export interface Project {
    * part of the panel.
    */
   previewVideo?: string
+  /** Optional WebM encode for the hover preview. */
+  previewVideoWebm?: string
   /**
    * The preview frame's shape, when the capture is not the 16/10 the other two are. Written as
    * the encode's real pixel dimensions, e.g. '1280 / 638'.
@@ -480,6 +484,7 @@ export const projects: Project[] = [
     // needs its 1.6). Re-encoded to 1280 wide: the preview frame is ~665 CSS px, so that is
     // 2x and no more.
     previewVideo: '/assets/projects/andcreative/homestatic.mp4',
+    previewVideoWebm: '/assets/projects/andcreative/homestatic.webm',
     previewAspect: '1280 / 638',
     visuals: [
       {
@@ -488,6 +493,7 @@ export const projects: Project[] = [
         // screen edge to edge. The earlier 1920x958 capture was 2.00 and left a band of
         // dead screen along the bottom.
         videoSrc: '/assets/projects/andcreative/home1610.mp4',
+        videoWebmSrc: '/assets/projects/andcreative/home1610.webm',
         alt: 'The Andcreative homepage scrolling',
       },
       {
@@ -587,11 +593,13 @@ export const projects: Project[] = [
       chrome: true,
     },
     previewVideo: '/assets/projects/kerma/kermashowcase.mp4',
+    previewVideoWebm: '/assets/projects/kerma/kermashowcase.webm',
     // Andcreative's format: the scroll capture in the mac, then the phone trio.
     visuals: [
       {
         // 1368x854 like the Andcreative capture, so it fills the screen cutout edge to edge.
         videoSrc: '/assets/projects/kerma/kermashowcase.mp4',
+        videoWebmSrc: '/assets/projects/kerma/kermashowcase.webm',
         frame: 'mac',
         alt: 'The Tahkon Kerma site scrolling',
       },

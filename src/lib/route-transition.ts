@@ -97,9 +97,13 @@ const labelSettleMs = (tokenCount: number) =>
 export const coveredHoldMs = (tokenCount: number) =>
   Math.max(COVERED_HOLD_MIN_MS, labelSettleMs(tokenCount) + LABEL_SETTLED_MS - COVER_MS)
 
-/** If the route has not landed by now, lift anyway. A stranded curtain is a broken site; an
- *  early lift is only an ugly one. */
-export const SWAP_TIMEOUT_MS = 900
+/**
+ * If the App Router has still not committed after this long, fall back to a regular browser
+ * navigation. The curtain stays seated while we wait: revealing the route being left makes a
+ * slow navigation look like a dead click, then lets the new page appear later with no
+ * transition at all.
+ */
+export const ROUTE_FALLBACK_MS = 5000
 /** Reduced motion keeps a transition, but a crossfade rather than a large directional travel —
  *  the translate is the part that carries vestibular risk, not the existence of the curtain. */
 export const REDUCED_FADE_MS = 120

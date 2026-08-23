@@ -31,6 +31,7 @@ const ProjectVisualGallery = ({
             <ProjectMacFrame
               key={visual.videoSrc}
               videoSrc={visual.videoSrc}
+              videoWebmSrc={visual.videoWebmSrc}
               posterSrc={visual.posterSrc}
               alt={visual.alt}
             />
