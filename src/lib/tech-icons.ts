@@ -44,6 +44,48 @@ import {
  * Anything not in here falls back to its plain name, so an unmapped entry
  * degrades to a wordmark instead of vanishing.
  */
+/**
+ * Where each brand mark in the "Built with" row links to. Same key discipline as
+ * `techIcons`: the exact strings used in `Project.tech`, so a typo is a dead link
+ * rather than a wrong one.
+ */
+export const techLinks: Record<string, string> = {
+  'Next.js': 'https://nextjs.org',
+  React: 'https://react.dev',
+  'React Router': 'https://reactrouter.com',
+  TypeScript: 'https://www.typescriptlang.org',
+  'Tailwind CSS': 'https://tailwindcss.com',
+  Tailwind: 'https://tailwindcss.com',
+  'Node.js': 'https://nodejs.org',
+  Express: 'https://expressjs.com',
+  MongoDB: 'https://www.mongodb.com',
+  PostgreSQL: 'https://www.postgresql.org',
+  Vercel: 'https://vercel.com',
+  'Cloudflare Pages': 'https://pages.cloudflare.com',
+  'GitHub Pages': 'https://pages.github.com',
+  Figma: 'https://www.figma.com',
+  GSAP: 'https://gsap.com',
+  'Framer Motion': 'https://www.framer.com/motion/',
+  Supabase: 'https://supabase.com',
+  Sanity: 'https://www.sanity.io',
+  Shopify: 'https://www.shopify.com',
+  Stripe: 'https://stripe.com',
+  'Three.js': 'https://threejs.org',
+  Webflow: 'https://webflow.com',
+  WordPress: 'https://wordpress.org',
+  JavaScript: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript',
+  HTML: 'https://developer.mozilla.org/en-US/docs/Web/HTML',
+  CSS: 'https://developer.mozilla.org/en-US/docs/Web/CSS',
+  Git: 'https://git-scm.com',
+  GitHub: 'https://github.com',
+  'Backbone.js': 'https://backbonejs.org',
+  Postman: 'https://www.postman.com',
+  Cypress: 'https://www.cypress.io',
+  Lenis: 'https://lenis.darkroom.engineering',
+  ZXing: 'https://github.com/zxing-js/library',
+  AOS: 'https://michalsnik.github.io/aos/',
+}
+
 export const techIcons: Record<string, IconType> = {
   'Next.js': SiNextdotjs,
   React: SiReact,
