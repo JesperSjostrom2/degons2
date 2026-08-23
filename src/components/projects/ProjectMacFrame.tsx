@@ -19,6 +19,10 @@ import { useAutoplayInView } from '@/lib/use-autoplay-in-view'
  * video fills the cutout edge to edge and the 0.15% difference is absorbed as a sub-pixel
  * trim. Re-exporting a capture at a different ratio is what breaks this: anything wider gets
  * cropped at the sides, anything narrower leaves a band of bare screen.
+ *
+ * Below 900px the frame is hidden and the recording is shown on its own — the plate's bezel
+ * and base cost more than they are worth on a phone. The `sizes` hint says so, which is what
+ * keeps the preload from pulling a full-width plate for an image that is never painted.
  */
 const ProjectMacFrame = ({
   videoSrc,
@@ -57,7 +61,7 @@ const ProjectMacFrame = ({
         alt=""
         aria-hidden="true"
         fill
-        sizes="(max-width: 899px) 92vw, 84rem"
+        sizes="(max-width: 899px) 16px, 112rem"
         className="project-page__mac-frame"
         priority
       />

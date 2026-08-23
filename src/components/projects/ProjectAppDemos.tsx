@@ -34,7 +34,26 @@ const ActiveDevice = ({ demo, onEnded }: { demo: Demo; onEnded: () => void }) =>
 const ProjectAppDemos = ({ demos }: { demos: Demo[] }) => {
   const [activeIndex, setActiveIndex] = useState(0)
   const advanceTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const listRef = useRef<HTMLDivElement>(null)
   const active = demos[activeIndex] ?? demos[0]
+
+  /* On narrow screens the list is a horizontal rail, and the showcase advances itself when a
+     recording ends — so the flow that just started playing can be sitting off the side of it.
+     Scrolling the rail's own box, rather than calling `scrollIntoView`, keeps the page where
+     the reader left it; where the list is a plain column this has nothing to scroll and does
+     nothing. */
+  useEffect(() => {
+    const list = listRef.current
+    const chip = list?.children[activeIndex]
+
+    if (!list || !(chip instanceof HTMLElement)) return
+
+    const offset = chip.getBoundingClientRect().left - list.getBoundingClientRect().left
+    list.scrollTo({
+      left: list.scrollLeft + offset - (list.clientWidth - chip.clientWidth) / 2,
+      behavior: 'smooth',
+    })
+  }, [activeIndex])
 
   const clearAdvanceTimer = useCallback(() => {
     if (advanceTimer.current) {
@@ -71,7 +90,11 @@ const ProjectAppDemos = ({ demos }: { demos: Demo[] }) => {
           <p>Choose a feature or let the showcase cycle automatically.</p>
         </header>
 
-        <div className="project-page__app-flow-list" aria-label="Choose a product feature">
+        <div
+          ref={listRef}
+          className="project-page__app-flow-list"
+          aria-label="Choose a product feature"
+        >
           {demos.map((demo, index) => {
             const isActive = index === activeIndex
 

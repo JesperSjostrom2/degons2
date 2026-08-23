@@ -4833,10 +4833,14 @@
      that reference is a presentation slide — here the laptop is the centrepiece, so it
      takes the full width and the phones below stay small enough to read as a footnote
      to it rather than a second act. */
+  /* Wider than the band it sits in. The gutter belongs to the prose, not to the device, so
+     the frame takes it back and keeps going — the plate spends a quarter of its width on
+     bezel and base, so a laptop sized to the text column reads far smaller than the space it
+     occupies. `align-items: center` on the band centres the overflow evenly on both sides. */
   .project-page__mac {
     position: relative;
     aspect-ratio: 5781 / 3676;
-    width: 100%;
+    width: min(112rem, 100vw - 3rem);
   }
 
   /* Stays square and opaque, because the hole in the frame PNG is square: this is the only
@@ -5660,13 +5664,52 @@
      viewport that same percentage leaves the devices too small to read, so they take
      back most of the width. */
   @media (max-width: 899px) {
+    /* The frame comes off at these widths. The plate spends a quarter of its width on bezel
+       and another quarter of its height on the base and the lid's chin, so on a phone the
+       laptop is mostly laptop and the capture inside it is a postage stamp. What the section
+       is actually showing is the site, so below 900px that is all it shows — the recording on
+       its own, at its own ratio, and about 70% more of it than the framed version fitted. */
+    .project-page__mac {
+      width: calc(100vw - 2rem);
+      aspect-ratio: 1368 / 854;
+    }
+
+    /* Now the whole box rather than a rectangle positioned into the plate's cutout, and its
+       corners can be rounded for real: the warning on the base rule is about opening gaps
+       under a frame that is no longer there. */
+    .project-page__mac-screen {
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 12px;
+      box-shadow:
+        0 1.5rem 3rem rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(255, 255, 255, 0.1);
+    }
+
+    /* The parent clips now, so the video's own radius would only expose four wedges of the
+       black behind it — invisible on a dark capture, obvious on a light one. */
+    .project-page__mac-screen video {
+      border-radius: 0;
+    }
+
+    .project-page__mac-frame {
+      display: none;
+    }
+
+    /* The single column puts the picker above the device, not below it: tapping a feature
+       has to move something you can still see. Everything above the phone is trimmed for
+       the same reason — the picker, the line describing the flow and the screen it plays on
+       have to fit one viewport together. */
     .project-page__app-showcase {
       grid-template-columns: minmax(0, 1fr);
-      gap: clamp(4rem, 10vw, 6rem);
+      gap: clamp(2rem, 5vw, 3rem);
       width: min(100%, 38rem);
     }
 
     .project-page__app-stage {
+      order: 2;
       min-height: 0;
     }
 
@@ -5675,7 +5718,75 @@
     }
 
     .project-page__app-flows {
+      order: 1;
       width: 100%;
+    }
+
+    .project-page__features-heading h2 {
+      font-size: clamp(2rem, 8vw, 2.8rem);
+    }
+
+    .project-page__features-heading p {
+      font-size: 0.85rem;
+    }
+
+    /* Six stacked rows would push the phone off the screen, so the list turns on its side.
+       The negative margin runs it into the page gutter, where a chip cut by the edge is the
+       thing that says there are more of them. */
+    .project-page__app-flow-list {
+      display: flex;
+      gap: 0.55rem;
+      margin-top: clamp(1.25rem, 4vw, 1.75rem);
+      margin-inline: -1.5rem;
+      /* `overflow-x: auto` makes the vertical axis a scroll box too, so a focus ring on a chip
+         would be clipped without this. */
+      padding: 0.3rem 1.5rem;
+      border-top: 0;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      scroll-snap-type: x proximity;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .project-page__app-flow-list::-webkit-scrollbar {
+      display: none;
+    }
+
+    .project-page__app-flow {
+      display: flex;
+      flex: 0 0 auto;
+      gap: 0.5rem;
+      width: auto;
+      padding: 0.6rem 1rem;
+      border: 1px solid var(--rim-border);
+      border-radius: 999px;
+      scroll-snap-align: center;
+      white-space: nowrap;
+      /* Scaled rather than set in a smaller type size: the rail would reflow on every
+         selection and the chips would shuffle under your thumb. This leaves the layout
+         boxes where they are and only draws them a little smaller. */
+      transform: scale(0.94);
+      transition: color 240ms ease, border-color 240ms ease, transform 240ms ease;
+    }
+
+    /* The desktop row marks itself by indenting; a chip in a scrolling rail cannot, because
+       the rail is already moving under your thumb. The outline carries it alone — the rest
+       of the page states itself in hairlines, and a filled pill would be the one solid
+       shape on it.
+
+       The site's beige, not `--project-accent`: this is site chrome sitting outside the
+       device, and Pikku Pulla's pink belongs to what is playing inside it. */
+    .project-page__app-flow[aria-pressed='true'] {
+      padding-left: 1rem;
+      border-color: color-mix(in srgb, var(--accent) 62%, transparent);
+      transform: none;
+    }
+
+    .project-page__app-selected-description {
+      min-height: 2.8rem;
+      margin-top: 1rem;
+      font-size: 0.9rem;
     }
 
     .project-page__static-phone-rail {
@@ -5750,10 +5861,6 @@
 
     .project-page__phone {
       width: min(68%, 15rem);
-    }
-
-    .project-page__mac {
-      width: 100%;
     }
 
     .project-page__palette {
