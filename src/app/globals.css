@@ -2158,9 +2158,9 @@
   .social-icon-link-glyph {
     position: relative;
     z-index: 1;
-    display: block;
-    height: 1.15rem;
-    width: 1.15rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition:
       transform 220ms ease,
       opacity 220ms ease;
