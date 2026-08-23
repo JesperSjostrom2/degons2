@@ -12,6 +12,8 @@ export const skillIconColors: Record<string, string> = {
   TypeScript: '#3178c6',
   GSAP: '#88ce02',
   Vercel: '#f5efe4',
+  Supabase: '#3ecf8e',
+  PostgreSQL: '#4169e1',
   'Cloudflare Pages': '#f6821f',
   'GitHub Pages': '#f5efe4',
   Figma: '#f24e1e',
