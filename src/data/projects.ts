@@ -320,6 +320,11 @@ const pikkuPullaProject: Project = {
           label: 'Today',
         },
         {
+          src: '/assets/projects/pikku-pulla/pikkuhistory.webp',
+          alt: 'Pikku Pulla nutrition history with weekly chart and daily summaries',
+          label: 'History',
+        },
+        {
           src: '/assets/projects/pikku-pulla/pikkusearch.webp',
           alt: 'Pikku Pulla Finnish food search and category browser',
           label: 'Search',
@@ -328,11 +333,6 @@ const pikkuPullaProject: Project = {
           src: '/assets/projects/pikku-pulla/pikkumeal.webp',
           alt: 'Pikku Pulla saved meals screen',
           label: 'Meals',
-        },
-        {
-          src: '/assets/projects/pikku-pulla/pikkuhistory.webp',
-          alt: 'Pikku Pulla nutrition history with weekly chart and daily summaries',
-          label: 'History',
         },
         {
           src: '/assets/projects/pikku-pulla/pikkuprofile.webp',

@@ -5017,12 +5017,16 @@
     min-width: 0;
   }
 
+  /* Held well short of the column it sits in. The longest title ends barely past the halfway
+     mark, so rules drawn to the full width read as six long lines with the text stranded at
+     one end — and the progress riding on them has nothing to measure against. */
   .project-page__app-flow-list {
+    max-width: 21rem;
     margin-top: clamp(2.5rem, 5vw, 4rem);
-    border-top: 1px solid var(--rim-border);
   }
 
   .project-page__app-flow {
+    position: relative;
     display: grid;
     grid-template-columns: 3rem minmax(0, 1fr);
     gap: 1rem;
@@ -5055,6 +5059,63 @@
 
   .project-page__app-flow[aria-pressed='true'] strong {
     font-weight: 700;
+  }
+
+  /* How long is left of the running recording, drawn over the row's own hairline so the list
+     keeps reading as a stack of rules rather than gaining a second line under each title.
+     Same weight as that hairline and a beige held well back from full strength: the row it
+     marks is already the bright one, so this only has to be findable, not loud.
+
+     Beige for the same reason the active row is beige: this is site chrome outside the
+     device, and Pikku Pulla's pink belongs to what is playing inside it. */
+  .project-page__app-flow-progress {
+    position: absolute;
+    right: 0;
+    bottom: -1px;
+    left: 0;
+    height: 1px;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 240ms ease;
+  }
+
+  .project-page__app-flow[aria-pressed='true'] .project-page__app-flow-progress {
+    opacity: 1;
+  }
+
+  .project-page__app-flow-progress::after {
+    content: '';
+    display: block;
+    height: 100%;
+    background: color-mix(in srgb, var(--accent) 55%, transparent);
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  /* One animation the length of the video plus the hold that follows it, rather than a value
+     pushed per frame from `timeupdate`: it stays smooth between the video's coarse time
+     updates, and it pauses with the video when the section leaves the screen. Selecting a flow
+     flips `aria-pressed`, which starts the animation from zero on the row that just took over. */
+  .project-page__app-flow-list:not([data-flow-state='idle'])
+    .project-page__app-flow[aria-pressed='true']
+    .project-page__app-flow-progress::after {
+    animation: project-flow-progress var(--flow-duration) linear forwards;
+  }
+
+  .project-page__app-flow-list[data-flow-state='paused']
+    .project-page__app-flow[aria-pressed='true']
+    .project-page__app-flow-progress::after {
+    animation-play-state: paused;
+  }
+
+  @keyframes project-flow-progress {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
   }
 
   .project-page__app-selected-description {
@@ -5733,17 +5794,17 @@
     }
 
     /* Six stacked rows would push the phone off the screen, so the list turns on its side.
-       The negative margin runs it into the page gutter, where a chip cut by the edge is the
+       The negative margin runs it into the page gutter, where a title cut by the edge is the
        thing that says there are more of them. */
     .project-page__app-flow-list {
       display: flex;
-      gap: 0.55rem;
+      gap: 1.5rem;
+      max-width: none;
       margin-top: clamp(1.25rem, 4vw, 1.75rem);
       margin-inline: -1.5rem;
-      /* `overflow-x: auto` makes the vertical axis a scroll box too, so a focus ring on a chip
-         would be clipped without this. */
+      /* `overflow-x: auto` makes the vertical axis a scroll box too, so a focus ring on an
+         item would be clipped without this. */
       padding: 0.3rem 1.5rem;
-      border-top: 0;
       overflow-x: auto;
       overscroll-behavior-x: contain;
       scroll-snap-type: x proximity;
@@ -5755,33 +5816,37 @@
       display: none;
     }
 
+    /* Open titles rather than outlined pills: six bordered shapes in a row are the one piece
+       of solid drawing on a page that otherwise states itself in hairlines. */
     .project-page__app-flow {
       display: flex;
       flex: 0 0 auto;
       gap: 0.5rem;
       width: auto;
-      padding: 0.6rem 1rem;
-      border: 1px solid var(--rim-border);
-      border-radius: 999px;
+      padding: 0.55rem 0;
+      border: 0;
       scroll-snap-align: center;
       white-space: nowrap;
       /* Scaled rather than set in a smaller type size: the rail would reflow on every
-         selection and the chips would shuffle under your thumb. This leaves the layout
+         selection and the titles would shuffle under your thumb. This leaves the layout
          boxes where they are and only draws them a little smaller. */
       transform: scale(0.94);
-      transition: color 240ms ease, border-color 240ms ease, transform 240ms ease;
+      transition: color 240ms ease, transform 240ms ease;
     }
 
-    /* The desktop row marks itself by indenting; a chip in a scrolling rail cannot, because
-       the rail is already moving under your thumb. The outline carries it alone — the rest
-       of the page states itself in hairlines, and a filled pill would be the one solid
-       shape on it.
+    /* An item in the rail has no hairline of its own for the progress to sit on, so it
+       carries its own track under the title — which is also what marks the running flow now
+       that there is no outline to do it. */
+    .project-page__app-flow-progress {
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background: var(--rim-border);
+      opacity: 1;
+    }
 
-       The site's beige, not `--project-accent`: this is site chrome sitting outside the
-       device, and Pikku Pulla's pink belongs to what is playing inside it. */
     .project-page__app-flow[aria-pressed='true'] {
-      padding-left: 1rem;
-      border-color: color-mix(in srgb, var(--accent) 62%, transparent);
+      padding-left: 0;
       transform: none;
     }
 

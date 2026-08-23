@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react'
 import { useAutoplayInView } from '@/lib/use-autoplay-in-view'
 
 interface Demo {
@@ -10,7 +10,16 @@ interface Demo {
   alt: string
 }
 
-const ActiveDevice = ({ demo, onEnded }: { demo: Demo; onEnded: () => void }) => {
+const ADVANCE_DELAY = 1200
+
+type ActiveDeviceProps = {
+  demo: Demo
+  onEnded: () => void
+  onDurationChange: (seconds: number) => void
+  onPlayingChange: (playing: boolean) => void
+}
+
+const ActiveDevice = ({ demo, onEnded, onDurationChange, onPlayingChange }: ActiveDeviceProps) => {
   const frameRef = useAutoplayInView<HTMLDivElement>()
 
   return (
@@ -23,6 +32,12 @@ const ActiveDevice = ({ demo, onEnded }: { demo: Demo; onEnded: () => void }) =>
         playsInline
         preload="none"
         aria-label={demo.alt}
+        onLoadedMetadata={(event) => onDurationChange(event.currentTarget.duration)}
+        /* `playing` and `waiting` rather than `play`: a recording that stalls to buffer would
+           otherwise leave the progress line running on ahead of the picture. */
+        onPlaying={() => onPlayingChange(true)}
+        onWaiting={() => onPlayingChange(false)}
+        onPause={() => onPlayingChange(false)}
         onEnded={onEnded}
       />
     </div>
@@ -33,6 +48,8 @@ const ActiveDevice = ({ demo, onEnded }: { demo: Demo; onEnded: () => void }) =>
  * turning six simultaneous videos into a wall of moving screens. */
 const ProjectAppDemos = ({ demos }: { demos: Demo[] }) => {
   const [activeIndex, setActiveIndex] = useState(0)
+  const [flowSeconds, setFlowSeconds] = useState<number | null>(null)
+  const [isRunning, setIsRunning] = useState(false)
   const advanceTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const listRef = useRef<HTMLDivElement>(null)
   const active = demos[activeIndex] ?? demos[0]
@@ -62,26 +79,51 @@ const ProjectAppDemos = ({ demos }: { demos: Demo[] }) => {
     }
   }, [])
 
+  /* The progress line is a CSS animation the length of the whole flow, so a new recording has
+     to blank it until its own length is known — otherwise it inherits the previous one's. */
+  const resetProgress = useCallback(() => {
+    setFlowSeconds(null)
+    setIsRunning(false)
+  }, [])
+
   const scheduleNext = useCallback(() => {
     clearAdvanceTimer()
+    /* The recording pauses itself at the end, but the line still has this hold to cross. */
+    setIsRunning(true)
     advanceTimer.current = setTimeout(() => {
+      resetProgress()
       setActiveIndex((current) => (current + 1) % demos.length)
-    }, 1200)
-  }, [clearAdvanceTimer, demos.length])
+    }, ADVANCE_DELAY)
+  }, [clearAdvanceTimer, demos.length, resetProgress])
 
   useEffect(() => clearAdvanceTimer, [clearAdvanceTimer])
 
   const selectFlow = (index: number) => {
     clearAdvanceTimer()
+    resetProgress()
     setActiveIndex(index)
   }
 
   if (!active) return null
 
+  /* The line has to finish where the showcase moves on, not where the recording stops, so it
+     runs for the video plus the hold that follows it. */
+  const flowState = flowSeconds === null ? 'idle' : isRunning ? 'running' : 'paused'
+  const flowStyle =
+    flowSeconds === null
+      ? undefined
+      : ({ '--flow-duration': `${flowSeconds * 1000 + ADVANCE_DELAY}ms` } as CSSProperties)
+
   return (
     <section className="project-page__app-showcase" aria-label="Pikku Pulla product flows">
       <div className="project-page__app-stage">
-        <ActiveDevice key={active.videoSrc} demo={active} onEnded={scheduleNext} />
+        <ActiveDevice
+          key={active.videoSrc}
+          demo={active}
+          onEnded={scheduleNext}
+          onDurationChange={(seconds) => setFlowSeconds(Number.isFinite(seconds) ? seconds : null)}
+          onPlayingChange={setIsRunning}
+        />
       </div>
 
       <div className="project-page__app-flows">
@@ -94,6 +136,8 @@ const ProjectAppDemos = ({ demos }: { demos: Demo[] }) => {
           ref={listRef}
           className="project-page__app-flow-list"
           aria-label="Choose a product feature"
+          data-flow-state={flowState}
+          style={flowStyle}
         >
           {demos.map((demo, index) => {
             const isActive = index === activeIndex
@@ -108,6 +152,7 @@ const ProjectAppDemos = ({ demos }: { demos: Demo[] }) => {
               >
                 <span>{String(index + 1).padStart(2, '0')}</span>
                 <strong>{demo.title}</strong>
+                <span className="project-page__app-flow-progress" aria-hidden="true" />
               </button>
             )
           })}
