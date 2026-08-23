@@ -537,13 +537,8 @@
     text-align: center;
   }
 
-  /* No section overline here on purpose, and no dead class waiting to be used
-     again. Home-page sections all have an h2 that already names them, so a
-     kicker above one could only ever restate it — "PROCESS" over "How it
-     works" — and a label that carries nothing is what makes a page look
-     generated. `.project-page__label` is a different job and stays: on /work it
-     titles content that has no heading of its own, so TYPOGRAPHY over two font
-     specimens is the only thing telling you what you are looking at. */
+  /* No section overline here on purpose. Every section has an h2 that already
+     names it, so a kicker above it could only restate the same information. */
   .section-title {
     color: var(--site-text);
     font-size: clamp(2.2rem, 5.2vw, 3.25rem);
@@ -2025,13 +2020,13 @@
     inset: 0;
   }
 
-  /* Source is pre-cropped square (see portrait-crop.jpg), already shot in
-     black and white and facing camera straight-on — no mirroring, and only a
-     light touch here since the photo doesn't need re-grading, just a nudge
-     toward the planet's tone. */
+  /* Monochrome and web-sized while retaining the source portrait's framing.
+     The restrained filter only settles the image into the planet's darker
+     tonal range. */
   .about-story-portrait::before {
-    background: url('/assets/portrait-crop.jpg') center / cover no-repeat #080808;
-    filter: contrast(1.02) brightness(1.04);
+    background: url('/assets/portrait1-planet.webp') center 20% / cover no-repeat #080808;
+    filter: contrast(1.03) brightness(0.96);
+    transform: scaleX(-1);
   }
 
   /* Just a rim fade so the photo's edge doesn't run straight into the frame
@@ -4222,7 +4217,7 @@
 
   /* Aligns the first fact's rule with the role prose rather than its label. */
   .project-page__brief-facts {
-    padding-top: clamp(2.25rem, 4vw, 3rem);
+    padding-top: clamp(4.75rem, 8vw, 5.75rem);
   }
 
   /* Sized to read as a real mark introducing the title, not a caption above it — big
@@ -4413,15 +4408,6 @@
     gap: clamp(1.75rem, 3vw, 2.5rem);
   }
 
-  .project-page__label {
-    color: rgba(245, 239, 228, 0.42);
-    font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.26em;
-    text-transform: uppercase;
-  }
-
   .project-page__prose {
     max-width: 44rem;
     color: rgba(245, 239, 228, 0.78);
@@ -4430,6 +4416,383 @@
     line-height: 1.75;
   }
 
+  .project-page__pwa-note {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(10rem, 0.42fr);
+    gap: clamp(2.5rem, 8vw, 7rem);
+    align-items: center;
+    padding: clamp(2.25rem, 5vw, 4rem) 0;
+    border-top: 1px solid var(--rim-border);
+    border-bottom: 1px solid var(--rim-border);
+  }
+
+  .project-page__pwa-mark {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+  }
+
+  .project-page__pwa-mark img {
+    width: clamp(4rem, 8vw, 5.75rem);
+    height: auto;
+    object-fit: contain;
+  }
+
+  .project-page__pwa-mark span {
+    color: rgba(245, 239, 228, 0.72);
+    font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .project-page__pwa-note h2 {
+    max-width: 16ch;
+    color: rgba(245, 239, 228, 0.92);
+    font-family: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    line-height: 1.05;
+  }
+
+  .project-page__pwa-note p {
+    max-width: 44rem;
+    margin-top: 1.15rem;
+    color: rgba(245, 239, 228, 0.58);
+    font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+    font-size: 1rem;
+    line-height: 1.75;
+  }
+
+  .project-page__section-heading,
+  .project-page__theme-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+
+  .project-page__section-title {
+    color: var(--site-text);
+    font-family: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+    font-size: clamp(1.75rem, 4vw, 2.8rem);
+    font-weight: 600;
+    letter-spacing: -0.045em;
+    line-height: 0.98;
+  }
+
+  .project-page__subsection-title {
+    color: rgba(245, 239, 228, 0.88);
+    font-family: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+    font-size: clamp(1.2rem, 2.5vw, 1.55rem);
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+  }
+
+  .project-page__colour-data {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.75rem, 3vw, 2.5rem);
+    margin-top: clamp(2rem, 4vw, 3.5rem);
+    padding-top: clamp(2rem, 4vw, 3.5rem);
+    border-top: 1px solid var(--rim-border);
+  }
+
+  .project-page__section-heading p,
+  .project-page__theme-heading > div > p {
+    margin-top: 0.55rem;
+    color: rgba(245, 239, 228, 0.42);
+    font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.9rem;
+  }
+
+  .project-page__mode-control {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .project-page__mode-control > span {
+    color: rgba(245, 239, 228, 0.52);
+    font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  .project-page__mode-toggle {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: flex-start;
+    width: 4.9rem;
+    height: 2.75rem;
+    padding: 0.3rem;
+    border: 1px solid var(--rim-border);
+    border-radius: 999px;
+    background: rgba(245, 239, 228, 0.07);
+    box-shadow: inset 0 1px 0 var(--rim-light-soft);
+    transition: background 320ms ease, border-color 320ms ease, box-shadow 320ms ease;
+  }
+
+  .project-page__mode-toggle[data-mode='dark'] {
+    justify-content: flex-end;
+    background: rgba(7, 7, 7, 0.74);
+    border-color: rgba(245, 239, 228, 0.2);
+  }
+
+  .project-page__mode-thumb {
+    position: relative;
+    display: grid;
+    width: 2.05rem;
+    height: 2.05rem;
+    place-items: center;
+    border-radius: 999px;
+    background: rgba(245, 239, 228, 0.96);
+    box-shadow:
+      0 0.3rem 0.9rem rgba(0, 0, 0, 0.28),
+      inset 0 1px 0 rgba(255, 255, 255, 0.65);
+    color: #171313;
+    transition: background 320ms ease, color 320ms ease, box-shadow 320ms ease;
+  }
+
+  .project-page__mode-toggle[data-mode='dark'] .project-page__mode-thumb {
+    background: #22201f;
+    color: rgba(245, 239, 228, 0.94);
+    box-shadow:
+      0 0.3rem 0.9rem rgba(0, 0, 0, 0.45),
+      inset 0 0 0 1px rgba(245, 239, 228, 0.13);
+  }
+
+  .project-page__mode-toggle:hover {
+    border-color: rgba(245, 239, 228, 0.3);
+    box-shadow:
+      inset 0 1px 0 var(--rim-light),
+      0 0 1.5rem -0.9rem rgba(245, 239, 228, 0.35);
+  }
+
+  .project-page__mode-toggle:focus-visible {
+    outline: 2px solid rgba(245, 239, 228, 0.82);
+    outline-offset: 2px;
+  }
+
+  .project-page__mode-icon {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+  }
+
+  .project-page__mode-icon svg {
+    width: 1rem;
+    height: 1rem;
+    stroke-width: 1.8;
+  }
+
+  .project-page__themes {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(0.85rem, 1.8vw, 1.35rem);
+  }
+
+  .project-page__theme {
+    overflow: hidden;
+    border-radius: 18px;
+    background: var(--theme-bg);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.16), 0 18px 38px -28px rgba(0, 0, 0, 0.72);
+    transition: background 240ms ease;
+  }
+
+  .project-page__theme-preview {
+    min-height: 19rem;
+    padding: 1.25rem 1.25rem 1rem;
+    color: var(--theme-ink);
+    transition: color 240ms ease;
+  }
+
+  .project-page__theme-date {
+    color: var(--theme-muted);
+    font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  .project-page__theme-gauge-row {
+    display: grid;
+    grid-template-columns: minmax(0, 0.7fr) minmax(8rem, 1.6fr) minmax(0, 0.7fr);
+    gap: 0.5rem;
+    align-items: center;
+    margin-top: 1rem;
+  }
+
+  .project-page__theme-side-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(--theme-muted);
+    font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+    text-align: center;
+  }
+
+  .project-page__theme-side-stat span {
+    font-size: 0.52rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .project-page__theme-side-stat strong {
+    margin-top: 0.22rem;
+    color: var(--theme-ink);
+    font-family: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.05rem;
+    line-height: 1;
+  }
+
+  .project-page__theme-side-stat small {
+    margin-top: 0.12rem;
+    font-size: 0.58rem;
+  }
+
+  .project-page__theme-gauge {
+    position: relative;
+    aspect-ratio: 1.2 / 1;
+  }
+
+  .project-page__theme-gauge svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    fill: none;
+    stroke-linecap: round;
+    stroke-width: 11;
+  }
+
+  .project-page__theme-gauge path:first-child {
+    stroke: var(--theme-surface-2);
+  }
+
+  .project-page__theme-gauge path:last-child {
+    stroke: var(--theme-ring);
+    stroke-dasharray: 58 100;
+  }
+
+  .project-page__theme-gauge > div {
+    position: absolute;
+    left: 50%;
+    top: 52%;
+    display: flex;
+    transform: translate(-50%, -50%);
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  }
+
+  .project-page__theme-gauge span {
+    color: var(--theme-muted);
+    font-size: 0.48rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .project-page__theme-gauge strong {
+    color: var(--theme-ink);
+    font-family: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+    font-size: clamp(2.25rem, 5vw, 3.6rem);
+    letter-spacing: -0.05em;
+    line-height: 0.95;
+  }
+
+  .project-page__theme-gauge small {
+    margin-top: 0.22rem;
+    color: var(--theme-muted);
+    font-size: 0.58rem;
+  }
+
+  .project-page__theme-macros {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.45rem;
+    margin-top: 0.7rem;
+  }
+
+  .project-page__theme-macros > i {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    height: 3.4rem;
+    padding: 0.65rem;
+    border-radius: 9px;
+    background: var(--theme-surface);
+    box-shadow: 0 7px 14px -12px color-mix(in srgb, var(--theme-ink) 45%, transparent);
+  }
+
+  .project-page__theme-macros span:first-child {
+    width: 48%;
+    height: 0.35rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--theme-ink) 42%, transparent);
+  }
+
+  .project-page__theme-macros span:last-child {
+    width: 100%;
+    height: 0.28rem;
+    margin-top: auto;
+    border-radius: 999px;
+    background: var(--theme-surface-2);
+  }
+
+  .project-page__theme-macros i:first-child span:last-child { background: var(--theme-accent); }
+  .project-page__theme-macros i:nth-child(2) span:last-child { background: #3b95a5; }
+  .project-page__theme-macros i:nth-child(3) span:last-child { background: #9a52bd; }
+
+  .project-page__theme-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.15rem;
+    background: var(--theme-surface);
+    color: var(--theme-ink);
+    transition: background 240ms ease, color 240ms ease;
+  }
+
+  .project-page__theme-meta h3 {
+    font-family: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+    font-size: 1rem;
+    font-weight: 650;
+  }
+
+  .project-page__theme-meta > div {
+    display: flex;
+    gap: 0.3rem;
+  }
+
+  .project-page__theme-meta i {
+    display: block;
+    width: 0.8rem;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--theme-ink) 18%, transparent);
+  }
+
+  .project-page__theme-meta i:nth-child(1) { background: var(--theme-bg); }
+  .project-page__theme-meta i:nth-child(2) { background: var(--theme-surface); }
+  .project-page__theme-meta i:nth-child(3) { background: var(--theme-surface-2); }
+  .project-page__theme-meta i:nth-child(4) { background: var(--theme-ink); }
+  .project-page__theme-meta i:nth-child(5) { background: var(--theme-accent); }
   /* ── Screenshots ────────────────────────────────────────────────────── */
 
   /* ── The work ───────────────────────────────────────────────────────────
@@ -4451,6 +4814,14 @@
     margin: 0 auto;
     /* The devices need air above them or the head crowds the laptop. */
     padding: clamp(5rem, 10vw, 9rem) 0 clamp(4rem, 8vw, 7rem);
+  }
+
+  .project-page__visuals--lead {
+    padding-bottom: clamp(3.5rem, 7vw, 6.5rem);
+  }
+
+  .project-page__visuals--supporting {
+    padding-top: clamp(3.5rem, 7vw, 6.5rem);
   }
 
   /* ── MacBook with a video in the screen ─────────────────────────────────
@@ -4562,6 +4933,179 @@
     max-width: none;
   }
 
+  /* Pikku Pulla is a phone product: one device is the centrepiece and the list
+     changes what is playing inside it. The selector uses the same hairline rhythm
+     as the facts and type specimens instead of introducing another card system. */
+  .project-page__app-showcase {
+    display: grid;
+    grid-template-columns: minmax(18rem, 0.8fr) minmax(22rem, 0.75fr);
+    gap: clamp(4rem, 10vw, 9rem);
+    align-items: center;
+    width: min(82%, 70rem);
+  }
+
+  .project-page__features-heading {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .project-page__features-heading h2 {
+    color: var(--site-text);
+    font-family: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    font-weight: 600;
+    letter-spacing: -0.045em;
+    line-height: 0.98;
+  }
+
+  .project-page__features-heading p {
+    color: rgba(245, 239, 228, 0.5);
+    font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+    max-width: 28rem;
+    font-size: 0.95rem;
+    line-height: 1.65;
+  }
+
+  .project-page__app-stage {
+    display: grid;
+    place-items: center;
+    min-height: 50rem;
+  }
+
+  .project-page__app-device {
+    position: relative;
+    overflow: hidden;
+    width: min(100%, 24rem);
+    aspect-ratio: 9 / 19.5;
+    border: 8px solid #111;
+    border-radius: 44px;
+    background: #111;
+    box-shadow:
+      0 2.5rem 5rem rgba(0, 0, 0, 0.42),
+      0 0 0 1px rgba(255, 255, 255, 0.12);
+  }
+
+  .project-page__app-device video {
+    width: 100%;
+    height: 100%;
+    border-radius: 35px;
+    object-fit: cover;
+    object-position: center top;
+  }
+
+  .project-page__app-speaker {
+    position: absolute;
+    z-index: 1;
+    left: 50%;
+    top: 0.55rem;
+    width: 27%;
+    height: 1.2rem;
+    transform: translateX(-50%);
+    border-radius: 999px;
+    background: #111;
+    pointer-events: none;
+  }
+
+  .project-page__app-flows {
+    min-width: 0;
+  }
+
+  .project-page__app-flow-list {
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+    border-top: 1px solid var(--rim-border);
+  }
+
+  .project-page__app-flow {
+    display: grid;
+    grid-template-columns: 3rem minmax(0, 1fr);
+    gap: 1rem;
+    align-items: center;
+    width: 100%;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--rim-border);
+    color: rgba(245, 239, 228, 0.34);
+    text-align: left;
+    transition: color 240ms ease, padding-left 320ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .project-page__app-flow > span {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+  }
+
+  .project-page__app-flow strong {
+    font-family: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+    font-size: clamp(1rem, 1.6vw, 1.15rem);
+    font-weight: 500;
+    transition: font-weight 180ms ease;
+  }
+
+  .project-page__app-flow[aria-pressed='true'] {
+    padding-left: 0.65rem;
+    color: var(--site-text);
+  }
+
+  .project-page__app-flow[aria-pressed='true'] strong {
+    font-weight: 700;
+  }
+
+  .project-page__app-selected-description {
+    min-height: 3.4rem;
+    max-width: 30rem;
+    margin-top: 1.5rem;
+    color: rgba(245, 239, 228, 0.52);
+    font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.65;
+  }
+
+  /* The five stills are an overview, not another hero. At wide widths they share one
+     calm row; narrow screens turn that same row into a deliberate swipeable rail. */
+  .project-page__static-phones {
+    width: 100%;
+  }
+
+  .project-page__static-phones-heading {
+    width: 100%;
+    margin: 0 auto clamp(3rem, 6vw, 5rem);
+    text-align: center;
+  }
+
+  .project-page__static-phone-rail {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: clamp(0.85rem, 2vw, 1.75rem);
+    align-items: start;
+  }
+
+  .project-page__static-phone {
+    min-width: 0;
+  }
+
+  .project-page__static-phone img {
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 1.75rem 2rem rgba(0, 0, 0, 0.34));
+  }
+
+  .project-page__static-phone figcaption {
+    margin-top: 1.15rem;
+    color: rgba(245, 239, 228, 0.58);
+    font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .project-page__app-flow:hover {
+      color: rgba(245, 239, 228, 0.82);
+    }
+  }
   /* Pointing at one phone quietens the other two and lifts it a little. No rotation and
      no scaling — a plate that tips or grows reads as a toy. The work here is done by the
      contrast between the lit plate and the dimmed ones, so the movement itself can stay
@@ -4586,12 +5130,32 @@
       transform: translateY(-0.5rem);
       filter: brightness(1.04);
     }
+
+    .project-page__static-phone {
+      transition:
+        transform 480ms cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 480ms ease,
+        filter 480ms ease;
+    }
+
+    .project-page__static-phone-rail:hover .project-page__static-phone {
+      opacity: 0.68;
+    }
+
+    .project-page__static-phone-rail:hover .project-page__static-phone:hover {
+      opacity: 1;
+      transform: translateY(-0.5rem);
+      filter: brightness(1.04);
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .project-page__phone,
     .project-page__phones:hover .project-page__phone,
-    .project-page__phones:hover .project-page__phone:hover {
+    .project-page__phones:hover .project-page__phone:hover,
+    .project-page__static-phone,
+    .project-page__static-phone-rail:hover .project-page__static-phone,
+    .project-page__static-phone-rail:hover .project-page__static-phone:hover {
       transition: none;
       transform: none;
     }
@@ -4682,6 +5246,8 @@
   }
 
   .project-page__swatch {
+    --swatch-edge: color-mix(in srgb, var(--swatch) 90%, #f5efe4 10%);
+    --swatch-edge-highlight: color-mix(in srgb, var(--swatch) 85%, #f5efe4 15%);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -4689,15 +5255,21 @@
     border-radius: 14px;
     background: var(--swatch);
     padding: 1.1rem;
-    /* An inset hairline rather than a border: #f5efe4 on a near-black page needs an
-       edge, and #141413 needs one just as much. Inset keeps the square exactly square. */
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+    /* The edge comes from the fill rather than a shared grey. Dark swatches get a
+       lighter tint of themselves; light swatches override this with a darker tint.
+       The second top-edge tint keeps near-black and near-white cards perceptible
+       without turning the outline into a separate frame. */
+    box-shadow:
+      inset 0 0 0 1px var(--swatch-edge),
+      inset 0 1px 0 var(--swatch-edge-highlight),
+      0 14px 30px -28px color-mix(in srgb, var(--swatch) 72%, transparent);
   }
 
   .project-page__swatch[data-tone='light'] {
     --swatch-ink: rgba(20, 20, 19, 0.9);
     --swatch-ink-soft: rgba(20, 20, 19, 0.55);
-    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12);
+    --swatch-edge: color-mix(in srgb, var(--swatch) 90%, #141413 10%);
+    --swatch-edge-highlight: color-mix(in srgb, var(--swatch) 95%, #141413 5%);
   }
 
   .project-page__swatch[data-tone='dark'] {
@@ -5075,6 +5647,46 @@
      viewport that same percentage leaves the devices too small to read, so they take
      back most of the width. */
   @media (max-width: 899px) {
+    .project-page__app-showcase {
+      grid-template-columns: minmax(0, 1fr);
+      gap: clamp(4rem, 10vw, 6rem);
+      width: min(100%, 38rem);
+    }
+
+    .project-page__app-stage {
+      min-height: 0;
+    }
+
+    .project-page__app-device {
+      width: min(72vw, 21rem);
+    }
+
+    .project-page__app-flows {
+      width: 100%;
+    }
+
+    .project-page__static-phone-rail {
+      grid-template-columns: none;
+      grid-auto-flow: column;
+      grid-auto-columns: min(62vw, 16rem);
+      justify-content: start;
+      gap: 1.25rem;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      padding-bottom: 1.5rem;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .project-page__static-phone-rail::-webkit-scrollbar {
+      display: none;
+    }
+
+    .project-page__static-phone {
+      scroll-snap-align: start;
+    }
+
     .project-page__brief {
       grid-template-columns: minmax(0, 1fr);
       gap: clamp(2.5rem, 6vw, 3.5rem);
@@ -5095,6 +5707,14 @@
        specifically rather than by moving the base floor, which desktop doesn't need. */
     .project-page__visuals {
       gap: clamp(12rem, 30vw, 16rem);
+    }
+
+    .project-page__visuals--lead {
+      padding-bottom: clamp(6rem, 15vw, 8rem);
+    }
+
+    .project-page__visuals--supporting {
+      padding-top: clamp(6rem, 15vw, 8rem);
     }
 
     /* No hover on these widths, so the plate can never open — and `display: none` is
@@ -5145,6 +5765,51 @@
 
     .project-page__next-thumb {
       display: none;
+    }
+  }
+
+  @media (max-width: 599px) {
+    .project-page__themes {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .project-page__pwa-note {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 2rem;
+    }
+
+    .project-page__pwa-mark {
+      justify-content: flex-start;
+    }
+
+    .project-page__section-heading,
+    .project-page__theme-heading {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .project-page__mode-control {
+      align-self: flex-start;
+    }
+
+    .project-page__app-device {
+      width: min(76vw, 18rem);
+      border-width: 6px;
+      border-radius: 36px;
+    }
+
+    .project-page__app-device video {
+      border-radius: 29px;
+    }
+
+    .project-page__theme-preview {
+      min-height: 17rem;
+      padding-inline: 0.9rem;
+    }
+
+    .project-page__theme-gauge-row {
+      grid-template-columns: 3.5rem minmax(7.5rem, 1fr) 3.5rem;
     }
   }
 

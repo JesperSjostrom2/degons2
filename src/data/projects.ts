@@ -5,9 +5,7 @@
  * without pulling component code into the RSC graph.
  *
  * ─────────────────────────────────────────────────────────────────────────────
- * Every `facts` row is now confirmed: Kerma's against the About section's own entry for
- * it, Portfolio v1's against the repo behind the site, and Andcreative's by you on
- * 2026-08-04. Nothing on these pages is an assumption any more.
+ * Every `facts` row is confirmed from the relevant project source, live site or owner brief.
  *
  * If a value ever goes back to being a guess, write it as finished copy anyway — the page
  * is read by people, not by you — and mark it `// unconfirmed` in the source so the debt
@@ -32,14 +30,15 @@
  * asset shows one rather than padding with a duplicate.
  * ─────────────────────────────────────────────────────────────────────────────
  *
- * VISUAL FORMAT — the standard every project moves to, as built for Andcreative:
+ * VISUAL FORMAT — website projects use the Andcreative device set:
  *
  *   01  mac      macmockup.webp with a scroll capture playing in the screen cutout
  *   02  phones   three phone plates side by side — landing, a list view, a detail
  *
  * Both frames want assets on a transparent background, exported at the same plate
- * size so they register with each other. All three projects are on it now; `frame:
- * 'browser'` stays in the union for a flat screenshot that has no plate yet.
+ * size so they register with each other. Mobile products can instead use `app-demos`
+ * to present real recordings at their native phone ratio; `browser` remains available
+ * for an unframed landing-page capture.
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
@@ -84,6 +83,17 @@ export type ProjectVisual =
   | { frame: 'mac'; videoSrc: string; posterSrc?: string; alt: string }
   /** Three phone plates side by side, print3.png style. */
   | { frame: 'phones'; phones: { src: string; alt: string }[] }
+  /** Mobile product recordings presented in their actual iOS/PWA context. */
+  | {
+      frame: 'app-demos'
+      demos: { videoSrc: string; title: string; description: string; alt: string }[]
+    }
+  /** A quiet overview of several native app screens, with no competing playback. */
+  | {
+      frame: 'phone-gallery'
+      title: string
+      phones: { src: string; alt: string; label: string }[]
+    }
 
 export interface ProjectPaletteColor {
   name: string
@@ -119,6 +129,29 @@ export interface ProjectTypeface {
 export interface ProjectFact {
   label: string
   value: string
+}
+
+export interface ProjectTheme {
+  name: string
+  light: ProjectThemeMode
+  dark: ProjectThemeMode
+}
+
+export interface ProjectThemeMode {
+  background: string
+  surface: string
+  surface2: string
+  ink: string
+  muted: string
+  accent: string
+  accentSoft: string
+  ring: string
+}
+
+export interface ProjectCaseStudy {
+  pwaNote?: string
+  themes?: ProjectTheme[]
+  dataPalette?: ProjectPaletteColor[]
 }
 
 export interface Project {
@@ -179,6 +212,8 @@ export interface Project {
   facts: ProjectFact[]
   /** Two to four sentences. What you actually did on this project. */
   roleSummary: string
+  /** Optional deeper product story for projects whose work extends beyond a marketing site. */
+  caseStudy?: ProjectCaseStudy
   typography: ProjectTypeface[]
   /** Neutral chips — never project-coloured (DESIGN.MD §7). */
   tech: string[]
@@ -202,7 +237,212 @@ export interface Project {
   accent: string
 }
 
+const pikkuPullaProject: Project = {
+  slug: 'pikku-pulla',
+  lastUpdated: '2026-08-23',
+  name: 'Pikku Pulla',
+  displayName: 'Pikku Pulla',
+  description:
+    'A carb-first food tracker for type 1 diabetes, built as an installable iOS app with Finnish food search, barcode scanning and daily history.',
+  palette: [
+    { name: 'Cream', value: '#efe9e7' },
+    { name: 'Surface', value: '#faf6f5' },
+    { name: 'Ink', value: '#3d2f36' },
+    { name: 'Blush', value: '#bd4a72' },
+    { name: 'Dark accent', value: '#f09eb4' },
+  ],
+  cover: {
+    src: '/assets/projects/pikku-pulla/pikku-pulla-thumbnail.webp',
+    alt: 'The Pikku Pulla landing page displayed on a laptop',
+    objectPosition: 'center',
+    chrome: true,
+  },
+  previewVideo: '/assets/pikkupullalaptop1610.mp4',
+  previewAspect: '16 / 10',
+  visuals: [
+    {
+      frame: 'mac',
+      videoSrc: '/assets/pikkupullalaptop1610.mp4',
+      alt: 'Pikku Pulla landing page shown on a desktop screen',
+    },
+    {
+      frame: 'app-demos',
+      demos: [
+        {
+          videoSrc: '/assets/projects/pikku-pulla/carbtracker.mp4',
+          title: 'Carb tracking',
+          description: 'Search, portion and see the carb count immediately.',
+          alt: 'Carb tracking flow in Pikku Pulla',
+        },
+        {
+          videoSrc: '/assets/projects/pikku-pulla/qrcode.mp4',
+          title: 'Barcode scan',
+          description: 'Move from a package to its nutrition data without typing.',
+          alt: 'Barcode scanning flow in Pikku Pulla',
+        },
+        {
+          videoSrc: '/assets/projects/pikku-pulla/quickadd.mp4',
+          title: 'Quick add',
+          description: 'Log a known carb amount in a few taps.',
+          alt: 'Quick-add flow in Pikku Pulla',
+        },
+        {
+          videoSrc: '/assets/projects/pikku-pulla/mealtracker.mp4',
+          title: 'Meals',
+          description: 'Save repeat meals and bring them back as one item.',
+          alt: 'Saved-meal flow in Pikku Pulla',
+        },
+        {
+          videoSrc: '/assets/projects/pikku-pulla/history.mp4',
+          title: 'Daily history',
+          description: 'Review intake by day without losing the macro hierarchy.',
+          alt: 'Daily history in Pikku Pulla',
+        },
+        {
+          videoSrc: '/assets/projects/pikku-pulla/profile.mp4',
+          title: 'Profile & themes',
+          description: 'Set goals and choose a complete light or dark palette.',
+          alt: 'Profile and theme settings in Pikku Pulla',
+        },
+      ],
+    },
+    {
+      frame: 'phone-gallery',
+      title: 'Inside the app',
+      phones: [
+        {
+          src: '/assets/projects/pikku-pulla/pikkuhome.webp',
+          alt: 'Pikku Pulla daily overview showing remaining calories and logged meals',
+          label: 'Today',
+        },
+        {
+          src: '/assets/projects/pikku-pulla/pikkusearch.webp',
+          alt: 'Pikku Pulla Finnish food search and category browser',
+          label: 'Search',
+        },
+        {
+          src: '/assets/projects/pikku-pulla/pikkumeal.webp',
+          alt: 'Pikku Pulla saved meals screen',
+          label: 'Meals',
+        },
+        {
+          src: '/assets/projects/pikku-pulla/pikkuhistory.webp',
+          alt: 'Pikku Pulla nutrition history with weekly chart and daily summaries',
+          label: 'History',
+        },
+        {
+          src: '/assets/projects/pikku-pulla/pikkuprofile.webp',
+          alt: 'Pikku Pulla profile and daily nutrition goal settings',
+          label: 'Profile',
+        },
+      ],
+    },
+  ],
+  facts: [
+    { label: 'Year', value: '2026' },
+    { label: 'Client', value: 'Personal project' },
+    { label: 'Scope', value: 'Product, design, full-stack' },
+  ],
+  roleSummary:
+    'Designed and built the product end to end, solo: product design, UI, front end, database, authentication, API routes and deployment. The central design decision was to make carbs the loudest number on every screen while keeping protein, fat, fibre and calories available but secondary. I also built the Finnish food-data import pipeline, barcode scanning, the mascot illustration set, a four-theme design system and 2FA-backed session security for personal health data.',
+  caseStudy: {
+    pwaNote:
+      'Pikku Pulla is installed to the iOS home screen and used there as an app. The narrow viewport, tap targets, persistent navigation and camera-based barcode flow were designed for that environment first; the desktop landing page explains the product, but it is not the product’s primary frame.',
+    themes: [
+      {
+        name: 'Blush',
+        light: {
+          background: '#efe9e7', surface: '#faf6f5', surface2: '#e6dedc', ink: '#3d2f36',
+          muted: '#7d6b73', accent: '#bd4a72', accentSoft: '#f8dae2', ring: '#d4607e',
+        },
+        dark: {
+          background: '#171317', surface: '#241e24', surface2: '#2e262e', ink: '#f4e9ec',
+          muted: '#a89aa1', accent: '#f09eb4', accentSoft: '#47303a', ring: '#d06a8c',
+        },
+      },
+      {
+        name: 'Pink',
+        light: {
+          background: '#fbdce6', surface: '#fff1f5', surface2: '#f1ccd9', ink: '#4a2634',
+          muted: '#805767', accent: '#f797b7', accentSoft: '#fdd9e6', ring: '#f797b7',
+        },
+        dark: {
+          background: '#191016', surface: '#291b24', surface2: '#352430', ink: '#f9e7f3',
+          muted: '#b596a9', accent: '#f797b7', accentSoft: '#4d2440', ring: '#e072b4',
+        },
+      },
+      {
+        name: 'Sage',
+        light: {
+          background: '#e6ece5', surface: '#f5f8f3', surface2: '#d8e0d6', ink: '#2b3a2f',
+          muted: '#5b6c61', accent: '#52795e', accentSoft: '#dcebe0', ring: '#5f866a',
+        },
+        dark: {
+          background: '#121611', surface: '#1f261f', surface2: '#2a332a', ink: '#e9f0e8',
+          muted: '#9aab9d', accent: '#9dc0a4', accentSoft: '#2b3a2f', ring: '#7fae8b',
+        },
+      },
+      {
+        name: 'Blue',
+        light: {
+          background: '#e5eaf2', surface: '#f4f7fc', surface2: '#d6dfec', ink: '#22304a',
+          muted: '#5c6a83', accent: '#4a76b6', accentSoft: '#dde7f5', ring: '#4d7fb8',
+        },
+        dark: {
+          background: '#101319', surface: '#1d2431', surface2: '#28303f', ink: '#e7edf7',
+          muted: '#98a5ba', accent: '#9dbce8', accentSoft: '#24334a', ring: '#7ba3d8',
+        },
+      },
+    ],
+    dataPalette: [
+      { name: 'Carb', value: '#d9459b' },
+      { name: 'Protein', value: '#3b95a5' },
+      { name: 'Fibre', value: '#8b6fc0' },
+      { name: 'Fat', value: '#9a52bd' },
+      { name: 'Water', value: '#3f6fb2' },
+    ],
+  },
+  typography: [
+    {
+      usage: 'Display & headings',
+      name: 'Quicksand',
+      weight: 'Medium–Bold 500–700',
+      cssFamily: 'var(--font-specimen-quicksand)',
+      cssWeight: 700,
+    },
+    {
+      usage: 'Body & UI',
+      name: 'Inter',
+      weight: 'Regular–Bold 400–700',
+      cssFamily: 'var(--font-specimen-inter)',
+      cssWeight: 500,
+    },
+  ],
+  tech: [
+    'Next.js',
+    'React',
+    'TypeScript',
+    'Tailwind CSS',
+    'Supabase',
+    'PostgreSQL',
+    'Lenis',
+    'ZXing',
+    'Vercel',
+  ],
+  logo: {
+    src: '/assets/projects/pikku-pulla/logohappy.png',
+    alt: 'Pikku Pulla cinnamon-bun mascot',
+    width: 150,
+    height: 150,
+    scale: 1.55,
+  },
+  liveUrl: 'https://pikku-pulla.vercel.app/landing',
+  liveLabel: 'pikku-pulla.vercel.app',
+  accent: '#f09eb4',
+}
+
 export const projects: Project[] = [
+  pikkuPullaProject,
   {
     slug: 'andcreative',
     lastUpdated: '2026-08-01',
@@ -439,137 +679,6 @@ export const projects: Project[] = [
     liveLabel: 'tahkonkerma.fi',
     // The site's own gold, off its stylesheet — the old #d4af37 was a generic gold beside it.
     accent: '#d7b154',
-  },
-  {
-    slug: 'portfolio-v1',
-    lastUpdated: '2026-08-01',
-    name: 'Portfolio v1',
-    displayName: 'Portfolio v1',
-    description:
-      'My first portfolio, with a backend and an admin area so the content could be edited without touching the code.',
-    /**
-     * Straight off the site's `:root` — this one does declare its colours. `--color-bg-main`
-     * is #000 with `--color-bg-variant` #171717 over most of it, `--color-main` is #f06, and
-     * the site's one gradient runs pink into cyan. Violet is `--accent-color`, which themes
-     * the two pages behind the login — the hub and the CV — rather than the public site.
-     *
-     * Pink was already right. The rest were near-misses: black was a shade off, violet and
-     * blue were a different violet and a blue that is nowhere in the stylesheet, and the
-     * cream belonged to this portfolio rather than that one.
-     */
-    palette: [
-      { name: 'Black', value: '#000000' },
-      { name: 'Ink', value: '#171717' },
-      { name: 'Pink', value: '#ff0066' },
-      { name: 'Cyan', value: '#33ccff' },
-      { name: 'Violet', value: '#9146ff' },
-    ],
-    cover: {
-      src: '/assets/projects/portfolio-v1/ogportfolionew.webp',
-      alt: 'Portfolio v1 homepage',
-      objectPosition: 'top',
-      chrome: true,
-    },
-    previewVideo: '/assets/projects/portfolio-v1/v1showcase.mp4',
-    // Andcreative's format: the scroll capture in the mac, then the phone trio.
-    visuals: [
-      {
-        // 1368x854 like the Andcreative capture, so it fills the screen cutout edge to edge.
-        videoSrc: '/assets/projects/portfolio-v1/v1showcase.mp4',
-        frame: 'mac',
-        alt: 'The Portfolio v1 homepage scrolling',
-      },
-      {
-        frame: 'phones',
-        phones: [
-          { src: '/assets/projects/portfolio-v1/v1phonehome.webp', alt: 'Portfolio v1 homepage on a phone' },
-          {
-            src: '/assets/projects/portfolio-v1/v1phoneprojects.webp',
-            alt: 'The Portfolio v1 projects page on a phone',
-          },
-          {
-            src: '/assets/projects/portfolio-v1/v1phonecontact.webp',
-            alt: 'The Portfolio v1 contact page on a phone',
-          },
-        ],
-      },
-    ],
-    facts: [
-      // Confirmed: the repo behind jespersjostrom2.github.io was created in May 2023.
-      { label: 'Year', value: '2023' },
-      { label: 'Client', value: 'Personal' },
-      // It is an Express and Mongoose service with a login, a signup and an admin area —
-      // "Front end, backend, admin" says that; "CMS" implies something off the shelf.
-      { label: 'Scope', value: 'Front end, backend, admin' },
-    ],
-    roleSummary:
-      'My first full-stack build, made to learn rather than to a brief — which is why there is a real backend and an admin area sitting behind it. Being able to change the content without touching the code was the whole point of it, and that habit has shaped everything I have built since.',
-    /**
-     * Poppins is used across a wider range here than the rows below show — 200, 400, 500, 600
-     * and 700 all appear live. The three named are the ones that carry the site: 700 on every
-     * heading, 500 on the nav and the lead paragraphs, 400 on body copy. Listing all five
-     * would be a font inventory rather than a spec sheet. The rest are noted here, not hidden.
-     *
-     * As on Kerma, the Google Fonts request stops at 600 while the headings ask for 700, so
-     * the browser draws Bold from SemiBold. Named at 700 here because that is the intent the
-     * stylesheet states, and because the two heaviest weights are what separate these rows.
-     *
-     * Noto Sans is imported as well, but only `.hub` and `.cv-page` set it — the two pages
-     * behind the login. Not listed: it is not a face anyone reaching the site will see.
-     *
-     * (The site also renders one `<button>` in Arial, which is a control that never inherited
-     * the family rather than a second face. Not listed, because it was not a choice.)
-     */
-    typography: [
-      {
-        usage: 'Headings',
-        name: 'Poppins',
-        weight: 'Bold 700',
-        cssFamily: 'var(--font-specimen-poppins)',
-        cssWeight: 700,
-      },
-      {
-        usage: 'Navigation & lead',
-        name: 'Poppins',
-        weight: 'Medium 500',
-        cssFamily: 'var(--font-specimen-poppins)',
-        cssWeight: 500,
-      },
-      {
-        usage: 'Body',
-        name: 'Poppins',
-        weight: 'Regular 400',
-        cssFamily: 'var(--font-specimen-poppins)',
-        cssWeight: 400,
-      },
-    ],
-    /**
-     * The one project whose source is public, so this is read from its package.json as well
-     * as its bundle. Create React App on the front, deployed to GitHub Pages with `gh-pages`;
-     * `backend/` is Express 4 on Mongoose 7, which is the admin area's half. Spline carries
-     * the 3D — it is what pulls Three.js in, so listing both would be listing it twice — and
-     * AOS does the scroll reveals.
-     *
-     * framer-motion is a dependency here but nothing imports it: no part of the library
-     * reaches the shipped bundle. Left off on purpose, since this row is what the site runs.
-     */
-    tech: ['React', 'React Router', 'AOS', 'Spline', 'Node.js', 'Express', 'MongoDB', 'GitHub Pages'],
-    /**
-     * 1500x1500 plate, ink 1473x1187 — near-square at 1.24, and unlike Kerma it does carry
-     * real padding (91px above, 222px below), so `object-fit: contain` fits the empty plate
-     * and shrinks the mark inside it. Scaled a little harder than Kerma to cover both the
-     * shape and that padding. Replaces the text wordmark this project used to fall back to.
-     */
-    logo: {
-      src: '/assets/projects/portfolio-v1/logo.png',
-      alt: 'Portfolio v1 logo',
-      width: 150,
-      height: 150,
-      scale: 1.15,
-    },
-    liveUrl: 'https://jespersjostrom2.github.io',
-    liveLabel: 'jespersjostrom2.github.io',
-    accent: '#ff0066',
   },
 ]
 

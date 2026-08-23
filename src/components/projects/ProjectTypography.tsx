@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { Poppins } from 'next/font/google'
+import { Inter, Poppins, Quicksand } from 'next/font/google'
 import type { ProjectTypeface } from '@/data/projects'
 
 /**
@@ -9,6 +9,18 @@ import type { ProjectTypeface } from '@/data/projects'
  */
 const poppins = Poppins({
   variable: '--font-specimen-poppins',
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+})
+
+const quicksand = Quicksand({
+  variable: '--font-specimen-quicksand',
+  subsets: ['latin'],
+  weight: ['500', '600', '700'],
+})
+
+const inter = Inter({
+  variable: '--font-specimen-inter',
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
 })
@@ -24,7 +36,7 @@ const poppins = Poppins({
  *                      the name line is simply absent until there is a real name to print.
  */
 const ProjectTypography = ({ typography }: { typography: ProjectTypeface[] }) => (
-  <div className={`project-page__type ${poppins.variable}`}>
+  <div className={`project-page__type ${poppins.variable} ${quicksand.variable} ${inter.variable}`}>
     {typography.map((face) => (
       <div key={face.usage} className="project-page__typeface">
         {face.specimenSrc ? (

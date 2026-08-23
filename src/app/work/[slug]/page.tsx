@@ -4,9 +4,6 @@ import { notFound } from 'next/navigation'
 import type { CSSProperties } from 'react'
 
 import { getNextProject, getProjectBySlug, projectSlugs } from '@/data/projects'
-import ProjectShot from '@/components/projects/ProjectShot'
-import ProjectMacFrame from '@/components/projects/ProjectMacFrame'
-import ProjectPhoneRow from '@/components/projects/ProjectPhoneRow'
 import ProjectFacts from '@/components/projects/ProjectFacts'
 import ProjectTypography from '@/components/projects/ProjectTypography'
 import ProjectPaletteBoard from '@/components/projects/ProjectPaletteBoard'
@@ -14,6 +11,8 @@ import ProjectTech from '@/components/projects/ProjectTech'
 import NextProjectLink from '@/components/projects/NextProjectLink'
 import ProjectNavbar from '@/components/projects/ProjectNavbar'
 import ProjectVisitLink from '@/components/projects/ProjectVisitLink'
+import ProjectVisualGallery from '@/components/projects/ProjectVisualGallery'
+import { ProjectCaseStudyDetails } from '@/components/projects/ProjectCaseStudy'
 import { serializeJsonLd } from '@/lib/json-ld'
 import { notFoundMetadata } from '@/lib/not-found-metadata'
 import { SITE_URL } from '@/lib/site-config'
@@ -81,6 +80,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
   }
 
   const next = getNextProject(project.slug)
+  const leadVisuals = project.caseStudy ? project.visuals.slice(0, 1) : project.visuals
+  const supportingVisuals = project.caseStudy ? project.visuals.slice(1) : []
 
   const projectJsonLd = {
     '@context': 'https://schema.org',
@@ -163,41 +164,31 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
                 <ProjectVisitLink href={project.liveUrl} label={`Visit ${project.liveLabel}`} />
               </div>
             </section>
+
           </div>
         </div>
 
         {/* ── The work. Its own wider column, so the devices are bigger than the
             prose they sit between. Nothing is ever printed under a visual. ── */}
         <div className="container mx-auto px-6">
-          <section className="project-page__visuals" aria-label={`${project.name} screenshots`}>
-            {project.visuals.map((visual, index) => {
-              if (visual.frame === 'mac') {
-                return (
-                  <ProjectMacFrame
-                    key={visual.videoSrc}
-                    videoSrc={visual.videoSrc}
-                    posterSrc={visual.posterSrc}
-                    alt={visual.alt}
-                  />
-                )
-              }
-
-              if (visual.frame === 'phones') {
-                return <ProjectPhoneRow key={visual.phones[0]?.src ?? index} phones={visual.phones} />
-              }
-
-              return (
-                <ProjectShot
-                  key={visual.src}
-                  shot={visual}
-                  liveLabel={project.liveLabel}
-                  sizes="(max-width: 899px) 92vw, 84rem"
-                  priority={index === 0}
-                />
-              )
-            })}
-          </section>
+          <ProjectVisualGallery
+            visuals={leadVisuals}
+            projectName={project.name}
+            liveLabel={project.liveLabel}
+            variant={project.caseStudy ? 'lead' : undefined}
+          />
         </div>
+
+        {project.caseStudy ? (
+          <div className="container mx-auto px-6">
+            <ProjectVisualGallery
+              visuals={supportingVisuals}
+              projectName={project.name}
+              liveLabel={project.liveLabel}
+              variant="supporting"
+            />
+          </div>
+        ) : null}
 
         <div className="container mx-auto px-6">
           <div className="project-page__inner project-page__inner--tail">
@@ -205,7 +196,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
                 band — the prose on the left, the hard numbers beside it. */}
             <section className="project-page__brief">
               <div className="project-page__block">
-                <h2 className="project-page__label">Role</h2>
+                <h2 className="project-page__section-title">Role</h2>
                 <p className="project-page__prose">{project.roleSummary}</p>
               </div>
 
@@ -215,18 +206,32 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
               </div>
             </section>
 
+            {project.caseStudy ? <ProjectCaseStudyDetails study={project.caseStudy} /> : null}
+
             <section className="project-page__block">
-              <h2 className="project-page__label">Typography</h2>
+              <h2 className="project-page__section-title">Typography</h2>
               <ProjectTypography typography={project.typography} />
             </section>
 
             <section className="project-page__block">
-              <h2 className="project-page__label">Colour</h2>
+              <h2 className="project-page__section-title">Colour</h2>
               <ProjectPaletteBoard palette={project.palette} />
+
+              {project.caseStudy?.dataPalette ? (
+                <div className="project-page__colour-data">
+                  <div className="project-page__section-heading">
+                    <div>
+                      <h3 className="project-page__subsection-title">Data identity</h3>
+                      <p>These colours keep their meaning in every theme.</p>
+                    </div>
+                  </div>
+                  <ProjectPaletteBoard palette={project.caseStudy.dataPalette} />
+                </div>
+              ) : null}
             </section>
 
             <section className="project-page__block">
-              <h2 className="project-page__label">Built with</h2>
+              <h2 className="project-page__section-title">Built with</h2>
               <ProjectTech tech={project.tech} />
             </section>
 
